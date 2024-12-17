@@ -1,0 +1,63 @@
+/* Set basic styles for the body element */
+body {
+    font-family: Arial, sans-serif; /* Use Arial font */
+    background-color: #f4f4f4; /* Light grey background */
+    display: flex; /* Use flexbox layout */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 100vh; /* Full viewport height */
+    margin: 0; /* Remove default margin */
+}
+
+/* Style the container element */
+.container {
+    background-color: white; /* White background */
+    padding: 20px; /* Padding inside the container */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 300px; /* Fixed width */
+}
+
+/* Style the h2 element */
+h2 {
+    text-align: center; /* Center the text */
+    color: #333; /* Dark grey color */
+}
+
+/* Style the form group */
+.form-group {
+    margin-bottom: 15px; /* Space below each form group */
+}
+
+/* Style the label element */
+label {
+    display: block; /* Block display */
+    margin-bottom: 5px; /* Space below the label */
+    color: #555; /* Medium grey color */
+}
+
+/* Style text and password input fields */
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside the input */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px; /* Rounded corners */
+}
+
+/* Style the submit button */
+input[type="submit"] {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside the button */
+    background-color: #5cb85c; /* Green background */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    color: white; /* White text */
+    font-size: 16px; /* Larger font size */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Change background color on hover for submit button */
+input[type="submit"]:hover {
+    background-color: #4cae4c; /* Darker green background */
+}
