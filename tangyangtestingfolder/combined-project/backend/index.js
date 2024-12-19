@@ -1,14 +1,18 @@
+// Import necessary modules
 const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+// Create an Express application
 const app = express();
 const port = 5000;
 
+// Middleware setup
 app.use(bodyParser.json());
 app.use(cors());
 
+// Connect to the SQLite database
 let db = new sqlite3.Database('./src/user_login.db', (err) => {
     if (err) {
         console.error(err.message);
@@ -16,6 +20,7 @@ let db = new sqlite3.Database('./src/user_login.db', (err) => {
     console.log('Connected to the user_login database.');
 });
 
+// Login endpoint
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     console.log('Login attempt:', { username, password });
@@ -28,7 +33,7 @@ app.post('/api/login', (req, res) => {
             console.log('User found:', row);
             if (password === row.password) {
                 console.log('Password match:', true);
-                res.status(200).json({ message: 'Login successful' });
+                res.status(200).json({ message: 'Login successful', userId: row.id });
             } else {
                 console.log('Password match:', false);
                 res.status(401).json({ message: 'Invalid credentials' });
@@ -40,6 +45,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
+// Create account endpoint
 app.post('/api/create-account', (req, res) => {
     const { username, email, password } = req.body;
     console.log('Create account attempt:', { username, email });
@@ -55,94 +61,39 @@ app.post('/api/create-account', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+// Create smart home endpoint
+app.post('/api/smart-homes', (req, res) => {
+    const { name, creatorId } = req.body;
+    console.log('Create smart home attempt:', { name, creatorId });
 
-/*
-// Import the sqlite3 library and enable verbose mode for debugging
-const sqlite3 = require('sqlite3').verbose();
-// Import the express library to create a web server
-const express = require('express');
-// Import the body-parser library to parse JSON request bodies
-const bodyParser = require('body-parser');
-// Import the cors library to enable Cross-Origin Resource Sharing
-const cors = require('cors');
-
-// Create an instance of an Express application
-const app = express();
-// Define the port number the server will listen on
-const port = 5000;
-
-// Use body-parser middleware to parse JSON request bodies
-app.use(bodyParser.json());
-// Use cors middleware to enable CORS
-app.use(cors());
-
-// Open a connection to the SQLite database
-let db = new sqlite3.Database('./src/user_login.db', (err) => {
-    if (err) {
-        // Log an error message if the connection fails
-        console.error(err.message);
-    }
-    // Log a success message if the connection is successful
-    console.log('Connected to the user_login database.');
-});
-
-// Define a route to handle login requests
-app.post('/api/login', (req, res) => {
-    // Extract username and password from the request body
-    const { username, password } = req.body;
-    console.log('Login attempt:', { username, password });
-
-    // Query the database for a user with the provided username
-    db.get(`SELECT * FROM users WHERE username = ?`, [username], (err, row) => {
+    db.run(`INSERT INTO smart_homes (name, creator_id) VALUES (?, ?)`, [name, creatorId], function(err) {
         if (err) {
-            // Log an error message and send a 500 response if there is a database error
             console.error('Database error:', err.message);
             res.status(500).json({ message: 'Internal server error' });
-        } else if (row) {
-            // Log the found user and check if the provided password matches the stored password
-            console.log('User found:', row);
-            if (password === row.password) {
-                // Log a success message and send a 200 response if the passwords match
-                console.log('Password match:', true);
-                res.status(200).json({ message: 'Login successful' });
-            } else {
-                // Log a failure message and send a 401 response if the passwords do not match
-                console.log('Password match:', false);
-                res.status(401).json({ message: 'Invalid credentials' });
-            }
         } else {
-            // Log a failure message and send a 401 response if the user is not found
-            console.log('User not found');
-            res.status(401).json({ message: 'Invalid credentials' });
+            console.log('Smart home created with ID:', this.lastID);
+            res.status(201).json({ message: 'Smart home created successfully', homeId: this.lastID });
         }
     });
 });
 
-// Define a route to handle account creation requests
-app.post('/api/create-account', (req, res) => {
-    // Extract username, email, and password from the request body
-    const { username, email, password } = req.body;
-    console.log('Create account attempt:', { username, email });
+// Get smart homes endpoint
+app.get('/api/smart-homes', (req, res) => {
+    const { userId } = req.query;
+    console.log('Get smart homes for user:', userId);
 
-    // Insert a new user into the database
-    db.run(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`, [username, email, password], function(err) {
+    db.all(`SELECT * FROM smart_homes WHERE creator_id = ?`, [userId], (err, rows) => {
         if (err) {
-            // Log an error message and send a 500 response if there is a database error
             console.error('Database error:', err.message);
             res.status(500).json({ message: 'Internal server error' });
         } else {
-            // Log a success message and send a 201 response if the account is created successfully
-            console.log('User created with ID:', this.lastID);
-            res.status(201).json({ message: 'Account created successfully' });
+            console.log('Smart homes found:', rows);
+            res.status(200).json(rows);
         }
     });
 });
 
-// Start the server and listen on the defined port
+// Start the server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-*/
