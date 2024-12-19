@@ -30,6 +30,21 @@ BEGIN
     UPDATE smart_homes SET updated_at = CURRENT_TIMESTAMP WHERE id = OLD.id;
 END;
 
+CREATE TABLE IF NOT EXISTS devices (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    smart_home_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (smart_home_id) REFERENCES smart_homes(id)
+);
+
+CREATE TABLE IF NOT EXISTS supported_devices (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    model_name TEXT NOT NULL,
+    type TEXT NOT NULL
+);
+
 /*
     SELECT * FROM users;
     DELETE FROm users WHERE id = 1;
