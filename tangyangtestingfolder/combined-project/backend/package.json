@@ -1,24 +1,23 @@
 {
-  "name": "user-login-database",
+  "name": "smart-home-backend",
   "version": "1.0.0",
-  "description": "A project to manage user login details with a database.",
+  "description": "Backend for Smart Home application",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mysql": "^2.18.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.0.2"
   },
-  "devDependencies": {
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
-  },
+  "devDependencies": {},
+  "keywords": [
+    "smart-home",
+    "backend",
+    "api"
+  ],
   "author": "",
-  "license": "ISC",
-  "keywords": []
+  "license": "ISC"
 }

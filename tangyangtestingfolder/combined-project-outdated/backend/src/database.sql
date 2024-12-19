@@ -44,3 +44,8 @@ CREATE TABLE IF NOT EXISTS supported_devices (
     model_name TEXT NOT NULL,
     type TEXT NOT NULL
 );
+
+/*
+    SELECT * FROM users;
+    DELETE FROm users WHERE id = 1;
+*/

@@ -1,12 +1,35 @@
 {
   "name": "combined-project",
   "version": "1.0.0",
+  "description": "A smart home system with a backend API and a React frontend.",
+  "main": "backend/index.js",
   "scripts": {
-      "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-      "start:backend": "cd backend && node index.js",
-      "start:frontend": "cd frontend && npm start"
+    "start": "node backend/index.js",
+    "frontend": "cd frontend && npm start",
+    "backend": "node backend/index.js",
+    "install": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.19.0"
   },
   "devDependencies": {
-      "concurrently": "^6.2.1"
-  }
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/combined-project.git"
+  },
+  "keywords": [
+    "smart-home",
+    "react",
+    "express",
+    "sqlite"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }
