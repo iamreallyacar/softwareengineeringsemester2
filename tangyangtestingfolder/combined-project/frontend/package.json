@@ -1,0 +1,22 @@
+{
+  "name": "login-page",
+  "version": "1.0.0",
+  "description": "A simple login page built with HTML, CSS, and JavaScript.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "live-server src"
+  },
+  "keywords": [
+    "login",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "proxy": "http://localhost:5000"
+}
