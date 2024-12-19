@@ -30,12 +30,12 @@ const SmartHomes = () => {
                 body: JSON.stringify({ name: homeName, creatorId: userId })
             });
 
+            const data = await response.json();
             if (response.ok) {
                 alert('Smart home created successfully');
                 setHomeName('');
                 fetchSmartHomes();
             } else {
-                const data = await response.json();
                 alert('Smart home creation failed: ' + data.message);
             }
         } catch (error) {

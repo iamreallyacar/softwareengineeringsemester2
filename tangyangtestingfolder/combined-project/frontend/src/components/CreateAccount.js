@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const CreateAccount = () => {
     const [username, setUsername] = useState('');
@@ -6,6 +7,7 @@ const CreateAccount = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const history = useHistory();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -33,8 +35,11 @@ const CreateAccount = () => {
                 setUsername('');
                 setEmail('');
                 setPassword('');
+                setTimeout(() => {
+                    history.push('/');
+                }, 2000); // Redirect to login after 2 seconds
             } else {
-                setError(data.message);
+                setError(data.message + (data.error ? `: ${data.error}` : ''));
             }
         } catch (error) {
             setError('An error occurred. Please try again.');

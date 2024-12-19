@@ -16,8 +16,42 @@ app.use(cors());
 let db = new sqlite3.Database('./src/user_login.db', (err) => {
     if (err) {
         console.error(err.message);
+    } else {
+        console.log('Connected to the user_login database.');
+        const createTables = [
+            `CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                email TEXT NOT NULL UNIQUE,
+                password TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );`,
+            `CREATE TABLE IF NOT EXISTS smart_homes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                creator_id INTEGER NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (creator_id) REFERENCES users(id)
+            );`,
+            `CREATE TABLE IF NOT EXISTS devices (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                smart_home_id INTEGER NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (smart_home_id) REFERENCES smart_homes(id)
+            );`,
+            `CREATE TABLE IF NOT EXISTS supported_devices (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                model_name TEXT NOT NULL,
+                type TEXT NOT NULL
+            );`
+        ];
+
+        createTables.forEach((query) => db.run(query));
     }
-    console.log('Connected to the user_login database.');
 });
 
 // Login endpoint
@@ -53,7 +87,7 @@ app.post('/api/create-account', (req, res) => {
     db.run(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`, [username, email, password], function(err) {
         if (err) {
             console.error('Database error:', err.message);
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({ message: 'Internal server error', error: err.message });
         } else {
             console.log('User created with ID:', this.lastID);
             res.status(201).json({ message: 'Account created successfully' });

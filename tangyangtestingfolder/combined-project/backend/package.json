@@ -1,23 +1,14 @@
 {
-  "name": "smart-home-backend",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "Backend for Smart Home application",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "init-db": "node initDatabase.js"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "sqlite3": "^5.0.2"
-  },
-  "devDependencies": {},
-  "keywords": [
-    "smart-home",
-    "backend",
-    "api"
-  ],
-  "author": "",
-  "license": "ISC"
+    "sqlite3": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5"
+  }
 }
