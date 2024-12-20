@@ -13,3 +13,17 @@
 6. Install the above recommended extensions. (if you have a powerful computer, feel free to just install whatever VS-Code tells you to)
 7. Create an ssh key and add it to your GitHub account
 8. Git clone this repository
+
+# Things we need to do
+1. Marketing Strategy and Materials
+2. Final Application Design and Implementation
+3. Appendix of Supporting Documentation
+
+# Database
+Users
+
+Smart Homes
+
+Connected Smart Devices
+
+Smart Devices
