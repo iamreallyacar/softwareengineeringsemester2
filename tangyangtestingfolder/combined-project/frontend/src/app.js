@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Login from './components/Login';
-import CreateAccount from './components/CreateAccount';
-import SmartHomes from './components/SmartHomes';
+
+// Lazy load components
+const Login = lazy(() => import('./components/Login'));
+const CreateAccount = lazy(() => import('./components/CreateAccount'));
+const SmartHomes = lazy(() => import('./components/SmartHomes'));
 
 function App() {
     return (
         <Router>
-            <Switch>
-                <Route path="/" exact component={Login} />
-                <Route path="/create-account" component={CreateAccount} />
-                <Route path="/smart-homes" component={SmartHomes} />
-            </Switch>
+            <Suspense fallback={<div>Loading...</div>}>
+                <Switch>
+                    <Route path="/" exact component={Login} />
+                    <Route path="/create-account" component={CreateAccount} />
+                    <Route path="/smart-homes" component={SmartHomes} />
+                </Switch>
+            </Suspense>
         </Router>
     );
 }

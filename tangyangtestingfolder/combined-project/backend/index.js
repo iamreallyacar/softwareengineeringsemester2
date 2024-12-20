@@ -1,133 +1,89 @@
-// Import necessary modules
-const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { initDb, getDb, closeDb } = require('./database');
 
-// Create an Express application
 const app = express();
 const port = 5000;
 
-// Middleware setup
 app.use(bodyParser.json());
 app.use(cors());
 
-// Connect to the SQLite database
-let db = new sqlite3.Database('./src/user_login.db', (err) => {
-    if (err) {
-        console.error(err.message);
-    } else {
-        console.log('Connected to the user_login database.');
-        const createTables = [
-            `CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL UNIQUE,
-                email TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );`,
-            `CREATE TABLE IF NOT EXISTS smart_homes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                creator_id INTEGER NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (creator_id) REFERENCES users(id)
-            );`,
-            `CREATE TABLE IF NOT EXISTS devices (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                smart_home_id INTEGER NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (smart_home_id) REFERENCES smart_homes(id)
-            );`,
-            `CREATE TABLE IF NOT EXISTS supported_devices (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                model_name TEXT NOT NULL,
-                type TEXT NOT NULL
-            );`
-        ];
+// Initialize database before starting server
+async function startServer() {
+    try {
+        await initDb();
+        
+        // Login endpoint
+        app.post('/api/login', (req, res) => {
+            const { username, password } = req.body;
+            const db = getDb();
+            
+            db.get(`SELECT id, username, password FROM users WHERE username = ?`, 
+                [username], 
+                (err, row) => {
+                    if (err) return res.status(500).json({ message: 'Internal server error' });
+                    if (!row) return res.status(401).json({ message: 'Invalid credentials' });
+                    if (password === row.password) {
+                        res.status(200).json({ message: 'Login successful', userId: row.id });
+                    } else {
+                        res.status(401).json({ message: 'Invalid credentials' });
+                    }
+                });
+        });
 
-        createTables.forEach((query) => db.run(query));
+        // Create account endpoint
+        app.post('/api/create-account', (req, res) => {
+            const { username, email, password } = req.body;
+            const db = getDb();
+            
+            db.run(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`, 
+                [username, email, password], 
+                function(err) {
+                    if (err) return res.status(500).json({ message: 'Internal server error', error: err.message });
+                    res.status(201).json({ message: 'Account created successfully' });
+                });
+        });
+
+        // Smart homes endpoints
+        app.post('/api/smart-homes', (req, res) => {
+            const { name, creatorId } = req.body;
+            const db = getDb();
+            
+            db.run(`INSERT INTO smart_homes (name, creator_id) VALUES (?, ?)`, 
+                [name, creatorId], 
+                function(err) {
+                    if (err) return res.status(500).json({ message: 'Internal server error' });
+                    res.status(201).json({ message: 'Smart home created successfully', homeId: this.lastID });
+                });
+        });
+
+        app.get('/api/smart-homes', (req, res) => {
+            const { userId } = req.query;
+            const db = getDb();
+            
+            db.all(`SELECT * FROM smart_homes WHERE creator_id = ?`, 
+                [userId], 
+                (err, rows) => {
+                    if (err) return res.status(500).json({ message: 'Internal server error' });
+                    res.status(200).json(rows);
+                });
+        });
+
+        app.listen(port, () => {
+            console.log(`Server running on port ${port}`);
+        });
+
+    } catch (err) {
+        console.error('Failed to start server:', err);
+        process.exit(1);
     }
+}
+
+// Handle graceful shutdown
+process.on('SIGINT', () => {
+    closeDb();
+    process.exit(0);
 });
 
-// Login endpoint
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    console.log('Login attempt:', { username, password });
-
-    db.get(`SELECT * FROM users WHERE username = ?`, [username], (err, row) => {
-        if (err) {
-            console.error('Database error:', err.message);
-            res.status(500).json({ message: 'Internal server error' });
-        } else if (row) {
-            console.log('User found:', row);
-            if (password === row.password) {
-                console.log('Password match:', true);
-                res.status(200).json({ message: 'Login successful', userId: row.id });
-            } else {
-                console.log('Password match:', false);
-                res.status(401).json({ message: 'Invalid credentials' });
-            }
-        } else {
-            console.log('User not found');
-            res.status(401).json({ message: 'Invalid credentials' });
-        }
-    });
-});
-
-// Create account endpoint
-app.post('/api/create-account', (req, res) => {
-    const { username, email, password } = req.body;
-    console.log('Create account attempt:', { username, email });
-
-    db.run(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`, [username, email, password], function(err) {
-        if (err) {
-            console.error('Database error:', err.message);
-            res.status(500).json({ message: 'Internal server error', error: err.message });
-        } else {
-            console.log('User created with ID:', this.lastID);
-            res.status(201).json({ message: 'Account created successfully' });
-        }
-    });
-});
-
-// Create smart home endpoint
-app.post('/api/smart-homes', (req, res) => {
-    const { name, creatorId } = req.body;
-    console.log('Create smart home attempt:', { name, creatorId });
-
-    db.run(`INSERT INTO smart_homes (name, creator_id) VALUES (?, ?)`, [name, creatorId], function(err) {
-        if (err) {
-            console.error('Database error:', err.message);
-            res.status(500).json({ message: 'Internal server error' });
-        } else {
-            console.log('Smart home created with ID:', this.lastID);
-            res.status(201).json({ message: 'Smart home created successfully', homeId: this.lastID });
-        }
-    });
-});
-
-// Get smart homes endpoint
-app.get('/api/smart-homes', (req, res) => {
-    const { userId } = req.query;
-    console.log('Get smart homes for user:', userId);
-
-    db.all(`SELECT * FROM smart_homes WHERE creator_id = ?`, [userId], (err, rows) => {
-        if (err) {
-            console.error('Database error:', err.message);
-            res.status(500).json({ message: 'Internal server error' });
-        } else {
-            console.log('Smart homes found:', rows);
-            res.status(200).json(rows);
-        }
-    });
-});
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+startServer();
