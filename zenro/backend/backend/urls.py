@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),      # URL for the admin site
     path('api/', include('api.urls')),    # Include URLs from the 'api' app
     path('', home),  # Add the home view for the root URL
+    # The following paths handle JWT authentication tokens.
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

@@ -4,10 +4,16 @@ from .models import User, SmartHome, SupportedDevice, Device
 
 # Serializer for the User model
 class UserSerializer(serializers.ModelSerializer):
+    # The password field is write-only to prevent it from being exposed.
+    password = serializers.CharField(write_only=True)
+    
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'date_joined', 'last_login']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['id', 'username', 'email', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'id': {'read_only': True}
+        }
     
     def create(self, validated_data):
         # Create a new user with the provided validated data
@@ -31,9 +37,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 # Serializer for the SmartHome model
 class SmartHomeSerializer(serializers.ModelSerializer):
+    is_creator = serializers.SerializerMethodField()
+    
     class Meta:
         model = SmartHome
-        fields = '__all__'  # Include all fields from the SmartHome model
+        fields = ['id', 'name', 'creator', 'members', 'created_at', 'is_creator']
+        read_only_fields = ['creator']  # Add this line
+    
+    def get_is_creator(self, obj):
+        request = self.context.get('request')
+        return request and request.user == obj.creator
+
+    def create(self, validated_data):
+        # Set creator to current user
+        validated_data['creator'] = self.context['request'].user
+        return super().create(validated_data)
 
 # Serializer for the SupportedDevice model
 class SupportedDeviceSerializer(serializers.ModelSerializer):
