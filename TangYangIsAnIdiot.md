@@ -38,52 +38,52 @@ https://prod.liveshare.vsengsaas.visualstudio.com/join?E46B3AC5AFA129F7F561B71F4
 **Frontend Structure (React)**
 
 index.js - The entry point
-     This is where React starts
-     Creates the root element and renders the main App component
+    - This is where React starts
+    - Creates the root element and renders the main App component
 
 App.js - The main application container
-     Acts as the main router
-     Defines which components show up at which URLs
-     Like a traffic controller for your app
+    - Acts as the main router
+    - Defines which components show up at which URLs
+    - Like a traffic controller for your app
 
 api.js - API communication manager
-     Central place for all backend communication
-     Handles authentication tokens
-     Makes HTTP requests to your backend
+    - Central place for all backend communication
+    - Handles authentication tokens
+    - Makes HTTP requests to your backend
 
 CSS Files - Styling
-     Controls how your components look
-     Defines colors, layouts, animations
+    - Controls how your components look
+    - Defines colors, layouts, animations
 
 **Backend Structure (Django)**
 
 settings.py - Django configuration
-     Like the control panel for Django
-     Sets up:
-       - Database connection
-       - Security settings
-       - Installed apps
-       - Authentication
+    - Like the control panel for Django
+    - Sets up:
+	- Database connection
+	- Security settings
+    - Installed apps
+    - Authentication
 
 urls.py - URL routing
-     Maps URLs to views
-     Example: /api/login → login function
-     Like a receptionist directing visitors
+	- Maps URLs to views
+    - Example: /api/login → login function
+    - Like a receptionist directing visitors
 
 models.py - Database structure
-     Defines database tables
-     Example: SmartHome table with name, creator fields
-     Think of it as blueprints for your data
+    - Defines database tables
+    - Example: SmartHome table with name, creator fields
+    - Think of it as blueprints for your data
 
 views.py - Request handlers
-     Contains the actual logic
-     Handles requests and returns responses
-     Like the workers doing the actual tasks
+    - Contains the actual logic
+    - Handles requests and returns responses
+    - Like the workers doing the actual tasks
 
 serializers.py - Data formatters
-     Converts Python objects to JSON and back
-     Makes data readable for frontend
-     Like a translator between backend and frontend
+    - Converts Python objects to JSON and back
+    - Makes data readable for frontend
+    - Like a translator between backend and frontend
 
 Why So Many Files?
 Separation of Concerns
@@ -111,3 +111,25 @@ settings.py = Restaurant rules
 Frontend files = Dining room and menu
 
 This separation makes the code more organized and maintainable, just like how different restaurant sections handle different tasks.
+
+# Role Assignment
+**(Still unconfirmed)**
+Code refactoring + cleaning:
+Aisyah
+Bobo
+Avril
+
+Backend:
+Zheng Rong (lead)
+Dzuhair
+
+Frontend:
+Zheng Rong
+Tang Yang
+
+Frontend Designer (css):
+Avril (lead)
+
+Marketing
+Alan
+Stone
