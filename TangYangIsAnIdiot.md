@@ -30,3 +30,5 @@ Smart Devices
 
 https://www.protectedtext.com/softwareengineeringsemester2
 password: ilovesoftwareengineering
+
+liveshare: https://prod.liveshare.vsengsaas.visualstudio.com/join?E46B3AC5AFA129F7F561B71F4BBF80292BE0
