@@ -38,11 +38,11 @@ https://prod.liveshare.vsengsaas.visualstudio.com/join?E46B3AC5AFA129F7F561B71F4
 **Frontend Structure (React)**
 
 index.js - The entry point
-    - This is where React starts
-    - Creates the root element and renders the main App component
+- This is where React starts
+- Creates the root element and renders the main App component
 
 App.js - The main application container
-    - Acts as the main router
+	- Acts as the main router
     - Defines which components show up at which URLs
     - Like a traffic controller for your app
 
