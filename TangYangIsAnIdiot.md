@@ -27,3 +27,6 @@ Smart Homes
 Connected Smart Devices
 
 Smart Devices
+
+https://www.protectedtext.com/softwareengineeringsemester2
+password: ilovesoftwareengineering
