@@ -20,19 +20,11 @@
 3. Appendix of Supporting Documentation
 
 # Database
-Users
-
-Smart Homes
-
-Connected Smart Devices
-
-Smart Devices
 
 https://www.protectedtext.com/softwareengineeringsemester2
 password: ilovesoftwareengineering
 
 liveshare:
-https://prod.liveshare.vsengsaas.visualstudio.com/join?E46B3AC5AFA129F7F561B71F4BBF80292BE0
 
 # Structure of our app code:
 **Frontend Structure (React)**
@@ -133,3 +125,12 @@ Avril (lead)
 Marketing
 Alan
 Stone
+
+# Notes
+## Backend
+### __init__.py
+1. Marks a directory as a Python package
+2. Initialization
+3. Control Public API
+4. Import Convenience
+5. Version Information
