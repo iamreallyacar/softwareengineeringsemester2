@@ -1,12 +1,12 @@
+# MASSIVE AI PARSER
+## HOW TO USE
+1. Make a tier three heading
+2. Let me know
+3. I will copy and paste your entire request into a 131k context length sonnet 3.5
+4. I will copy and paste the response here
 
-
-
-
-
-
-
-
-
+## REQUESTS
+### REQUEST 1
 zenro
 	backend
 		api

@@ -14,17 +14,22 @@
 7. Create an ssh key and add it to your GitHub account
 8. Git clone this repository
 
-# Things we need to do
+# Things we need to do today
+1. Everyone should finish the above checklist
+2. Zenro will explain to everyone the main idea and outline of the code
+3. Task division among everyone for the rest of the week
+
+# Things we need to do when semester 2 starts
 1. Marketing Strategy and Materials
 2. Final Application Design and Implementation
 3. Appendix of Supporting Documentation
 
-# Database
-
+# Important Shit
+### Clipboard
 https://www.protectedtext.com/softwareengineeringsemester2
 password: ilovesoftwareengineering
 
-liveshare:
+### Live Share Link
 
 # Structure of our app code:
 **Frontend Structure (React)**
