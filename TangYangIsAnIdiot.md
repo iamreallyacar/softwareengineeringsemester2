@@ -10,7 +10,7 @@
 3. Update your packages. (sudo apt update & sudo apt upgrade)
 4. Install Git and Python on your WSL.
 5. Install Node.js
-6. Install the above recommended extensions. (if you have a powerful computer, feel free to just install whatever VS-Code tells you to)
+6. Install the above recommended extensions. (Also just install whatever VS-Code tells you to)
 7. Create an ssh key and add it to your GitHub account
 8. Git clone this repository
 
