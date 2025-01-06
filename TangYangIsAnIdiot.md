@@ -18,6 +18,7 @@
 1. Everyone should finish the above checklist
 2. Zenro will explain to everyone the main idea and outline of the code
 3. Task division among everyone for the rest of the week
+4. Run the fucking code
 
 # Things we need to do when semester 2 starts
 1. Marketing Strategy and Materials
