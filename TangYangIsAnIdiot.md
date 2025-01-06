@@ -119,14 +119,16 @@ Avril
 
 Backend:
 Zheng Rong (lead)
-Dzuhair
+Tang Yang
 
 Frontend:
 Zheng Rong
 Tang Yang
+Dzuhair
 
 Frontend Designer (css):
 Avril (lead)
+Dzuhair
 
 Marketing
 Alan
