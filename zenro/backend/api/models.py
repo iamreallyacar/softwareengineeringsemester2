@@ -31,4 +31,3 @@ class Device(models.Model):
             # Ensure that each device name is unique within a smart home
             models.UniqueConstraint(fields=['name', 'smart_home'], name='unique_device_per_home')
         ]
-

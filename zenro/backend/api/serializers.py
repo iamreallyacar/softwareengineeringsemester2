@@ -42,7 +42,7 @@ class SmartHomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SmartHome
         fields = ['id', 'name', 'creator', 'members', 'created_at', 'is_creator']
-        read_only_fields = ['creator']  # Add this line
+        read_only_fields = ['creator']
     
     def get_is_creator(self, obj):
         request = self.context.get('request')
@@ -64,3 +64,8 @@ class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = '__all__'  # Include all fields from the Device model
+    
+	def create(self, validated_data):
+		# Set smart_home to the current user's smart home
+		validated_data['smart_home'] = self.context['request'].user.smart_home
+		return super().create(validated_data)

@@ -54,6 +54,17 @@ button:hover {
     background-color: #3182ce;
 }
 
+/* The .home-container styles the home page layout */
+.smart-home-page {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding: 20px;
+	background-color: #1a1a1a;
+}
+
 /* Additional styles for lists, buttons, and success/error messages */
 ul {
     list-style: none;
