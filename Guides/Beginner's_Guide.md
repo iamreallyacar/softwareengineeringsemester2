@@ -11,17 +11,17 @@
 2. Apply for a Github Education Account if you want GitHub Copilot for free
 3. Set up your Linux environment
 4. Update your packages. (sudo apt update & sudo apt upgrade)
-5. Install Git (sudo apt install git-all)
+5. Install Git
+    - sudo apt update
+    - sudo apt install git-all
 5. Install Node.js
+    - sudo apt update
+    - sudo apt install curl
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+
 6. Install the above recommended extensions. (Also just install whatever VS-Code tells you to)
 7. Create an ssh key and add it to your GitHub account
 8. Git clone this repository
-
-# Things we need to do today
-1. Everyone should finish the above checklist
-2. Zenro will explain to everyone the main idea and outline of the code
-3. Task division among everyone for the rest of the week
-4. Run the fucking code
 
 # Things we need to do when semester 2 starts
 1. Marketing Strategy and Materials
