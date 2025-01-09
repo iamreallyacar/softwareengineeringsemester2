@@ -1,5 +1,16 @@
 # softwareengineeringsemester2
 
+### Beginner's Guide
+
+### Code Documentations
+
+### Resources
+
+### Management
+
+### Task List
+
+
 Below is a practical, step-by-step guide to help you develop a fully functioning smart home system using open source or free tools. This guide assumes you have a basic understanding of programming concepts but are unsure how to piece everything together into a working solution. The stack chosen here is Django (Python) for the backend and React (JavaScript) for the frontend because both are widely used, have large communities, and are free.
 High-Level Overview
 •	Backend: Django (Python) and Django REST Framework for APIs
