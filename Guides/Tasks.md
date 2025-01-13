@@ -11,6 +11,3 @@
 - Since there will be multiple smart homes created, we might need a way to create a new database for each new smart home
 2. The bunch of python files in the backend is a mess, we should create subfolders to organize them.
 - Files that are automatically created by django should be separated from the files we have to deal with so that we do not feel overwhelmed
-
-# Notes
-1. Delete the tasks once you are done with them, we will have better task organization in the future but just do this for now.
