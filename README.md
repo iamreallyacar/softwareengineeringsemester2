@@ -2,19 +2,17 @@
 
 ## Main Folder and File Structure
 
-Guides: Has all the things you need to know to get started with the project. Come here if you are stuck!
+**Guides**: Has all the things you need to know to get started with the project. Come here if you are stuck!
 Instruction PDF Files: Important PDF files provided by the university and our Stage 1 final document. Must read!
 
-Testing Folder: Don't worry about these, they will be deleted soon.
+**Testing Folder**: Don't worry about these, they will be deleted soon.
 zenro: Our project's main directory. All the code are in here. It's named zenro so Zheng Rong can feel the pressure of having the whole group's work on his name.
 
-.gitignore: Don't touch this file if you have no idea what you are doing. If something has to be excluded safely and should never be added, commited, or pushed, let me know and I will add it to this file.
+**.gitignore**: Don't touch this file if you have no idea what you are doing. If something has to be excluded safely and should never be added, commited, or pushed, let me know and I will add it to this file.
 
-README.md: You are reading this now, dumbass.
+**README.md**: You are reading this now, dumbass.
 
-### Resources
-
-### Management
+**Below is an unnecessarily complicated guide written by the unnecessarily talkative Zheng Rong, please refer to the Guides folder for a simple version.**
 
 Below is a practical, step-by-step guide to help you develop a fully functioning smart home system using open source or free tools. This guide assumes you have a basic understanding of programming concepts but are unsure how to piece everything together into a working solution. The stack chosen here is Django (Python) for the backend and React (JavaScript) for the frontend because both are widely used, have large communities, and are free.
 High-Level Overview
