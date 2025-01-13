@@ -6,7 +6,6 @@
 2. Create a home page for the smart homes
 3. Make it so that clicking on a smart home from the smart home list can lead to the home page
 
-
 # Backend Tasks
 1. Create the database to store the usage and generation data for individual smart homes
 - Since there will be multiple smart homes created, we might need a way to create a new database for each new smart home
