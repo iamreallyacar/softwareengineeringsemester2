@@ -26,27 +26,14 @@
     - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
     - nvm install node
     - nvm use node
-7. Install the above recommended extensions and whatever VS-Code tells you to
-8. Create an ssh key and add it to your GitHub account
+7. Install Python
+    - sudo apt update
+    - sudo apt install python3
+    - sudo apt install python3-pip
+8. Install Django
+    - pip install django
+9. Install the above recommended extensions and whatever VS-Code tells you to
+10. Create an ssh key and add it to your GitHub account
     - ssh-keygen
     - cat ~/.ssh/id_[just press tab to autofill].pub
-9. Git clone this repository
-
-## Things we need to do when semester 2 starts
-
-1. Marketing Strategy and Materials
-2. Final Application Design and Implementation
-3. Appendix of Supporting Documentation
-
-### Clipboard
-
-https://www.protectedtext.com/softwareengineeringsemester2
-password: ilovesoftwareengineering
-
-### __init__.py
-
-1. Marks a directory as a Python package
-2. Initialization
-3. Control Public API
-4. Import Convenience
-5. Version Information
+11. Git clone this repository
