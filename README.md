@@ -1,5 +1,7 @@
 # Software Engineering Group 2
+
 ## Main Folder and File Structure
+
 Guides: Has all the things you need to know to get started with the project. Come here if you are stuck!
 Instruction PDF Files: Important PDF files provided by the university and our Stage 1 final document. Must read!
 Testing Folder: Don't worry about these, they will be deleted soon.
