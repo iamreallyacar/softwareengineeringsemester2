@@ -3,12 +3,14 @@
 ## Setting up your coding environment
 
 ### Recommended Extensions
+
 1. GitHub Copilot: https://marketplace.visualstudio.com/items?itemName=GitHub.copilot
 2. GitHub Copilot Chat: https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat
 3. Live Share: https://marketplace.visualstudio.com/items?itemName=ms-vsliveshare.vsliveshare
 4. VSCode PDF: https://marketplace.visualstudio.com/items?itemName=tomoki1207.pdf
 
 ### Getting Started
+
 1. Make a GitHub account.
 2. Apply for a Github Education Account if you want GitHub Copilot for free
 3. Set up your Linux environment
@@ -31,18 +33,18 @@
 9. Git clone this repository
 
 ## Things we need to do when semester 2 starts
+
 1. Marketing Strategy and Materials
 2. Final Application Design and Implementation
 3. Appendix of Supporting Documentation
 
-# Important Shit
 ### Clipboard
+
 https://www.protectedtext.com/softwareengineeringsemester2
 password: ilovesoftwareengineering
 
-# Notes
-## Backend
 ### __init__.py
+
 1. Marks a directory as a Python package
 2. Initialization
 3. Control Public API
