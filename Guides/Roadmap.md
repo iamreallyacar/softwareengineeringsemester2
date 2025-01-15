@@ -16,6 +16,21 @@
         - Posters
 2. Final Application Design and Implementation
     - Overview
-        - High-Level Description of Core Technology, Components, and Connections
-        - Detailed Description of Final System Design
+        - high-level description of the application's core technologies and system components and how they’re connected.
+    - Detailed Description of Final System Design
+        - final state of project requirements
+        - implemented features
+        - dataflow diagrams
+        - UML diagrams
+        - Class diagrams
+    - Description of the final interface design
+        - layout and navigation
+    - Discussion of implementation methodology
+        - Details of what was achieved during each development iteration/sprint
+    - Summary of tests
+        - System components and final overall system
+    - Documentation on how to install/setup/maintain the final system and user guide
 3. Appendix of Supporting Documentation
+    - Project diaries/reports
+    - Original implementation plans
+    - Marketting materials
