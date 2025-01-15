@@ -33,18 +33,8 @@ fi
 
 # Install Python
 echo "Installing Python..."
-sudo apt install -y python3 python3-pip python3-venv
+sudo apt install -y python3 python3-pip
 
-# Create a virtual environment
-if [ ! -d "~/myenv" ]; then
-    echo "Creating a virtual environment..."
-    python3 -m venv ~/myenv
-else
-    echo "Virtual environment already exists."
-fi
-source ~/myenv/bin/activate
-
-# Install Django and additional packages
-echo "Installing Django and additional packages..."
-pip install --upgrade pip
-pip install django djangorestframework djangorestframework-simplejwt django-cors-headers
+# Install Django and additional packages using apt
+echo "Installing Django and additional packages using apt..."
+sudo apt install -y python3-django python3-djangorestframework python3-djangorestframework-simplejwt python3-django-cors-headers
