@@ -13,8 +13,8 @@
 ### Getting Started
 
 1. Make a GitHub account.
-2. Apply for a Github Education Account if you want GitHub Copilot for free
-3. Set up your Linux environment
+2. Apply for a Github Education Account if you want GitHub Copilot for free.
+3. Set up your Linux environment.
 4. Update your packages.
     - sudo apt update
     - sudo apt upgrade
@@ -38,3 +38,19 @@
     - ssh-keygen
     - cat ~/.ssh/id_[just press tab to autofill].pub
 11. Git clone this repository
+
+### Getting Started Version 2.0
+
+1. Make a Github account.
+2. Apply for a Github Education Account if you want GitHub Copilot for free.
+3. Set up your Linux environment.
+4. Install Git
+    - sudo apt update
+    - sudo apt install git-all
+5. Install the above recommended extensions and whatever VS-Code tells you to
+6. Create an ssh key and add it to your GitHub account
+    - ssh-keygen
+    - cat ~/.ssh/id_[just press tab to autofill].pub
+7. Git clone this repository.
+8. Run the setup_environment.sh file.
+    - bash setup_environment.sh
