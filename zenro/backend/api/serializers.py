@@ -65,7 +65,7 @@ class DeviceSerializer(serializers.ModelSerializer):
         model = Device
         fields = '__all__'  # Include all fields from the Device model
     
-	def create(self, validated_data):
-		# Set smart_home to the current user's smart home
-		validated_data['smart_home'] = self.context['request'].user.smart_home
-		return super().create(validated_data)
+    def create(self, validated_data):
+        # Set smart_home to the current user's smart home
+        validated_data['smart_home'] = self.context['request'].user.smart_home
+        return super().create(validated_data)
