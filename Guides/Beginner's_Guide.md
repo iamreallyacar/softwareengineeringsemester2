@@ -8,6 +8,7 @@
 2. GitHub Copilot Chat: https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat
 3. Live Share: https://marketplace.visualstudio.com/items?itemName=ms-vsliveshare.vsliveshare
 4. VSCode PDF: https://marketplace.visualstudio.com/items?itemName=tomoki1207.pdf
+5. Python: https://marketplace.visualstudio.com/items?itemName=ms-python.python
 
 ### Getting Started
 
