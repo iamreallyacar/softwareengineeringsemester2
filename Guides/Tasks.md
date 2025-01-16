@@ -11,6 +11,7 @@
     - django-restframework
     - django-restframework-simplejwt
     - I can't remember the rest
+**Completed**
 2. Create the database to store the usage and generation data for individual smart homes
     - Since there will be multiple smart homes created, we might need a way to create a new database for each new smart home
 3. The bunch of python files in the backend is a mess, we should create subfolders to organize them.

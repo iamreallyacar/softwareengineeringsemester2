@@ -31,3 +31,11 @@ class Device(models.Model):
             # Ensure that each device name is unique within a smart home
             models.UniqueConstraint(fields=['name', 'smart_home'], name='unique_device_per_home')
         ]
+
+# Model representing a energy generation log entry for a device
+# DeviceLog stores device status, energy usage, and timestamps
+class DeviceLog(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE) # Reference to the device instance
+    status = models.BooleanField()                               # Status of the device at the time of the log
+    energy_usage = models.FloatField()                           # Energy usage of the device at the time of the log
+    created_at = models.DateTimeField(auto_now_add=True)         # Timestamp when the log
