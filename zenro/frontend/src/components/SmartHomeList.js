@@ -96,14 +96,11 @@ function SmartHomeList() {
                 <h2>My Smart Homes</h2>
                 <ul>
                     {smartHomes.map((home) => (
+                        <Link to={`/smarthomepage/${home.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                         <li key={home.id}>
                             {home.name}
-                            {!home.is_creator && (
-                                <button onClick={() => handleLeaveHome(home.id)}>
-                                    Leave
-                                </button>
-                            )}
                         </li>
+                        </Link>
                     ))}
                 </ul>
             </div>
