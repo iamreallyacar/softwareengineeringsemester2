@@ -60,7 +60,7 @@ button:hover {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	min-height: 100vh;
+    min-height: 100vh;
 	padding: 20px;
 	background-color: #1a1a1a;
 }
@@ -128,4 +128,108 @@ h1, h2 {
 /* Success message style */
 .success {
     color: #68d391;
+}
+
+.card-container {
+    width: 100%;               
+    max-width: 1200px;         
+    height: 50%;              
+    min-height: 100px;          
+    display: flex;              
+    justify-content: space-between; 
+    align-items: center;        
+    padding: 5px;             
+    margin: 0 auto;             
+    box-sizing: border-box;     
+}
+
+.room-container {
+    width: 100%;                /* Full width of the parent container */
+    max-width: 600px;           /* Max width to prevent excessive width */
+    height: auto;               /* Allow dynamic height based on content */
+    min-height: 150px;          /* Minimum height for the container */
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;     
+    display: flex;              
+    flex-direction: column;     
+    align-items: flex-start;   
+    overflow: hidden;           
+}
+
+.room-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+/* .room */
+.room {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+/* .room-buttons container */
+.room-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    overflow: hidden;           /* Prevent overflow in this container */
+}
+
+/* .room-button */
+.room-button {
+    display: flex;
+    justify-content: space-between;   /* Space between icon+text and the right text */
+    align-items: center;             
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;           
+    width: 100%;                     /* Ensure it fills the container without overflowing */
+    box-sizing: border-box;         
+}
+
+/* Hover effect for the button */
+.room-button:hover {
+    background-color: #3a6daf;
+}
+
+.room-button {
+    word-wrap: break-word;   /* Prevent text overflow */
+    overflow: hidden;        /* Hide any overflowed content */
+    text-overflow: ellipsis; /* Add ellipsis if the text overflows */
+    color: #1a1a1a;
+}
+
+.back-button button,
+.notification-button button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.welcome-message {
+    text-align: center; /* Center align the text */
+    font-size: 18px; 
+    color: #ffffff;
+}
+
+.notification-button button i {
+    margin-right: 8px; 
+    font-size: 20px;   /* Adjust icon size */
 }
