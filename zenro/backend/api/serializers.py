@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.db import models  # Add this import
 from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, RoomLogMonthly
 
 # Serializer for the User model
@@ -72,7 +73,16 @@ class DeviceSerializer(serializers.ModelSerializer):
 # Serializer for the Room model
 class RoomSerializer(serializers.ModelSerializer):
     devices = DeviceSerializer(many=True, read_only=True)
+    daily_usage = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
-        fields = ['id', 'name', 'smart_home', 'devices']
+        fields = ['id', 'name', 'smart_home', 'devices', 'daily_usage']
+
+    def get_daily_usage(self, obj):
+        from django.utils import timezone
+        today = timezone.now().date()
+        # Sum all RoomLog5Sec entries for this room for 'today'
+        logs = RoomLog5Sec.objects.filter(room=obj, created_at__date=today)
+        total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+        return total_usage

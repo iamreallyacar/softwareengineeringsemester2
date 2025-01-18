@@ -2,13 +2,14 @@ from django.http import HttpResponse
 from rest_framework import viewsets
 from django.contrib.auth.models import User
 from .models import User, SmartHome, SupportedDevice, Device, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, RoomLogMonthly, Room
-from .serializers import UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, DeviceSerializer
+from .serializers import UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, DeviceSerializer, RoomSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
 from rest_framework.response import Response
 from rest_framework import status
-from django.db import models
+from django.db import models, IntegrityError
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from django.shortcuts import get_object_or_404
 
 # ViewSet for handling User CRUD operations
 class UserViewSet(viewsets.ModelViewSet):
@@ -55,7 +56,28 @@ class DeviceViewSet(viewsets.ModelViewSet):
 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
-    # ...existing code if you need a serializer class...
+    serializer_class = RoomSerializer  # 1) Provide a serializer_class
+
+    def get_queryset(self):
+        try:
+            queryset = super().get_queryset()
+            smart_home_id = self.request.query_params.get('smart_home')
+            if smart_home_id:
+                try:
+                    sh_id = int(smart_home_id)
+                    user_homes = SmartHome.objects.filter(
+                        models.Q(creator=self.request.user) | 
+                        models.Q(members=self.request.user)
+                    ).values_list('id', flat=True)
+                    if sh_id not in user_homes:
+                        return queryset.none()
+                    queryset = queryset.filter(smart_home_id=sh_id)
+                except ValueError:
+                    return queryset.none()
+            return queryset
+        except Exception as e:
+            print(f"Error in get_queryset: {e}")
+            return Room.objects.none()
 
     @action(detail=True, methods=['POST'])
     def add_device(self, request, pk=None):
@@ -63,13 +85,21 @@ class RoomViewSet(viewsets.ModelViewSet):
         room = self.get_object()
         supported_device_id = request.data.get('supported_device_id')
         device_name = request.data.get('name')
-        # ...existing code for validation...
-        supported_device = SupportedDevice.objects.get(pk=supported_device_id)
-        Device.objects.create(
-            name=device_name,
-            room=room,
-            supported_device=supported_device
-        )
+
+        if not (supported_device_id and device_name):
+            return Response({'error': 'Missing supported_device_id or device name.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        # 2) Handle potential DoesNotExist error
+        supported_device = get_object_or_404(SupportedDevice, pk=supported_device_id)
+        try:
+            Device.objects.create(
+                name=device_name,
+                room=room,
+                supported_device=supported_device
+            )
+        except IntegrityError:
+            return Response({'error': 'Device name must be unique within this room.'},
+                            status=status.HTTP_400_BAD_REQUEST)
         return Response({'status': 'device_added'})
 
     @action(detail=True, methods=['GET'])
