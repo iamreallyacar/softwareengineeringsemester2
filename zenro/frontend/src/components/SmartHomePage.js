@@ -8,12 +8,22 @@ import api from "../api";
  */
 
 function SmartHomePage() {
-	/*
-	 * The SmartHomePage component will display the user's smart home devices.
-	 * The user can add, delete, and update devices.
-	 * The component will fetch the user's devices from the backend.
-	 * The component will also have a form to add a new device.
-	 */
+	const [roomId, setRoomId] = useState(null); // e.g. from URL or selection
+	const [deviceName, setDeviceName] = useState("");
+	const [supportedDeviceId, setSupportedDeviceId] = useState("");
+	const [dailyUsage, setDailyUsage] = useState(null);
+
+	const handleAddDevice = async () => {
+		await api.post(`/rooms/${roomId}/add_device/`, {
+			name: deviceName,
+			supported_device_id: supportedDeviceId
+		});
+	};
+
+	const fetchDailyUsage = async () => {
+		const response = await api.get(`/rooms/${roomId}/daily_usage/`);
+		setDailyUsage(response.data.usage);
+	};
 
 	return (
 		<div className="smart-home-page">
@@ -48,31 +58,52 @@ function SmartHomePage() {
 			{/* Each device should have an edit and delete button */}
 
 			<div className="room-container">
-			<div className="room">
-            <div className="room-buttons">
-                <div className="room-button">
-                    <div className="icon-text">
-                        <i className="fas fa-bed"></i> {/* Example icon */}
-                        <span>Room 1 Description</span>
-                    </div>
-                    <span>More Info</span>
-                </div>
-                <div className="room-button">
-                    <div className="icon-text">
-                        <i className="fas fa-couch"></i> {/* Example icon */}
-                        <span>Room 2 Description</span>
-                    </div>
-                    <span>More Info</span>
-                </div>
-                <div className="room-button">
-                    <div className="icon-text">
-                        <i className="fas fa-tv"></i> {/* Example icon */}
-                        <span>Room 3 Description</span>
-                    </div>
-                    <span>More Info</span>
-                </div>
-            </div>
-        </div>
+				<div className="room">
+					<div className="room-buttons">
+						<div className="room-button">
+							<div className="icon-text">
+								<i className="fas fa-bed"></i> {/* Example icon */}
+								<span>Room 1 Description</span>
+							</div>
+							<span>More Info</span>
+						</div>
+						<div className="room-button">
+							<div className="icon-text">
+								<i className="fas fa-couch"></i> {/* Example icon */}
+								<span>Room 2 Description</span>
+							</div>
+							<span>More Info</span>
+						</div>
+						<div className="room-button">
+							<div className="icon-text">
+								<i className="fas fa-tv"></i> {/* Example icon */}
+								<span>Room 3 Description</span>
+							</div>
+							<span>More Info</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<h3>Add Device to Room</h3>
+				<input
+					placeholder="Device Name"
+					value={deviceName}
+					onChange={(e) => setDeviceName(e.target.value)}
+				/>
+				<input
+					placeholder="SupportedDevice ID"
+					value={supportedDeviceId}
+					onChange={(e) => setSupportedDeviceId(e.target.value)}
+				/>
+				<button onClick={handleAddDevice}>Add Device</button>
+			</div>
+
+			<div>
+				<h3>Room Daily Usage</h3>
+				<button onClick={fetchDailyUsage}>Refresh Usage</button>
+				{dailyUsage !== null && <p>Today's Usage: {dailyUsage} kWh</p>}
 			</div>
 
 		</div>
