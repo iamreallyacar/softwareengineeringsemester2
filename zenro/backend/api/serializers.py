@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import User, SmartHome, SupportedDevice, Device
+from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, RoomLogMonthly
 
 # Serializer for the User model
 class UserSerializer(serializers.ModelSerializer):
@@ -66,6 +66,13 @@ class DeviceSerializer(serializers.ModelSerializer):
         fields = '__all__'  # Include all fields from the Device model
     
     def create(self, validated_data):
-        # Set smart_home to the current user's smart home
-        validated_data['smart_home'] = self.context['request'].user.smart_home
+        # Removed the old 'smart_home' assignment
         return super().create(validated_data)
+
+# Serializer for the Room model
+class RoomSerializer(serializers.ModelSerializer):
+    devices = DeviceSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Room
+        fields = ['id', 'name', 'smart_home', 'devices']

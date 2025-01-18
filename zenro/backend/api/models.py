@@ -10,6 +10,11 @@ class SmartHome(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)        # Timestamp when the smart home was created
     updated_at = models.DateTimeField(auto_now=True)            # Timestamp when the smart home was last updated
 
+# Model representing a room in a smart home
+class Room(models.Model):
+    name = models.CharField(max_length=100)
+    smart_home = models.ForeignKey(SmartHome, on_delete=models.CASCADE, related_name='rooms')
+
 # Model representing a supported device model that can be added to a smart home
 # SupportedDevice lists device models and types
 class SupportedDevice(models.Model):
@@ -21,21 +26,50 @@ class SupportedDevice(models.Model):
 class Device(models.Model):
     name = models.CharField(max_length=100)                             # Name of the device instance
     status = models.BooleanField(default=False)                         # Current status of the device (e.g., on/off)
-    smart_home = models.ForeignKey(SmartHome, on_delete=models.CASCADE) # Reference to the smart home the device belongs to
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='devices') # Reference to the room the device belongs to
     supported_device = models.ForeignKey(SupportedDevice, on_delete=models.CASCADE) # Reference to the supported device model
     created_at = models.DateTimeField(auto_now_add=True)                # Timestamp when the device instance was created
     updated_at = models.DateTimeField(auto_now=True)                    # Timestamp when the device instance was last updated
 
     class Meta:
         constraints = [
-            # Ensure that each device name is unique within a smart home
-            models.UniqueConstraint(fields=['name', 'smart_home'], name='unique_device_per_home')
+            # Ensure that each device name is unique within a room
+            models.UniqueConstraint(fields=['name', 'room'], name='unique_device_in_room')
         ]
 
 # Model representing a energy generation log entry for a device
 # DeviceLog stores device status, energy usage, and timestamps
-class DeviceLog(models.Model):
+class DeviceLog5Sec(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE) # Reference to the device instance
     status = models.BooleanField()                               # Status of the device at the time of the log
     energy_usage = models.FloatField()                           # Energy usage of the device at the time of the log
-    created_at = models.DateTimeField(auto_now_add=True)         # Timestamp when the log
+    created_at = models.DateTimeField(auto_now_add=True)         # Timestamp when the log was created
+
+class DeviceLogDaily(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    date = models.DateField()
+    total_energy_usage = models.FloatField(default=0.0)
+    status_usage_details = models.JSONField(default=dict)  # For storing on/off intervals if needed
+
+class DeviceLogMonthly(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    month = models.IntegerField()
+    year = models.IntegerField()
+    total_energy_usage = models.FloatField(default=0.0)
+    daily_summaries = models.JSONField(default=dict)  # Each day's usage for the month
+
+class RoomLog5Sec(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE) # Reference to the room instance
+    energy_usage = models.FloatField()                           # Energy usage of the device at the time of the log
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class RoomLogDaily(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    date = models.DateField()
+    total_energy_usage = models.FloatField(default=0.0)
+
+class RoomLogMonthly(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    month = models.IntegerField()
+    year = models.IntegerField()
+    total_energy_usage = models.FloatField(default=0.0)
