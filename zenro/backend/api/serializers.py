@@ -70,6 +70,39 @@ class DeviceSerializer(serializers.ModelSerializer):
         # Removed the old 'smart_home' assignment
         return super().create(validated_data)
 
+    # Returns energy usage from a specified time to a specified time
+    def get_from_to_time(self, obj, start_time, end_time):
+        # Filter DeviceLog5Sec entries for this device from start_time to end_time
+        logs = DeviceLog5Sec.objects.filter(device=obj, created_at__gte=start_time, created_at__lte=end_time)
+        total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+        return total_usage
+    
+    # Returns energy usage for the past 24 hours from a specified time
+    def get_24_hours_from_specified_time(self, obj, end_time=None):
+        from django.utils import timezone
+        from datetime import timedelta
+
+        # Use the provided end_time or default to the current time
+        if end_time is None:
+            end_time = timezone.now()
+
+        # Calculate the time 24 hours ago from end_time
+        past_24_hours = end_time - timedelta(hours=24)
+
+        # Use the get_from_to_time method to get the total usage
+        total_usage = self.get_from_to_time(obj, past_24_hours, end_time)
+        return total_usage
+
+    def get_past_24_hours_usage(self, obj):
+        return self.get_24_hours_from_specified_time(obj)
+    
+    def get_yesterday_usage(self, obj):
+        from django.utils import timezone
+        today = timezone.now().date()
+        yesterday = today - timezone.timedelta(days=1)
+        return self.get_24_hours_from_specified_time(obj, end_time=yesterday)
+
+
 # Serializer for the Room model
 class RoomSerializer(serializers.ModelSerializer):
     devices = DeviceSerializer(many=True, read_only=True)
