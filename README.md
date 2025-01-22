@@ -129,22 +129,3 @@ Step 13: Documentation and Maintenance
 •	Add comments to your code, especially in complex parts.
 •	Regularly update dependencies and fix any vulnerabilities (run npm audit fix for frontend, pip list --outdated for backend).
 •	Keep refining the UI based on feedback.
-________________________________________
-Free Tools Summary
-•	Editor: VS Code (Free)
-•	Backend: Django, Django REST Framework (Free, open source)
-•	Frontend: React (Free, open source)
-•	Version Control: Git + GitHub (Free)
-•	Testing Tools: Built-in testing (no extra cost), Jest for React, unittest/pytest for Django
-•	Deployment: Netlify/Vercel (frontend), Render/Railway (backend) free tiers available
-•	Package Managers: npm (Node.js default), pip (Python default)
-•	UI Libraries: Material-UI (free), Chart.js (free)
-•	API Testing: Postman or Insomnia (free)
-•	CI/CD: GitHub Actions (Free for public/private repos within limits)
-________________________________________
-Final Notes
-•	Start small. Aim to get a basic API and a basic React page working first.
-•	Gradually add features: authentication, device control, data visualization.
-•	Always commit and push your code frequently.
-•	Use the free tiers of hosting platforms for learning and demonstration purposes.
-•	Don’t worry if you don’t get it perfect at first. Iteration is key.
