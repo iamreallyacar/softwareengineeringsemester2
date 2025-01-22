@@ -58,6 +58,7 @@ class DeviceLogMonthly(models.Model):
     total_energy_usage = models.FloatField(default=0.0)
     daily_summaries = models.JSONField(default=dict)  # Each day's usage for the month
 
+# Model representing energy generation for a room
 class RoomLog5Sec(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE) # Reference to the room instance
     energy_usage = models.FloatField()                           # Energy usage of the device at the time of the log
