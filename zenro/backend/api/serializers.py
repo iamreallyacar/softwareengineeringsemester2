@@ -107,7 +107,6 @@ class DeviceLog5SecSerializer(serializers.ModelSerializer):
         yesterday = today - timezone.timedelta(days=1)
         return self.get_24_hours_from_specified_time(obj, end_time=yesterday)
 
-
 # Serializer for the Room model
 class RoomSerializer(serializers.ModelSerializer):
     devices = DeviceSerializer(many=True, read_only=True)
