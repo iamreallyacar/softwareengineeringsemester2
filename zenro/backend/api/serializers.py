@@ -70,6 +70,11 @@ class DeviceSerializer(serializers.ModelSerializer):
         # Removed the old 'smart_home' assignment
         return super().create(validated_data)
 
+class DeviceLog5SecSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeviceLog5Sec
+        fields = '__all__'
+
     # Returns energy usage from a specified time to a specified time
     def get_from_to_time(self, obj, start_time, end_time):
         # Filter DeviceLog5Sec entries for this device from start_time to end_time
