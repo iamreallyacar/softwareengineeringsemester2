@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from rest_framework import viewsets
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User # REMOVE THIS LINE
 from .models import User, SmartHome, SupportedDevice, Device, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, RoomLogMonthly, Room
 from .serializers import UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, DeviceSerializer, RoomSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
@@ -10,6 +10,10 @@ from django.db import models, IntegrityError
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from datetime import timedelta
+from rest_framework.decorators import action
+
 
 # ViewSet for handling User CRUD operations
 class UserViewSet(viewsets.ModelViewSet):
@@ -54,9 +58,10 @@ class DeviceViewSet(viewsets.ModelViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
 
+# ViewSet for handling Room CRUD operations
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
-    serializer_class = RoomSerializer  # 1) Provide a serializer_class
+    serializer_class = RoomSerializer
 
     def get_queryset(self):
         try:
@@ -75,6 +80,7 @@ class RoomViewSet(viewsets.ModelViewSet):
                 except ValueError:
                     return queryset.none()
             return queryset
+        # Error handling
         except Exception as e:
             print(f"Error in get_queryset: {e}")
             return Room.objects.none()
@@ -115,6 +121,18 @@ class RoomViewSet(viewsets.ModelViewSet):
         ).aggregate(models.Sum('total_energy_usage'))['total_energy_usage__sum'] or 0
         return Response({'date': str(today), 'usage': total_usage})
 
+    @action(detail=True, methods=['GET'])
+    def weekly_usage(self, request, pk=None):
+        """Get the weekly usage for this room."""
+        room = self.get_object()
+        from django.utils import timezone
+        today = timezone.now().date()
+        start_of_week = today - timedelta(days=today.weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+        logs = RoomLogDaily.objects.filter(room=room, date__range=[start_of_week, end_of_week])
+        total_usage = logs.aggregate(models.Sum('total_energy_usage'))['total_energy_usage__sum'] or 0
+        return Response({'start_of_week': str(start_of_week), 'end_of_week': str(end_of_week), 'usage': total_usage})
+
 def aggregate_logs():
     """
     Example logic to move data from DeviceLog5Sec to DeviceLogDaily,
@@ -123,6 +141,36 @@ def aggregate_logs():
     """
     # ...existing code or aggregator logic...
     pass
+
+def aggregate_room_logs():
+    """
+    Aggregate RoomLog5Sec entries into RoomLogDaily and RoomLogDaily into RoomLogMonthly.
+    This function can be scheduled to run periodically.
+    """
+    today = timezone.now().date()
+    yesterday = today - timedelta(days=1)
+
+    # Aggregate RoomLog5Sec to RoomLogDaily
+    rooms = Room.objects.all()
+    for room in rooms:
+        daily_logs = RoomLog5Sec.objects.filter(room=room, created_at__date=yesterday)
+        total_usage = daily_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+        RoomLogDaily.objects.update_or_create(
+            room=room,
+            date=yesterday,
+            defaults={'total_energy_usage': total_usage}
+        )
+
+    # Aggregate RoomLogDaily to RoomLogMonthly
+    for room in rooms:
+        monthly_logs = RoomLogDaily.objects.filter(room=room, date__month=yesterday.month, date__year=yesterday.year)
+        total_usage = monthly_logs.aggregate(models.Sum('total_energy_usage'))['total_energy_usage__sum'] or 0
+        RoomLogMonthly.objects.update_or_create(
+            room=room,
+            month=yesterday.month,
+            year=yesterday.year,
+            defaults={'total_energy_usage': total_usage}
+        )
 
 # Home view to handle the root URL
 def home(request):
