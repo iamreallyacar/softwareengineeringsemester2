@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'api',
     'corsheaders',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -110,11 +111,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Singapore'  # Change to your timezone
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -165,3 +166,8 @@ CORS_ALLOW_METHODS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
+
+CRONJOBS = [
+    ('05 0 * * *', 'api.views.aggregate_room_logs'),
+    ('05 0 * * *', 'api.views.aggregate_device_logs')
+]

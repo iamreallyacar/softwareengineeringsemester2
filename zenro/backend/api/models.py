@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Model representing a smart home
 # SmartHome stores home info, creator, members, timestamps
@@ -43,7 +44,7 @@ class DeviceLog5Sec(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE) # Reference to the device instance
     status = models.BooleanField()                               # Status of the device at the time of the log
     energy_usage = models.FloatField()                           # Energy usage of the device at the time of the log
-    created_at = models.DateTimeField(auto_now_add=True)         # Timestamp when the log was created
+    created_at = models.DateTimeField(default=timezone.now)         # Timestamp when the log was created
 
 class DeviceLogDaily(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
@@ -62,7 +63,7 @@ class DeviceLogMonthly(models.Model):
 class RoomLog5Sec(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE) # Reference to the room instance
     energy_usage = models.FloatField()                           # Energy usage of the device at the time of the log
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)  # Change from auto_now_add
 
 class RoomLogDaily(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
