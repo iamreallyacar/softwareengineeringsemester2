@@ -168,6 +168,7 @@ CORS_ALLOW_METHODS = [
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
 
 CRONJOBS = [
-    ('05 0 * * *', 'api.views.aggregate_room_logs'),
-    ('05 0 * * *', 'api.views.aggregate_device_logs')
+    ('05 00 * * *', 'api.scheduled_scripts.aggregate_room_logs'),
+    ('07 00 * * *', 'api.scheduled_scripts.aggregate_device_logs'),
+    ('* * * * *', 'api.scheduled_scripts.aggregate_device_to_room_logs'),
 ]

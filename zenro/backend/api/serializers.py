@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User # REMOVE THIS LINE
-from django.db import models # THIS IS NOT USED? DELETE
+from django.db import models
 from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, RoomLogMonthly
 
 # Serializer for the User model
@@ -106,6 +105,16 @@ class DeviceLog5SecSerializer(serializers.ModelSerializer):
         today = timezone.now().date()
         yesterday = today - timezone.timedelta(days=1)
         return self.get_24_hours_from_specified_time(obj, end_time=yesterday)
+
+class DeviceLogDailySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeviceLogDaily
+        fields = '__all__'
+
+class RoomLogDailySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomLogDaily
+        fields = '__all__'
 
 # Serializer for the Room model
 class RoomSerializer(serializers.ModelSerializer):
