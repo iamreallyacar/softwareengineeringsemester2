@@ -97,9 +97,11 @@ class DeviceLog5SecSerializer(serializers.ModelSerializer):
         total_usage = self.get_from_to_time(obj, past_24_hours, end_time)
         return total_usage
 
+    # Returns energy usage for the past 24 hours from the current time
     def get_past_24_hours_usage(self, obj):
         return self.get_24_hours_from_specified_time(obj)
     
+    # Returns energy usage for yesterday
     def get_yesterday_usage(self, obj):
         from django.utils import timezone
         today = timezone.now().date()

@@ -93,21 +93,31 @@ class DeviceLogMonthly(models.Model):
     # Usage details for the month
     daily_summaries = models.JSONField(default=dict)
 
-# 1. Can't we just store month and year as date and then use it to figure out the month or year when we need it?
+# 1. Can't we just store month and year as created_at and then use it to figure out the month or year when we need it?
 
 # Model representing energy generation for a room
 class RoomLog5Sec(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE) # Reference to the room instance
-    energy_usage = models.FloatField()                           # Energy usage of the device at the time of the log
-    created_at = models.DateTimeField(default=timezone.now)  # Change from auto_now_add
+    # Reference to the room instance
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # Energy usage of the device at the time of the log
+    energy_usage = models.FloatField()
+    # Timestamp when the log was created                
+    created_at = models.DateTimeField(default=timezone.now)
 
 class RoomLogDaily(models.Model):
+    # Reference to the room instance
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # Date of the log entry
     date = models.DateField()
+    # Total energy usage of the room for the day
     total_energy_usage = models.FloatField(default=0.0)
 
 class RoomLogMonthly(models.Model):
+    # Reference to the room instance
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # Month of the log entry
     month = models.IntegerField()
+    # Year of the log entry
     year = models.IntegerField()
+    # Total energy usage of the room for the month
     total_energy_usage = models.FloatField(default=0.0)
