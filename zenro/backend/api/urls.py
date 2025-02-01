@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     UserViewSet, SmartHomeViewSet, SupportedDeviceViewSet, 
     DeviceViewSet, register_user, RoomViewSet,
-    DeviceLogDailyViewSet, RoomLogDailyViewSet
+    DeviceLogDailyViewSet, RoomLogDailyViewSet, HomeIOControlView
 )
 
 # Create a router and register our viewsets with it
@@ -21,4 +21,5 @@ router.register(r'roomlogdaily', RoomLogDailyViewSet, basename='roomlogdaily')  
 urlpatterns = [
     path('', include(router.urls)),    # Include router-generated URLs
     path('register/', register_user, name='register'),  # The 'register/' path calls the register_user function for signup
+    path('homeio/control/', HomeIOControlView.as_view(), name='homeio-control'), 
 ]

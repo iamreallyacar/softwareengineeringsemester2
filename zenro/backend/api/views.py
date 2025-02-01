@@ -3,6 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 from django.db import models, IntegrityError
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -16,8 +17,9 @@ from .serializers import (
     UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
     DeviceSerializer, RoomSerializer,
     DeviceLogDailySerializer,
-    RoomLogDailySerializer
+    RoomLogDailySerializer, HomeIOControlSerializer
 )
+from .home_io.home_io_services import HomeIOService
 
 
 # ViewSet for handling User CRUD operations
@@ -145,6 +147,17 @@ class DeviceLogDailyViewSet(viewsets.ReadOnlyModelViewSet):
 class RoomLogDailyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RoomLogDaily.objects.all()
     serializer_class = RoomLogDailySerializer
+
+class HomeIOControlView(APIView):
+    def post(self, request):
+        serializer = HomeIOControlSerializer(data=request.data)
+        if serializer.is_valid():
+            address = serializer.validated_data['address']
+            state = serializer.validated_data['state']
+            service = HomeIOService()
+            service.set_device_state(address, state)
+            return Response({'status': 'updated'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Home view to handle the root URL
 def home(request):

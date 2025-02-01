@@ -134,3 +134,7 @@ class RoomSerializer(serializers.ModelSerializer):
         logs = RoomLog5Sec.objects.filter(room=obj, created_at__date=today)
         total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
         return total_usage
+
+class HomeIOControlSerializer(serializers.Serializer):
+    address = serializers.IntegerField()
+    state = serializers.BooleanField()
