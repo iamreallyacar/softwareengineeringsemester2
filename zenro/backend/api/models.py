@@ -39,17 +39,22 @@ class SupportedDevice(models.Model):
 
 # Model representing a device instance added to a smart home
 # Device associates a named device with a SmartHome and SupportedDevice
+# device - Name of the device instance
+# status - Current status of the device (e.g., on/off)
+# room - Reference to the room the device belongs to
+# supported_device - Reference to the supported device model
+# created_at - Timestamp when the device instance was created
+# updated_at - Timestamp when the device instance was last updated
 class Device(models.Model):
-    name = models.CharField(max_length=100)                             # Name of the device instance
-    status = models.BooleanField(default=False)                         # Current status of the device (e.g., on/off)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='devices') # Reference to the room the device belongs to
-    supported_device = models.ForeignKey(SupportedDevice, on_delete=models.CASCADE) # Reference to the supported device model
-    created_at = models.DateTimeField(auto_now_add=True)                # Timestamp when the device instance was created
-    updated_at = models.DateTimeField(auto_now=True)                    # Timestamp when the device instance was last updated
+    name = models.CharField(max_length=100)                             
+    status = models.BooleanField(default=False)                         
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='devices') 
+    supported_device = models.ForeignKey(SupportedDevice, on_delete=models.CASCADE) 
+    created_at = models.DateTimeField(auto_now_add=True)                
+    updated_at = models.DateTimeField(auto_now=True)                    
 
     class Meta:
         constraints = [
-            # Ensure that each device name is unique within a room
             models.UniqueConstraint(fields=['name', 'room'], name='unique_device_in_room')
         ]
 
@@ -70,56 +75,61 @@ class DeviceLog5Sec(models.Model):
 
 # Model representing energy generation for a device
 # DeviceLogDaily stores daily energy usage summaries
+# device - Reference to the device instance
+# date - Date of the log entry
+# total_energy_usage - Total energy usage of the device for the day
+# status_usage_details Usage details for the day
 class DeviceLogDaily(models.Model):
-    # Reference to the device instance
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    # Date of the log entry
     date = models.DateField()
-    # Total energy usage of the device for the day
     total_energy_usage = models.FloatField(default=0.0)
-    # Usage details for the day
     status_usage_details = models.JSONField(default=dict)  # For storing on/off intervals if needed
 
 # 1. rename date to created_at for consistency?
 
 # Model representing energy generation for a device
+# device - Reference to the device instance
+# month - Month of the log entry
+# year - Year of the log entry
+# total_energy_usage - Total energy usage of the device for the month
+# daily_summaries - Usage details for the month
 class DeviceLogMonthly(models.Model):
-    # Reference to the device instance
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    # Month of the log entry
     month = models.IntegerField()
-    # Year of the log entry
     year = models.IntegerField()
-    # Total energy usage of the device for the month
     total_energy_usage = models.FloatField(default=0.0)
-    # Usage details for the month
     daily_summaries = models.JSONField(default=dict)
 
 # 1. Can't we just store month and year as created_at and then use it to figure out the month or year when we need it?
 
 # Model representing energy generation for a room
+# RoomLog5Sec stores energy usage of a room every 5 seconds
+# room - Reference to the room instance
+# energy_usage - Energy usage of the room at the time of the log
+# created_at - Timestamp when the log was created
 class RoomLog5Sec(models.Model):
-    # Reference to the room instance
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    # Energy usage of the device at the time of the log
     energy_usage = models.FloatField()
-    # Timestamp when the log was created                
     created_at = models.DateTimeField(default=timezone.now)
 
+# Model representing daily energy generation for a room
+# RoomLogDaily stores daily energy usage summaries
+# room - Reference to the room instance
+# date - Date of the log entry
+# total_energy_usage - Total energy usage of the room for the day
 class RoomLogDaily(models.Model):
-    # Reference to the room instance
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    # Date of the log entry
     date = models.DateField()
-    # Total energy usage of the room for the day
     total_energy_usage = models.FloatField(default=0.0)
 
+# Model representing monthly energy generation for a room
+# RoomLogMonthly stores monthly energy usage summaries
+# room - Reference to the room instance
+# month - Month of the log entry
+# year - Year of the log entry
+# total_energy_usage - Total energy usage of the room for the month
 class RoomLogMonthly(models.Model):
-    # Reference to the room instance
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    # Month of the log entry
     month = models.IntegerField()
-    # Year of the log entry
     year = models.IntegerField()
-    # Total energy usage of the room for the month
     total_energy_usage = models.FloatField(default=0.0)
