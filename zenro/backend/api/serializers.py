@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.db import models
+from django.utils import timezone
+from datetime import timedelta
 from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, RoomLogMonthly
 
 # Serializer for the User model
@@ -74,39 +76,25 @@ class DeviceLog5SecSerializer(serializers.ModelSerializer):
         model = DeviceLog5Sec
         fields = '__all__'
 
-    # Returns energy usage from a specified time to a specified time
-    def get_from_to_time(self, obj, start_time, end_time):
-        # Filter DeviceLog5Sec entries for this device from start_time to end_time
-        logs = DeviceLog5Sec.objects.filter(device=obj, created_at__gte=start_time, created_at__lte=end_time)
-        total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
-        return total_usage
-    
-    # Returns energy usage for the past 24 hours from a specified time
-    def get_24_hours_from_specified_time(self, obj, end_time=None):
-        from django.utils import timezone
-        from datetime import timedelta
+    def get_energy_usage(self, obj, start_time, end_time):
+        """Fetch total energy usage for a given time range."""
+        logs = DeviceLog5Sec.objects.filter(
+            device=obj, created_at__gte=start_time, created_at__lte=end_time
+        )
+        return logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
 
-        # Use the provided end_time or default to the current time
+    def get_past_24_hours_usage(self, obj, end_time=None):
+        """Get energy usage for the past 24 hours from a specified end_time (defaults to now)."""
         if end_time is None:
             end_time = timezone.now()
+        start_time = end_time - timedelta(hours=24)
+        return self.get_energy_usage(obj, start_time, end_time)
 
-        # Calculate the time 24 hours ago from end_time
-        past_24_hours = end_time - timedelta(hours=24)
-
-        # Use the get_from_to_time method to get the total usage
-        total_usage = self.get_from_to_time(obj, past_24_hours, end_time)
-        return total_usage
-
-    # Returns energy usage for the past 24 hours from the current time
-    def get_past_24_hours_usage(self, obj):
-        return self.get_24_hours_from_specified_time(obj)
-    
-    # Returns energy usage for yesterday
     def get_yesterday_usage(self, obj):
-        from django.utils import timezone
+        """Get energy usage for yesterday (00:00 - 23:59)."""
         today = timezone.now().date()
-        yesterday = today - timezone.timedelta(days=1)
-        return self.get_24_hours_from_specified_time(obj, end_time=yesterday)
+        yesterday = today - timedelta(days=1)
+        return self.get_energy_usage(obj, yesterday, today)
 
 class DeviceLogDailySerializer(serializers.ModelSerializer):
     class Meta:
