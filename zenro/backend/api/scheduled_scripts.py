@@ -23,7 +23,6 @@ def aggregate_room_logs():
             # Step 3: Save to RoomLogDaily
             rooms = Room.objects.all()
             for room in rooms:
-                # Strictly get yesterday's logs only
                 daily_logs = RoomLog5Sec.objects.filter(
                     room=room,
                     created_at__date=yesterday
@@ -41,7 +40,9 @@ def aggregate_room_logs():
                     )
 
             # Step 1: Check if today is first of month
-            # Step 2: Aggregate previous month's daily logs
+            # Step 2: Iterate over all rooms
+            # Step 3: Filter and sum previous month's daily logs
+            # Step 4: Save to RoomLogMonthly
             if is_first_day_of_month(today):
                 first_of_prev_month = yesterday.replace(day=1)
                 
