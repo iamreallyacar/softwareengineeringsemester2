@@ -4,36 +4,37 @@ from django.utils import timezone
 
 # Model representing a smart home
 # SmartHome stores home info, creator, members, timestamps
+# name - Name of the smart home
+# creator - Reference to the user who created the smart home
+# member - Users who are members of the smart home
+# created_at - Timestamp when the smart home was created
+# updated_at - Timestamp when the smart home was last updated
 class SmartHome(models.Model):
-    # Name of the smart home
     name = models.CharField(max_length=255)
-    # Reference to the user who created the smart home
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_homes')
-    # Users who are members of the smart home
     members = models.ManyToManyField(User, related_name='joined_homes', blank=True)
-    # Timestamp when the smart home was created
     created_at = models.DateTimeField(auto_now_add=True)
-    # Timestamp when the smart home was last updated
     updated_at = models.DateTimeField(auto_now=True)
 
+# Questions
 # 1. Should we add a field for privileged users?
 # 2. Should we instead make a separate table for member list and add a field for privilege?
 
 # Model representing a room in a smart home
+# name - Name of the room
+# smart_home - Reference to the smart home the room belongs to
 class Room(models.Model):
-    # Name of the room
     name = models.CharField(max_length=100)
-    # Reference to the smart home the room belongs to
     smart_home = models.ForeignKey(SmartHome, on_delete=models.CASCADE, related_name='rooms')
 
 # Model representing a supported device model that can be added to a smart home
-# SupportedDevice lists device models and types
+# model_name - Model name of the supported device
+# type - Type/category of the device (e.g., 'light', 'thermostat')
 class SupportedDevice(models.Model):
-    # Model name of the supported device
     model_name = models.CharField(max_length=255)
-    # Type/category of the device (e.g., 'light', 'thermostat')
     type = models.CharField(max_length=50)
 
+# Questions
 # 1. Should we make a table to keep track of all the legal types and then reference them here?
 
 # Model representing a device instance added to a smart home
@@ -52,18 +53,19 @@ class Device(models.Model):
             models.UniqueConstraint(fields=['name', 'room'], name='unique_device_in_room')
         ]
 
+# Question
 # 1. Should we use MAC address to identify devices?
 
 # Model representing a energy generation log entry for a device
 # DeviceLog stores energy usage and status of a device every 5 seconds
+# device - Reference to the device instance
+# status - Status of the device at the time of the log
+# energy_usage - Energy usage of the device at the time of the log
+# created_at - Timestamp when the log was created
 class DeviceLog5Sec(models.Model):
-    # Reference to the device instance
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    # Status of the device at the time of the log
     status = models.BooleanField()
-    # Energy usage of the device at the time of the log
     energy_usage = models.FloatField()
-    # Timestamp when the log was created
     created_at = models.DateTimeField(default=timezone.now)
 
 # Model representing energy generation for a device
