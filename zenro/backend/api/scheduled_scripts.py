@@ -18,7 +18,9 @@ def aggregate_room_logs():
             today = timezone.now().date()
             yesterday = today - timedelta(days=1)
 
-            # Step 1: Aggregate RoomLog5Sec to RoomLogDaily
+            # Step 1: Iterate over all rooms
+            # Step 2: Filter and sum all energy usage yesterday
+            # Step 3: Save to RoomLogDaily
             rooms = Room.objects.all()
             for room in rooms:
                 # Strictly get yesterday's logs only
@@ -38,7 +40,8 @@ def aggregate_room_logs():
                         defaults={'total_energy_usage': total_usage}
                     )
 
-            # Step 2: If today is first of month, aggregate previous month's daily logs
+            # Step 1: Check if today is first of month
+            # Step 2: Aggregate previous month's daily logs
             if is_first_day_of_month(today):
                 first_of_prev_month = yesterday.replace(day=1)
                 
