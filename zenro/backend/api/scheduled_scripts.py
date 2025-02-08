@@ -98,9 +98,8 @@ def calculate_device_metrics(logs):
 
 def aggregate_room_logs():
     """
-    Aggregate logs at 00:05 daily.
-    1. Always aggregate previous day's 5sec logs to daily
-    2. On first day of month, also aggregate previous month's daily logs to monthly
+    Aggregates daily and monthly logs for all Rooms.
+    Runs at 00:05 daily to handle data from the previous day or month.
     """
     try:
         with transaction.atomic():

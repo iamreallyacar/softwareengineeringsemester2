@@ -36,7 +36,7 @@ class SupportedDevice(models.Model):
     model_name = models.CharField(max_length=255)
     type = models.CharField(max_length=50)
     home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE)
-    address = models.IntegerField(unique=True)
+    address = models.IntegerField(unique=True, null=True, blank=True)
 
 # Questions
 # 1. Should we make a table to keep track of all the legal types and then reference them here?

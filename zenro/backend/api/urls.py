@@ -1,3 +1,6 @@
+# This file defines the API endpoint routing. 
+# The DefaultRouter auto-generates routes for all ViewSets, plus some custom paths.
+
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (

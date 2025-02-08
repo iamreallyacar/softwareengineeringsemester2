@@ -1,3 +1,5 @@
+# Registers models with Django admin for easy management.
+
 from django.contrib import admin
 from .models import SmartHome, SupportedDevice, Device, Room, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLogDaily, RoomLogMonthly, RoomLog5Sec
 

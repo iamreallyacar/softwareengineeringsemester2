@@ -1,0 +1,62 @@
+{
+  "rooms": [
+    {
+      "name": "Zone A (Living Room)",
+      "unlock_order": 1,
+      "devices": [
+        {
+          "model_name": "Light Switch 1",
+          "type": "light_switch",
+          "address": 0
+        },
+        {
+          "model_name": "Light Switch 2",
+          "type": "light_switch",
+          "address": 1
+        },
+        {
+          "model_name": "Light Switch 3",
+          "type": "light_switch",
+          "address": 2
+        },
+        {
+          "model_name": "Dimmer Switch 1 (Up)",
+          "type": "dimmer_switch",
+          "address": 7
+        }
+      ]
+    },
+    {
+      "name": "Zone B (Bedroom)",
+      "unlock_order": 2,
+      "devices": [
+        {
+          "model_name": "Light Switch 1",
+          "type": "light_switch",
+          "address": 27
+        },
+        {
+          "model_name": "Light Switch 2",
+          "type": "light_switch",
+          "address": 28
+        },
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 29
+        }
+      ]
+    },
+    {
+      "name": "Zone C (Garage)",
+      "unlock_order": 3,
+      "devices": [
+        {
+          "model_name": "Light Switch",
+          "type": "light_switch",
+          "address": 39
+        }
+      ]
+    }
+  ]
+}

@@ -25,6 +25,9 @@ from .home_io.home_io_services import HomeIOService
 
 # ViewSet for handling User CRUD operations
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    Handles CRUD operations for User model.
+    """
     # Allow any user (including anonymous) to access UserViewSet.
     permission_classes = [AllowAny]
     queryset = User.objects.all()
@@ -32,6 +35,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # ViewSet for handling SmartHome CRUD operations
 class SmartHomeViewSet(viewsets.ModelViewSet):
+    """
+    Handles CRUD operations for SmartHome model.
+    """
     serializer_class = SmartHomeSerializer
     queryset = SmartHome.objects.all()
 
@@ -58,16 +64,25 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
 
 # ViewSet for handling SupportedDevice CRUD operations
 class SupportedDeviceViewSet(viewsets.ModelViewSet):
+    """
+    Handles CRUD operations for SupportedDevice model.
+    """
     queryset = SupportedDevice.objects.all()
     serializer_class = SupportedDeviceSerializer
 
 # ViewSet for handling Device CRUD operations
 class DeviceViewSet(viewsets.ModelViewSet):
+    """
+    Handles CRUD operations for Device model.
+    """
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
 
 # ViewSet for handling Room CRUD operations
 class RoomViewSet(viewsets.ModelViewSet):
+    """
+    Handles CRUD operations for Room model.
+    """
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 
@@ -142,14 +157,23 @@ class RoomViewSet(viewsets.ModelViewSet):
         return Response({'start_of_week': str(start_of_week), 'end_of_week': str(end_of_week), 'usage': total_usage})
 
 class DeviceLogDailyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Handles read-only operations for DeviceLogDaily model.
+    """
     queryset = DeviceLogDaily.objects.all()
     serializer_class = DeviceLogDailySerializer
 
 class RoomLogDailyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Handles read-only operations for RoomLogDaily model.
+    """
     queryset = RoomLogDaily.objects.all()
     serializer_class = RoomLogDailySerializer
 
 class HomeIOControlView(APIView):
+    """
+    Handles HomeIO control operations.
+    """
     def post(self, request):
         serializer = HomeIOControlSerializer(data=request.data)
         if serializer.is_valid():
@@ -161,6 +185,9 @@ class HomeIOControlView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UnlockRoomView(APIView):
+    """
+    Unlock a "next" HomeIORoom in fixed layout, linking it to the user's SmartHome.
+    """
     def post(self, request):
         serializer = UnlockRoomSerializer(data=request.data)
         if serializer.is_valid():
@@ -187,6 +214,9 @@ class UnlockRoomView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AddDeviceView(APIView):
+    """
+    Handles adding a new device to a room.
+    """
     def post(self, request):
         serializer = AddDeviceSerializer(data=request.data)
         if serializer.is_valid():

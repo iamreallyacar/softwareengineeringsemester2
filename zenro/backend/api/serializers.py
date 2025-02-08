@@ -6,7 +6,7 @@ from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog5Se
 
 # Serializer for the User model
 class UserSerializer(serializers.ModelSerializer):
-    # The password field is write-only to prevent it from being exposed.
+    # The 'password' field is write-only for security.
     password = serializers.CharField(write_only=True)
     
     class Meta:
