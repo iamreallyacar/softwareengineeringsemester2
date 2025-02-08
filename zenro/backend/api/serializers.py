@@ -126,3 +126,11 @@ class RoomSerializer(serializers.ModelSerializer):
 class HomeIOControlSerializer(serializers.Serializer):
     address = serializers.IntegerField()
     state = serializers.BooleanField()
+
+class UnlockRoomSerializer(serializers.Serializer):
+    smart_home_id = serializers.IntegerField()
+    home_io_room_id = serializers.IntegerField()
+
+class AddDeviceSerializer(serializers.Serializer):
+    room_id = serializers.IntegerField()
+    supported_device_id = serializers.IntegerField()

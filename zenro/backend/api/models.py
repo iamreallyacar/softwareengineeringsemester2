@@ -24,8 +24,10 @@ class SmartHome(models.Model):
 # name - Name of the room
 # smart_home - Reference to the smart home the room belongs to
 class Room(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     smart_home = models.ForeignKey(SmartHome, on_delete=models.CASCADE, related_name='rooms')
+    home_io_room = models.ForeignKey('HomeIORoom', null=True, blank=True, on_delete=models.SET_NULL)
+    is_unlocked = models.BooleanField(default=True)
 
 # Model representing a supported device model that can be added to a smart home
 # model_name - Model name of the supported device
@@ -33,6 +35,8 @@ class Room(models.Model):
 class SupportedDevice(models.Model):
     model_name = models.CharField(max_length=255)
     type = models.CharField(max_length=50)
+    home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE)
+    address = models.IntegerField(unique=True)
 
 # Questions
 # 1. Should we make a table to keep track of all the legal types and then reference them here?
@@ -133,3 +137,9 @@ class RoomLogMonthly(models.Model):
     month = models.IntegerField()
     year = models.IntegerField()
     total_energy_usage = models.FloatField(default=0.0)
+
+# Model representing a fixed room layout in Home I/O
+# name - Name of the room in Home I/O
+class HomeIORoom(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    unlock_order = models.PositiveIntegerField(unique=True, null=True, blank=True)  # Enforce fixed order

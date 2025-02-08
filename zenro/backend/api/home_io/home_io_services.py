@@ -15,12 +15,12 @@ class HomeIOService:
         pass
 
     def set_device_state(self, address, state):
-        # Implement setting device state to Home I/O.
-        # For example:
+        # e.g. flip the bit for the device at 'address'
+        print(f"Setting device {address} to {state}")
+        # Implementation with MemoryMap, e.g.:
         # device = self.mm.GetBit(address, MemoryType.Output)
         # device.Value = state
         # self.mm.Update()
-        print(f"Set device at {address} to state={state}")
 
     def get_device_state(self, address):
         # device = self.mm.GetBit(address, MemoryType.Output)

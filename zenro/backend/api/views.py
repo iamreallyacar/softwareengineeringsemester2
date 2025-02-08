@@ -11,13 +11,14 @@ from datetime import timedelta
 from .models import (
     User, SmartHome, SupportedDevice, Device, DeviceLog5Sec, 
     DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, 
-    RoomLogMonthly, Room
+    RoomLogMonthly, Room, HomeIORoom
 )
 from .serializers import (
     UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
     DeviceSerializer, RoomSerializer,
     DeviceLogDailySerializer,
-    RoomLogDailySerializer, HomeIOControlSerializer
+    RoomLogDailySerializer, HomeIOControlSerializer, UnlockRoomSerializer,
+    AddDeviceSerializer
 )
 from .home_io.home_io_services import HomeIOService
 
@@ -157,6 +158,62 @@ class HomeIOControlView(APIView):
             service = HomeIOService()
             service.set_device_state(address, state)
             return Response({'status': 'updated'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UnlockRoomView(APIView):
+    def post(self, request):
+        serializer = UnlockRoomSerializer(data=request.data)
+        if serializer.is_valid():
+            smart_home_id = serializer.validated_data['smart_home_id']
+            home_io_room_id = serializer.validated_data['home_io_room_id']
+            smart_home = get_object_or_404(SmartHome, pk=smart_home_id)
+            fixed_room = get_object_or_404(HomeIORoom, pk=home_io_room_id)
+
+            # Check if already unlocked
+            if Room.objects.filter(smart_home=smart_home, home_io_room=fixed_room).exists():
+                return Response({"detail": "Room already unlocked"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Instead of directly using home_io_room_id, define logic to retrieve the next locked room
+            # or verify that home_io_room_id is indeed the one with the lowest unlock_order still locked.
+            next_locked_room = HomeIORoom.objects.filter(room__isnull=True).order_by('unlock_order').first()
+            if not next_locked_room or next_locked_room.id != home_io_room_id:
+                return Response({"detail": "Invalid unlock order."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create "unlocked" room
+            new_room = Room.objects.create(
+                name=fixed_room.name, smart_home=smart_home, home_io_room=fixed_room, is_unlocked=True
+            )
+            return Response({"detail": "Room unlocked", "room_id": new_room.id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AddDeviceView(APIView):
+    def post(self, request):
+        serializer = AddDeviceSerializer(data=request.data)
+        if serializer.is_valid():
+            room_id = serializer.validated_data['room_id']
+            supported_device_id = serializer.validated_data['supported_device_id']
+
+            room = get_object_or_404(Room, pk=room_id)
+            supported_device = get_object_or_404(SupportedDevice, pk=supported_device_id)
+
+            if supported_device.home_io_room != room.home_io_room:
+                return Response({"detail": "Device is not in the correct room."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Then check that the selected device is still “locked” in that HomeIORoom
+            if Device.objects.filter(room=room, supported_device=supported_device).exists():
+                return Response({"detail": "Device already unlocked in this room."}, status=status.HTTP_400_BAD_REQUEST)
+
+            device = Device.objects.create(
+                room=room,
+                supported_device=supported_device,
+                status=False
+            )
+
+            # Use HomeIOService to set the device state (if needed)
+            home_io = HomeIOService()
+            home_io.set_device_state(supported_device.address, True)  # Example: set to 'True' = unlocked/active
+
+            return Response({"detail": "Device unlocked", "device_id": device.id}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Home view to handle the root URL
