@@ -57,6 +57,60 @@
           "address": 39
         }
       ]
+    },
+    {
+      "name": "Zone D (Kitchen)",
+      "unlock_order": 4,
+      "devices": [
+        {
+          "model_name": "Up/Down Switch (Up)",
+          "type": "up_down_switch",
+          "address": 49
+        },
+        {
+          "model_name": "Up/Down Switch (Down)",
+          "type": "up_down_switch",
+          "address": 50
+        },
+        {
+          "model_name": "Light Switch Dimmer 1 (Up)",
+          "type": "dimmer_switch",
+          "address": 51
+        },
+        {
+          "model_name": "Light Switch Dimmer 1 (Down)",
+          "type": "dimmer_switch",
+          "address": 52
+        },
+        {
+          "model_name": "Light Switch Dimmer 2 (Up)",
+          "type": "dimmer_switch",
+          "address": 53
+        },
+        {
+          "model_name": "Light Switch Dimmer 2 (Down)",
+          "type": "dimmer_switch",
+          "address": 54
+        },
+        {
+          "model_name": "Door Detector",
+          "type": "sensor",
+          "address": 55
+        },
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 56
+        },
+        {
+          "model_name": "Brightness Sensor",
+          "type": "sensor",
+          "address": 57
+        }
+      ]
+    }
+    {
+      "name": "Zone E (Entrance Hall)"
     }
   ]
 }
