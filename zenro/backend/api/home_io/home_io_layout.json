@@ -464,6 +464,327 @@
           "address": 153
         }
       ]
+    },
+    {
+      "name": "Zone J (Single bedroom)",
+      "unlock_order": 10,
+      "devices": [
+        {
+          "model_name": "Light Switch 1",
+          "type": "light_switch",
+          "address": 163
+        },
+        {
+          "model_name": "Light Switch 2",
+          "type": "light_switch",
+          "address": 164
+        },
+        {
+          "model_name": "Up/Down Switch (Up)",
+          "type": "up_down_switch",
+          "address": 165
+        },
+        {
+          "model_name": "Up/Down Switch (Down)",
+          "type": "up_down_switch",
+          "address": 166
+        },
+        {
+          "model_name": "Light Switch Dimmer (Up)",
+          "type": "dimmer_switch",
+          "address": 167
+        },
+        {
+          "model_name": "Light Switch Dimmer (Down)",
+          "type": "dimmer_switch",
+          "address": 168
+        },
+        {
+          "model_name": "Door Detector 1",
+          "type": "sensor",
+          "address": 169
+        },
+        {
+          "model_name": "Door Detector 2",
+          "type": "sensor",
+          "address": 170
+        },
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 171
+        },
+        {
+          "model_name": "Brightness Sensor",
+          "type": "sensor",
+          "address": 172
+        },
+        {
+          "model_name": "Smoke Detector",
+          "type": "sensor",
+          "address": 173
+        }
+      ]
+    },
+    {
+      "name": "Zone K (Private bathroom)",
+      "unlock_order": 11,
+      "devices": [
+        {
+          "model_name": "Light Switch Dimmer (Up)",
+          "type": "dimmer_switch",
+          "address": 183
+        },
+        {
+          "model_name": "Light Switch Dimmer (Down)",
+          "type": "dimmer_switch",
+          "address": 184
+        },
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 185
+        }
+      ]
+    },
+    {
+      "name": "Zone L (Couple bedroom)",
+      "unlock_order": 12,
+      "devices": [
+        {
+          "model_name": "Light Switch 1",
+          "type": "light_switch",
+          "address": 195
+        },
+        {
+          "model_name": "Light Switch 2",
+          "type": "light_switch",
+          "address": 196
+        },
+        {
+          "model_name": "Up/Down Switch (Up)",
+          "type": "up_down_switch",
+          "address": 197
+        },
+        {
+          "model_name": "Up/Down Switch (Down)",
+          "type": "up_down_switch",
+          "address": 198
+        },
+        {
+          "model_name": "Light Switch Dimmer 1 (Up)",
+          "type": "dimmer_switch",
+          "address": 199
+        },
+        {
+          "model_name": "Light Switch Dimmer 1 (Down)",
+          "type": "dimmer_switch",
+          "address": 200
+        },
+        {
+          "model_name": "Light Switch Dimmer 2 (Up)",
+          "type": "dimmer_switch",
+          "address": 201
+        },
+        {
+          "model_name": "Light Switch Dimmer 2 (Down)",
+          "type": "dimmer_switch",
+          "address": 202
+        },
+        {
+          "model_name": "Door Detector 1",
+          "type": "sensor",
+          "address": 203
+        },
+        {
+          "model_name": "Door Detector 2",
+          "type": "sensor",
+          "address": 204
+        },
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 205
+        },
+        {
+          "model_name": "Brightness Sensor",
+          "type": "sensor",
+          "address": 206
+        },
+        {
+          "model_name": "Smoke Detector",
+          "type": "sensor",
+          "address": 207
+        }
+      ]
+    },
+    {
+      "name": "Zone M (Laundry room)",
+      "unlock_order": 13,
+      "devices": [
+        {
+          "model_name": "Light Switch",
+          "type": "light_switch",
+          "address": 217
+        },
+        {
+          "model_name": "Up/Down Switch (Up)",
+          "type": "up_down_switch",
+          "address": 218
+        },
+        {
+          "model_name": "Up/Down Switch (Down)",
+          "type": "up_down_switch",
+          "address": 219
+        },
+        {
+          "model_name": "Door Detector 1",
+          "type": "sensor",
+          "address": 220
+        },
+        {
+          "model_name": "Door Detector 2",
+          "type": "sensor",
+          "address": 221
+        },
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 222
+        },
+        {
+          "model_name": "Brightness Sensor",
+          "type": "sensor",
+          "address": 223
+        }
+      ]
+    },
+    {
+      "name": "Zone N (Home office)",
+      "unlock_order": 14,
+      "devices": [
+        {
+          "model_name": "Light Switch 1",
+          "type": "light_switch",
+          "address": 233
+        },
+        {
+          "model_name": "Light Switch 2",
+          "type": "light_switch",
+          "address": 234
+        },
+        {
+          "model_name": "Light Switch 3",
+          "type": "light_switch",
+          "address": 235
+        },
+        {
+          "model_name": "Light Switch Dimmer 1 (Up)",
+          "type": "dimmer_switch",
+          "address": 236
+        },
+        {
+          "model_name": "Light Switch Dimmer 1 (Down)",
+          "type": "dimmer_switch",
+          "address": 237
+        },
+        {
+          "model_name": "Light Switch Dimmer 2 (Up)",
+          "type": "dimmer_switch",
+          "address": 238
+        },
+        {
+          "model_name": "Light Switch Dimmer 2 (Down)",
+          "type": "dimmer_switch",
+          "address": 239
+        },
+        {
+          "model_name": "Light Switch Dimmer 3 (Up)",
+          "type": "dimmer_switch",
+          "address": 240
+        },
+        {
+          "model_name": "Light Switch Dimmer 3 (Down)",
+          "type": "dimmer_switch",
+          "address": 241
+        },
+        {
+          "model_name": "Up/Down Switch (Up)",
+          "type": "up_down_switch",
+          "address": 242
+        },
+        {
+          "model_name": "Up/Down Switch (Down)",
+          "type": "up_down_switch",
+          "address": 243
+        },
+        {
+          "model_name": "Door Detector 1",
+          "type": "sensor",
+          "address": 244
+        },
+        {
+          "model_name": "Door Detector 2",
+          "type": "sensor",
+          "address": 245
+        },
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 246
+        },
+        {
+          "model_name": "Brightness Sensor",
+          "type": "sensor",
+          "address": 247
+        },
+        {
+          "model_name": "Smoke Detector",
+          "type": "sensor",
+          "address": 248
+        }
+      ]
+    },
+    {
+      "name": "Zone O (Exterior)",
+      "unlock_order": 15,
+      "devices": [
+        {
+          "model_name": "Motion Detector",
+          "type": "sensor",
+          "address": 258
+        },
+        {
+          "model_name": "Brightness Sensor",
+          "type": "sensor",
+          "address": 259
+        },
+        {
+          "model_name": "Entrance Gate (Opened)",
+          "type": "sensor",
+          "address": 260
+        },
+        {
+          "model_name": "Entrance Gate (Closed)",
+          "type": "sensor",
+          "address": 261
+        },
+        {
+          "model_name": "Entrance Gate (Infrared 1)",
+          "type": "sensor",
+          "address": 262
+        },
+        {
+          "model_name": "Entrance Gate (Infrared 2)",
+          "type": "sensor",
+          "address": 263
+        },
+        {
+          "model_name": "Entrance Gate (Infrared 3)",
+          "type": "sensor",
+          "address": 264
+        }
+      ]
     }
   ]
 }
