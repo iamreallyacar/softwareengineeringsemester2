@@ -1,2 +1,6 @@
-django-crontab
+django
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+pythonnet
 django-crontab

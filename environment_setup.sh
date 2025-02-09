@@ -37,4 +37,4 @@ sudo apt install -y python3 python3-pip
 
 # Install Django and additional packages using apt
 echo "Installing Django and additional packages using apt..."
-sudo apt install -y python3-django python3-djangorestframework python3-djangorestframework-simplejwt python3-django-cors-headers
+sudo apt install -y python3-django python3-djangorestframework python3-djangorestframework-simplejwt python3-django-cors-headers python3-pythonnet python3-django-crontab
