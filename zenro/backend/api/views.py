@@ -22,8 +22,6 @@ from .serializers import (
 )
 from .home_io.home_io_services import HomeIOService
 
-
-# ViewSet for handling User CRUD operations
 class UserViewSet(viewsets.ModelViewSet):
     """
     Handles CRUD operations for User model.
@@ -33,13 +31,16 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-# ViewSet for handling SmartHome CRUD operations
 class SmartHomeViewSet(viewsets.ModelViewSet):
     """
-    Handles CRUD operations for SmartHome model.
+    Handles CRUD operations for SmartHome model.    
+    - perform_create: saves the creator as the requesting user
+    - get_queryset: filters SmartHomes to only show ones the user created or is a member of
+    - join: adds requesting user as a member to the SmartHome
+    - leave: removes requesting user from SmartHome members
     """
-    serializer_class = SmartHomeSerializer
     queryset = SmartHome.objects.all()
+    serializer_class = SmartHomeSerializer
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
@@ -62,7 +63,6 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
         smart_home.members.remove(request.user)
         return Response({'status': 'left'})
 
-# ViewSet for handling SupportedDevice CRUD operations
 class SupportedDeviceViewSet(viewsets.ModelViewSet):
     """
     Handles CRUD operations for SupportedDevice model.
@@ -82,7 +82,25 @@ class DeviceViewSet(viewsets.ModelViewSet):
 class RoomViewSet(viewsets.ModelViewSet):
     """
     Handles CRUD operations for Room model.
+    get_queryset(): 
+        Returns filtered queryset of rooms based on user's smart home access.
+        Ensures users can only access rooms in smart homes they own or are members of.
+        Returns empty queryset on errors or invalid smart_home_id.
+    add_device(request, pk=None):
+        Adds a new device to the specified room.
+        Requires 'supported_device_id' and 'name' in request data.
+        Ensures unique device names within the room.
+        Returns HTTP 400 if required data is missing or name is duplicate.
+    daily_usage(request, pk=None):
+        Retrieves the total energy usage for all devices in the room for the current day.
+        Aggregates DeviceLogDaily entries for all devices in the room.
+        Returns date and total usage in the response.
+    weekly_usage(request, pk=None):
+        Calculates the total energy usage for the room over the current week.
+        Uses RoomLogDaily entries from Monday to Sunday of the current week.
+        Returns start date, end date, and total usage in the response.
     """
+
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 
