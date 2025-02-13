@@ -1,0 +1,191 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.smart-home-page {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+    height: 100vh;
+	padding: 20px;
+	background: linear-gradient(to bottom, #DD946A, #BF5E40);
+    overflow: hidden;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    width: 150px;
+    height: 100vh;
+    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+    color: white;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* Sidebar Menu */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}   
+
+.information {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: fixed;
+    background: linear-gradient(to bottom, #DD946A, #BF5E40);
+    width: calc(100% - 170px); ;
+    height: 100vh;
+    margin-left: 170px; /* Match the left spacing of CCTV */
+    overflow: hidden;
+}
+
+.CCTV {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: top;
+
+    width: 57%;
+    height: 37%;
+    padding: 20px;
+    position: absolute;
+
+    background: #fbdba7;
+    border: 3px solid;
+    border-radius: 20px;
+    border-color: linear-gradient(to bottom, #FFF6E7, #FFE9C5);
+}
+
+/* room containert */
+.rooms {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding: 20px;
+
+    width: 34%;
+    height: 43%;
+    right: 40px;    
+    position: absolute;
+    
+    background: peachpuff;
+    border: 3px solid;
+    border-radius: 20px;
+    border-color: linear-gradient(to bottom, #FFF6E7, #FFE9C5);
+}
+
+.rooms h1 {
+    color: rgb(237, 62, 62);
+    text-align: left;
+    align-self: flex-start;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.rooms-divider {
+    width: 100%;
+    height: 2px;
+    background: white;
+    border: none;
+}
+
+.rooms ul {
+    width: 100%;
+    max-height: 100%; 
+    box-sizing: border-box;
+
+    text-align: left;
+    overflow-x: hidden;
+    overflow-y: auto; /* Enable vertical scrolling */
+    
+    scrollbar-width: thin; 
+    scrollbar-color: white transparent; 
+    border-radius: 10px;
+}
+
+.rooms ul::-webkit-scrollbar-button {
+    display: none;
+}
+
+.rooms ul::-webkit-scrollbar {
+    width: 3px;
+    border: 1px solid white;
+    border-radius: 10px ;
+}
+
+.rooms ul::-webkit-scrollbar-thumb {
+    background: white; /* Scrollbar color */
+    border: 3px solid white; /* Scrollbar border */
+    border-radius: 1px; /* Makes scrollbar rounded */
+}
+
+.rooms ul::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.2); /* Background of scrollbar */
+    border-radius: 10px;
+}
+
+
+.rooms ul li {
+    padding-left: 30px;
+    width: 300px;
+}
+
+/* living room container */
+.living-room-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: top;
+
+    width: 44%;
+    height: 37%;
+    padding: 20px;
+    position: absolute;
+    left: 20px;     /* Position from left edge */
+    bottom: 65px;   /* Position from bottom */
+    
+    background: peachpuff;
+    border: 3px solid #FFF6E7;  /* Fixed border syntax */
+    border-radius: 20px;
+}
+
+.temp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: top;
+
+    width: 44%;
+    height: 37%;
+    padding: 20px;
+    position: absolute;
+    right: 40px;     /* Position from left edge */
+    bottom: 65px;   /* Position from bottom */
+    
+    background: #fbdba7;
+    border: 3px solid #FFF6E7;  /* Fixed border syntax */
+    border-radius: 20px;
+}
+

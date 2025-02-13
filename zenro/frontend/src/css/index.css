@@ -62,7 +62,7 @@ button:hover {
 	align-items: center;
     min-height: 100vh;
 	padding: 20px;
-	background-color: #1a1a1a;
+	background: linear-gradient(to bottom, #f68e61, #cd4a1a);
 }
 
 /* Additional styles for lists, buttons, and success/error messages */
