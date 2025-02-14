@@ -1,19 +1,38 @@
 {
   "rooms": [
     {
-      "name": "Zone A (Living Room)",
+      "Zone": "A", 
+      "name": "Living Room",
       "unlock_order": 1,
-      "devices": [
+      "input_devices": [
       {
         "model_name": "Light Switch 1",
         "type": "light_switch",
-        "address": 0
+        "address": 0, 
+        "contact_type": "NO", 
+        "data_type": "Bool"
       },
+      {
+        "model_name": "Brightness Sensor (Analogue)", 
+        "type": "sensor",
+        "address": 0, 
+        "contact_type": "NULL",
+        "data_type": "Float"
+      }, 
       {
         "model_name": "Light Switch 2",
         "type": "light_switch",
-        "address": 1
+        "address": 1, 
+        "contact_type": "NO",
+        "data_type": "Bool"
       },
+      {
+        "model_name": "Thermotat (Room Temperature)",
+        "type": "sensor",
+        "address": 1, 
+        "contact_type": "NULL",
+        "data_type": "Float"
+      }, 
       {
         "model_name": "Light Switch 3",
         "type": "light_switch",
@@ -94,7 +113,39 @@
         "type": "sensor",
         "address": 17
       }
-      ]
+      ], 
+      "output_devices": [
+      {
+        "model_name": "Lights", 
+        "type": "lighting",
+        "address": 0, 
+        "data_type": "Bool"
+      }, 
+      {
+        "model_name": "Lights (Analogue)", 
+        "type": "lighting",
+        "address": 0,
+        "data_type": "Float"
+      }, 
+      {
+        "model_name": "Roller Shades 1 (Up)", 
+        "type": "lighting",
+        "address": 1,
+        "data_type": "Bool"
+      }, 
+      {
+        "model_name": "Heater (Analogue)",
+        "type": "heating",
+        "address": 1, 
+        "data_type": "Float"
+
+      }
+      ], 
+      "memory": {
+        "name": "Temperature [k]", 
+        "address": 150,
+        "data_type": "Float"
+      }
     },
     {
       "name": "Zone B (Guest restroom)",
@@ -786,5 +837,22 @@
         }
       ]
     }
+  ], 
+  "memories": [
+  {
+    "name": "Using DLST", 
+    "address": 256, 
+    "data_type": "Bool"
+  }, 
+  {
+    "name": "Time Scalev", 
+    "address": 129, 
+    "data_type": "Float"
+  }, 
+  {
+    "name": "Latitude", 
+    "address": 130,
+    "data_type": "Float"
+  }
   ]
 }
