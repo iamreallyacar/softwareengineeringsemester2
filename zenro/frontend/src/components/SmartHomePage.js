@@ -39,12 +39,12 @@ function SmartHomePage() {
             <li><a href="#">About</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Contact</a></li>
+            <li><a href="/smart-homes">Back</a></li>
         </ul>
       </div>
      
       <div class="information">
         <div class="CCTV">
-
         </div>
 
         <div class="rooms">
@@ -62,11 +62,9 @@ function SmartHomePage() {
         </div>
 
         <div class="living-room-block">
-          
         </div>
 
         <div class="temp">
-
         </div>
 
       </div>
@@ -145,11 +143,7 @@ function SmartHomePage() {
           <button onClick={handleAddDevice}>Add Device</button>
         </div>
       */}  
-
     </div>  
-
-
-
   );
 }
 
