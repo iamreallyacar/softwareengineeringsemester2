@@ -18,6 +18,7 @@ class SmartHome(models.Model):
 
 # Questions
 # 1. Should we add a field for privileged users?
+# - Es ist für später, wenn wir Admins hinzufügen wollen.
 # 2. Should we instead make a separate table for member list and add a field for privilege?
 
 # Model representing a room in a smart home
@@ -26,17 +27,48 @@ class SmartHome(models.Model):
 class Room(models.Model):
     name = models.CharField(max_length=255)
     smart_home = models.ForeignKey(SmartHome, on_delete=models.CASCADE, related_name='rooms')
-    home_io_room = models.ForeignKey('HomeIORoom', null=True, blank=True, on_delete=models.SET_NULL)
-    is_unlocked = models.BooleanField(default=True)
+    home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE)
+    is_unlocked = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'smart_home'], name='unique_room_in_home')
+        ]
+
+    def __str__(self):
+        return f"{self.name} (Home: {self.smart_home.name})"
 
 # Model representing a supported device model that can be added to a smart home
 # model_name - Model name of the supported device
 # type - Type/category of the device (e.g., 'light', 'thermostat')
 class SupportedDevice(models.Model):
+    DEVICE_MEMORY_TYPE_CHOICES = [
+        ('input', 'Input'),
+        ('output', 'Output'),
+        ('memory', 'Memory'),
+    ]
+
     model_name = models.CharField(max_length=255)
-    type = models.CharField(max_length=50)
-    home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE)
-    address = models.IntegerField(unique=True, null=True, blank=True)
+    type = models.CharField(max_length=50, default=None)
+    home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE, null=True, default=None)
+    address = models.IntegerField()
+    data_type = models.CharField(max_length=10)
+    contact_type = models.CharField(max_length=10, null=True, default=None)
+    memory_type = models.CharField(
+        max_length=10,
+        choices=DEVICE_MEMORY_TYPE_CHOICES,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['address', 'data_type', 'memory_type'],
+                name='unique_addr_data_memtype'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.model_name} ({self.memory_type}, addr={self.address}, {self.data_type})"
 
 # Questions
 # 1. Should we make a table to keep track of all the legal types and then reference them here?
@@ -52,15 +84,19 @@ class SupportedDevice(models.Model):
 class Device(models.Model):
     name = models.CharField(max_length=100)                             
     status = models.BooleanField(default=False)                         
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='devices') 
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='devices', null=True) 
     supported_device = models.ForeignKey(SupportedDevice, on_delete=models.CASCADE) 
     created_at = models.DateTimeField(auto_now_add=True)                
     updated_at = models.DateTimeField(auto_now=True)                    
+    is_unlocked = models.BooleanField(default=False)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['name', 'room'], name='unique_device_in_room')
         ]
+
+    def __str__(self):
+        return f"{self.name} in {self.room.name}"
 
 # Question
 # 1. Should we use MAC address to identify devices?
@@ -142,4 +178,7 @@ class RoomLogMonthly(models.Model):
 # name - Name of the room in Home I/O
 class HomeIORoom(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    unlock_order = models.PositiveIntegerField(unique=True, null=True, blank=True)  # Enforce fixed order
+    unlock_order = models.PositiveIntegerField(null=True)  # Enforce fixed order
+
+    def __str__(self):
+        return f"{self.name} (order {self.unlock_order})"
