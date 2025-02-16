@@ -1,7 +1,7 @@
 import React from 'react';
 // This imports dependencies for React and DOM rendering
 import { createRoot } from 'react-dom/client';
-import './css/index.css';
+import './importAllCSS';
 import App from './App';
 
 /**
