@@ -49,7 +49,7 @@ class SupportedDevice(models.Model):
     ]
 
     model_name = models.CharField(max_length=255)
-    type = models.CharField(max_length=50, default=None)
+    type = models.CharField(max_length=50, default=None, null=True)
     home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE, null=True, default=None)
     address = models.IntegerField()
     data_type = models.CharField(max_length=10)

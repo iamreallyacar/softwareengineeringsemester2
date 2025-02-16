@@ -1,8 +1,7 @@
 {
   "rooms": [
     {
-      "Zone": "A", 
-      "name": "Living Room",
+      "name": "Zone A (Living Room)",
       "unlock_order": 1,
       "input_devices": [
       {
@@ -165,80 +164,94 @@
         "model_name": "Lights", 
         "type": "lighting",
         "address": 0, 
+        "contact_type": "NULL",
         "data_type": "Bool"
       }, 
       {
         "model_name": "Lights (Analogue)", 
         "type": "lighting",
         "address": 0,
+        "contact_type": "NULL",
         "data_type": "Float"
       }, 
       {
         "model_name": "Roller Shades 1 (Up)", 
         "type": "lighting",
         "address": 1,
+        "contact_type": "NULL",
         "data_type": "Bool"
       }, 
       {
         "model_name": "Heater (Analogue)",
         "type": "heating",
         "address": 1, 
+        "contact_type": "NULL",
         "data_type": "Float"
       },
       {
         "model_name": "Roller Shades 1 (Down)",
         "type": "lighting",
         "address": 2,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Roller Shades 2 (Up)",
         "type": "lighting",
         "address": 3,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Roller Shades 2 (Down)",
         "type": "lighting",
         "address": 4,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Roller Shades 3 (Up)",
         "type": "lighting",
         "address": 5,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Roller Shades 3 (Down)",
         "type": "lighting",
         "address": 6,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Roller Shades 4 (Up)",
         "type": "lighting",
         "address": 7,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Roller Shades 4 (Down)",
         "type": "lighting",
         "address": 8,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Heater",
         "type": "heating",
         "address": 9,
+        "contact_type": "NULL",
         "data_type": "Bool"
       }
       ], 
-      "memory": {
+      "memory": [
+      {
       "name": "Temperature [k]", 
       "address": 150,
       "data_type": "Float"
       }
+      ] 
     },
     {
       "name": "Zone B (Guest restroom)",
@@ -271,25 +284,36 @@
         "model_name": "Lights 1 (Analogue)",
         "type": "lighting",
         "address": 11,
+        "contact_type": "NULL",
         "data_type": "Float"
       },
       {
         "model_name": "Lights 2 (Analogue)",
         "type": "lighting",
         "address": 12,
+        "contact_type": "NULL",
         "data_type": "Float"
       },
       {
         "model_name": "Lights 1",
         "type": "lighting",
         "address": 19,
+        "contact_type": "NULL",
         "data_type": "Bool"
       },
       {
         "model_name": "Lights 2",
         "type": "lighting",
         "address": 20,
+        "contact_type": "NULL",
         "data_type": "Bool"
+      }
+      ], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 151,
+      "data_type": "Float"
       }
       ]
     },
@@ -310,14 +334,23 @@
           "model_name": "Lights (Analogue)",
           "type": "lighting",
           "address": 22,
+          "contact_type": "NULL",
           "data_type": "Float"
         },
         {
           "model_name": "Lights",
           "type": "lighting",
           "address": 30,
+          "contact_type": "NULL",
           "data_type": "Bool"
         }
+      ], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 152,
+      "data_type": "Float"
+      }
       ]
     },
     {
@@ -393,50 +426,65 @@
           "model_name": "Lights 1 (Analogue)",
           "type": "lighting",
           "address": 32,
+          "contact_type": "NULL",
           "data_type": "Float"
         },
         {
           "model_name": "Lights 2 (Analogue)",
           "type": "lighting",
           "address": 33,
+          "contact_type": "NULL",
           "data_type": "Float"
         },
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
           "address": 34,
+          "contact_type": "NULL",
           "data_type": "Float"
         },
         {
           "model_name": "Lights 1",
           "type": "lighting",
           "address": 40,
+          "contact_type": "NULL",
           "data_type": "Bool"
         },
         {
           "model_name": "Lights 2",
           "type": "lighting",
           "address": 41,
+          "contact_type": "NULL",
           "data_type": "Bool"
         },
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
           "address": 42,
+          "contact_type": "NULL",
           "data_type": "Bool"
         },
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
           "address": 43,
+          "contact_type": "NULL",
           "data_type": "Bool"
         },
         {
           "model_name": "Heater",
           "type": "heating",
           "address": 44,
+          "contact_type": "NULL",
           "data_type": "Bool"
         }
+      ], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 153,
+      "data_type": "Float"
+      }
       ]
     },
     {
@@ -556,7 +604,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 154,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone F (Garage)",
@@ -640,7 +695,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 155,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone G (Bedroom corridor)",
@@ -710,7 +772,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 156,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone H (Children bedroom)",
@@ -794,7 +863,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 157,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone I (Bathroom)",
@@ -829,7 +905,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 158,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone J (Single bedroom)",
@@ -913,7 +996,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 159,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone K (Private bathroom)",
@@ -941,7 +1031,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 160,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone L (Couple bedroom)",
@@ -1039,7 +1136,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 161,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone M (Laundry room)",
@@ -1095,7 +1199,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 162,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone N (Home office)",
@@ -1214,7 +1325,14 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": [
+      {
+      "name": "Temperature [k]",
+      "address": 163,
+      "data_type": "Float"
+      }
+      ]
     },
     {
       "name": "Zone O (Exterior)",
@@ -1270,7 +1388,8 @@
           "data_type": "Bool"
         }
       ],
-      "output_devices": []
+      "output_devices": [], 
+      "memory": []
     }
   ], 
   "memories": [
