@@ -89,11 +89,9 @@ function SmartHomeList() {
             </div>
 
             <div className="dashboard-content">
-                <h1>Smart Homes</h1>
                 {error && <p className="error">{error}</p>}
                 
                 <div className="create-home">
-                    <h2>Create New Smart Home</h2>
                     <form onSubmit={handleCreateSmartHome}>
                         <input
                             type="text"
