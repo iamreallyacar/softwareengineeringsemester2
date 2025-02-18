@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown, Home, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import "../css/styles.css";
 import { ChevronLeft, User } from "lucide-react";
 
 function SmartHomeList() {

@@ -7,9 +7,13 @@ import SmartHomePage from './components/SmartHomePage';
 import 'font-awesome/css/font-awesome.min.css';
 import './css/App.css';
 
+/*
+ * Things that are missing:
+ * 1. Device page
+ * 2. Room page
+ */
 function App() {
     return (
-        // The BrowserRouter manages client-side routing
         <BrowserRouter>
             <div className="App">
                 <Routes>
