@@ -20,12 +20,10 @@ html, body {
 .sidebar {
     width: 150px;
     height: 100vh;
-    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+    background: linear-gradient(to bottom,#DD946A, #BF5E40);
     color: white;
     padding: 20px;
     position: fixed;
-    top: 0;
-    left: 0;
 }
 
 /* Sidebar Menu */
@@ -47,13 +45,14 @@ html, body {
     transition: 0.3s;
 }
 
+/* CCTV container */
 .information {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    position: fixed;
-    background: linear-gradient(to bottom, #DD946A, #BF5E40);
-    width: calc(100% - 170px); ;
+    position: absolute;
+    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+    width: calc(100% - 170px);
     height: 100vh;
     margin-left: 170px; /* Match the left spacing of CCTV */
     overflow: hidden;
@@ -62,8 +61,7 @@ html, body {
 .CCTV {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: top;
+    align-content: left;
 
     width: 57%;
     height: 37%;
@@ -73,10 +71,83 @@ html, body {
     background: #fbdba7;
     border: 3px solid;
     border-radius: 20px;
-    border-color: linear-gradient(to bottom, #FFF6E7, #FFE9C5);
+    border-color: white;
 }
 
-/* room containert */
+.CCTV button {
+    background-color: beige;
+    color: black;
+    font-weight: bold;
+    width: 10%;
+    border-radius: 20px;
+    border: 0px;
+    box-shadow: 0px 3px 3px black;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.CCTV button:hover {
+    background-color: rgb(241, 241, 188);
+    transform: scale(1.05);
+}
+
+.cctv-statistics {
+    display: flex;
+    gap: 20px;
+    text-align: center;
+    background: none;
+}
+
+.cctv-room-list {
+    position: absolute;
+    box-sizing: border-box;
+    list-style: none;
+    align-items: left;
+}
+
+.cctv-room-list li {
+    border-radius: 20px;
+    border: 0px;
+    box-shadow: 0px 3px 3px black;
+    background-color: beige;
+    color: black;
+    font-weight: bold;      
+    font-size: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    display: block;
+    
+}
+
+.cctv-view {
+    width: 100%;
+    height: 80%;
+    text-align: center;
+    padding-top: 7%;
+}
+
+.cctv-statistics {
+    width: 100%;
+    height: 20%;
+    align-content: flex-start;
+}
+
+.statistics {
+    position: flex;
+    text-align: left;
+    padding: 10px;
+    color: black;
+    background-color: beige;
+    font-weight: bold;
+    font-size: 10px;
+    width: 12%;
+    border-radius: 20px;
+    border: 0px;
+    box-shadow: 0px 3px 3px black;
+    display: inline-block;
+}
+
+/* room container */
 .rooms {
     display: flex;
     flex-direction: column;
@@ -93,7 +164,7 @@ html, body {
     background: peachpuff;
     border: 3px solid;
     border-radius: 20px;
-    border-color: linear-gradient(to bottom, #FFF6E7, #FFE9C5);
+    border-color: white;
 }
 
 .rooms h1 {
@@ -101,7 +172,6 @@ html, body {
     text-align: left;
     align-self: flex-start;
     margin: 0;
-    padding-bottom: 5px;
 }
 
 .rooms-divider {
@@ -109,47 +179,92 @@ html, body {
     height: 2px;
     background: white;
     border: none;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
-.rooms ul {
+.rooms-list-container{
     width: 100%;
-    max-height: 100%; 
+    height: 65%;
     box-sizing: border-box;
+    padding: 0;
+}
+
+.rooms-list{
+    min-width: 100%;
+    height: 80%;
+    box-sizing: border-box;
+    list-style-type: none;
+    padding: 5px;
 
     text-align: left;
     overflow-x: hidden;
     overflow-y: auto; /* Enable vertical scrolling */
-    
-    scrollbar-width: thin; 
-    scrollbar-color: white transparent; 
-    border-radius: 10px;
 }
 
-.rooms ul::-webkit-scrollbar-button {
+.rooms-list::-webkit-scrollbar-button {
     display: none;
 }
 
-.rooms ul::-webkit-scrollbar {
-    width: 3px;
-    border: 1px solid white;
-    border-radius: 10px ;
+.rooms-list::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 20px;
+    background: transparent;
+    margin: 5px 0;
 }
 
-.rooms ul::-webkit-scrollbar-thumb {
-    background: white; /* Scrollbar color */
-    border: 3px solid white; /* Scrollbar border */
-    border-radius: 1px; /* Makes scrollbar rounded */
+.rooms-list::-webkit-scrollbar-thumb {
+    background: white; 
+    border: 2px solid transparent;
+    border-radius: 20px;
+    background-clip: padding-box;
 }
 
-.rooms ul::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.2); /* Background of scrollbar */
-    border-radius: 10px;
-}
+.rooms-list::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 20px;
+    margin: 5px 0;
+}   
 
-
-.rooms ul li {
+.rooms-list li {
     padding-left: 30px;
-    width: 300px;
+    width: 100%;
+    height: 20%;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 0px solid transparent;
+    border-radius: 20px;
+    color: rgb(237, 62, 62);
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    position: relative;
+}
+
+.rooms-list li::after {
+    content: "›";
+    font-size: 20px;
+    right: 15px;
+    position: absolute;
+    bottom: 7%;
+}
+
+.rooms-list li:hover {
+    background-color: white;
+}
+
+.add-room-button {
+    background-color: rgb(237, 62, 62);
+    color: white;
+    width: 100%;
+    height: 10%;
+    border: none;
+    border-radius: 20px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.add-room-button:hover {
+    background-color: rgb(200, 50, 50); /* Darker shade */
+    transform: scale(1.05); /* Slightly bigger */
 }
 
 /* living room container */

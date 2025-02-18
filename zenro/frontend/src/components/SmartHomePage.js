@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import api from "../api";
+import { motion, AnimatePresence } from "framer-motion";
 
 function SmartHomePage() {
   const { id: smartHomeId } = useParams(); // The current smart home’s ID
@@ -10,6 +11,9 @@ function SmartHomePage() {
   const [selectedRoomId, setSelectedRoomId] = useState("");
   const [selectedSupportedDevice, setSelectedSupportedDevice] = useState("");
   const [deviceName, setDeviceName] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const allRooms = ["Living Room", "Kitchen", "Bedroom", "Bathroom", "Garage", "Backyard"];
+
 
   useEffect(() => {
     // Fetch rooms for this smart home
@@ -33,7 +37,7 @@ function SmartHomePage() {
 
   return (
     <div className="smart-home-page">
-      <div class="sidebar">
+      <div className="sidebar">
         <ul>
             <li><a href="#">Home</a></li>
             <li><a href="#">About</a></li>
@@ -43,14 +47,57 @@ function SmartHomePage() {
         </ul>
       </div>
      
-      <div class="information">
-        <div class="CCTV">
+      <div className="information">
+        <div className="CCTV">
+        <button onClick={() => setIsOpen(!isOpen)}>
+              {isOpen ? "Hide List" : "Show List"}
+        </button>
+
+        <AnimatePresence>
+                {isOpen && (
+                    <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        style={{ overflow: "hidden" }}
+                    >
+                        <ul className="cctv-room-list">
+                            {allRooms.map((room, index) => (
+                                <motion.li
+                                    key={room}
+                                    initial={{ opacity: 0, y: -30 }}
+                                    animate={{ opacity: 1, y: -20 }}
+                                    exit={{ opacity: 0, y: -30 }}
+                                    transition={{ delay: index * 0.2, duration: 0.3 }}
+                                >
+                                    {room}
+                                </motion.li>
+                            ))}
+                        </ul>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+          <div className="cctv-view">
+            <h1>CCTV</h1>
+          </div>
+
+          <div className="cctv-statistics">
+            <p className="statistics">Temperature</p>
+            <p className="statistics">Power Usage</p>
+            <p className="statistics">Humidity</p>
+            <p className="statistics">Light</p>
+          </div>
+
         </div>
 
-        <div class="rooms">
+        <div className="rooms">
           <h1>Rooms</h1>
           <hr className="rooms-divider"/>
-          <ul>
+
+          <div className="rooms-list-container">
+          <ul className="rooms-list">
             {rooms.map((room) => (
               <li key={room.id}>
                 <Link to={`/room/${room.name}/${smartHomeId}`}>{room.name}</Link>
@@ -76,12 +123,17 @@ function SmartHomePage() {
               <Link to={`/room/backyard/${smartHomeId}`}>Backyard</Link>
             </li>
           </ul>
+          </div>
+
+          <button className="add-room-button">+ Add Room</button>
+
         </div>
 
-        <div class="living-room-block">
+        <div className="living-room-block">
+            
         </div>
 
-        <div class="temp">
+        <div className="temp">
         </div>
 
       </div>
