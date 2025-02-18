@@ -153,7 +153,6 @@ class RoomViewSet(viewsets.ModelViewSet):
     def daily_usage(self, request, pk=None):
         """Get the daily usage for this room."""
         room = self.get_object()
-        # Summation of DeviceLogDaily for all devices in the room (today)
         from django.utils import timezone
         today = timezone.now().date()
         devices = room.devices.all()
