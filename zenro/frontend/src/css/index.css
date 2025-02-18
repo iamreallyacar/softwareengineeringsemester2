@@ -65,7 +65,7 @@ button:hover {
 	background: linear-gradient(to bottom, #f68e61, #cd4a1a);
 }
 
-/* Additional styles for lists, buttons, and success/error messages */
+  /* Additional styles for lists, buttons, and success/error messages */
 ul {
     list-style: none;
     padding: 0;

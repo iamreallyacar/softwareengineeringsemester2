@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api";
 
 function SmartHomePage() {
@@ -49,14 +50,31 @@ function SmartHomePage() {
         <div class="rooms">
           <h1>Rooms</h1>
           <hr className="rooms-divider"/>
-
           <ul>
-            <li>Living Room</li>
-            <li>Kitchen</li>
-            <li>Bedroom</li>
-            <li>Bathroom</li>
-            <li>Garage</li>
-            <li>Backyard</li>
+            {rooms.map((room) => (
+              <li key={room.id}>
+                <Link to={`/room/${room.name}/${smartHomeId}`}>{room.name}</Link>
+              </li>
+            ))}
+            {/* The following fixed links should also use the dynamic smartHomeId */}
+            <li>
+              <Link to={`/room/living-room/${smartHomeId}`}>Living Room</Link>
+            </li>
+            <li>
+              <Link to={`/room/kitchen/${smartHomeId}`}>Kitchen</Link>
+            </li>
+            <li>
+              <Link to={`/room/bedroom/${smartHomeId}`}>Bedroom</Link>
+            </li>
+            <li>
+              <Link to={`/room/bathroom/${smartHomeId}`}>Bathroom</Link>
+            </li>
+            <li>
+              <Link to={`/room/garage/${smartHomeId}`}>Garage</Link>
+            </li>
+            <li>
+              <Link to={`/room/backyard/${smartHomeId}`}>Backyard</Link>
+            </li>
           </ul>
         </div>
 
