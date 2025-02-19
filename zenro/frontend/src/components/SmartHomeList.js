@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, Home, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import api from "../api";
 import { ChevronLeft, User } from "lucide-react";
 
@@ -12,6 +12,7 @@ function SmartHomeList() {
     const [isOwnedExpanded, setIsOwnedExpanded] = useState(false);
     const [isJoinedExpanded, setIsJoinedExpanded] = useState(false);
     const userId = localStorage.getItem("userId");
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchSmartHomes();
@@ -70,6 +71,7 @@ function SmartHomeList() {
         }
     };
 
+    
     return (
         <div className="dashboard-container">
             <div className="dashboard-header">

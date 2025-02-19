@@ -1,235 +1,142 @@
-/* The body styling sets the base theme for the entire page */
+/* Base styles */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    background-color: #1a1a1a;
-    color: #ffffff;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* The .login-container styles the login form layout */
+/* Layout containers */
 .login-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    background-color: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 300px;
-    width: 100%;
-    margin: 0 auto;
+.login-card {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-input {
-    padding: 8px;
-    border: 1px solid #444;
-    border-radius: 4px;
-    background-color: #2a2a2a;
-    color: #ffffff;
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-button {
-    padding: 8px;
-    background-color: #2c5282;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.login-title {
+  color: #ea580c;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
-button:hover {
-    background-color: #3182ce;
+.login-subtitle {
+  color: #9ca3af;
+  font-size: 0.875rem;
 }
 
-/* The .home-container styles the home page layout */
-.smart-home-page {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-    min-height: 100vh;
-	padding: 20px;
-	background: linear-gradient(to bottom, #f68e61, #cd4a1a);
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-  /* Additional styles for lists, buttons, and success/error messages */
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-    width: 100%;
-    max-width: 300px;
-    text-align: center;
+.input-group {
+  position: relative;
 }
 
-li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 5px auto;
-    background-color: #2a2a2a;
-    border-radius: 4px;
-    border: 1px solid #444;
-    width: 100%;
-    color: #ffffff;
+.login-input {
+  width: 100%;
+  padding: 0.75rem 1rem; /* Adjust padding */
+  border: 2px solid #fed7aa;
+  border-radius: 1rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
 }
 
-li button {
-    margin-left: 10px;
-    padding: 4px 8px;
-    font-size: 0.9em;
+.login-input:focus {
+  outline: none;
+  border-color: #ea580c;
 }
 
-h1 {
-    margin-bottom: 20px;
-    color: #ffffff;
+.login-button {
+  background-color: #ea580c;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.my-homes, .available-homes, .create-home {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0;
-    width: 100%;
-    max-width: 500px;
+.login-button:hover {
+  background-color: #c2410c;
 }
 
+.button-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.forgot-password {
+  color: #ea580c;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.signup-prompt {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.signup-link {
+  color: #ea580c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .login-card {
+      padding: 2rem;
+  }
+
+  .login-title {
+      font-size: 2rem;
+  }
+}
+
+/* Error message style */
 .error {
-    color: #fc8181;
+  color: #fc8181;
 }
 
+/* Link styles */
 a {
-    color: #63b3ed;
-    text-decoration: none;
+  color: #63b3ed;
+  text-decoration: none;
 }
 
 a:hover {
-    color: #90cdf4;
-}
-
-h1, h2 {
-    color: #ffffff;
-}
-
-/* Success message style */
-.success {
-    color: #68d391;
-}
-
-.card-container {
-    width: 100%;               
-    max-width: 1200px;         
-    height: 50%;              
-    min-height: 100px;          
-    display: flex;              
-    justify-content: space-between; 
-    align-items: center;        
-    padding: 5px;             
-    margin: 0 auto;             
-    box-sizing: border-box;     
-}
-
-.room-container {
-    width: 100%;                /* Full width of the parent container */
-    max-width: 600px;           /* Max width to prevent excessive width */
-    height: auto;               /* Allow dynamic height based on content */
-    min-height: 150px;          /* Minimum height for the container */
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;     
-    display: flex;              
-    flex-direction: column;     
-    align-items: flex-start;   
-    overflow: hidden;           
-}
-
-.room-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-}
-
-/* .room */
-.room {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
-/* .room-buttons container */
-.room-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    overflow: hidden;           /* Prevent overflow in this container */
-}
-
-/* .room-button */
-.room-button {
-    display: flex;
-    justify-content: space-between;   /* Space between icon+text and the right text */
-    align-items: center;             
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;           
-    width: 100%;                     /* Ensure it fills the container without overflowing */
-    box-sizing: border-box;         
-}
-
-/* Hover effect for the button */
-.room-button:hover {
-    background-color: #3a6daf;
-}
-
-.room-button {
-    word-wrap: break-word;   /* Prevent text overflow */
-    overflow: hidden;        /* Hide any overflowed content */
-    text-overflow: ellipsis; /* Add ellipsis if the text overflows */
-    color: #1a1a1a;
-}
-
-.back-button button,
-.notification-button button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.welcome-message {
-    text-align: center; /* Center align the text */
-    font-size: 18px; 
-    color: #ffffff;
-}
-
-.notification-button button i {
-    margin-right: 8px; 
-    font-size: 20px;   /* Adjust icon size */
+  color: #90cdf4;
 }
