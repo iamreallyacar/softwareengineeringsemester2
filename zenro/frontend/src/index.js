@@ -1,6 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './importAllCSS';
+//import './css/smart-home-page.css';
+//import './css/App.css';
+//import './css/styles.css';
 import App from './App';
 
 /**
