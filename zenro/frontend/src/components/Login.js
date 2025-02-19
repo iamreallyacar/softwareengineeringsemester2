@@ -30,26 +30,44 @@ function Login() {
 
     return (
         <div className="login-container">
-            {error && <p>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                {/* The form fields handle changes via state */}
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <Link to="/create-account">Create one here</Link></p>
+            <div className="login-card">
+                <div className="login-header">
+                    <h1 className="login-title">Login</h1>
+                    <p className="login-subtitle">Please enter your credentials</p>
+                </div>
+                {error && <p className="error">{error}</p>}
+                <form className="login-form" onSubmit={handleSubmit}>
+                    <div className="input-group">
+                        <input
+                            type="text"
+                            className="login-input"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <input
+                            type="password"
+                            className="login-input"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button className="login-button" type="submit">
+                        <span>Login</span>
+                    </button>
+                </form>
+                <div className="login-footer">
+                    <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
+                    <div className="signup-prompt">
+                        Don't have an account? <Link to="/create-account" className="signup-link">Sign up</Link>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
