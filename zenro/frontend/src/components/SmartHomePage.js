@@ -11,8 +11,28 @@ function SmartHomePage() {
   const [selectedRoomId, setSelectedRoomId] = useState("");
   const [selectedSupportedDevice, setSelectedSupportedDevice] = useState("");
   const [deviceName, setDeviceName] = useState("");
+  // boolean for drop-down list for CCTV
   const [isOpen, setIsOpen] = useState(false);
+  // boolean for drop-down list for appliances 
+  const [isOpenLR, setIsOpenLR] = useState(false);
+  // constant for all rooms
   const allRooms = ["Living Room", "Kitchen", "Bedroom", "Bathroom", "Garage", "Backyard"];
+  // variable to change the names of the room for drop-down list in cctv container
+  const [selectedRoomCCTV, setSelectedRoomCCTV] = useState("Living Room");
+  // variable to change the names of the room for drop-down list in appliances container
+  const [selectedRoom, setSelectedRoom] = useState("Living Room");
+  // boolean to check if the appliances is turning on or off, in appliances container
+  const [isOn, setIsOn] = useState(false);
+
+  const handleRoomSelectCCTV = (room) => {
+    setSelectedRoomCCTV(room);
+    setIsOpen(false);
+  };
+
+  const handleRoomSelect = (room) => {
+    setSelectedRoom(room);
+    setIsOpenLR(false);
+  };
 
 
   useEffect(() => {
@@ -47,10 +67,10 @@ function SmartHomePage() {
         </ul>
       </div>
      
-      <div className="information">
-        <div className="CCTV">
+      <div className="shp-information">
+        <div className="shp-CCTV">
         <button onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? "Hide List" : "Show List"}
+            {selectedRoomCCTV} {isOpen ? "▲" : "▼"}
         </button>
 
         <AnimatePresence>
@@ -62,10 +82,11 @@ function SmartHomePage() {
                         transition={{ duration: 0.5, ease: "easeInOut" }}
                         style={{ overflow: "hidden" }}
                     >
-                        <ul className="cctv-room-list">
+                        <ul className="shp-cctv-room-list">
                             {allRooms.map((room, index) => (
                                 <motion.li
                                     key={room}
+                                    onClick={() => handleRoomSelectCCTV(room)}
                                     initial={{ opacity: 0, y: -30 }}
                                     animate={{ opacity: 1, y: -20 }}
                                     exit={{ opacity: 0, y: -30 }}
@@ -79,25 +100,25 @@ function SmartHomePage() {
                 )}
             </AnimatePresence>
 
-          <div className="cctv-view">
+          <div className="shp-cctv-view">
             <h1>CCTV</h1>
           </div>
 
-          <div className="cctv-statistics">
-            <p className="statistics">Temperature</p>
-            <p className="statistics">Power Usage</p>
-            <p className="statistics">Humidity</p>
-            <p className="statistics">Light</p>
+          <div className="shp-cctv-statistics">
+            <p className="shp-statistics">Temperature</p>
+            <p className="shp-statistics">Power Usage</p>
+            <p className="shp-statistics">Humidity</p>
+            <p className="shp-statistics">Light</p>
           </div>
 
         </div>
 
-        <div className="rooms">
+        <div className="shp-rooms">
           <h1>Rooms</h1>
-          <hr className="rooms-divider"/>
+          <hr className="shp-rooms-divider"/>
 
-          <div className="rooms-list-container">
-          <ul className="rooms-list">
+          <div className="shp-rooms-list-container">
+          <ul className="shp-rooms-list">
             {rooms.map((room) => (
               <li key={room.id}>
                 <Link to={`/room/${room.name}/${smartHomeId}`}>{room.name}</Link>
@@ -105,35 +126,87 @@ function SmartHomePage() {
             ))}
             {/* The following fixed links should also use the dynamic smartHomeId */}
             <li>
-              <Link to={`/room/living-room/${smartHomeId}`}>Living Room</Link>
+              <Link to={`/room/living-room/${smartHomeId}`} className="shp-rooms-list-links">Living Room</Link>
             </li>
             <li>
-              <Link to={`/room/kitchen/${smartHomeId}`}>Kitchen</Link>
+              <Link to={`/room/kitchen/${smartHomeId}`} className="shp-rooms-list-links">Kitchen</Link>
             </li>
             <li>
-              <Link to={`/room/bedroom/${smartHomeId}`}>Bedroom</Link>
+              <Link to={`/room/bedroom/${smartHomeId}`} className="shp-rooms-list-links">Bedroom</Link>
             </li>
             <li>
-              <Link to={`/room/bathroom/${smartHomeId}`}>Bathroom</Link>
+              <Link to={`/room/bathroom/${smartHomeId}`} className="shp-rooms-list-links">Bathroom</Link>
             </li>
             <li>
-              <Link to={`/room/garage/${smartHomeId}`}>Garage</Link>
+              <Link to={`/room/garage/${smartHomeId}`} className="shp-rooms-list-links">Garage</Link>
             </li>
             <li>
-              <Link to={`/room/backyard/${smartHomeId}`}>Backyard</Link>
+              <Link to={`/room/backyard/${smartHomeId}`} className="shp-rooms-list-links">Backyard</Link>
             </li>
           </ul>
           </div>
 
-          <button className="add-room-button">+ Add Room</button>
+          <button className="shp-add-room-button">+ Add Room</button>
 
         </div>
 
-        <div className="living-room-block">
-            
+        {/* Appliances Container */}
+        <div className="shp-appliances">
+            <div className="shp-appliances-room-select">
+
+              <h3 onClick={() => setIsOpenLR(!isOpenLR)} className="room-title">
+                {selectedRoom} {isOpenLR ? "▲" : "▼" }
+              </h3>
+
+              <AnimatePresence>
+                {isOpenLR && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    style={{ overflow: "hidden" }}
+                >
+                    <ul className="shp-appliances-room-list">
+                        {allRooms.map((room, index) => (
+                            <motion.li 
+                            onClick={() => handleRoomSelect(room)}
+                            key={room}
+                            initial={{ opacity: 0, y: -30 }}
+                            animate={{ opacity: 1, y: -20 }}
+                            exit={{ opacity: 0, y: -30 }}
+                            transition={{ delay: index * 0.2, duration: 0.3 }}
+                        >
+                            {room}
+                        </motion.li>
+                        ))}
+                    </ul>
+                  </motion.div>
+                )}
+            </AnimatePresence>
+
+              <p>Smart Air Conditioner</p>
+            </div>
+
+            <div className="shp-appliances-on-off-button">
+              <button
+                onClick={() => setIsOn(!isOn)}
+                className={isOn ? "shp-appliances-button-on":"shp-appliances-button-off"}
+              >
+              <span className="status-dot"></span>
+              {isOn ? "ON" : "OFF"}
+              </button>
+            </div>
+
+            <div className="shp-appliances-img">
+              
+            </div>
+
+            <div className="shp-appliances-statistics">
+            </div>  
         </div>
 
-        <div className="temp">
+        <div className="shp-temp">
         </div>
 
       </div>
