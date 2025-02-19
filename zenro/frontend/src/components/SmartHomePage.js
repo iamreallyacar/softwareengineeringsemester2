@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
 
+import airCond from "../assets/images/aircond-removebg-preview.png";
+
 function SmartHomePage() {
   const { id: smartHomeId } = useParams(); // The current smart home’s ID
   const [rooms, setRooms] = useState([]);
@@ -33,7 +35,6 @@ function SmartHomePage() {
     setSelectedRoom(room);
     setIsOpenLR(false);
   };
-
 
   useEffect(() => {
     // Fetch rooms for this smart home
@@ -154,7 +155,7 @@ function SmartHomePage() {
         <div className="shp-appliances">
             <div className="shp-appliances-room-select">
 
-              <h3 onClick={() => setIsOpenLR(!isOpenLR)} className="room-title">
+              <h3 onClick={() => setIsOpenLR(!isOpenLR)}>
                 {selectedRoom} {isOpenLR ? "▲" : "▼" }
               </h3>
 
@@ -199,14 +200,35 @@ function SmartHomePage() {
             </div>
 
             <div className="shp-appliances-img">
-              
+              <img src="../assets/images/aircond-removebg-preview.png" alt="Air Conditioner"/>
             </div>
 
             <div className="shp-appliances-statistics">
+              <p className="shp-statistics">Total Uptime</p>
+              <p className="shp-statistics">Fan Speed</p>
+              <p className="shp-statistics">Temperature</p>
             </div>  
         </div>
 
-        <div className="shp-temp">
+        /* Most Used Container */
+        <div className="shp-most-used">
+          <div className="shp-most-used-title">
+            <h3> {selectedRoom} </h3>
+          </div>
+
+          <h4>Most Used Appliances</h4>
+
+          <div style={{ width: "100%", height: "200%" }}>
+            <ul className="shp-most-used-list">
+              <li className="shp-most-used-appliances">Smart Air Conditioner</li>
+              <li className="shp-most-used-appliances">Smart Lights</li>
+              <li className="shp-most-used-appliances">Smart TV</li>
+              <li className="shp-most-used-appliances">Smart Fridge</li>
+              <li className="shp-most-used-appliances">Smart Oven</li>
+              <li className="shp-most-used-appliances">Smart Washing Machine</li>
+            </ul>
+          </div>
+
         </div>
 
       </div>

@@ -10,7 +10,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.0",
     "react-scripts": "^5.0.1",
-    "lucide-react": "0.475.0"
+    "lucide-react": "0.475.0",
+    "framer-motion": "^4.1.17"
   },
   "scripts": {
     "start": "react-scripts start",
