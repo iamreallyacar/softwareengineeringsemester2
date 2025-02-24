@@ -29,7 +29,7 @@ function CreateAccount() {
             setSuccess("Account created successfully!");
             // After a timeout of 2 seconds, navigate to the login page
             setTimeout(() => {
-                navigate("/login");
+                navigate("/");
             }, 2000);
         } catch (error) {
             console.error("Account Creation Failed:", error);
