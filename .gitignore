@@ -3,3 +3,5 @@
 **/venv/
 .vscode/
 **/zenro/frontend/package-lock.json
+./zenro/frontend/package-lock.json
+**/package-lock.json
