@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_crontab',
     # Our own apps
-    'api',
+    'api.apps.ApiConfig',  # Required for signals
 ]
 
 MIDDLEWARE = [

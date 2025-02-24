@@ -76,45 +76,4 @@ class Command(BaseCommand):
                     }
                 )
 
-            # For memory devices inside each room
-            mem_devices = room_item.get('memory', [])
-            for dev in mem_devices:
-                name = dev.get('name')
-                address = dev.get('address')
-                data_type = dev.get('data_type')
-                # “memory” devices: model_name = 'Memory: ' + name
-                # type / contact_type can be None
-                # memory_type='memory'
-                SupportedDevice.objects.update_or_create(
-                    model_name= name,
-                    address=address,
-                    data_type=data_type,
-                    memory_type='memory',
-                    home_io_room=homeio_room,
-                    defaults={
-                        'type': None,
-                        'contact_type': None
-                    }
-                )
-
-        # 2) Process top-level "memories" array (these don’t belong to any room)
-        global_memories = data.get('memories', [])
-        for dev in global_memories:
-            name = dev.get('name')
-            address = dev.get('address')
-            data_type = dev.get('data_type')
-
-            # model_name = 'Memory: ' + name
-            SupportedDevice.objects.update_or_create(
-                model_name=name,
-                address=address,
-                data_type=data_type,
-                memory_type='memory',
-                home_io_room=None,
-                defaults={
-                    'type': None,
-                    'contact_type': None
-                }
-            )
-
         self.stdout.write(self.style.SUCCESS("Home I/O layout import completed."))

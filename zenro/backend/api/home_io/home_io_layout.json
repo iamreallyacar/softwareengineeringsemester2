@@ -5,138 +5,47 @@
       "unlock_order": 1,
       "input_devices": [
       {
-        "model_name": "Light Switch 1",
-        "type": "light_switch",
-        "address": 0, 
-        "contact_type": "NO", 
-        "data_type": "Bool"
-      },
-      {
         "model_name": "Brightness Sensor (Analogue)", 
         "type": "sensor",
         "address": 0, 
         "contact_type": "NULL",
         "data_type": "Float"
-      }, 
-      {
-        "model_name": "Light Switch 2",
-        "type": "light_switch",
-        "address": 1, 
-        "contact_type": "NO",
-        "data_type": "Bool"
       },
       {
-        "model_name": "Thermotat (Room Temperature)",
+        "model_name": "Thermostat (Room Temperature)",
         "type": "sensor",
         "address": 1, 
         "contact_type": "NULL",
         "data_type": "Float"
-      }, 
-      {
-        "model_name": "Light Switch 3",
-        "type": "light_switch",
-        "address": 2,
-        "contact_type": "NO",
-        "data_type": "Bool"
       },
       {
-        "model_name": "Thermostat (Set Point)",
-        "type": "sensor",
-        "address": 2,
-        "contact_type": "NULL",
-        "data_type": "Float"
-      },
-      {
-        "model_name": "Up/Down Switch 1 (Up)",
-        "type": "up_down_switch",
-        "address": 3,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Roller Shades (Openness)",
+        "model_name": "Roller Shades 1 (Openness)",
         "type": "sensor",
         "address": 3,
         "contact_type": "NULL",
         "data_type": "Float"
       },
       {
-        "model_name": "Up/Down Switch 1 (Down)",
-        "type": "up_down_switch",
+        "model_name": "Roller Shades 2 (Openness)",
+        "type": "sensor",
         "address": 4,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
+        "contact_type": "NULL",
+        "data_type": "Float"
+      }, 
       {
-        "model_name": "Up/Down Switch 2 (Up)",
-        "type": "up_down_switch",
+        "model_name": "Roller Shades 3 (Openness)",
+        "type": "sensor",
         "address": 5,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
+        "contact_type": "NULL",
+        "data_type": "Float"
+      }, 
       {
-        "model_name": "Up/Down Switch 2 (Down)",
-        "type": "up_down_switch",
+        "model_name": "Roller Shades 4 (Openness)",
+        "type": "sensor",
         "address": 6,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Light Switch Dimmer 1 (Up)",
-        "type": "dimmer_switch",
-        "address": 7,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Light Switch Dimmer 1 (Down)",
-        "type": "dimmer_switch",
-        "address": 8,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Light Switch Dimmer 2 (Up)",
-        "type": "dimmer_switch",
-        "address": 9,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Light Switch Dimmer 2 (Down)",
-        "type": "dimmer_switch",
-        "address": 10,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Light Switch Dimmer 3 (Up)",
-        "type": "dimmer_switch",
-        "address": 11,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Light Switch Dimmer 3 (Down)",
-        "type": "dimmer_switch",
-        "address": 12,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Door Detector 1",
-        "type": "sensor",
-        "address": 13,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Door Detector 2",
-        "type": "sensor",
-        "address": 14,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
+        "contact_type": "NULL",
+        "data_type": "Float"
+      }, 
       {
         "model_name": "Motion Detector",
         "type": "sensor",
@@ -149,13 +58,6 @@
         "type": "sensor",
         "address": 16,
         "contact_type": "NC",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Smoke Detector",
-        "type": "sensor",
-        "address": 17,
-        "contact_type": "NO",
         "data_type": "Bool"
       }
       ], 
@@ -244,33 +146,12 @@
         "contact_type": "NULL",
         "data_type": "Bool"
       }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]", 
-      "address": 150,
-      "data_type": "Float"
-      }
-      ] 
+      ]
     },
     {
       "name": "Zone B (Guest restroom)",
       "unlock_order": 2,
       "input_devices": [
-      {
-        "model_name": "Light Switch 1",
-        "type": "light_switch",
-        "address": 27,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Light Switch 2",
-        "type": "light_switch",
-        "address": 28,
-        "contact_type": "NO",
-        "data_type": "Bool"
-      },
       {
         "model_name": "Motion Detector",
         "type": "sensor",
@@ -308,27 +189,12 @@
         "contact_type": "NULL",
         "data_type": "Bool"
       }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 151,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone C (Pantry)",
       "unlock_order": 3,
-      "input_devices": [
-        {
-          "model_name": "Light Switch",
-          "type": "light_switch",
-          "address": 39,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }
-      ],
+      "input_devices": [],
       "output_devices": [
         {
           "model_name": "Lights (Analogue)",
@@ -344,68 +210,12 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 152,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone D (Kitchen)",
       "unlock_order": 4,
       "input_devices": [
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 49,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 50,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Up)",
-          "type": "dimmer_switch",
-          "address": 51,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Down)",
-          "type": "dimmer_switch",
-          "address": 52,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Up)",
-          "type": "dimmer_switch",
-          "address": 53,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Down)",
-          "type": "dimmer_switch",
-          "address": 54,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector",
-          "type": "sensor",
-          "address": 55,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -419,6 +229,27 @@
           "address": 57,
           "contact_type": "NO",
           "data_type": "Bool"
+        }, 
+        {
+          "model_name": "Brightness Sensor (Analogue)",
+          "type": "sensor",
+          "address": 12,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)", 
+          "type": "sensor",
+          "address": 13,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 15,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -478,110 +309,12 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 153,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone E (Entrance Hall)",
       "unlock_order": 5,
       "input_devices": [
-        {
-          "model_name": "Light Switch 1",
-          "type": "light_switch",
-          "address": 67,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 2",
-          "type": "light_switch",
-          "address": 68,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 3",
-          "type": "light_switch",
-          "address": 69,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 4",
-          "type": "light_switch",
-          "address": 70,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 5",
-          "type": "light_switch",
-          "address": 71,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 72,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 73,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Up)",
-          "type": "dimmer_switch",
-          "address": 74,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Down)",
-          "type": "dimmer_switch",
-          "address": 75,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Up)",
-          "type": "dimmer_switch",
-          "address": 76,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Down)",
-          "type": "dimmer_switch",
-          "address": 77,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 1",
-          "type": "sensor",
-          "address": 78,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 2",
-          "type": "sensor",
-          "address": 79,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -595,13 +328,27 @@
           "address": 81,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
+        }, 
         {
-          "model_name": "Alarm Key Pad (Armed)",
+          "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
-          "address": 82,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 24,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)",
+          "type": "sensor",
+          "address": 25,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 27,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -646,83 +393,13 @@
           "address": 57,
           "contact_type": "NULL",
           "data_type": "Bool"
-        },
-        {
-          "model_name": "Siren",
-          "type": "security",
-          "address": 58,
-          "contact_type": "NULL",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Alarm Key Pad (Arm)",
-          "type": "security",
-          "address": 59,
-          "contact_type": "NULL",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Alarm Key Pad (Disarm)",
-          "type": "security",
-          "address": 60,
-          "contact_type": "NULL",
-          "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 154,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone F (Garage)",
       "unlock_order": 6,
       "input_devices": [
-        {
-          "model_name": "Light Switch 1",
-          "type": "light_switch",
-          "address": 92,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 2",
-          "type": "light_switch",
-          "address": 93,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch 1 (Up)",
-          "type": "up_down_switch",
-          "address": 94,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch 1 (Down)",
-          "type": "up_down_switch",
-          "address": 95,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch 2 (Up)",
-          "type": "up_down_switch",
-          "address": 96,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch 2 (Down)",
-          "type": "up_down_switch",
-          "address": 97,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -736,27 +413,20 @@
           "address": 99,
           "contact_type": "NO",
           "data_type": "Bool"
+        }, 
+        {
+          "model_name": "Brightness Sensor (Analogue)",
+          "type": "sensor",
+          "address": 36,
+          "contact_type": "NULL",
+          "data_type": "Float"
         },
         {
-          "model_name": "Garage Door (Opened)",
+          "model_name": "Roller Shades (Openness)",
           "type": "sensor",
-          "address": 100,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Garage Door (Closed)",
-          "type": "sensor",
-          "address": 101,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Garage Door (Infrared)",
-          "type": "sensor",
-          "address": 102,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 37,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -801,28 +471,7 @@
           "address": 71,
           "contact_type": "NULL",
           "data_type": "Bool"
-        },
-        {
-          "model_name": "Garage Door (Open)",
-          "type": "door",
-          "address": 72,
-          "contact_type": "NULL",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Garage Door (Close)",
-          "type": "door",
-          "address": 73,
-          "contact_type": "NULL",
-          "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 155,
-      "data_type": "Float"
-      }
       ]
     },
     {
@@ -830,67 +479,25 @@
       "unlock_order": 7,
       "input_devices": [
         {
-          "model_name": "Light Switch 1",
-          "type": "light_switch",
-          "address": 112,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 2",
-          "type": "light_switch",
-          "address": 113,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 3",
-          "type": "light_switch",
-          "address": 114,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 4",
-          "type": "light_switch",
-          "address": 115,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 5",
-          "type": "light_switch",
-          "address": 116,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 117,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 118,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
           "model_name": "Motion Detector",
           "type": "sensor",
           "address": 119,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
+        }, 
         {
-          "model_name": "Smoke Detector",
+          "model_name": "Thermostat (Room Temperature)", 
           "type": "sensor",
-          "address": 120,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 46,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 48,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -950,75 +557,12 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 156,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone H (Children bedroom)",
       "unlock_order": 8,
       "input_devices": [
-        {
-          "model_name": "Light Switch 1",
-          "type": "light_switch",
-          "address": 130,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 2",
-          "type": "light_switch",
-          "address": 131,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 132,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 133,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer (Up)",
-          "type": "dimmer_switch",
-          "address": 134,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer (Down)",
-          "type": "dimmer_switch",
-          "address": 135,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 1",
-          "type": "sensor",
-          "address": 136,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 2",
-          "type": "sensor",
-          "address": 137,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -1032,13 +576,27 @@
           "address": 139,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
+        }, 
         {
-          "model_name": "Smoke Detector",
+          "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
-          "address": 140,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 57,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)",
+          "type": "sensor",
+          "address": 58,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 60,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1084,13 +642,6 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 157,
-      "data_type": "Float"
-      }
       ]
     },
     {
@@ -1098,32 +649,18 @@
       "unlock_order": 9,
       "input_devices": [
         {
-          "model_name": "Light Switch",
-          "type": "light_switch",
-          "address": 150,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer (Up)",
-          "type": "dimmer_switch",
-          "address": 151,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer (Down)",
-          "type": "dimmer_switch",
-          "address": 152,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
           "model_name": "Motion Detector",
           "type": "sensor",
           "address": 153,
           "contact_type": "NO",
           "data_type": "Bool"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)", 
+          "type": "sensor",
+          "address": 69,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1169,75 +706,12 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 158,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone J (Single bedroom)",
       "unlock_order": 10,
       "input_devices": [
-        {
-          "model_name": "Light Switch 1",
-          "type": "light_switch",
-          "address": 163,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 2",
-          "type": "light_switch",
-          "address": 164,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 165,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 166,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer (Up)",
-          "type": "dimmer_switch",
-          "address": 167,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer (Down)",
-          "type": "dimmer_switch",
-          "address": 168,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 1",
-          "type": "sensor",
-          "address": 169,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 2",
-          "type": "sensor",
-          "address": 170,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -1251,13 +725,27 @@
           "address": 172,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
+        }, 
         {
-          "model_name": "Smoke Detector",
+          "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
-          "address": 173,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 80,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)",
+          "type": "sensor",
+          "address": 81,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 83,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1303,13 +791,6 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 159,
-      "data_type": "Float"
-      }
       ]
     },
     {
@@ -1317,25 +798,18 @@
       "unlock_order": 11,
       "input_devices": [
         {
-          "model_name": "Light Switch Dimmer (Up)",
-          "type": "dimmer_switch",
-          "address": 183,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer (Down)",
-          "type": "dimmer_switch",
-          "address": 184,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
           "model_name": "Motion Detector",
           "type": "sensor",
           "address": 185,
           "contact_type": "NO",
           "data_type": "Bool"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)", 
+          "type": "sensor",
+          "address": 92,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1367,89 +841,12 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 160,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone L (Couple bedroom)",
       "unlock_order": 12,
       "input_devices": [
-        {
-          "model_name": "Light Switch 1",
-          "type": "light_switch",
-          "address": 195,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 2",
-          "type": "light_switch",
-          "address": 196,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 197,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 198,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Up)",
-          "type": "dimmer_switch",
-          "address": 199,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Down)",
-          "type": "dimmer_switch",
-          "address": 200,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Up)",
-          "type": "dimmer_switch",
-          "address": 201,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Down)",
-          "type": "dimmer_switch",
-          "address": 202,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 1",
-          "type": "sensor",
-          "address": 203,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 2",
-          "type": "sensor",
-          "address": 204,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -1463,13 +860,27 @@
           "address": 206,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
+        }, 
         {
-          "model_name": "Smoke Detector",
+          "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
-          "address": 207,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 103,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)",
+          "type": "sensor",
+          "address": 104,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 106,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1515,54 +926,12 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 161,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone M (Laundry room)",
       "unlock_order": 13,
       "input_devices": [
-        {
-          "model_name": "Light Switch",
-          "type": "light_switch",
-          "address": 217,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 218,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 219,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 1",
-          "type": "sensor",
-          "address": 220,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 2",
-          "type": "sensor",
-          "address": 221,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -1576,6 +945,27 @@
           "address": 223,
           "contact_type": "NO",
           "data_type": "Bool"
+        }, 
+        {
+          "model_name": "Brightness Sensor (Analogue)",
+          "type": "sensor",
+          "address": 115,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)",
+          "type": "sensor",
+          "address": 116,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 118,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1621,110 +1011,12 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 162,
-      "data_type": "Float"
-      }
       ]
     },
     {
       "name": "Zone N (Home office)",
       "unlock_order": 14,
       "input_devices": [
-        {
-          "model_name": "Light Switch 1",
-          "type": "light_switch",
-          "address": 233,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 2",
-          "type": "light_switch",
-          "address": 234,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch 3",
-          "type": "light_switch",
-          "address": 235,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Up)",
-          "type": "dimmer_switch",
-          "address": 236,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 1 (Down)",
-          "type": "dimmer_switch",
-          "address": 237,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Up)",
-          "type": "dimmer_switch",
-          "address": 238,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 2 (Down)",
-          "type": "dimmer_switch",
-          "address": 239,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 3 (Up)",
-          "type": "dimmer_switch",
-          "address": 240,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Light Switch Dimmer 3 (Down)",
-          "type": "dimmer_switch",
-          "address": 241,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Up)",
-          "type": "up_down_switch",
-          "address": 242,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Up/Down Switch (Down)",
-          "type": "up_down_switch",
-          "address": 243,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 1",
-          "type": "sensor",
-          "address": 244,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Door Detector 2",
-          "type": "sensor",
-          "address": 245,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
         {
           "model_name": "Motion Detector",
           "type": "sensor",
@@ -1738,13 +1030,27 @@
           "address": 247,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
+        }, 
         {
-          "model_name": "Smoke Detector",
+          "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
-          "address": 248,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 127,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Thermostat (Room Temperature)",
+          "type": "sensor",
+          "address": 128,
+          "contact_type": "NULL",
+          "data_type": "Float"
+        }, 
+        {
+          "model_name": "Roller Shades (Openness)",
+          "type": "sensor",
+          "address": 130,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1818,13 +1124,6 @@
           "contact_type": "NULL",
           "data_type": "Bool"
         }
-      ], 
-      "memory": [
-      {
-      "name": "Temperature [k]",
-      "address": 163,
-      "data_type": "Float"
-      }
       ]
     },
     {
@@ -1844,41 +1143,13 @@
           "address": 259,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
+        }, 
         {
-          "model_name": "Entrance Gate (Opened)",
+          "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
-          "address": 260,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Entrance Gate (Closed)",
-          "type": "sensor",
-          "address": 261,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Entrance Gate (Infrared 1)",
-          "type": "sensor",
-          "address": 262,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Entrance Gate (Infrared 2)",
-          "type": "sensor",
-          "address": 263,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Entrance Gate (Infrared 3)",
-          "type": "sensor",
-          "address": 264,
-          "contact_type": "NO",
-          "data_type": "Bool"
+          "address": 139,
+          "contact_type": "NULL",
+          "data_type": "Float"
         }
       ],
       "output_devices": [
@@ -1951,62 +1222,8 @@
           "address": 191,
           "contact_type": "NULL",
           "data_type": "Bool"
-        },
-        {
-          "model_name": "Siren",
-          "type": "security",
-          "address": 192,
-          "contact_type": "NULL",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Entrance Gate (Open)",
-          "type": "gate",
-          "address": 193,
-          "contact_type": "NULL",
-          "data_type": "Bool"
-        },
-        {
-          "model_name": "Entrance Gate (Close)",
-          "type": "gate",
-          "address": 194,
-          "contact_type": "NULL",
-          "data_type": "Bool"
         }
-      ], 
-      "memory": []
+      ]
     }
-  ], 
-  "memories": [
-  {
-    "name": "Using DLST", 
-    "address": 256, 
-    "data_type": "Bool"
-  }, 
-  {
-    "name": "Time Scale", 
-    "address": 129, 
-    "data_type": "Float"
-  }, 
-  {
-    "name": "Latitude", 
-    "address": 130,
-    "data_type": "Float"
-  },
-  {
-    "name": "Longitude",
-    "address": 131,
-    "data_type": "Float"
-  },
-  {
-    "name": "Air Temperature [K]",
-    "address": 132,
-    "data_type": "Float"
-  },
-  {
-    "name": "Relative Humidity",
-    "address": 133,
-    "data_type": "Float"
-  }
   ]
 }
