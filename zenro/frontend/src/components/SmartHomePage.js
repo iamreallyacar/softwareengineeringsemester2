@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
 
-import airCond from "../assets/images/aircond-removebg-preview.png";
+import airCond from "../assets/images/aircond.png";
 
 function SmartHomePage() {
   const { id: smartHomeId } = useParams(); // The current smart home’s ID
@@ -198,9 +198,9 @@ function SmartHomePage() {
               {isOn ? "ON" : "OFF"}
               </button>
             </div>
-
-            <div className="shp-appliances-img">
-              <img src="../assets/images/aircond-removebg-preview.png" alt="Air Conditioner"/>
+            
+            <div className="shp-appliances-img-container">
+              <img className="shp-appliances-img" src={airCond} alt="Air Conditioner"/>
             </div>
 
             <div className="shp-appliances-statistics">
@@ -210,7 +210,7 @@ function SmartHomePage() {
             </div>  
         </div>
 
-        /* Most Used Container */
+        {/* Most Used Container */}
         <div className="shp-most-used">
           <div className="shp-most-used-title">
             <h3> {selectedRoom} </h3>

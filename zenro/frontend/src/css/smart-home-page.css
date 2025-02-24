@@ -412,10 +412,16 @@ html, body {
     background-color: green;
 }
 
-.shp-appliances-img {
+.shp-appliances-img-container {
     width: 100%;
     height: 50%;
 }
+
+.shp-appliances-img {
+    width: 70%;
+    height: 70%;
+}
+
 
 .shp-appliances-statistics {
     width: 100%;
