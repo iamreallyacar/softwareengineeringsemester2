@@ -6,12 +6,12 @@
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "font-awesome": "^4.7.0",
+    "framer-motion": "^4.1.17",
+    "lucide-react": "0.475.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.0",
-    "react-scripts": "^5.0.1",
-    "lucide-react": "0.475.0",
-    "framer-motion": "^4.1.17"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
