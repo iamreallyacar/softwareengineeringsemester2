@@ -1,120 +1,62 @@
+import random
 from django.db import models, transaction
 from django.utils import timezone
 from datetime import timedelta
-from .models import Room, RoomLog5Sec, RoomLogDaily, RoomLogMonthly, Device, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly
+from .models import Room, RoomLog1Min, RoomLogDaily, RoomLogMonthly, Device, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly
 
 def is_first_day_of_month(date):
     """Check if given date is the first day of the month."""
     return date.day == 1
 
 """
+# Legacy aggregation code kept as reference
 def aggregate_room_logs():
-    aggregate_logs(RoomLog5Sec, RoomLogDaily, "created_at", "energy_usage", "total_energy_usage")
+    aggregate_logs(RoomLog1Min, RoomLogDaily, "created_at", "energy_usage", "total_energy_usage")
     aggregate_monthly_logs(RoomLogDaily, RoomLogMonthly, "date", "total_energy_usage", "total_energy_usage")
 
 def aggregate_device_logs():
-    aggregate_logs(DeviceLog5Sec, DeviceLogDaily, "created_at", "energy_usage", "total_energy_usage")
+    aggregate_logs(DeviceLog1Min, DeviceLogDaily, "created_at", "energy_usage", "total_energy_usage")
     aggregate_monthly_logs(DeviceLogDaily, DeviceLogMonthly, "date", "total_energy_usage", "total_energy_usage")
 
-def aggregate_logs(
-    model_source, model_target, date_field, aggregate_field, target_field, filters=None
-):
-    try:
-        with transaction.atomic():
-            today = timezone.now().date()
-            yesterday = today - timedelta(days=1)
-
-            base_query = model_source.objects.filter(**filters) if filters else model_source.objects.all()
-            daily_logs = base_query.filter(**{f"{date_field}__date": yesterday})
-
-            if daily_logs.exists():
-                total_usage = daily_logs.aggregate(models.Sum(aggregate_field))[f"{aggregate_field}__sum"] or 0
-                
-                model_target.objects.update_or_create(
-                    **{date_field: yesterday},
-                    defaults={target_field: total_usage}
-                )
-    except Exception as e:
-        print(f"Error in aggregate_logs: {e}")
-        raise    
-
-def aggregate_monthly_logs(model_source, model_target, date_field, aggregate_field, target_field):
-    try:
-        with transaction.atomic():
-            today = timezone.now().date()
-            if today.day != 1:
-                return  # Only run on the first day of the month
-
-            yesterday = today - timedelta(days=1)
-            first_of_prev_month = yesterday.replace(day=1)
-
-            logs = model_source.objects.filter(
-                **{f"{date_field}__gte": first_of_prev_month, f"{date_field}__lte": yesterday}
-            )
-
-            if logs.exists():
-                total_usage = logs.aggregate(models.Sum(aggregate_field))[f"{aggregate_field}__sum"] or 0
-                
-                model_target.objects.update_or_create(
-                    **{"month": yesterday.month, "year": yesterday.year},
-                    defaults={target_field: total_usage}
-                )
-    except Exception as e:
-        print(f"Error in aggregate_monthly_logs: {e}")
-        raise
-
-def calculate_metrics(logs, status_value):
-    filtered_logs = logs.filter(status=status_value)
-    count = filtered_logs.count()
-    total_seconds = count * 5
-    total_usage = filtered_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
-    avg_usage = total_usage / total_seconds if total_seconds > 0 else 0
-
-    return {
-        'duration': total_seconds,
-        'total_usage': total_usage,
-        'avg_usage_per_second': avg_usage
-    }
-
-def calculate_device_metrics(logs):
-    total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
-    avg_usage_per_second = total_usage / (24 * 60 * 60)  # per second for whole day
-
-    return {
-        'total_usage': total_usage,
-        'avg_usage_per_second': avg_usage_per_second,
-        'uptime': calculate_metrics(logs, True),
-        'downtime': calculate_metrics(logs, False),
-        'logs': [
-            {
-                'timestamp': log.created_at.isoformat(),
-                'status': log.status,
-                'energy_usage': log.energy_usage
-            } for log in logs
-        ]
-    }
+# ...existing code...
 """
 
 def generate_device_logs():
+    """
+    Generate 1-minute device logs for all unlocked devices.
+    Uses a uniform timestamp for all logs created in this batch.
+    """
+    # Get the current minute timestamp (rounded down to the minute)
+    now = timezone.now()
+    current_minute = now.replace(second=0, microsecond=0)
+    
     devices = Device.objects.all()
     for device in devices:
-        if (device.is_unlocked and device.supported_device.consumption_rate != None):
+        if (device.is_unlocked and device.supported_device.consumption_rate != None and "Analogue" not in device.name):
             if device.status:
-                energy_usage = device.supported_device.consumption_rate
+                # Calculate energy usage in kWh for 1 minute period
+                energy_usage = device.supported_device.consumption_rate * 60 / 3600 / 1000 # in kWh
             else:
-                energy_usage = 0
-            DeviceLog5Sec.objects.create(
+                energy_usage = random.uniform(0, 0.00017)
+            DeviceLog1Min.objects.create(
                 device=device,
                 status=device.status,
-                energy_usage=energy_usage
+                energy_usage=energy_usage,
+                created_at=current_minute  # Use the uniform timestamp
             )
         else: 
             continue
+    
+    aggregate_device_to_room_logs(current_minute)  # Pass the timestamp to make aggregation more efficient
 
 def aggregate_room_logs():
     """
     Aggregates daily and monthly logs for all Rooms.
     Runs at 00:05 daily to handle data from the previous day or month.
+    
+    Process:
+    1. For each room, aggregate all 1-minute logs from yesterday into a daily entry
+    2. On first day of month, aggregate previous month's daily logs into a monthly entry
     """
     try:
         with transaction.atomic():
@@ -126,12 +68,14 @@ def aggregate_room_logs():
             # Step 3: Save to RoomLogDaily
             rooms = Room.objects.all()
             for room in rooms:
-                daily_logs = RoomLog5Sec.objects.filter(
+                daily_logs = RoomLog1Min.objects.filter(
                     room=room,
                     created_at__date=yesterday
                 ).order_by('created_at')
                 
-                if daily_logs.exists():
+                if not daily_logs.exists():
+                    continue # No logs to aggregate
+                else: 
                     total_usage = daily_logs.aggregate(
                         models.Sum('energy_usage')
                     )['energy_usage__sum'] or 0
@@ -156,7 +100,9 @@ def aggregate_room_logs():
                         date__lte=yesterday
                     ).order_by('date')
                     
-                    if monthly_logs.exists():
+                    if not monthly_logs.exists():
+                        continue  # No logs to aggregate
+                    else:
                         total_usage = monthly_logs.aggregate(
                             models.Sum('total_energy_usage')
                         )['total_energy_usage__sum'] or 0
@@ -173,22 +119,32 @@ def aggregate_room_logs():
         raise
 
 def calculate_device_metrics(logs):
-    """Calculate device metrics from 5-second logs."""
+    """
+    Calculate device metrics from 1-minute logs.
+    
+    Parameters:
+        logs: QuerySet of DeviceLog1Min entries
+    
+    Returns:
+        Dictionary with metrics including total usage, average usage,
+        and separate metrics for periods when the device was on vs. off
+    """
     # Overall metrics
     total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
-    avg_usage_per_second = total_usage / (24 * 60 * 60)  # per second for whole day
+    usage_duration = logs.count() * 60 # Convert to seconds for consistent metrics
+    avg_usage_per_second = total_usage / usage_duration  # per second for whole day
     
     # Uptime metrics
     uptime_logs = logs.filter(status=True)
     uptime_count = uptime_logs.count()
-    uptime_seconds = uptime_count * 5
+    uptime_seconds = uptime_count * 60  # Convert to seconds for consistent metrics
     uptime_usage = uptime_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
     avg_uptime_usage = uptime_usage / uptime_seconds if uptime_seconds > 0 else 0
     
     # Downtime metrics
     downtime_logs = logs.filter(status=False)
     downtime_count = downtime_logs.count()
-    downtime_seconds = downtime_count * 5
+    downtime_seconds = downtime_count * 60  # Convert to seconds for consistent metrics
     downtime_usage = downtime_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
     avg_downtime_usage = downtime_usage / downtime_seconds if downtime_seconds > 0 else 0
     
@@ -196,12 +152,12 @@ def calculate_device_metrics(logs):
         'total_usage': total_usage,
         'avg_usage_per_second': avg_usage_per_second,
         'uptime': {
-            'duration': uptime_seconds,
+            'duration': uptime_seconds,  # Reported in seconds for consistency
             'total_usage': uptime_usage,
             'avg_usage_per_second': avg_uptime_usage
         },
         'downtime': {
-            'duration': downtime_seconds,
+            'duration': downtime_seconds,  # Reported in seconds for consistency
             'total_usage': downtime_usage,
             'avg_usage_per_second': avg_downtime_usage
         },
@@ -215,7 +171,17 @@ def calculate_device_metrics(logs):
     }
 
 def calculate_monthly_metrics(daily_logs):
-    """Calculate monthly metrics from daily logs."""
+    """
+    Calculate monthly metrics from daily logs.
+    
+    Parameters:
+        daily_logs: QuerySet of DeviceLogDaily entries
+        
+    Returns:
+        Dictionary with daily summaries and monthly totals/averages
+    """
+    # No changes needed here as this function works with daily logs
+    # ...existing code...
     total_days = daily_logs.count()
     if total_days == 0:
         return {}
@@ -254,7 +220,9 @@ def calculate_monthly_metrics(daily_logs):
 def aggregate_device_logs():
     """
     Aggregate device logs at 00:05 daily.
-    1. Aggregate previous day's 5sec logs to daily with detailed status metrics
+    
+    Process:
+    1. Aggregate previous day's 1-minute logs to daily with detailed status metrics
     2. On first day of month, aggregate previous month's daily logs to monthly
     """
     try:
@@ -262,16 +230,18 @@ def aggregate_device_logs():
             today = timezone.now().date()
             yesterday = today - timedelta(days=1)
 
-            # Step 1: Aggregate DeviceLog5Sec to DeviceLogDaily
+            # Step 1: Aggregate DeviceLog1Min to DeviceLogDaily
             devices = Device.objects.all()
             for device in devices:
                 # Get yesterday's logs
-                daily_logs = DeviceLog5Sec.objects.filter(
+                daily_logs = DeviceLog1Min.objects.filter(
                     device=device,
                     created_at__date=yesterday
                 ).order_by('created_at')
                 
-                if daily_logs.exists():
+                if not daily_logs.exists():
+                    continue  # No logs to aggregate
+                else:
                     metrics = calculate_device_metrics(daily_logs)
                     
                     DeviceLogDaily.objects.update_or_create(
@@ -294,7 +264,9 @@ def aggregate_device_logs():
                         date__lte=yesterday
                     ).order_by('date')
                     
-                    if monthly_logs.exists():
+                    if not monthly_logs.exists():
+                        continue  # No logs to aggregate
+                    else:
                         monthly_metrics = calculate_monthly_metrics(monthly_logs)
                         
                         DeviceLogMonthly.objects.update_or_create(
@@ -311,72 +283,114 @@ def aggregate_device_logs():
         print(f"Error in aggregate_device_logs: {e}")
         raise
 
-def aggregate_device_to_room_logs():
+def aggregate_device_to_room_logs(current_minute=None):
     """
-    Aggregates 5-second device logs (DeviceLog5Sec) into a single 5-second room log (RoomLog5Sec)
-    for each room, preserving the exact created_at time for each 5-second interval.
-
-    Steps:
-      1. Find the latest RoomLog5Sec entry (max created_at).
-      2. Only gather new DeviceLog5Sec entries (created_at > latest room log time).
-      3. Group these device logs by (room, created_at).
-      4. For each group, sum up the energy_usage of all devices in that room for that 5-second period.
-      5. Create a new RoomLog5Sec entry if it doesn't already exist for (room, created_at).
-         - This ensures we don't overwrite or duplicate existing logs.
-      6. The newly created RoomLog5Sec entry gets the exact same created_at as the device logs, 
-         preserving the 5-second interval alignment.
+    Aggregates 1-minute device logs (DeviceLog1Min) into a single 1-minute room log (RoomLog1Min)
+    for each room. This function is called immediately after generate_device_logs().
+    
+    Parameters:
+        current_minute: Timestamp to use for filtering logs. If not provided,
+                        the function will determine it based on the current time.
+                        
+    Process:
+    1. Get all device logs with the exact timestamp
+    2. Group the logs by room and sum their energy usage
+    3. Create a room log for each room with the same timestamp
     """
-
     try:
         with transaction.atomic():
-            # 1. Determine the last recorded room log time (or fallback to a default).
-            last_room_log = RoomLog5Sec.objects.order_by('-created_at').first()
-            if last_room_log:
-                cutoff_time = last_room_log.created_at
-            else:
-                # If no previous room logs exist, we look back a bit so we can catch all device logs.
-                cutoff_time = timezone.now() - timedelta(days=30)
+            # Use the passed timestamp or determine it if not provided
+            if current_minute is None:
+                now = timezone.now()
+                current_minute = now.replace(second=0, microsecond=0)
+            
+            # Get device logs with the exact current_minute timestamp
+            current_device_logs = DeviceLog1Min.objects.filter(
+                created_at=current_minute
+            ).select_related('device__room')
+            
+            if not current_device_logs.exists():
+                return  # No logs to aggregate
 
-            # 2. Gather new device logs since the last known room log time
-            new_device_logs = DeviceLog5Sec.objects.filter(
-                created_at__gt=cutoff_time
-            ).select_related('device__room').order_by('created_at')
-
-            if not new_device_logs.exists():
-                return  # Nothing new to aggregate
-
-            # 3. Group logs by (room, created_at)
-            room_groups = {}
-            for dev_log in new_device_logs:
-                room = dev_log.device.room.id
-                ts = dev_log.created_at  # All matching logs share the same 5-second timestamp
-
-                # Use room.id + exact timestamp as the group key
-                key = (room.id, ts)
-                if key not in room_groups:
-                    room_groups[key] = {
+            # Group logs by room
+            room_energy_usage = {}
+            for dev_log in current_device_logs:
+                room = dev_log.device.room
+                if room is None:
+                    # Skip devices that are not assigned to a room
+                    continue
+                    
+                if room.id not in room_energy_usage:
+                    room_energy_usage[room.id] = {
                         'room': room,
-                        'created_at': ts,
                         'total_usage': 0.0
                     }
-                room_groups[key]['total_usage'] += dev_log.energy_usage
+                room_energy_usage[room.id]['total_usage'] += dev_log.energy_usage
 
-            # 4. For each group, create a new RoomLog5Sec if it doesn't already exist
-            for data in room_groups.values():
-                # Check if there's already a record for (room, created_at)
-                exists = RoomLog5Sec.objects.filter(
-                    room=data['room'],
-                    created_at=data['created_at']
-                ).exists()
-
-                if not exists:
-                    # Create a new RoomLog5Sec entry 
-                    RoomLog5Sec.objects.create(
-                        room=data['room'],
-                        energy_usage=data['total_usage'],
-                        created_at=data['created_at']
-                    )
+            # Create room logs for each room (using the same timestamp)
+            for room_data in room_energy_usage.values():
+                RoomLog1Min.objects.create(
+                    room=room_data['room'],
+                    energy_usage=room_data['total_usage'],
+                    created_at=current_minute  # Use the same uniform timestamp
+                )
 
     except Exception as e:
         print(f"Error in aggregate_device_to_room_logs: {e}")
         raise
+
+def calculate_realtime_energy_usage(room_id=None, device_id=None, hours=24):
+    """
+    Calculates real-time energy usage for a specific room or device.
+    
+    This utility function is helpful for on-demand energy usage calculation
+    rather than waiting for the daily aggregation.
+    
+    Parameters:
+        room_id: Optional - Filter by room ID
+        device_id: Optional - Filter by device ID
+        hours: Number of hours to look back (default: 24)
+        
+    Returns:
+        Dictionary with usage metrics
+    """
+    end_time = timezone.now()
+    start_time = end_time - timedelta(hours=hours)
+    
+    result = {
+        'start_time': start_time,
+        'end_time': end_time,
+        'period_hours': hours,
+        'total_usage': 0
+    }
+    
+    if room_id:
+        # Calculate room-level energy usage
+        logs = RoomLog1Min.objects.filter(
+            room_id=room_id,
+            created_at__gte=start_time,
+            created_at__lte=end_time
+        )
+        result['total_usage'] = logs.aggregate(
+            models.Sum('energy_usage')
+        )['energy_usage__sum'] or 0
+        
+    elif device_id:
+        # Calculate device-level energy usage
+        logs = DeviceLog1Min.objects.filter(
+            device_id=device_id,
+            created_at__gte=start_time,
+            created_at__lte=end_time
+        )
+        result['total_usage'] = logs.aggregate(
+            models.Sum('energy_usage')
+        )['energy_usage__sum'] or 0
+        
+        # Add status breakdown for devices
+        on_logs = logs.filter(status=True)
+        result['on_time_minutes'] = on_logs.count()
+        result['on_time_usage'] = on_logs.aggregate(
+            models.Sum('energy_usage')
+        )['energy_usage__sum'] or 0
+        
+    return result

@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django_crontab',
     # Our own apps
     'api.apps.ApiConfig',  # Required for signals
+    # Add drf-yasg for API documentation
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -162,8 +164,25 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
 
-CRONJOBS = [
-    ('05 00 * * *', 'api.scheduled_scripts.aggregate_room_logs'),
-    ('07 00 * * *', 'api.scheduled_scripts.aggregate_device_logs'),
-    ('* * * * *', 'api.scheduled_scripts.aggregate_device_to_room_logs'),
+# Cron job configuration for regularly scheduled tasks
+# - aggregate_room_logs: Daily aggregation of room energy usage data
+# - aggregate_device_logs: Daily aggregation of device energy usage data  
+# - generate_device_logs: Creates 1-minute device log entries
+CRONJOBS = [ 
+    ('05 00 * * *', 'api.scheduled_scripts.aggregate_room_logs'),   # Run at 00:05 every day
+    ('07 00 * * *', 'api.scheduled_scripts.aggregate_device_logs'), # Run at 00:07 every day
+    ('* * * * *', 'api.scheduled_scripts.generate_device_logs'),    # Run every minute
 ]
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
+
+# HomeIO Integration settings
+HOME_IO_API_URL = 'http://localhost:8080'  # Default to localhost for development

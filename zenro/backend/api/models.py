@@ -102,13 +102,13 @@ class Device(models.Model):
 # Question
 # 1. Should we use MAC address to identify devices?
 
-# Model representing a energy generation log entry for a device
-# DeviceLog stores energy usage and status of a device every 5 seconds
+# Model representing energy usage logs for a device at 1-minute intervals
+# Previously named DeviceLog5Sec but now records data every minute
 # device - Reference to the device instance
 # status - Status of the device at the time of the log
 # energy_usage - Energy usage of the device at the time of the log
 # created_at - Timestamp when the log was created
-class DeviceLog5Sec(models.Model):
+class DeviceLog1Min(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     status = models.BooleanField()
     energy_usage = models.FloatField()
@@ -143,12 +143,12 @@ class DeviceLogMonthly(models.Model):
 
 # 1. Can't we just store month and year as created_at and then use it to figure out the month or year when we need it?
 
-# Model representing energy generation for a room
-# RoomLog5Sec stores energy usage of a room every 5 seconds
+# Model representing energy usage logs for a room at 1-minute intervals
+# Previously named RoomLog5Sec but now records data every minute
 # room - Reference to the room instance
 # energy_usage - Energy usage of the room at the time of the log
 # created_at - Timestamp when the log was created
-class RoomLog5Sec(models.Model):
+class RoomLog1Min(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     energy_usage = models.FloatField()
     created_at = models.DateTimeField(default=timezone.now)

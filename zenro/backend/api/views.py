@@ -9,16 +9,16 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
 from .models import (
-    User, SmartHome, SupportedDevice, Device, DeviceLog5Sec, 
-    DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, 
-    RoomLogMonthly, Room, HomeIORoom
+    User, SmartHome, SupportedDevice, Device,  
+    DeviceLogDaily, DeviceLogMonthly, RoomLogDaily, 
+    RoomLogMonthly, Room, HomeIORoom, RoomLog1Min, DeviceLog1Min
 )
 from .serializers import (
-    UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
+    DeviceLogMonthlySerializer, UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
     DeviceSerializer, RoomSerializer,
     DeviceLogDailySerializer,
     RoomLogDailySerializer, HomeIOControlSerializer, UnlockRoomSerializer,
-    AddDeviceSerializer
+    AddDeviceSerializer, DeviceLog1MinSerializer, RoomLog1MinSerializer, HomeIORoomSerializer, RoomLogMonthlySerializer
 )
 from .home_io.home_io_services import HomeIOService
 
@@ -187,6 +187,130 @@ class RoomLogDailyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RoomLogDaily.objects.all()
     serializer_class = RoomLogDailySerializer
 
+class DeviceLog1MinViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying device energy usage logs at 1-minute intervals.
+    Provides energy usage data recorded for each device.
+    
+    Query parameters:
+    - device: Filter by device ID
+    - start_date: Filter by start date (YYYY-MM-DD)
+    - end_date: Filter by end date (YYYY-MM-DD)
+    """
+    serializer_class = DeviceLog1MinSerializer
+    
+    def get_queryset(self):
+        queryset = DeviceLog1Min.objects.all().order_by('-created_at')
+        
+        # Filter by device if specified
+        device_id = self.request.query_params.get('device')
+        if device_id:
+            queryset = queryset.filter(device_id=device_id)
+            
+        # Filter by date range if specified
+        start_date = self.request.query_params.get('start_date')
+        if start_date:
+            queryset = queryset.filter(created_at__date__gte=start_date)
+                
+        end_date = self.request.query_params.get('end_date')
+        if end_date:
+            queryset = queryset.filter(created_at__date__lte=end_date)
+            
+        # Limit results to prevent performance issues
+        return queryset[:1000]  # Limit to 1000 most recent records
+
+class RoomLog1MinViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying room energy usage logs at 1-minute intervals.
+    Provides aggregated energy usage data for each room.
+    
+    Query parameters:
+    - room: Filter by room ID
+    - start_date: Filter by start date (YYYY-MM-DD)
+    - end_date: Filter by end date (YYYY-MM-DD)
+    """
+    serializer_class = RoomLog1MinSerializer
+    
+    def get_queryset(self):
+        queryset = RoomLog1Min.objects.all().order_by('-created_at')
+        
+        # Filter by room if specified
+        room_id = self.request.query_params.get('room')
+        if room_id:
+            queryset = queryset.filter(room_id=room_id)
+            
+        # Filter by date range if specified
+        start_date = self.request.query_params.get('start_date')
+        if start_date:
+            queryset = queryset.filter(created_at__date__gte=start_date)
+                
+        end_date = self.request.query_params.get('end_date')
+        if end_date:
+            queryset = queryset.filter(created_at__date__lte=end_date)
+            
+        # Limit results to prevent performance issues
+        return queryset[:1000]  # Limit to 1000 most recent records
+
+class DeviceLogMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying device monthly energy usage logs.
+    """
+    queryset = DeviceLogMonthly.objects.all()
+    serializer_class = DeviceLogMonthlySerializer
+    
+    def get_queryset(self):
+        queryset = DeviceLogMonthly.objects.all()
+        
+        # Filter by device if specified
+        device_id = self.request.query_params.get('device')
+        if device_id:
+            queryset = queryset.filter(device_id=device_id)
+            
+        # Filter by year/month if specified
+        year = self.request.query_params.get('year')
+        if year:
+            queryset = queryset.filter(year=year)
+                
+        month = self.request.query_params.get('month')
+        if month:
+            queryset = queryset.filter(month=month)
+            
+        return queryset
+
+class RoomLogMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying room monthly energy usage logs.
+    """
+    queryset = RoomLogMonthly.objects.all()
+    serializer_class = RoomLogMonthlySerializer
+    
+    def get_queryset(self):
+        queryset = RoomLogMonthly.objects.all()
+        
+        # Filter by room if specified
+        room_id = self.request.query_params.get('room')
+        if room_id:
+            queryset = queryset.filter(room_id=room_id)
+            
+        # Filter by year/month if specified
+        year = self.request.query_params.get('year')
+        if year:
+            queryset = queryset.filter(year=year)
+                
+        month = self.request.query_params.get('month')
+        if month:
+            queryset = queryset.filter(month=month)
+            
+        return queryset
+
+class HomeIORoomViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying available HomeIO room layouts.
+    """
+    queryset = HomeIORoom.objects.all().order_by('unlock_order')
+    serializer_class = HomeIORoomSerializer
+    permission_classes = [AllowAny]  # Allow frontend to view room layouts without auth
+
 class HomeIOControlView(APIView):
     """
     Handles HomeIO control operations.
@@ -281,4 +405,67 @@ def register_user(request):
             'id': user.id
         }, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def dashboard_summary(request):
+    """
+    Provides a summary of energy usage data for the dashboard.
+    
+    Returns:
+        - today_usage: Total energy usage across all rooms for today
+        - yesterday_usage: Total energy usage across all rooms for yesterday
+        - room_summary: Per-room breakdown of today's energy usage
+        - device_summary: Top energy-consuming devices today
+    """
+    try:
+        today = timezone.now().date()
+        yesterday = today - timedelta(days=1)
+        
+        # Get today's room logs
+        today_logs = RoomLog1Min.objects.filter(created_at__date=today)
+        today_usage = today_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+        
+        # Get yesterday's usage
+        yesterday_logs = RoomLogDaily.objects.filter(date=yesterday)
+        yesterday_usage = yesterday_logs.aggregate(models.Sum('total_energy_usage'))['total_energy_usage__sum'] or 0
+        
+        # Room-by-room breakdown
+        rooms = Room.objects.all()
+        room_summary = []
+        for room in rooms:
+            room_logs = RoomLog1Min.objects.filter(room=room, created_at__date=today)
+            room_usage = room_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+            if room_usage > 0:  # Only include rooms with usage
+                room_summary.append({
+                    'id': room.id,
+                    'name': room.name,
+                    'usage': room_usage
+                })
+        
+        # Get top energy-consuming devices
+        device_summary = []
+        today_device_logs = DeviceLog1Min.objects.filter(created_at__date=today)
+        if today_device_logs.exists():
+            # Group by device and sum usage
+            top_devices = today_device_logs.values('device', 'device__name')\
+                .annotate(total=models.Sum('energy_usage'))\
+                .order_by('-total')[:5]  # Top 5 devices
+                
+            for device in top_devices:
+                device_summary.append({
+                    'id': device['device'],
+                    'name': device['device__name'],
+                    'usage': device['total']
+                })
+        
+        return Response({
+            'today_usage': today_usage,
+            'yesterday_usage': yesterday_usage,
+            'room_summary': room_summary,
+            'device_summary': device_summary
+        })
+        
+    except Exception as e:
+        print(f"Error in dashboard_summary: {e}")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

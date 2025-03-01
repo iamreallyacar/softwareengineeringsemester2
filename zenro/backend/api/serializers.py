@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog5Sec, DeviceLogDaily, DeviceLogMonthly, RoomLog5Sec, RoomLogDaily, RoomLogMonthly
+from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly, RoomLog1Min, RoomLogDaily, RoomLogMonthly, HomeIORoom
 
 # Serializer for the User model
 class UserSerializer(serializers.ModelSerializer):
@@ -71,14 +71,15 @@ class DeviceSerializer(serializers.ModelSerializer):
         # Removed the old 'smart_home' assignment
         return super().create(validated_data)
 
-class DeviceLog5SecSerializer(serializers.ModelSerializer):
+# Replace DeviceLog5SecSerializer with DeviceLog1MinSerializer
+class DeviceLog1MinSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DeviceLog5Sec
+        model = DeviceLog1Min
         fields = '__all__'
 
     def get_energy_usage(self, obj, start_time, end_time):
         """Fetch total energy usage for a given time range."""
-        logs = DeviceLog5Sec.objects.filter(
+        logs = DeviceLog1Min.objects.filter(
             device=obj, created_at__gte=start_time, created_at__lte=end_time
         )
         return logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
@@ -101,12 +102,22 @@ class DeviceLogDailySerializer(serializers.ModelSerializer):
         model = DeviceLogDaily
         fields = '__all__'
 
+class DeviceLogMonthlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeviceLogMonthly
+        fields = '__all__'
+
 class RoomLogDailySerializer(serializers.ModelSerializer):
     class Meta:
         model = RoomLogDaily
         fields = '__all__'
 
-# Serializer for the Room model
+class RoomLogMonthlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomLogMonthly
+        fields = '__all__'
+
+# Fix the RoomSerializer to use RoomLog1Min
 class RoomSerializer(serializers.ModelSerializer):
     devices = DeviceSerializer(many=True, read_only=True)
     daily_usage = serializers.SerializerMethodField()
@@ -118,10 +129,27 @@ class RoomSerializer(serializers.ModelSerializer):
     def get_daily_usage(self, obj):
         from django.utils import timezone
         today = timezone.now().date()
-        # Sum all RoomLog5Sec entries for this room for 'today'
-        logs = RoomLog5Sec.objects.filter(room=obj, created_at__date=today)
+        # Updated to use RoomLog1Min instead of RoomLog5Sec
+        logs = RoomLog1Min.objects.filter(room=obj, created_at__date=today)
         total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
         return total_usage
+
+# Add RoomLog1MinSerializer which was missing
+class RoomLog1MinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomLog1Min
+        fields = '__all__'
+
+class HomeIORoomSerializer(serializers.ModelSerializer):
+    is_unlocked = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = HomeIORoom
+        fields = ['id', 'name', 'unlock_order', 'is_unlocked']
+    
+    def get_is_unlocked(self, obj):
+        # Check if this HomeIORoom is linked to any Room
+        return Room.objects.filter(home_io_room=obj).exists()
 
 class HomeIOControlSerializer(serializers.Serializer):
     address = serializers.IntegerField()
