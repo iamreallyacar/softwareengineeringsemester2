@@ -63,6 +63,7 @@ class Command(BaseCommand):
                 contact_type = dev.get('contact_type') if dev.get('contact_type') != 'NULL' else None
                 data_type = dev.get('data_type')
                 dev_type = dev.get('type')       # e.g. 'lighting', 'heating'
+                consumption_rate = dev.get('power_consumption_rate')
                 # memory_type='output' for output_devices
                 SupportedDevice.objects.update_or_create(
                     model_name=model_name,
@@ -70,6 +71,7 @@ class Command(BaseCommand):
                     data_type=data_type,
                     memory_type='output',
                     home_io_room=homeio_room,
+                    consumption_rate=consumption_rate,  # Only for output devices
                     defaults={
                         'contact_type': contact_type,
                         'type': dev_type

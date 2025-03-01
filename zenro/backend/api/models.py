@@ -58,6 +58,7 @@ class SupportedDevice(models.Model):
         max_length=10,
         choices=DEVICE_MEMORY_TYPE_CHOICES,
     )
+    consumption_rate = models.IntegerField(null=True, default=None)
 
     class Meta:
         constraints = [
