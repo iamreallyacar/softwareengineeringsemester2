@@ -95,6 +95,21 @@ def calculate_device_metrics(logs):
     }
 """
 
+def generate_device_logs():
+    devices = Device.objects.all()
+    for device in devices:
+        if (device.is_unlocked and device.supported_device.consumption_rate != None):
+            if device.status:
+                energy_usage = device.supported_device.consumption_rate
+            else:
+                energy_usage = 0
+            DeviceLog5Sec.objects.create(
+                device=device,
+                status=device.status,
+                energy_usage=energy_usage
+            )
+        else: 
+            continue
 
 def aggregate_room_logs():
     """
