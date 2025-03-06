@@ -183,3 +183,19 @@ class HomeIORoom(models.Model):
 
     def __str__(self):
         return f"{self.name} (order {self.unlock_order})"
+
+class EnergyGeneration1Min(models.Model): 
+    home = models.ForeignKey(SmartHome, on_delete=models.CASCADE)
+    energy_generation = models.FloatField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+class EnergyGenerationDaily(models.Model):
+    home = models.ForeignKey(SmartHome, on_delete=models.CASCADE)
+    date = models.DateField()
+    total_energy_generation = models.FloatField(default=0.0)
+
+class EnergyGenerationMonthly(models.Model):
+    home = models.ForeignKey(SmartHome, on_delete=models.CASCADE)
+    month = models.IntegerField()
+    year = models.IntegerField()
+    total_energy_generation = models.FloatField(default=0.0)

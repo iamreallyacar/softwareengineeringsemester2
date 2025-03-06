@@ -169,9 +169,10 @@ CORS_ALLOW_ALL_ORIGINS = True  # For development only
 # - aggregate_device_logs: Daily aggregation of device energy usage data  
 # - generate_device_logs: Creates 1-minute device log entries
 CRONJOBS = [ 
+    ('02 00 * * *', 'api.scheduled_scripts.aggregate_energy_generation'), # Run at 00:02 every day
     ('05 00 * * *', 'api.scheduled_scripts.aggregate_room_logs'),   # Run at 00:05 every day
     ('07 00 * * *', 'api.scheduled_scripts.aggregate_device_logs'), # Run at 00:07 every day
-    ('* * * * *', 'api.scheduled_scripts.generate_device_logs'),    # Run every minute
+    ('* * * * *', 'api.scheduled_scripts.generate_minute_data'),    # Run every minute
 ]
 
 SWAGGER_SETTINGS = {

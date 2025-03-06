@@ -2,7 +2,7 @@ import random
 from django.db import models, transaction
 from django.utils import timezone
 from datetime import timedelta
-from .models import Room, RoomLog1Min, RoomLogDaily, RoomLogMonthly, Device, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly
+from .models import Room, RoomLog1Min, RoomLogDaily, RoomLogMonthly, Device, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly, SmartHome, EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly
 
 def is_first_day_of_month(date):
     """Check if given date is the first day of the month."""
@@ -21,7 +21,7 @@ def aggregate_device_logs():
 # ...existing code...
 """
 
-def generate_device_logs():
+def generate_minute_data():
     """
     Generate 1-minute device logs for all unlocked devices.
     Uses a uniform timestamp for all logs created in this batch.
@@ -30,6 +30,15 @@ def generate_device_logs():
     now = timezone.now()
     current_minute = now.replace(second=0, microsecond=0)
     
+    homes = SmartHome.objects.all()
+    for home in homes:
+        energy_gen = random.uniform(0, 0.083)
+        EnergyGeneration1Min.objects.create(
+            home=home,
+            energy_generation=energy_gen,
+            created_at=current_minute  # Use the uniform timestamp
+        )
+
     devices = Device.objects.all()
     for device in devices:
         if (device.is_unlocked and device.supported_device.consumption_rate != None and "Analogue" not in device.name):
@@ -49,6 +58,75 @@ def generate_device_logs():
     
     aggregate_device_to_room_logs(current_minute)  # Pass the timestamp to make aggregation more efficient
 
+def aggregate_energy_generation():
+    """
+    Aggregates daily and monthly logs for all Smart Homes.
+    Runs at 00:05 daily to handle data from the previous day or month.
+    
+    Process:
+    1. For each home, aggregate all 1-minute logs from yesterday into a daily entry
+    2. On first day of month, aggregate previous month's daily logs into a monthly entry
+    """
+    try:
+        with transaction.atomic():
+            today = timezone.now().date()
+            yesterday = today - timedelta(days=1)
+
+            # Step 1: Iterate over all homes
+            # Step 2: Filter and sum all energy generation yesterday
+            # Step 3: Save to EnergyGenerationDaily
+            homes = SmartHome.objects.all()
+            for home in homes:
+                daily_logs = EnergyGeneration1Min.objects.filter(
+                    home=home,
+                    created_at__date=yesterday
+                ).order_by('created_at')
+                
+                if not daily_logs.exists():
+                    continue # No logs to aggregate
+                else: 
+                    total_generation = daily_logs.aggregate(
+                        models.Sum('energy_generation')
+                    )['energy_generation__sum'] or 0
+                    
+                    EnergyGenerationDaily.objects.update_or_create(
+                        home=home,
+                        date=yesterday,
+                        defaults={'total_energy_generation': total_generation}
+                    )
+
+            # Step 1: Check if today is first of month
+            # Step 2: Iterate over all homes
+            # Step 3: Filter and sum previous month's daily logs
+            # Step 4: Save to EnergyGenerationMonthly
+            if is_first_day_of_month(today):
+                first_of_prev_month = yesterday.replace(day=1)
+                
+                for home in homes:
+                    monthly_logs = EnergyGenerationDaily.objects.filter(
+                        home=home,
+                        date__gte=first_of_prev_month,
+                        date__lte=yesterday
+                    ).order_by('date')
+                    
+                    if not monthly_logs.exists():
+                        continue  # No logs to aggregate
+                    else:
+                        total_generation = monthly_logs.aggregate(
+                            models.Sum('total_energy_generation')
+                        )['total_energy_generation__sum'] or 0
+                        
+                        EnergyGenerationMonthly.objects.update_or_create(
+                            home=home,
+                            month=yesterday.month,
+                            year=yesterday.year,
+                            defaults={'total_energy_generation': total_generation}
+                        )
+
+    except Exception as e:
+        print(f"Error in aggregate_energy_generation: {e}")
+        raise
+    
 def aggregate_room_logs():
     """
     Aggregates daily and monthly logs for all Rooms.
