@@ -1,6 +1,6 @@
 .room-text {
     color: #C14600; 
-    font-weight: normal;
+    font-weight: bold;
     display: inline-block;
     margin: 0;
 }
@@ -28,6 +28,30 @@
     border-bottom: 2px solid #f8e7d4; 
     text-underline-position: under;
 }
+.room-container {
+  width: 100%;
+}
+
+.room-content {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: space-between; /* Space between text and image */
+}
+
+.room-text-container {
+  display: flex;
+  flex-direction: column; /* Stack "Brightness" and "50%" vertically */
+  align-items: flex-start; /* Align text to the left */
+}
+
+.room-appliances-img-container {
+  flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.room-appliances-img {
+  width: 50px; /* Adjust size as needed */
+  height: auto;
+}
 
 .columns {
     display: flex;
@@ -39,7 +63,7 @@
 
 .column1 {
     flex: 2; 
-    background-color: #fbdba7;
+    /* background-color: #fbdba7; */
     padding: 20px;
     border-radius: 10px;
     overflow: hidden; 
@@ -51,7 +75,7 @@
 
 .column2 {
     flex: 1; 
-    background-color: #ffe9c5;
+    /* background-color: #ffe9c5; */
     padding: 20px;
     border-radius: 10px;
     
@@ -146,7 +170,7 @@
     width: 100vw;
     margin: 0; 
     padding: 20px; 
-    background: linear-gradient(to bottom, #f68e61, #cd4a1a); /* Gradient background */
+    background: linear-gradient(to bottom, #DD946A, #BF5E40);
     background-size: cover;
     background-position: center; 
     background-attachment: fixed; 
@@ -162,4 +186,15 @@
     align-items: center;
     margin-bottom: 20px;
     padding-left: 30vw;
+}
+
+.room-appliances-img-container {
+  width: 50%;
+  height: 50%;
+  align-self: flex-end;
+}
+
+.room-appliances-img {
+  width: 70%;
+  height: 70%;
 }

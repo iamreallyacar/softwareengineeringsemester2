@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import api from "../api";
 
+import lightBulb from "../assets/images/light-bulb.png";
+import smartBlind from "../assets/images/smart-blind.png";
+
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
+    const [isOn, setIsOn] = useState(false);
   
   return (
     <div className="room-page">
@@ -47,16 +51,28 @@ function RoomsPage() {
             <div className="column2">
                 {/* Row 1: Living Room energy consumption for today */}
                 <div className="energy-consumption">
+                {/* button for on/off  */}
                 <label className="switch">
                     <input type="checkbox" />
                     <span className="slider"></span>
                 </label>
+
                 <h3 className="room-text">
                     <span className="number">4</span> devices
                 </h3>
                 <h3 className="room-text">Lights</h3>
-                <h3 className="room-text-val">Brightness</h3>
-                <h3 className="room-text">50%</h3>
+                <div className="col-12 room-container">
+                    <div className="room-content">
+                        <div className="room-text-container">
+                            <h3 className="room-text-val">Brightness</h3>
+                            <h3 className="room-text">50%</h3>
+                        </div>
+                        <div className="room-appliances-img-container">
+                            <img className="room-appliances-img" src={lightBulb} alt="Light Bulb"/>
+                        </div>
+                    </div>
+                </div>
+                
                 {/* Content for living room energy consumption */}
                 </div>
 
@@ -70,8 +86,17 @@ function RoomsPage() {
                     <span className="number">4</span> devices
                 </h3>
                 <h3 className="room-text">Smart Blinds</h3>
-                <h3 className="room-text-val">UV Index</h3>
-                <h3 className="room-text">Low</h3>
+                <div className="col-12 room-container">
+                    <div className="room-content">
+                        <div className="room-text-container">
+                            <h3 className="room-text-val">UV Index</h3>
+                            <h3 className="room-text">Low</h3>
+                        </div>
+                        <div className="room-appliances-img-container">
+                            <img className="room-appliances-img" src={smartBlind} alt="Smart Blind"/>
+                        </div>
+                    </div>
+                </div>
                 {/* Content for weekly living room energy consumption */}
                 </div>
 
@@ -85,8 +110,18 @@ function RoomsPage() {
                     <span className="number">4</span> devices
                 </h3>
                 <h3 className="room-text">Smart Blinds</h3>
-                <h3 className="room-text-val">UV Index</h3>
-                <h3 className="room-text">Low</h3>
+                <div className="col-12 room-container">
+                    <div className="room-content">
+                        <div className="room-text-container">
+                            <h3 className="room-text-val">UV Index</h3>
+                            <h3 className="room-text">Low</h3>
+                        </div>
+                        <div className="room-appliances-img-container">
+                            <img className="room-appliances-img" src={smartBlind} alt="Smart Blind"/>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Content for weekly living room energy consumption */}
                 </div>
 
