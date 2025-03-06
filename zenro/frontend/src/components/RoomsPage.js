@@ -5,6 +5,8 @@ import api from "../api";
 
 import lightBulb from "../assets/images/light-bulb.png";
 import smartBlind from "../assets/images/smart-blind.png";
+import airCond from "../assets/images/aircond.png";
+import smartTV from "../assets/images/smart-tv.png";
 
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
@@ -107,23 +109,50 @@ function RoomsPage() {
                     <span className="slider"></span>
                 </label>
                 <h3 className="room-text">
-                    <span className="number">4</span> devices
+                    <span className="number">1</span> devices
                 </h3>
-                <h3 className="room-text">Smart Blinds</h3>
+                <h3 className="room-text">Smart TV</h3>
                 <div className="col-12 room-container">
                     <div className="room-content">
                         <div className="room-text-container">
-                            <h3 className="room-text-val">UV Index</h3>
-                            <h3 className="room-text">Low</h3>
+                            <h3 className="room-text-val">Attribute</h3>
+                            <h3 className="room-text">Desc</h3>
                         </div>
                         <div className="room-appliances-img-container">
-                            <img className="room-appliances-img" src={smartBlind} alt="Smart Blind"/>
+                            <img className="room-appliances-img" src={smartTV} alt="Smart TV"/>
                         </div>
                     </div>
                 </div>
 
                 {/* Content for weekly living room energy consumption */}
                 </div>
+
+                {/* Row 2: Weekly living room energy consumption */}
+                <div className="energy-consumption">
+                <label className="switch">
+                    <input type="checkbox" />
+                    <span className="slider"></span>
+                </label>
+                <h3 className="room-text">
+                    <span className="number">2</span> devices
+                </h3>
+                <h3 className="room-text">Air Conditioners</h3>
+                <div className="col-12 room-container">
+                    <div className="room-content">
+                        <div className="room-text-container">
+                            <h3 className="room-text-val">Temperature</h3>
+                            <h3 className="room-text">19</h3>
+                        </div>
+                        <div className="room-appliances-img-container">
+                            <img className="room-appliances-img" src={airCond} alt="Air Conditioner"/>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Content for weekly living room energy consumption */}
+                </div>
+
+                
 
             </div>
         </div>
