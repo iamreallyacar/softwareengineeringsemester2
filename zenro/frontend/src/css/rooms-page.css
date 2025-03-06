@@ -118,7 +118,7 @@
   top: 10px; 
   right: 10px;
   display: inline-block;
-  width: 60px; /* Increased width to fit the text */
+  width: 80px; /* Increased width to fit the text */
   height: 25px;
 }
 
@@ -160,7 +160,7 @@
 }
 
 .slider:after {
-  content: "OFF"; /* Default text */
+  content: "OFF ALL"; /* Default text */
   position: absolute;
   right: 8px;
   color: white;
@@ -172,11 +172,11 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(30px); /* Move the circle to the right */
+  transform: translateX(55px); /* Move the circle to the right */
 }
 
 input:checked + .slider:after {
-  content: "ON"; /* Change text to ON */
+  content: "ON ALL"; /* Change text to ON */
   left: 8px;
   right: auto;
 }
