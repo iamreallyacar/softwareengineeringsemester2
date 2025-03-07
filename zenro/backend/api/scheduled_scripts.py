@@ -1,7 +1,7 @@
 import random
 from django.db import models, transaction
 from django.utils import timezone
-from datetime import timedelta
+from datetime import time, timedelta
 from .models import Room, RoomLog1Min, RoomLogDaily, RoomLogMonthly, Device, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly, SmartHome, EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly
 
 def is_first_day_of_month(date):
@@ -67,6 +67,8 @@ def aggregate_energy_generation():
     1. For each home, aggregate all 1-minute logs from yesterday into a daily entry
     2. On first day of month, aggregate previous month's daily logs into a monthly entry
     """
+    time.sleep(30) # Delay to ensure all 1-minute logs are generated
+    
     try:
         with transaction.atomic():
             today = timezone.now().date()
@@ -136,6 +138,8 @@ def aggregate_room_logs():
     1. For each room, aggregate all 1-minute logs from yesterday into a daily entry
     2. On first day of month, aggregate previous month's daily logs into a monthly entry
     """
+    time.sleep(30) # Delay to ensure all 1-minute logs are generated
+
     try:
         with transaction.atomic():
             today = timezone.now().date()
@@ -303,6 +307,8 @@ def aggregate_device_logs():
     1. Aggregate previous day's 1-minute logs to daily with detailed status metrics
     2. On first day of month, aggregate previous month's daily logs to monthly
     """
+    time.sleep(30) # Delay to ensure all 1-minute logs are generated
+
     try:
         with transaction.atomic():
             today = timezone.now().date()
