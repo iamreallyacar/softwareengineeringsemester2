@@ -1,7 +1,8 @@
 import random
+import time  # Add this import for time.sleep()
 from django.db import models, transaction
 from django.utils import timezone
-from datetime import time, timedelta
+from datetime import timedelta  # Remove 'time' from this import
 from .models import Room, RoomLog1Min, RoomLogDaily, RoomLogMonthly, Device, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly, SmartHome, EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly
 
 def is_first_day_of_month(date):
