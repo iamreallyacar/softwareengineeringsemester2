@@ -93,7 +93,7 @@ function CreateAccount() {
                 </form>
                 <div className="login-footer">
                     <div className="signup-prompt">
-                        Already have an account? <Link to="/" className="signup-link">Log in</Link>
+                        Already have an account? <Link to="/login" className="signup-link">Log in</Link>
                     </div>
                 </div>
             </div>
