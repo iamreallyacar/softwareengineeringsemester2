@@ -1,45 +1,50 @@
-import { useState, useEffect } from "react"
-import { Menu, Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react"
-import api from "../api";
+import React, { useState, useEffect } from "react";
+import { Menu, Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+
+// Utility function for consistent scrolling behavior
+const scrollToElement = (elementId) => {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const navbarHeight = 70; // Match the padding-top in CSS
+    window.scrollTo({
+      top: element.offsetTop - navbarHeight,
+      behavior: "smooth",
+    });
+  }
+};
 
 // Navbar Component
 function Navbar() {
-  const [isSticky, setIsSticky] = useState(false)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  const [isSticky, setIsSticky] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 50)
-    }
+      setIsSticky(window.scrollY > 50);
+    };
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const scrollToSection = (sectionId) => {
-    const section = document.getElementById(sectionId)
-    if (section) {
-      window.scrollTo({
-        top: section.offsetTop - 70,
-        behavior: "smooth",
-      })
-    }
-    setIsMenuOpen(false)
-  }
+    scrollToElement(sectionId);
+    setIsMenuOpen(false);
+  };
 
   return (
     <nav className={`navbar ${isSticky ? "sticky" : ""}`}>
       <div className="container">
-        <div className="navbar-content">
-          <Link to="/" className="logo">
-            ModernSite
+        <div className="content-container navbar-content">
+          <Link to="/landing-page" className="logo">
+            PeachesOS
           </Link>
 
           <div className="menu-toggle">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
               <Menu size={24} />
             </button>
           </div>
@@ -54,32 +59,31 @@ function Navbar() {
             <button onClick={() => scrollToSection("contact")} className="nav-link">
               Contact
             </button>
-            <Link to="/signup" className="sign-up-btn">
+            <Link to="/create-account" className="sign-up-btn">
               Sign Up
             </Link>
           </div>
         </div>
       </div>
     </nav>
-  )
+  );
 }
 
 // Hero Component
 function Hero() {
+  const scrollToAbout = () => {
+    scrollToElement("about");
+  };
+
   return (
     <section id="home" className="hero">
       <div className="hero-overlay"></div>
       <div className="container">
-        <div className="hero-content">
+        <div className="content-container hero-content">
           <h1>Welcome to Our Modern Website</h1>
           <p>A clean, responsive design built with React</p>
           <button
-            onClick={() => {
-              const aboutSection = document.getElementById("about")
-              if (aboutSection) {
-                aboutSection.scrollIntoView({ behavior: "smooth" })
-              }
-            }}
+            onClick={scrollToAbout}
             className="btn-primary"
           >
             Learn More
@@ -87,7 +91,7 @@ function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // About Component
@@ -95,41 +99,41 @@ function About() {
   return (
     <section id="about" className="about">
       <div className="container">
-        <div className="section-header">
-          <h2>About Us</h2>
-          <div className="divider"></div>
-          <p>Learn more about our company and what makes us different.</p>
-        </div>
-
-        <div className="about-content">
-          <div className="about-image">
-            <img src="/placeholder.svg?height=400&width=600" alt="About Us" />
+        <div className="content-container">
+          <div className="section-header">
+            <h2>About Us</h2>
+            <div className="divider"></div>
+            <p>Learn more about our company and what makes us different.</p>
           </div>
-          <div className="about-text">
-            <h3>Our Story</h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at eros euismod, finibus nunc ac, volutpat
-              metus. Vivamus eget mauris in nisi efficitur maximus vel in magna.
-            </p>
-            <p>
-              Praesent dignissim, justo non aliquam feugiat, lorem urna lobortis nulla, id facilisis eros lorem eu
-              mauris. Fusce vitae risus sed nisi scelerisque sollicitudin.
-            </p>
-            <div className="about-boxes">
-              <div className="about-box">
-                <h4>Our Mission</h4>
-                <p>To provide exceptional service and innovative solutions.</p>
-              </div>
-              <div className="about-box">
-                <h4>Our Vision</h4>
-                <p>To become the industry leader in our field.</p>
+
+          <div className="about-content">
+            <div className="about-image">
+              <img src="/images/placeholder.jpg" alt="About Us" />
+            </div>
+            <div className="about-text">
+              <h3>Our Story</h3>
+              <p>
+              PeachesOS is a smart monitoring solution designed to optimize energy usage, track resource consumption, and enhance sustainability in net-zero homes and care facilities. 
+              </p>
+              <p>
+              By integrating IoT sensors, AI-driven analytics, and real-time data visualization, the system enables homeowners and facility managers to monitor solar energy generation, water usage, indoor air quality, and overall energy efficiency.
+              </p>
+              <div className="about-boxes">
+                <div className="about-box">
+                  <h4>Our Mission</h4>
+                  <p>To provide exceptional service and innovative solutions.</p>
+                </div>
+                <div className="about-box">
+                  <h4>Our Vision</h4>
+                  <p>To become the industry leader in our field.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // Contact Component
@@ -139,150 +143,178 @@ function Contact() {
     email: "",
     subject: "",
     message: "",
-  })
+  });
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log("Form submitted:", formData)
-    alert("Thank you for your message! We'll get back to you soon.")
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    })
-  }
+    e.preventDefault();
+    try {
+      // Here you would typically send the form data to your backend
+      console.log("Form submitted:", formData);
+      setSuccess("Thank you for your message! We'll get back to you soon.");
+      
+      // Clear form after submission
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccess("");
+      }, 3000);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSuccess("An error occurred. Please try again later.");
+    }
+  };
 
   return (
     <section id="contact" className="contact">
-      <div className="container">
-        <div className="section-header">
-          <h2>Contact Us</h2>
-          <div className="divider"></div>
-          <p>Get in touch with us for any questions or inquiries.</p>
-        </div>
+      <div className="contact-inner">
+        <div className="content-container">
+          <div className="section-header">
+            <h2>Contact Us</h2>
+            <div className="divider"></div>
+            <p>Get in touch with us for any questions or inquiries.</p>
+          </div>
 
-        <div className="contact-grid">
-          <div className="contact-info">
-            <div className="contact-card">
-              <h3>Contact Information</h3>
+          <div className="contact-grid">
+            <div className="contact-info">
+              <div className="contact-card">
+                <h3>Contact Information</h3>
 
-              <div className="contact-item">
-                <MapPin className="icon" />
-                <div>
-                  <h4>Our Location</h4>
-                  <p>123 Business Street, Suite 100, City, State 12345</p>
+                <div className="contact-item">
+                  <MapPin className="icon" />
+                  <div>
+                    <h4>Our Location</h4>
+                    <p>123 Business Street, Suite 100, City, State 12345</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="contact-item">
-                <Phone className="icon" />
-                <div>
-                  <h4>Phone Number</h4>
-                  <p>(123) 456-7890</p>
+                <div className="contact-item">
+                  <Phone className="icon" />
+                  <div>
+                    <h4>Phone Number</h4>
+                    <p>(123) 456-7890</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="contact-item">
-                <Mail className="icon" />
-                <div>
-                  <h4>Email Address</h4>
-                  <p>info@yourcompany.com</p>
+                <div className="contact-item">
+                  <Mail className="icon" />
+                  <div>
+                    <h4>Email Address</h4>
+                    <p>info@yourcompany.com</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="contact-form-container">
-            <div className="contact-card">
-              <h3>Send Us a Message</h3>
+            <div className="contact-form-container">
+              <div className="contact-card">
+                <h3>Send Us a Message</h3>
+                
+                {success && <p className="success">{success}</p>}
 
-              <form onSubmit={handleSubmit}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="name">Your Name</label>
-                    <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+                <form onSubmit={handleSubmit}>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="name">Your Name</label>
+                      <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="email">Your Email</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
                   </div>
+
                   <div className="form-group">
-                    <label htmlFor="email">Your Email</label>
+                    <label htmlFor="subject">Subject</label>
                     <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
                       onChange={handleChange}
                       required
                     />
                   </div>
-                </div>
 
-                <div className="form-group">
-                  <label htmlFor="subject">Subject</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="message">Your Message</label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows={5}
+                      required
+                    ></textarea>
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="message">Your Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={5}
-                    required
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="btn-primary">
-                  Send Message
-                </button>
-              </form>
+                  <button type="submit" className="btn-primary">
+                    Send Message
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // Footer Component
 function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
+  
+  const handleSocialClick = (e) => {
+    e.preventDefault();
+    // Social media link handler would go here
+  };
+  
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    // Newsletter subscription logic would go here
+    console.log("Newsletter subscription submitted");
+  };
 
   return (
     <footer className="footer">
       <div className="container">
-        <div className="footer-content">
+        <div className="content-container footer-content">
           <div className="footer-section">
             <h3>ModernSite</h3>
             <p>A modern website template built with React, providing a clean and responsive design.</p>
             <div className="social-links">
-              <a href="#" className="social-link">
+              <a href="#" onClick={handleSocialClick} className="social-link" aria-label="Facebook">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="#" onClick={handleSocialClick} className="social-link" aria-label="Twitter">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="#" onClick={handleSocialClick} className="social-link" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="#" onClick={handleSocialClick} className="social-link" aria-label="LinkedIn">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -292,16 +324,22 @@ function Footer() {
             <h3>Quick Links</h3>
             <ul className="footer-links">
               <li>
-                <a href="#home">Home</a>
+                <a href="#home" onClick={(e) => {
+                  e.preventDefault();
+                  scrollToElement('home');
+                }}>Home</a>
               </li>
               <li>
-                <a href="#about">About</a>
+                <a href="#about" onClick={(e) => {
+                  e.preventDefault();
+                  scrollToElement('about');
+                }}>About</a>
               </li>
               <li>
-                <a href="#contact">Contact</a>
-              </li>
-              <li>
-                <Link to="/signup">Sign Up</Link>
+                <a href="#contact" onClick={(e) => {
+                  e.preventDefault();
+                  scrollToElement('contact');
+                }}>Contact</a>
               </li>
             </ul>
           </div>
@@ -309,23 +347,32 @@ function Footer() {
           <div className="footer-section">
             <h3>Newsletter</h3>
             <p>Subscribe to our newsletter to receive updates and news.</p>
-            <form className="newsletter-form">
-              <input type="email" placeholder="Your email" />
+            <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+              <input type="email" placeholder="Your email" required />
               <button type="submit">Subscribe</button>
             </form>
           </div>
         </div>
 
-        <div className="footer-bottom">
+        <div className="content-container footer-bottom">
           <p>&copy; {currentYear} ModernSite. All rights reserved.</p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
 
-// Main App Component
-export default function LandingPage() {
+// Main LandingPage Component
+function LandingPage() {
+  useEffect(() => {
+    // Ensure the page starts at the top when loaded
+    window.scrollTo(0, 0);
+    document.body.style.overflow = "auto";    
+    return () => {
+      // Cleanup if needed
+    };
+  }, []);
+  
   return (
     <main className="landing-page">
       <Navbar />
@@ -334,5 +381,7 @@ export default function LandingPage() {
       <Contact />
       <Footer />
     </main>
-  )
+  );
 }
+
+export default LandingPage;
