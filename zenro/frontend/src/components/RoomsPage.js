@@ -13,6 +13,7 @@ function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
     const [isOn, setIsOn] = useState(false);
     const chartRef = useRef(null);
+    const weeklyChartRef = useRef(null);
     const [roomData, setRoomData] = useState(null);
 
     useEffect(() => {
@@ -74,6 +75,71 @@ function RoomsPage() {
             });
         }
     }, [roomData, roomId]);
+
+    useEffect(() => {
+        if (weeklyChartRef.current && roomData) {
+            const existingChart = Chart.getChart(weeklyChartRef.current);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            const ctx = weeklyChartRef.current.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    datasets: [
+                        {
+                            label: 'Lights',
+                            data: [90, 90, 120, 200, 40, 250, 250],
+                            backgroundColor: '#FFB357'
+                        },
+                        {
+                            label: 'Security Camera',
+                            data: [120, 120, 120, 120, 120, 120, 120],
+                            backgroundColor: '#DD946A'
+                        },
+                        {
+                            label: 'Air Conditioner',
+                            data: [200, 200, 50, 225, 20, 200, 150],
+                            backgroundColor: '#BF5E40'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Energy Usage (kWh)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: `Weekly ${roomId} Energy Usage by Device`,
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }, [roomData, roomId]);
   
   return (
     <div className="room-page">
@@ -109,6 +175,9 @@ function RoomsPage() {
                 {/* Row 2: Weekly bedroom energy consumption */}
                 <div className="energy-consumption">
                 <h4 className="room-text-with-line">Weekly {roomId} Energy Consumption</h4>
+                <div style={{ height: '400px', width: '100%' }}>
+                    <canvas ref={weeklyChartRef}></canvas>
+                </div>
                 <h4 className="room-text-val">Daily Average</h4>
                 <h4 className="room-text">2h 20m</h4>
                 </div>
