@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { Chart } from 'chart.js/auto';
 import api from "../api";
 
 import lightBulb from "../assets/images/light-bulb.png";
@@ -11,6 +12,68 @@ import smartTV from "../assets/images/smart-tv.png";
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
     const [isOn, setIsOn] = useState(false);
+    const chartRef = useRef(null);
+    const [roomData, setRoomData] = useState(null);
+
+    useEffect(() => {
+        const fetchRoomData = async () => {
+            try {
+                const response = await api.get(`/roomlogs/?room=${roomId}`);
+                setRoomData(response.data);
+            } catch (error) {
+                console.error("Error fetching room data:", error);
+            }
+        };
+
+        fetchRoomData();
+    }, [roomId]);
+
+    useEffect(() => {
+        if (chartRef.current && roomData) {
+            const existingChart = Chart.getChart(chartRef.current);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            const ctx = chartRef.current.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    datasets: [{
+                        label: 'Room Energy Usage',
+                        data: roomData.slice(0, 7).map(log => log.energy_usage),
+                        backgroundColor: '#FFB357',
+                        borderColor: '#FFB357',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Energy Usage (kWh)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `${roomId} Weekly Energy Usage`,
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }, [roomData, roomId]);
   
   return (
     <div className="room-page">
@@ -37,8 +100,10 @@ function RoomsPage() {
             <div className="column1">
                 {/* Row 1: Bedroom energy consumption for today */}
                 <div className="energy-consumption">
-                <h4 className="room-text-with-line">{roomId} Energy Consumption Today</h4>
-                {/* Content for today's energy consumption */}
+                    <h4 className="room-text-with-line">{roomId} Energy Consumption Today</h4>
+                    <div style={{ height: '400px', width: '100%' }}>
+                        <canvas ref={chartRef}></canvas>
+                    </div>
                 </div>
 
                 {/* Row 2: Weekly bedroom energy consumption */}
