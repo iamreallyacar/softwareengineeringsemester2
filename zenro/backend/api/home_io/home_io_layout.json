@@ -3,6 +3,7 @@
     {
       "name": "Zone A (Living Room)",
       "unlock_order": 1,
+      "zone": "A",
       "input_devices": [
       {
         "model_name": "Brightness Sensor (Analogue)", 
@@ -65,6 +66,7 @@
       {
         "model_name": "Lights", 
         "type": "lighting",
+        "number": 1,
         "address": 0, 
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -73,6 +75,7 @@
       {
         "model_name": "Lights (Analogue)", 
         "type": "lighting",
+        "number": 1,
         "address": 0,
         "contact_type": "NULL",
         "data_type": "Float",
@@ -81,6 +84,7 @@
       {
         "model_name": "Roller Shades 1 (Up)", 
         "type": "lighting",
+        "number": 1,
         "address": 1,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -89,6 +93,7 @@
       {
         "model_name": "Heater (Analogue)",
         "type": "heating",
+        "number": "NULL",
         "address": 1, 
         "contact_type": "NULL",
         "data_type": "Float",
@@ -97,6 +102,7 @@
       {
         "model_name": "Roller Shades 1 (Down)",
         "type": "lighting",
+        "number": 1,
         "address": 2,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -105,6 +111,7 @@
       {
         "model_name": "Roller Shades 2 (Up)",
         "type": "lighting",
+        "number": 2,
         "address": 3,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -113,6 +120,7 @@
       {
         "model_name": "Roller Shades 2 (Down)",
         "type": "lighting",
+        "number": 2,
         "address": 4,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -121,6 +129,7 @@
       {
         "model_name": "Roller Shades 3 (Up)",
         "type": "lighting",
+        "number": 3,
         "address": 5,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -129,6 +138,7 @@
       {
         "model_name": "Roller Shades 3 (Down)",
         "type": "lighting",
+        "number": 3,
         "address": 6,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -137,6 +147,7 @@
       {
         "model_name": "Roller Shades 4 (Up)",
         "type": "lighting",
+        "number": 4,
         "address": 7,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -145,6 +156,7 @@
       {
         "model_name": "Roller Shades 4 (Down)",
         "type": "lighting",
+        "number": 4,
         "address": 8,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -153,6 +165,7 @@
       {
         "model_name": "Heater",
         "type": "heating",
+        "number": "NULL",
         "address": 9,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -162,6 +175,7 @@
     },
     {
       "name": "Zone B (Guest restroom)",
+      "zone": "B",
       "unlock_order": 2,
       "input_devices": [
       {
@@ -176,6 +190,7 @@
       {
         "model_name": "Lights 1 (Analogue)",
         "type": "lighting",
+        "number": 1,
         "address": 11,
         "contact_type": "NULL",
         "data_type": "Float",
@@ -184,6 +199,7 @@
       {
         "model_name": "Lights 2 (Analogue)",
         "type": "lighting",
+        "number": 2,
         "address": 12,
         "contact_type": "NULL",
         "data_type": "Float",
@@ -192,6 +208,7 @@
       {
         "model_name": "Lights 1",
         "type": "lighting",
+        "number": 1,
         "address": 19,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -200,6 +217,7 @@
       {
         "model_name": "Lights 2",
         "type": "lighting",
+        "number": 2,
         "address": 20,
         "contact_type": "NULL",
         "data_type": "Bool",
@@ -209,12 +227,14 @@
     },
     {
       "name": "Zone C (Pantry)",
+      "zone": "C",
       "unlock_order": 3,
       "input_devices": [],
       "output_devices": [
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 22,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -223,6 +243,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 30,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -232,6 +253,7 @@
     },
     {
       "name": "Zone D (Kitchen)",
+      "zone": "D",
       "unlock_order": 4,
       "input_devices": [
         {
@@ -274,6 +296,7 @@
         {
           "model_name": "Lights 1 (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 32,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -282,6 +305,7 @@
         {
           "model_name": "Lights 2 (Analogue)",
           "type": "lighting",
+          "number": 2,
           "address": 33,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -290,6 +314,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 34,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -298,6 +323,7 @@
         {
           "model_name": "Lights 1",
           "type": "lighting",
+          "number": 1,
           "address": 40,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -306,6 +332,7 @@
         {
           "model_name": "Lights 2",
           "type": "lighting",
+          "number": 2,
           "address": 41,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -314,6 +341,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 42,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -322,6 +350,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 43,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -330,6 +359,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 44,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -339,6 +369,7 @@
     },
     {
       "name": "Zone E (Entrance Hall)",
+      "zone": "E",
       "unlock_order": 5,
       "input_devices": [
         {
@@ -381,6 +412,7 @@
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 44,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -389,6 +421,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 45,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -397,6 +430,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 54,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -405,6 +439,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 55,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -413,6 +448,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 56,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -421,6 +457,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 57,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -430,6 +467,7 @@
     },
     {
       "name": "Zone F (Garage)",
+      "zone": "F",
       "unlock_order": 6,
       "input_devices": [
         {
@@ -465,6 +503,7 @@
         {
           "model_name": "Lights 1 (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 55,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -473,6 +512,7 @@
         {
           "model_name": "Lights 2 (Analogue)",
           "type": "lighting",
+          "number": 2,
           "address": 56,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -481,6 +521,7 @@
         {
           "model_name": "Lights 1",
           "type": "lighting",
+          "number": 1,
           "address": 68,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -489,6 +530,7 @@
         {
           "model_name": "Lights 2",
           "type": "lighting",
+          "number": 2,
           "address": 69,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -497,6 +539,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 70,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -505,6 +548,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 71,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -514,6 +558,7 @@
     },
     {
       "name": "Zone G (Bedroom corridor)",
+      "zone": "G",
       "unlock_order": 7,
       "input_devices": [
         {
@@ -542,6 +587,7 @@
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 66,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -550,6 +596,7 @@
         {
           "model_name": "Heater 1 (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 67,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -558,6 +605,7 @@
         {
           "model_name": "Heater 2 (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 68,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -566,6 +614,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 83,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -574,6 +623,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 84,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -582,6 +632,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 85,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -590,6 +641,7 @@
         {
           "model_name": "Heater 1",
           "type": "heating",
+          "number": "NULL",
           "address": 86,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -598,6 +650,7 @@
         {
           "model_name": "Heater 2",
           "type": "heating",
+          "number": "NULL",
           "address": 87,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -607,6 +660,7 @@
     },
     {
       "name": "Zone H (Children bedroom)",
+      "zone": "H",
       "unlock_order": 8,
       "input_devices": [
         {
@@ -649,6 +703,7 @@
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 78,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -657,6 +712,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 79,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -665,6 +721,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 97,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -673,6 +730,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 98,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -681,6 +739,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 99,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -689,6 +748,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 100,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -698,6 +758,7 @@
     },
     {
       "name": "Zone I (Bathroom)",
+      "zone": "I",
       "unlock_order": 9,
       "input_devices": [
         {
@@ -719,6 +780,7 @@
         {
           "model_name": "Lights 1 (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 89,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -727,6 +789,7 @@
         {
           "model_name": "Lights 2 (Analogue)",
           "type": "lighting",
+          "number": 2,
           "address": 90,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -735,6 +798,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 91,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -743,6 +807,7 @@
         {
           "model_name": "Lights 1",
           "type": "lighting",
+          "number": 1,
           "address": 110,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -751,6 +816,7 @@
         {
           "model_name": "Lights 2",
           "type": "lighting",
+          "number": 2, 
           "address": 111,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -759,6 +825,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 112,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -768,6 +835,7 @@
     },
     {
       "name": "Zone J (Single bedroom)",
+      "zone": "J",
       "unlock_order": 10,
       "input_devices": [
         {
@@ -810,6 +878,7 @@
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 101,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -818,6 +887,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 102,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -826,6 +896,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 122,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -834,6 +905,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 123,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -842,6 +914,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 124,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -850,6 +923,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 125,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -859,6 +933,7 @@
     },
     {
       "name": "Zone K (Private bathroom)",
+      "zone": "K",
       "unlock_order": 11,
       "input_devices": [
         {
@@ -880,6 +955,7 @@
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 112,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -888,6 +964,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 113,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -896,6 +973,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 135,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -904,6 +982,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 136,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -913,6 +992,7 @@
     },
     {
       "name": "Zone L (Couple bedroom)",
+      "zone": "L",
       "unlock_order": 12,
       "input_devices": [
         {
@@ -955,6 +1035,7 @@
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 123,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -963,6 +1044,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 124,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -971,6 +1053,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 146,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -979,6 +1062,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 147,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -987,6 +1071,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 148,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -995,6 +1080,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 149,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1004,6 +1090,7 @@
     },
     {
       "name": "Zone M (Laundry room)",
+      "zone": "M",
       "unlock_order": 13,
       "input_devices": [
         {
@@ -1046,6 +1133,7 @@
         {
           "model_name": "Lights (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 134,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1054,6 +1142,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL",
           "address": 135,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1062,6 +1151,7 @@
         {
           "model_name": "Lights",
           "type": "lighting",
+          "number": 1,
           "address": 159,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1070,6 +1160,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1,
           "address": 160,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1078,6 +1169,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 161,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1086,6 +1178,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 162,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1095,6 +1188,7 @@
     },
     {
       "name": "Zone N (Home office)",
+      "zone": "N",
       "unlock_order": 14,
       "input_devices": [
         {
@@ -1137,6 +1231,7 @@
         {
           "model_name": "Lights 1 (Analogue)",
           "type": "lighting",
+          "number": 1,
           "address": 145,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1145,6 +1240,7 @@
         {
           "model_name": "Lights 2 (Analogue)",
           "type": "lighting",
+          "number": 2,
           "address": 146,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1153,6 +1249,7 @@
         {
           "model_name": "Lights 3 (Analogue)",
           "type": "lighting",
+          "number": 3,
           "address": 147,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1161,6 +1258,7 @@
         {
           "model_name": "Heater (Analogue)",
           "type": "heating",
+          "number": "NULL", 
           "address": 148,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1169,6 +1267,7 @@
         {
           "model_name": "Lights 1",
           "type": "lighting",
+          "number": 1,
           "address": 172,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1177,6 +1276,7 @@
         {
           "model_name": "Lights 2",
           "type": "lighting",
+          "number": 2,
           "address": 173,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1185,6 +1285,7 @@
         {
           "model_name": "Lights 3",
           "type": "lighting",
+          "number": 3,
           "address": 174,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1193,6 +1294,7 @@
         {
           "model_name": "Roller Shades (Up)",
           "type": "shades",
+          "number": 1, 
           "address": 175,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1201,6 +1303,7 @@
         {
           "model_name": "Roller Shades (Down)",
           "type": "shades",
+          "number": 1,
           "address": 176,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1209,6 +1312,7 @@
         {
           "model_name": "Heater",
           "type": "heating",
+          "number": "NULL",
           "address": 177,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1218,6 +1322,7 @@
     },
     {
       "name": "Zone O (Exterior)",
+      "zone": "O",
       "unlock_order": 15,
       "input_devices": [
         {
@@ -1245,7 +1350,8 @@
       "output_devices": [
         {
           "model_name": "Lights Poarch 1 (Analogue)",
-          "type": "lighting",
+          "type": "lighting", 
+          "number": 1, 
           "address": 158,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1254,6 +1360,7 @@
         {
           "model_name": "Lights Poarch 2 (Analogue)",
           "type": "lighting",
+          "number": 2,
           "address": 159,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1262,6 +1369,7 @@
         {
           "model_name": "Lights Pool (Analogue)",
           "type": "lighting",
+          "number": 3,
           "address": 160,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1270,6 +1378,7 @@
         {
           "model_name": "Lights Garden (Analogue)",
           "type": "lighting",
+          "number": 4,
           "address": 161,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1278,6 +1387,7 @@
         {
           "model_name": "Lights Entrance (Analogue)",
           "type": "lighting",
+          "number": 5,
           "address": 162,
           "contact_type": "NULL",
           "data_type": "Float",
@@ -1286,6 +1396,7 @@
         {
           "model_name": "Lights Porch 1",
           "type": "lighting",
+          "number": 1,
           "address": 187,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1294,6 +1405,7 @@
         {
           "model_name": "Lights Porch 2",
           "type": "lighting",
+          "number": 2,
           "address": 188,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1302,6 +1414,7 @@
         {
           "model_name": "Lights Pool",
           "type": "lighting",
+          "number": 3,
           "address": 189,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1310,6 +1423,7 @@
         {
           "model_name": "Lights Garden",
           "type": "lighting",
+          "number": 4,
           "address": 190,
           "contact_type": "NULL",
           "data_type": "Bool",
@@ -1318,6 +1432,7 @@
         {
           "model_name": "Lights Entrance",
           "type": "lighting",
+          "number": 5,
           "address": 191,
           "contact_type": "NULL",
           "data_type": "Bool",

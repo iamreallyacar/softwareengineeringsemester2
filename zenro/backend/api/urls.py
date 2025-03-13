@@ -9,7 +9,7 @@ from .views import (
     DeviceLogDailyViewSet, RoomLogDailyViewSet, HomeIOControlView,
     UnlockRoomView, AddDeviceView,
     DeviceLog1MinViewSet, RoomLog1MinViewSet, dashboard_summary,
-    DeviceLogMonthlyViewSet, RoomLogMonthlyViewSet, HomeIORoomViewSet
+    DeviceLogMonthlyViewSet, RoomLogMonthlyViewSet, HomeIORoomViewSet, DeviceControlView
 )
 
 # Create a router and register our viewsets with it
@@ -36,4 +36,5 @@ urlpatterns = [
     path('unlock-room/', UnlockRoomView.as_view(), name='unlock-room'),
     path('add-device/', AddDeviceView.as_view(), name='add-device'),
     path('dashboard/', dashboard_summary, name='dashboard'),
+    path('devices/<int:pk>/control/', DeviceControlView.as_view(), name='device-control'),
 ]

@@ -469,3 +469,33 @@ def dashboard_summary(request):
         print(f"Error in dashboard_summary: {e}")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# Add this new class to views.py
+
+class DeviceControlView(APIView):
+    """
+    API endpoint to directly control devices
+    """
+    def post(self, request, pk):
+        device = get_object_or_404(Device, pk=pk)
+        status_value = request.data.get('status')
+        
+        if status_value is None:
+            return Response({'error': 'Status required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        try:
+            # Convert to boolean if needed
+            if isinstance(status_value, str):
+                status_value = status_value.lower() == 'true'
+                
+            # Update device in database
+            device.status = status_value
+            device.save()  # This will trigger the signal to control HomeIO
+            
+            return Response({
+                'device_id': device.id,
+                'name': device.name,
+                'status': device.status
+            })
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

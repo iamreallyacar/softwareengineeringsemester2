@@ -26,11 +26,13 @@ class Command(BaseCommand):
         # 1) Process "rooms" array
         for room_item in rooms_data:
             room_name = room_item.get('name')
+            room_zone = room_item.get('zone')
             unlock_order = room_item.get('unlock_order')
 
             # Create or update HomeIORoom
             homeio_room, _ = HomeIORoom.objects.update_or_create(
                 name=room_name,
+                zone=room_zone,
                 defaults={'unlock_order': unlock_order}
             )
 
@@ -60,6 +62,7 @@ class Command(BaseCommand):
             for dev in output_devices:
                 model_name = dev.get('model_name')
                 address = dev.get('address')
+                devNumber = dev.get('number') if dev.get('number') != 'NULL' else None
                 contact_type = dev.get('contact_type') if dev.get('contact_type') != 'NULL' else None
                 data_type = dev.get('data_type')
                 dev_type = dev.get('type')       # e.g. 'lighting', 'heating'
@@ -68,6 +71,7 @@ class Command(BaseCommand):
                 SupportedDevice.objects.update_or_create(
                     model_name=model_name,
                     address=address,
+                    number=devNumber,
                     data_type=data_type,
                     memory_type='output',
                     home_io_room=homeio_room,

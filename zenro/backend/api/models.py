@@ -50,6 +50,7 @@ class SupportedDevice(models.Model):
 
     model_name = models.CharField(max_length=255)
     type = models.CharField(max_length=50, default=None, null=True)
+    number = models.IntegerField(default=None, null=True)
     home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE, null=True, default=None)
     address = models.IntegerField()
     data_type = models.CharField(max_length=10)
@@ -179,6 +180,7 @@ class RoomLogMonthly(models.Model):
 # name - Name of the room in Home I/O
 class HomeIORoom(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    zone = models.CharField(max_length=5, default=None, null=True)
     unlock_order = models.PositiveIntegerField(null=True)  # Enforce fixed order
 
     def __str__(self):
