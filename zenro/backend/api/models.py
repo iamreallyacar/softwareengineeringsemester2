@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Model representing a smart home
 # SmartHome stores home info, creator, members, timestamps
@@ -85,7 +86,15 @@ class SupportedDevice(models.Model):
 # updated_at - Timestamp when the device instance was last updated
 class Device(models.Model):
     name = models.CharField(max_length=100)                             
-    status = models.BooleanField(default=False)                         
+    status = models.BooleanField(default=False)                     
+    analogue_value = models.IntegerField(
+        null=True, 
+        default=None,
+        validators=[
+            MinValueValidator(1, message="Value must be at least 1"),
+            MaxValueValidator(10, message="Value cannot be greater than 10")
+        ]
+    ) 
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='devices', null=True) 
     supported_device = models.ForeignKey(SupportedDevice, on_delete=models.CASCADE) 
     created_at = models.DateTimeField(auto_now_add=True)                

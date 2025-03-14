@@ -20,45 +20,10 @@
         "data_type": "Float"
       },
       {
-        "model_name": "Roller Shades 1 (Openness)",
-        "type": "sensor",
-        "address": 3,
-        "contact_type": "NULL",
-        "data_type": "Float"
-      },
-      {
-        "model_name": "Roller Shades 2 (Openness)",
-        "type": "sensor",
-        "address": 4,
-        "contact_type": "NULL",
-        "data_type": "Float"
-      }, 
-      {
-        "model_name": "Roller Shades 3 (Openness)",
-        "type": "sensor",
-        "address": 5,
-        "contact_type": "NULL",
-        "data_type": "Float"
-      }, 
-      {
-        "model_name": "Roller Shades 4 (Openness)",
-        "type": "sensor",
-        "address": 6,
-        "contact_type": "NULL",
-        "data_type": "Float"
-      }, 
-      {
         "model_name": "Motion Detector",
         "type": "sensor",
         "address": 15,
         "contact_type": "NO",
-        "data_type": "Bool"
-      },
-      {
-        "model_name": "Brightness Sensor",
-        "type": "sensor",
-        "address": 16,
-        "contact_type": "NC",
         "data_type": "Bool"
       }
       ], 
@@ -71,45 +36,18 @@
         "contact_type": "NULL",
         "data_type": "Bool",
         "power_consumption_rate": 60
-      }, 
+      },
       {
-        "model_name": "Lights (Analogue)", 
-        "type": "lighting",
-        "number": 1,
-        "address": 0,
-        "contact_type": "NULL",
-        "data_type": "Float",
-        "power_consumption_rate": 60
-      }, 
-      {
-        "model_name": "Roller Shades 1 (Up)", 
+        "model_name": "Roller Shades 1", 
         "type": "lighting",
         "number": 1,
         "address": 1,
         "contact_type": "NULL",
         "data_type": "Bool",
         "power_consumption_rate": 10
-      }, 
-      {
-        "model_name": "Heater (Analogue)",
-        "type": "heating",
-        "number": "NULL",
-        "address": 1, 
-        "contact_type": "NULL",
-        "data_type": "Float",
-        "power_consumption_rate": 2000
       },
       {
-        "model_name": "Roller Shades 1 (Down)",
-        "type": "lighting",
-        "number": 1,
-        "address": 2,
-        "contact_type": "NULL",
-        "data_type": "Bool",
-        "power_consumption_rate": 10
-      },
-      {
-        "model_name": "Roller Shades 2 (Up)",
+        "model_name": "Roller Shades 2",
         "type": "lighting",
         "number": 2,
         "address": 3,
@@ -118,16 +56,7 @@
         "power_consumption_rate": 10
       },
       {
-        "model_name": "Roller Shades 2 (Down)",
-        "type": "lighting",
-        "number": 2,
-        "address": 4,
-        "contact_type": "NULL",
-        "data_type": "Bool",
-        "power_consumption_rate": 10
-      },
-      {
-        "model_name": "Roller Shades 3 (Up)",
+        "model_name": "Roller Shades 3",
         "type": "lighting",
         "number": 3,
         "address": 5,
@@ -136,28 +65,10 @@
         "power_consumption_rate": 10
       },
       {
-        "model_name": "Roller Shades 3 (Down)",
-        "type": "lighting",
-        "number": 3,
-        "address": 6,
-        "contact_type": "NULL",
-        "data_type": "Bool",
-        "power_consumption_rate": 10
-      },
-      {
-        "model_name": "Roller Shades 4 (Up)",
+        "model_name": "Roller Shades 4",
         "type": "lighting",
         "number": 4,
         "address": 7,
-        "contact_type": "NULL",
-        "data_type": "Bool",
-        "power_consumption_rate": 10
-      },
-      {
-        "model_name": "Roller Shades 4 (Down)",
-        "type": "lighting",
-        "number": 4,
-        "address": 8,
         "contact_type": "NULL",
         "data_type": "Bool",
         "power_consumption_rate": 10
@@ -188,24 +99,6 @@
       ],
       "output_devices": [
       {
-        "model_name": "Lights 1 (Analogue)",
-        "type": "lighting",
-        "number": 1,
-        "address": 11,
-        "contact_type": "NULL",
-        "data_type": "Float",
-        "power_consumption_rate": 10
-      },
-      {
-        "model_name": "Lights 2 (Analogue)",
-        "type": "lighting",
-        "number": 2,
-        "address": 12,
-        "contact_type": "NULL",
-        "data_type": "Float",
-        "power_consumption_rate": 10
-      },
-      {
         "model_name": "Lights 1",
         "type": "lighting",
         "number": 1,
@@ -232,15 +125,6 @@
       "input_devices": [],
       "output_devices": [
         {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 22,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 10
-        },
-        {
           "model_name": "Lights",
           "type": "lighting",
           "number": 1,
@@ -264,13 +148,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 57,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 12,
@@ -283,43 +160,9 @@
           "address": 13,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 15,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights 1 (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 32,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 60
-        },
-        {
-          "model_name": "Lights 2 (Analogue)",
-          "type": "lighting",
-          "number": 2,
-          "address": 33,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 30
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 34,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 1500
-        },
         {
           "model_name": "Lights 1",
           "type": "lighting",
@@ -339,19 +182,10 @@
           "power_consumption_rate": 30
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 42,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 43,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -380,13 +214,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 81,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 24,
@@ -399,34 +226,9 @@
           "address": 25,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 27,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 44,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 60
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 45,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 1750
-        },
         {
           "model_name": "Lights",
           "type": "lighting",
@@ -437,19 +239,10 @@
           "power_consumption_rate": 60
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 55,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 56,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -476,13 +269,6 @@
           "address": 98,
           "contact_type": "NO",
           "data_type": "Bool"
-        },
-        {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 99,
-          "contact_type": "NO",
-          "data_type": "Bool"
         }, 
         {
           "model_name": "Brightness Sensor (Analogue)",
@@ -490,34 +276,9 @@
           "address": 36,
           "contact_type": "NULL",
           "data_type": "Float"
-        },
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 37,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights 1 (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 55,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Lights 2 (Analogue)",
-          "type": "lighting",
-          "number": 2,
-          "address": 56,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 120
-        },
         {
           "model_name": "Lights 1",
           "type": "lighting",
@@ -537,19 +298,10 @@
           "power_consumption_rate": 120
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 70,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 71,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -574,43 +326,9 @@
           "address": 46,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 48,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 66,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 50
-        },
-        {
-          "model_name": "Heater 1 (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 67,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 750
-        },
-        {
-          "model_name": "Heater 2 (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 68,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 750
-        },
         {
           "model_name": "Lights",
           "type": "lighting",
@@ -621,19 +339,10 @@
           "power_consumption_rate": 50
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 84,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 85,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -671,13 +380,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 139,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 57,
@@ -690,34 +392,9 @@
           "address": 58,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 60,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 78,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 40
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 79,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 1000
-        },
         {
           "model_name": "Lights",
           "type": "lighting",
@@ -728,19 +405,10 @@
           "power_consumption_rate": 40
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 98,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 99,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -777,33 +445,6 @@
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights 1 (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 89,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Lights 2 (Analogue)",
-          "type": "lighting",
-          "number": 2,
-          "address": 90,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 91,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 750
-        },
         {
           "model_name": "Lights 1",
           "type": "lighting",
@@ -846,13 +487,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 172,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 80,
@@ -865,34 +499,9 @@
           "address": 81,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 83,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 101,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 40
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 102,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 750
-        },
         {
           "model_name": "Lights",
           "type": "lighting",
@@ -903,19 +512,10 @@
           "power_consumption_rate": 40
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 123,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 124,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -953,24 +553,6 @@
       ],
       "output_devices": [
         {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 112,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 20
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 113,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 1000
-        },
-        {
           "model_name": "Lights",
           "type": "lighting",
           "number": 1,
@@ -1003,13 +585,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 206,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 103,
@@ -1022,34 +597,9 @@
           "address": 104,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 106,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 123,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 40
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 124,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 750
-        },
         {
           "model_name": "Lights",
           "type": "lighting",
@@ -1060,19 +610,10 @@
           "power_consumption_rate": 40
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 147,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 148,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -1101,13 +642,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 223,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 115,
@@ -1120,34 +654,9 @@
           "address": 116,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 118,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 134,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL",
-          "address": 135,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 500
-        },
         {
           "model_name": "Lights",
           "type": "lighting",
@@ -1158,19 +667,10 @@
           "power_consumption_rate": 10
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1,
           "address": 160,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 161,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -1199,13 +699,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 247,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 127,
@@ -1218,52 +711,9 @@
           "address": 128,
           "contact_type": "NULL",
           "data_type": "Float"
-        }, 
-        {
-          "model_name": "Roller Shades (Openness)",
-          "type": "sensor",
-          "address": 130,
-          "contact_type": "NULL",
-          "data_type": "Float"
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights 1 (Analogue)",
-          "type": "lighting",
-          "number": 1,
-          "address": 145,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 90
-        },
-        {
-          "model_name": "Lights 2 (Analogue)",
-          "type": "lighting",
-          "number": 2,
-          "address": 146,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 30
-        },
-        {
-          "model_name": "Lights 3 (Analogue)",
-          "type": "lighting",
-          "number": 3,
-          "address": 147,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 30
-        },
-        {
-          "model_name": "Heater (Analogue)",
-          "type": "heating",
-          "number": "NULL", 
-          "address": 148,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 1500
-        },
         {
           "model_name": "Lights 1",
           "type": "lighting",
@@ -1292,19 +742,10 @@
           "power_consumption_rate": 30
         },
         {
-          "model_name": "Roller Shades (Up)",
+          "model_name": "Roller Shades",
           "type": "shades",
           "number": 1, 
           "address": 175,
-          "contact_type": "NULL",
-          "data_type": "Bool",
-          "power_consumption_rate": 10
-        },
-        {
-          "model_name": "Roller Shades (Down)",
-          "type": "shades",
-          "number": 1,
-          "address": 176,
           "contact_type": "NULL",
           "data_type": "Bool",
           "power_consumption_rate": 10
@@ -1333,13 +774,6 @@
           "data_type": "Bool"
         },
         {
-          "model_name": "Brightness Sensor",
-          "type": "sensor",
-          "address": 259,
-          "contact_type": "NO",
-          "data_type": "Bool"
-        }, 
-        {
           "model_name": "Brightness Sensor (Analogue)",
           "type": "sensor",
           "address": 139,
@@ -1348,51 +782,6 @@
         }
       ],
       "output_devices": [
-        {
-          "model_name": "Lights Poarch 1 (Analogue)",
-          "type": "lighting", 
-          "number": 1, 
-          "address": 158,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 60
-        },
-        {
-          "model_name": "Lights Poarch 2 (Analogue)",
-          "type": "lighting",
-          "number": 2,
-          "address": 159,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 80
-        },
-        {
-          "model_name": "Lights Pool (Analogue)",
-          "type": "lighting",
-          "number": 3,
-          "address": 160,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 160
-        },
-        {
-          "model_name": "Lights Garden (Analogue)",
-          "type": "lighting",
-          "number": 4,
-          "address": 161,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 40
-        },
-        {
-          "model_name": "Lights Entrance (Analogue)",
-          "type": "lighting",
-          "number": 5,
-          "address": 162,
-          "contact_type": "NULL",
-          "data_type": "Float",
-          "power_consumption_rate": 10
-        },
         {
           "model_name": "Lights Porch 1",
           "type": "lighting",
