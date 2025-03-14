@@ -27,7 +27,7 @@ class HomeIOService:
             status = device.status
             
             # Only handle lights for now
-            if device_type != 'light':
+            if device_type != 'lighting':
                 logger.info(f"Device type {device_type} not supported for HTTP control yet")
                 return False
                 
