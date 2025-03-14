@@ -478,14 +478,32 @@ class DeviceControlView(APIView):
     def post(self, request, pk):
         device = get_object_or_404(Device, pk=pk)
         status_value = request.data.get('status')
+        analogue_value = request.data.get('analogue_value')
         
-        if status_value is None:
-            return Response({"error": "Status value required"}, status=status.HTTP_400_BAD_REQUEST)
+        if status_value is None and analogue_value is None:
+            return Response({"error": "Either status or analogue_value must be provided"}, 
+                          status=status.HTTP_400_BAD_REQUEST)
             
         try:
-            device.status = status_value
+            # Update status if provided
+            if status_value is not None:
+                device.status = status_value
+            
+            # Update analogue_value if provided
+            if analogue_value is not None:
+                # Validate that analogue_value is in the allowed range
+                try:
+                    analogue_value = int(analogue_value)
+                    if analogue_value < 0 or analogue_value > 10:
+                        return Response({"error": "Analogue value must be between 0 and 10"}, 
+                                      status=status.HTTP_400_BAD_REQUEST)
+                    device.analogue_value = analogue_value
+                except ValueError:
+                    return Response({"error": "Analogue value must be an integer"}, 
+                                  status=status.HTTP_400_BAD_REQUEST)
+            
             device.save()  # This will trigger the pre_save signal
-            return Response({"status": "Device status updated"}, status=status.HTTP_200_OK)
+            return Response({"status": "Device updated successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
