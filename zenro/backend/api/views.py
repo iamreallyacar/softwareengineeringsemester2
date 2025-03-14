@@ -480,22 +480,12 @@ class DeviceControlView(APIView):
         status_value = request.data.get('status')
         
         if status_value is None:
-            return Response({'error': 'Status required'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Status value required"}, status=status.HTTP_400_BAD_REQUEST)
             
         try:
-            # Convert to boolean if needed
-            if isinstance(status_value, str):
-                status_value = status_value.lower() == 'true'
-                
-            # Update device in database
             device.status = status_value
-            device.save()  # This will trigger the signal to control HomeIO
-            
-            return Response({
-                'device_id': device.id,
-                'name': device.name,
-                'status': device.status
-            })
+            device.save()  # This will trigger the pre_save signal
+            return Response({"status": "Device status updated"}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

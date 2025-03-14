@@ -39,7 +39,7 @@
       },
       {
         "model_name": "Roller Shades 1", 
-        "type": "lighting",
+        "type": "shades",
         "number": 1,
         "address": 1,
         "contact_type": "NULL",
@@ -48,7 +48,7 @@
       },
       {
         "model_name": "Roller Shades 2",
-        "type": "lighting",
+        "type": "shades",
         "number": 2,
         "address": 3,
         "contact_type": "NULL",
@@ -57,7 +57,7 @@
       },
       {
         "model_name": "Roller Shades 3",
-        "type": "lighting",
+        "type": "shades",
         "number": 3,
         "address": 5,
         "contact_type": "NULL",
@@ -66,7 +66,7 @@
       },
       {
         "model_name": "Roller Shades 4",
-        "type": "lighting",
+        "type": "shades",
         "number": 4,
         "address": 7,
         "contact_type": "NULL",

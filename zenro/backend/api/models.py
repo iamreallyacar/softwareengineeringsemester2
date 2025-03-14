@@ -91,7 +91,7 @@ class Device(models.Model):
         null=True, 
         default=None,
         validators=[
-            MinValueValidator(1, message="Value must be at least 1"),
+            MinValueValidator(0, message="Value must be at least 1"),
             MaxValueValidator(10, message="Value cannot be greater than 10")
         ]
     ) 

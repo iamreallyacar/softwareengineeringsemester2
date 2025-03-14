@@ -26,22 +26,27 @@ class HomeIOService:
             zone = device.supported_device.home_io_room.zone
             status = device.status
             
-            # Only handle lights for now
-            if device_type != 'lighting':
+            # Handle different device types
+            if device_type == 'lighting':
+                action = "turn_on" if status else "turn_off"
+                url = f"{self.base_url}/swl/{action}/{device_number}/{zone}"
+            elif device_type == 'heating':
+                action = "turn_on" if status else "turn_off"
+                url = f"{self.base_url}/swh/{action}/{zone}"
+            elif device_type == 'shades':
+                action = "up" if status else "down"
+                url = f"{self.base_url}/strs/{device_number}/{action}/{zone}"
+            else:
                 logger.info(f"Device type {device_type} not supported for HTTP control yet")
                 return False
                 
-            # Build URL based on device status
-            action = "turn_on" if status else "turn_off"
-            url = f"{self.base_url}/swl/{action}/{device_number}/{zone}"
-            
             logger.info(f"Sending HomeIO control request: {url}")
             
             # Send the request
             response = requests.get(url, timeout=5)
             
             if response.status_code == 200:
-                logger.info(f"Successfully controlled device {device.name} ({action})")
+                logger.info(f"Successfully controlled device {device.name} (type: {device_type}, action: {action})")
                 return True
             else:
                 logger.error(f"Failed to control device: {response.status_code}, {response.text}")
