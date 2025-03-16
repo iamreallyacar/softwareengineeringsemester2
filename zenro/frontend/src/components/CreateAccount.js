@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import api from "../api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import LoadingElement from "./LoadingElement.js";
 
 function CreateAccount() {
     // State variables to store user input and feedback messages
@@ -14,6 +15,8 @@ function CreateAccount() {
     const [birthdate, setBirthdate] = useState("");
     const [gender, setGender] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     // handleSubmit posts new user details to create an account
     const handleSubmit = async (e) => {
@@ -21,6 +24,8 @@ function CreateAccount() {
         e.preventDefault();
         // Clear any previous error messages
         setError("");
+        setLoading(true);
+
         try {
             // Send a POST request to the API to create a new account
             const response = await api.post("/register/", {
@@ -38,12 +43,14 @@ function CreateAccount() {
             // Tokens are stored in local storage
             localStorage.setItem("accessToken", response.data.access);
             localStorage.setItem("userId", response.data.userId);
-            // After a timeout of 2 seconds, navigate to the login page
+            // After a timeout of 2 seconds, navigate to smart homes page
             setTimeout(() => {
-                window.location.href = "/smart-homes";
-            }, 2000);
+                setLoading(false);
+                navigate("/smart-homes");
+            }, 3000);
         } catch (error) {
             console.error("Account Creation Failed:", error);
+            setLoading(false);
             // Handle errors from the API response
             if (error.response) {
                 const errorMessage = error.response.data.detail ||
@@ -57,110 +64,115 @@ function CreateAccount() {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-content">
-                <p className="login-title">Create Account</p>
-                {/* Display success message if account creation is successful */}
-                {success && <p className="error">{success}</p>}
-                <form className="login-form" onSubmit={handleSubmit}>
+        loading ? (
+            <LoadingElement /> // Show loader while fetching data
+        ) : (
+            <div className="login-container">
+                <div className="login-content">
+                    <p className="login-title">Create Account</p>
+                    {/* Display success message if account creation is successful */}
+                    {success && <p className="error">{success}</p>}
+                    <form className="login-form" onSubmit={handleSubmit}>
 
-                    {/* Username */}
-                    <div className="input-group-long">
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    {/* First name and DOB */}
-                    <div className="input-group-short">
-                        <input
-                            type="text"
-                            placeholder="First name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            required
-                        />
-                        <input
-                            type="date"
-                            placeholder="Date of Birth"
-                            value={birthdate}
-                            onChange={(e) => setBirthdate(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    {/* Last name and gender */}
-                    <div className="input-group-short">
-                        <input
-                            type="text"
-                            placeholder="Last name"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            required
-                        />
-                        <select 
-                            value={gender} 
-                            onChange={(e) => setGender(e.target.value)} 
-                            required
-                        >
-                            <option value="m">Male</option>
-                            <option value="f">Female</option>
-                            <option value="0" selected>Rather not say</option>
-                        </select>
-                        </div>
-                        
-                        {/* Email */}
+                        {/* Username */}
                         <div className="input-group-long">
                             <input
-                                type="email"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                type="text"
+                                placeholder="Username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required
                             />
-                    </div>
+                        </div>
 
-                    {/* Phone number */}
-                    <div className="input-group-long">
-                    <input
-                        type="tel"
-                        placeholder="Phone Number"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        required
-                    />
-                    </div>
+                        {/* First name and DOB */}
+                        <div className="input-group-short">
+                            <input
+                                type="text"
+                                placeholder="First name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="date"
+                                placeholder="Date of Birth"
+                                value={birthdate}
+                                onChange={(e) => setBirthdate(e.target.value)}
+                                required
+                            />
+                        </div>
 
-                    {/* Password */}
-                    <div className="input-group-long">
+                        {/* Last name and gender */}
+                        <div className="input-group-short">
+                            <input
+                                type="text"
+                                placeholder="Last name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                required
+                            />
+                            <select 
+                                value={gender} 
+                                onChange={(e) => setGender(e.target.value)} 
+                                required
+                            >
+                                <option value="" disabled selected hidden>Gender</option>
+                                <option value="m">Male</option>
+                                <option value="f">Female</option>
+                                <option value="0">Rather not say</option>
+                            </select>
+                            </div>
+                            
+                            {/* Email */}
+                            <div className="input-group-long">
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                        </div>
+
+                        {/* Phone number */}
+                        <div className="input-group-long">
                         <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            type="tel"
+                            placeholder="Phone Number"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                             required
                         />
-                    </div>
-
-                    <button className="login-button" type="submit">
-                        <span>Create Account</span>
-                    </button>
-                    {/* Display error message if account creation fails */}
-                    {error && <p className="error">{error}</p>}
-
-                    <div className="login-footer">
-                        <div className="signup-prompt">
-                            Already have an account? <Link to="/login" className="signup-link"> Log in </Link>
                         </div>
-                    </div>
-                </form>
-            </div>   
-        </div>
-);
+
+                        {/* Password */}
+                        <div className="input-group-long">
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <button className="login-button" type="submit">
+                            <span>Create Account</span>
+                        </button>
+                        {/* Display error message if account creation fails */}
+                        {error && <p className="error">{error}</p>}
+
+                        <div className="login-footer">
+                            <div className="signup-prompt">
+                                Already have an account? <Link to="/login" className="signup-link"> Log in </Link>
+                            </div>
+                        </div>
+                    </form>
+                </div>   
+            </div>
+        )
+    );
 }
 
 export default CreateAccount;

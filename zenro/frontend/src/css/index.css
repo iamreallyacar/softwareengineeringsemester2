@@ -14,7 +14,6 @@ body {
   justify-content: center;
   align-items: center;
 
- 
   padding: 1rem;
   min-width: max-content;
   min-height: max-content;
@@ -24,21 +23,48 @@ body {
 
   background: linear-gradient(to bottom, rgba(255, 255, 255, 10%) 0%, rgba(153, 153, 153, 10%));
   backdrop-filter: blur(20px);
-  border-style: solid;
-  border-width: 1px;
-  border-color: ivory;
-  -webkit-border-color: linear-gradient(to bottom,rgba(255, 254, 253, 49%) #F8C3A5 #BF6D3D);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
 
+.login-container-circle {
+  border-radius: 50%;
+  width: 40vw;
+  height: 40vw;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
+  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
 }
 
 /* includes title and the login-form */
 .login-content {
   overflow-y: auto;
   border-radius: 15%;
-  
   width: 45vw;
   height: 80vh;
+  padding: 0.5rem;
+}
+
+/* includes title and the login-form */
+.login-content-circle {
+  width: 80%;
+  height: 80%;
+  overflow-y: auto;
+  border-radius: 15%;
+  
   padding: 0.5rem;
 }
 
@@ -90,11 +116,6 @@ body {
   width: 100%;
 }
 
-.login-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
 /* refers to "Create Account" */
 .login-title {
   display:block;
@@ -106,7 +127,18 @@ body {
   padding-left: 2rem;
   margin-bottom: 1.5rem;
   text-align: left;
+}
 
+.login-title-circle {
+  display:block;
+  color: #FFFFFF;
+  text-shadow: 2px 2px #9ca3af;
+  font-size: 2.5em;
+  font-weight: 700;
+  padding-top: 2rem;
+  padding-left: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
 }
 
 .login-button {
@@ -117,8 +149,7 @@ body {
   border-radius: 0.5rem;
   color: #FFFFFF;
   padding: 0.75rem 1.5rem;
-  margin-top: 2rem;
-  margin: 2rem auto;
+  margin: 2rem auto 0 auto;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -138,46 +169,65 @@ body {
   transform: translateY(-3px);
 }
 
-/* 
-.button-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-} */
-
+/* takes the user to the log in page if they already have an account */
 .login-footer {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
   text-align: center;
+  justify-content: center;
   width: 60%;
   max-width: 250px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
 }
 
-.forgot-password {
-  color: #ea580c;
-  text-decoration: none;
-  font-size: 0.875rem;
-  width: 100%;
-  text-align: center;
-}
-
+/* refers to:- Already have an account? */
 .signup-prompt {
-  margin-top: 1.5rem;
   font-size: 1rem;
-  color: rgba(0, 0, 0, 31%);
+  color: rgba(0, 0, 0, 30%);
   width: 100%;
   text-align: center;
+}
+
+/* refers to:- Don't have an account? */
+.signup-prompt-circle {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 30%);
+  width: 100%;
+  text-align: center;
+  padding-top: 0.5rem;
 }
 
 .signup-link {
   color: #FFFFFF;
   font-weight: 600;
   margin-left: 5px;
+  text-shadow: 2px 2px 2 #9ca3af;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.signup-link:hover {
+  color: #FFF6E7;
+  text-decoration: underline;
+  transform: translateY(-3px) scale(1.1);
+  text-shadow: 0px 0px 10px #FFF6E7;
+}
+
+.forgot-password {
+  color: rgba(0, 0, 0, 30%);
+  text-decoration: none;
+  font-size: 0.9rem;
+  width: 100%;
+  text-align: right;
+  text-shadow: 2px 2px 2 #9ca3af;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #ea580c;
+  text-shadow: 0px 0px 10px rgb(239, 185, 141);
+  text-decoration: underline;
+  transform: translateY(-3px);
+  width: 100%;
+  text-align: right;
 }
 
 /* Responsive adjustments */
@@ -191,19 +241,15 @@ body {
   .login-title {
     font-size: 2rem;
   }
+
+  .login-container-circle {
+    width: 80vw;
+    height: 80vw;
+  }
 }
 
 /* Error message style */
 .error {
-  color: #fc8181;
+  color: #ee5705;
 }
 
-/* Link styles */
-a {
-  color: #FFD700;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #ffffff;
-}

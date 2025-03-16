@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import api from "../api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import LoadingElement from "./LoadingElement.js";
 
-function Login() {
+const Login = ({ setIsAuthenticated }) => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     // handleSubmit sends the username and password to the backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setLoading(true);
+
         if (!username || !password) {
+            setLoading(false);
             setError("Please enter both username and password.");
             return;
         }
@@ -21,55 +27,57 @@ function Login() {
             // On success, tokens are stored in local storage, then redirect
             localStorage.setItem("accessToken", response.data.access);
             localStorage.setItem("userId", response.data.userId);
-            window.location.href = "/smart-homes";
+            setIsAuthenticated(true);
+            navigate("/smart-homes");
         } catch (error) {
+            setLoading(false);
             console.error("Login Failed:", error);
             setError("Invalid credentials or server error.");
         }
     };
 
     return (
-        <div className="login-container">
-            <div className="login-card">
-                <div className="login-header">
-                    <h1 className="login-title">Login</h1>
-                    <p className="login-subtitle">Please enter your credentials</p>
-                </div>
-                {error && <p className="error">{error}</p>}
-                <form className="login-form" onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            className="login-input"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <input
-                            type="password"
-                            className="login-input"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button className="login-button" type="submit">
-                        <span>Login</span>
-                    </button>
-                </form>
-                <div className="login-footer">
-                    <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
-                    <div className="signup-prompt">
-                        Don't have an account? <Link to="/create-account" className="signup-link">Sign up</Link>
+        loading ? (
+            <LoadingElement /> // Show loader while fetching data
+        ) : (
+            <div className="login-container-circle">
+                <div className="login-content-circle">
+                    <h1 className="login-title-circle">Login</h1>
+                    {error && <p className="error">{error}</p>}
+                    <form className="login-form" onSubmit={handleSubmit}>
+                        <div className="input-group-long">
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group-long">
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
+                        <button className="login-button" type="submit">
+                            <span>Login</span>
+                        </button>
+                    </form>
+                    <div className="login-footer">
+                        <div className="signup-prompt-circle">
+                            Don't have an account? <Link to="/create-account" className="signup-link">Sign up</Link>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        )
     );
-}
+};
+
 
 export default Login;

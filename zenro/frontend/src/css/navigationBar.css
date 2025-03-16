@@ -1,0 +1,25 @@
+.sidebar {
+    position: fixed;  /* Keeps it fixed on the screen */
+    top: 0;           /* Stick to the top */
+    left: 0;          /* Stick to the left */
+    width: 250px;     /* Adjust width as needed */
+    height: 100vh;    /* Full height of the viewport */
+    background-color: #222; /* Background color */
+    color: white;     /* Text color */
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    display: block;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    background-color: #444; /* Hover effect */
+}
+
