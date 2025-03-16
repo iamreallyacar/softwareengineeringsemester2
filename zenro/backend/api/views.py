@@ -11,14 +11,16 @@ from datetime import timedelta
 from .models import (
     User, SmartHome, SupportedDevice, Device,  
     DeviceLogDaily, DeviceLogMonthly, RoomLogDaily, 
-    RoomLogMonthly, Room, HomeIORoom, RoomLog1Min, DeviceLog1Min
+    RoomLogMonthly, Room, HomeIORoom, RoomLog1Min, DeviceLog1Min,
+    EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly
 )
 from .serializers import (
     DeviceLogMonthlySerializer, UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
     DeviceSerializer, RoomSerializer,
-    DeviceLogDailySerializer,
-    RoomLogDailySerializer, HomeIOControlSerializer, UnlockRoomSerializer,
-    AddDeviceSerializer, DeviceLog1MinSerializer, RoomLog1MinSerializer, HomeIORoomSerializer, RoomLogMonthlySerializer
+    DeviceLogDailySerializer, RoomLogDailySerializer, HomeIOControlSerializer, UnlockRoomSerializer,
+    AddDeviceSerializer, DeviceLog1MinSerializer, RoomLog1MinSerializer, HomeIORoomSerializer, 
+    RoomLogMonthlySerializer, EnergyGeneration1MinSerializer, EnergyGenerationDailySerializer, 
+    EnergyGenerationMonthlySerializer
 )
 from .home_io.home_io_services import HomeIOService
 
@@ -506,4 +508,269 @@ class DeviceControlView(APIView):
             return Response({"status": "Device updated successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class EnergyGeneration1MinViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying energy generation data at 1-minute intervals.
+    """
+    serializer_class = EnergyGeneration1MinSerializer
+    
+    def get_queryset(self):
+        queryset = EnergyGeneration1Min.objects.all().order_by('-created_at')
+        
+        # Filter by home if specified
+        home_id = self.request.query_params.get('home')
+        if home_id:
+            queryset = queryset.filter(home_id=home_id)
+            
+        # Filter by date range if specified
+        start_date = self.request.query_params.get('start_date')
+        if start_date:
+            queryset = queryset.filter(created_at__date__gte=start_date)
+                
+        end_date = self.request.query_params.get('end_date')
+        if end_date:
+            queryset = queryset.filter(created_at__date__lte=end_date)
+            
+        # Limit results to prevent performance issues
+        return queryset[:1000]  # Limit to 1000 most recent records
+
+class EnergyGenerationDailyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying daily energy generation data.
+    """
+    serializer_class = EnergyGenerationDailySerializer
+    
+    def get_queryset(self):
+        queryset = EnergyGenerationDaily.objects.all().order_by('-date')
+        
+        # Filter by home if specified
+        home_id = self.request.query_params.get('home')
+        if home_id:
+            queryset = queryset.filter(home_id=home_id)
+            
+        # Filter by date range if specified
+        start_date = self.request.query_params.get('start_date')
+        if start_date:
+            queryset = queryset.filter(date__gte=start_date)
+                
+        end_date = self.request.query_params.get('end_date')
+        if end_date:
+            queryset = queryset.filter(date__lte=end_date)
+            
+        return queryset
+
+class EnergyGenerationMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint for querying monthly energy generation data.
+    """
+    serializer_class = EnergyGenerationMonthlySerializer
+    
+    def get_queryset(self):
+        queryset = EnergyGenerationMonthly.objects.all()
+        
+        # Filter by home if specified
+        home_id = self.request.query_params.get('home')
+        if home_id:
+            queryset = queryset.filter(home_id=home_id)
+            
+        # Filter by year/month if specified
+        year = self.request.query_params.get('year')
+        if year:
+            queryset = queryset.filter(year=year)
+                
+        month = self.request.query_params.get('month')
+        if month:
+            queryset = queryset.filter(month=month)
+            
+        return queryset
+
+@api_view(['GET'])
+def energy_summary(request):
+    """
+    Provides a summary of energy generation and consumption data.
+    
+    Returns:
+        - generation_today: Total energy generated today
+        - consumption_today: Total energy consumed today
+        - net_energy: Net energy (generation - consumption)
+        - comparison: Percentage change from yesterday
+    """
+    try:
+        today = timezone.now().date()
+        yesterday = today - timedelta(days=1)
+        
+        # Get home ID from query params
+        home_id = request.query_params.get('home')
+        if not home_id:
+            # If no home specified, use the first one
+            home = SmartHome.objects.first()
+            if not home:
+                return Response({'error': 'No smart homes found'}, status=status.HTTP_404_NOT_FOUND)
+            home_id = home.id
+            
+        # Today's generation
+        today_gen = EnergyGeneration1Min.objects.filter(
+            home_id=home_id,
+            created_at__date=today
+        )
+        generation_today = today_gen.aggregate(models.Sum('energy_generation'))['energy_generation__sum'] or 0
+        
+        # Today's consumption (from all rooms in the home)
+        rooms = Room.objects.filter(smart_home_id=home_id)
+        room_ids = rooms.values_list('id', flat=True)
+        today_consumption = RoomLog1Min.objects.filter(
+            room_id__in=room_ids,
+            created_at__date=today
+        ).aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+        
+        # Yesterday's net energy
+        yesterday_gen = EnergyGenerationDaily.objects.filter(
+            home_id=home_id, 
+            date=yesterday
+        ).aggregate(models.Sum('total_energy_generation'))['total_energy_generation__sum'] or 0
+        
+        yesterday_consumption = RoomLogDaily.objects.filter(
+            room__smart_home_id=home_id,
+            date=yesterday
+        ).aggregate(models.Sum('total_energy_usage'))['total_energy_usage__sum'] or 0
+        
+        # Calculate net energy and comparison
+        net_today = generation_today - today_consumption
+        net_yesterday = yesterday_gen - yesterday_consumption
+        
+        # Calculate percentage change
+        comparison = 0
+        if net_yesterday != 0:
+            comparison = ((net_today - net_yesterday) / abs(net_yesterday)) * 100
+            
+        return Response({
+            'generation_today': generation_today,
+            'consumption_today': today_consumption,
+            'net_energy': net_today,
+            'yesterday_net': net_yesterday,
+            'comparison': round(comparison, 2)
+        })
+        
+    except Exception as e:
+        print(f"Error in energy_summary: {e}")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def dashboard_summary(request):
+    """
+    Provides a summary of energy usage data for the dashboard.
+    
+    Returns:
+        - today_usage: Total energy usage across all rooms for today
+        - yesterday_usage: Total energy usage across all rooms for yesterday
+        - room_summary: Per-room breakdown of today's energy usage
+        - device_summary: Top energy-consuming devices today
+        - energy_generation: Energy generation data
+    """
+    try:
+        today = timezone.now().date()
+        yesterday = today - timedelta(days=1)
+        
+        # Get home ID from query params or use first home
+        home_id = request.query_params.get('home')
+        home = None
+        
+        if home_id:
+            home = get_object_or_404(SmartHome, pk=home_id)
+        else:
+            # If no home specified, use the first one the user has access to
+            if request.user.is_authenticated:
+                home = SmartHome.objects.filter(
+                    models.Q(creator=request.user) | models.Q(members=request.user)
+                ).first()
+            
+            if not home:
+                home = SmartHome.objects.first()
+                
+            if home:
+                home_id = home.id
+        
+        if not home:
+            return Response({'error': 'No smart homes found'}, status=status.HTTP_404_NOT_FOUND)
+            
+        # Calculate room info only for the selected home
+        rooms = Room.objects.filter(smart_home_id=home_id)
+        room_ids = rooms.values_list('id', flat=True)
+            
+        # Get today's room logs
+        today_logs = RoomLog1Min.objects.filter(
+            room_id__in=room_ids,
+            created_at__date=today
+        )
+        today_usage = today_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+        
+        # Get yesterday's usage
+        yesterday_logs = RoomLogDaily.objects.filter(
+            room_id__in=room_ids,
+            date=yesterday
+        )
+        yesterday_usage = yesterday_logs.aggregate(models.Sum('total_energy_usage'))['total_energy_usage__sum'] or 0
+        
+        # Room-by-room breakdown
+        room_summary = []
+        for room in rooms:
+            room_logs = RoomLog1Min.objects.filter(room=room, created_at__date=today)
+            room_usage = room_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
+            if room_usage > 0:  # Only include rooms with usage
+                room_summary.append({
+                    'id': room.id,
+                    'name': room.name,
+                    'usage': room_usage
+                })
+        
+        # Get top energy-consuming devices
+        device_summary = []
+        devices = Device.objects.filter(room__smart_home_id=home_id)
+        device_ids = devices.values_list('id', flat=True)
+        
+        today_device_logs = DeviceLog1Min.objects.filter(
+            device_id__in=device_ids,
+            created_at__date=today
+        )
+        if today_device_logs.exists():
+            # Group by device and sum usage
+            top_devices = today_device_logs.values('device', 'device__name')\
+                .annotate(total=models.Sum('energy_usage'))\
+                .order_by('-total')[:5]  # Top 5 devices
+                
+            for device in top_devices:
+                device_summary.append({
+                    'id': device['device'],
+                    'name': device['device__name'],
+                    'usage': device['total']
+                })
+        
+        # Add energy generation data
+        today_gen = EnergyGeneration1Min.objects.filter(
+            home_id=home_id,
+            created_at__date=today
+        )
+        generation_today = today_gen.aggregate(models.Sum('energy_generation'))['energy_generation__sum'] or 0
+        
+        yesterday_gen = EnergyGenerationDaily.objects.filter(
+            home_id=home_id,
+            date=yesterday
+        ).aggregate(models.Sum('total_energy_generation'))['total_energy_generation__sum'] or 0
+        
+        return Response({
+            'today_usage': today_usage,
+            'yesterday_usage': yesterday_usage,
+            'room_summary': room_summary,
+            'device_summary': device_summary,
+            'energy_generation': {
+                'today': generation_today,
+                'yesterday': yesterday_gen,
+                'net_today': generation_today - today_usage
+            }
+        })
+        
+    except Exception as e:
+        print(f"Error in dashboard_summary: {e}")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

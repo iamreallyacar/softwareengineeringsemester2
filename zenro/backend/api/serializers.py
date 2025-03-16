@@ -2,7 +2,12 @@ from rest_framework import serializers
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from .models import User, SmartHome, SupportedDevice, Device, Room, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly, RoomLog1Min, RoomLogDaily, RoomLogMonthly, HomeIORoom
+from .models import (
+    User, SmartHome, SupportedDevice, Device, Room, DeviceLog1Min, 
+    DeviceLogDaily, DeviceLogMonthly, RoomLog1Min, RoomLogDaily, 
+    RoomLogMonthly, HomeIORoom, EnergyGeneration1Min, EnergyGenerationDaily, 
+    EnergyGenerationMonthly
+)
 
 # Serializer for the User model
 class UserSerializer(serializers.ModelSerializer):
@@ -162,3 +167,19 @@ class UnlockRoomSerializer(serializers.Serializer):
 class AddDeviceSerializer(serializers.Serializer):
     room_id = serializers.IntegerField()
     supported_device_id = serializers.IntegerField()
+
+# Add EnergyGeneration serializers
+class EnergyGeneration1MinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnergyGeneration1Min
+        fields = '__all__'
+
+class EnergyGenerationDailySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnergyGenerationDaily
+        fields = '__all__'
+
+class EnergyGenerationMonthlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnergyGenerationMonthly
+        fields = '__all__'
