@@ -10,32 +10,33 @@ from .views import (
     UnlockRoomView, AddDeviceView,
     DeviceLog1MinViewSet, RoomLog1MinViewSet, dashboard_summary,
     DeviceLogMonthlyViewSet, RoomLogMonthlyViewSet, HomeIORoomViewSet, DeviceControlView,
-    # Add new ViewSets
     EnergyGeneration1MinViewSet, EnergyGenerationDailyViewSet, EnergyGenerationMonthlyViewSet,
     energy_summary
 )
 
 # Create a router and register our viewsets with it
 router = DefaultRouter()
+
+# Core data models (full CRUD - GET/POST/PUT/PATCH/DELETE)
 router.register(r'users', UserViewSet)                 
 router.register(r'smarthomes', SmartHomeViewSet)       
+router.register(r'devices', DeviceViewSet)
+router.register(r'rooms', RoomViewSet)
 router.register(r'supporteddevices', SupportedDeviceViewSet)  
-router.register(r'devices', DeviceViewSet)             
-router.register(r'rooms', RoomViewSet)                 
-router.register(r'devicelogdaily', DeviceLogDailyViewSet, basename='devicelogdaily')  
-router.register(r'roomlogdaily', RoomLogDailyViewSet, basename='roomlogdaily')        
-router.register(r'devicelogs', DeviceLog1MinViewSet, basename='devicelogs')
-router.register(r'roomlogs', RoomLog1MinViewSet, basename='roomlogs')
-router.register(r'devicelogsmonthly', DeviceLogMonthlyViewSet, basename='devicelogsmonthly')
-router.register(r'roomlogsmonthly', RoomLogMonthlyViewSet, basename='roomlogsmonthly')
 router.register(r'homeio-rooms', HomeIORoomViewSet, basename='homeio-rooms')
 
-# Register new energy generation viewsets
+# Energy & device log models (read-only - GET)
+router.register(r'devicelogs', DeviceLog1MinViewSet, basename='devicelogs')
+router.register(r'devicelogs/daily', DeviceLogDailyViewSet, basename='devicelogdaily')
+router.register(r'devicelogs/monthly', DeviceLogMonthlyViewSet, basename='devicelogsmonthly')
+router.register(r'roomlogs', RoomLog1MinViewSet, basename='roomlogs')
+router.register(r'roomlogs/daily', RoomLogDailyViewSet, basename='roomlogdaily')
+router.register(r'roomlogs/monthly', RoomLogMonthlyViewSet, basename='roomlogsmonthly')
 router.register(r'energy-generation', EnergyGeneration1MinViewSet, basename='energy-generation')
-router.register(r'energy-generation-daily', EnergyGenerationDailyViewSet, basename='energy-generation-daily')
-router.register(r'energy-generation-monthly', EnergyGenerationMonthlyViewSet, basename='energy-generation-monthly')
+router.register(r'energy-generation/daily', EnergyGenerationDailyViewSet, basename='energy-generation-daily')
+router.register(r'energy-generation/monthly', EnergyGenerationMonthlyViewSet, basename='energy-generation-monthly')
 
-# Organized URL patterns for better maintainability
+# Organized URL patterns by function
 urlpatterns = [
     # Router URLs
     path('', include(router.urls)),
