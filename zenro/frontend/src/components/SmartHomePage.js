@@ -122,10 +122,22 @@ function SmartHomePage() {
           </div>
 
           <div className="shp-cctv-statistics">
-            <p className="shp-statistics">Temperature</p>
-            <p className="shp-statistics">Power Usage</p>
-            <p className="shp-statistics">Humidity</p>
-            <p className="shp-statistics">Light</p>
+            <div className="shp-statistics">
+              <i className="fas fa-temperature-low"></i> 
+              <span>Temperature</span> 
+            </div>
+            <div className="shp-statistics">
+              <i class="fa-solid fa-bolt"></i>
+              <span>Power Usage</span> 
+            </div>
+            <div className="shp-statistics">
+              <i class="fa-solid fa-droplet"></i>
+              <span>Humidity</span> 
+            </div>
+            <div className="shp-statistics">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span>Light</span> 
+            </div>
           </div>
 
         </div>
@@ -143,21 +155,27 @@ function SmartHomePage() {
             ))}
             {/* The following fixed links should also use the dynamic smartHomeId */}
             <li>
+            <i class="fa-solid fa-couch"></i>
               <Link to={`/room/living-room/${smartHomeId}`} className="shp-rooms-list-links">Living Room</Link>
             </li>
             <li>
+            <i class='fas fa-hamburger'></i>
               <Link to={`/room/kitchen/${smartHomeId}`} className="shp-rooms-list-links">Kitchen</Link>
             </li>
             <li>
+            <i class="fa-solid fa-bed"></i>
               <Link to={`/room/bedroom/${smartHomeId}`} className="shp-rooms-list-links">Bedroom</Link>
             </li>
             <li>
+            <i class="fa-solid fa-shower"></i>
               <Link to={`/room/bathroom/${smartHomeId}`} className="shp-rooms-list-links">Bathroom</Link>
             </li>
             <li>
+            <i class="fa-solid fa-warehouse"></i>
               <Link to={`/room/garage/${smartHomeId}`} className="shp-rooms-list-links">Garage</Link>
             </li>
             <li>
+            <i class="fa-solid fa-tree"></i>
               <Link to={`/room/backyard/${smartHomeId}`} className="shp-rooms-list-links">Backyard</Link>
             </li>
           </ul>
