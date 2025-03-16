@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Sidebar from "./Sidebar";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -26,6 +27,10 @@ function SmartHomePage() {
   // boolean to check if the appliances is turning on or off, in appliances container
   const [isOn, setIsOn] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [newRoomName, setNewRoomName] = useState(""); // State for the new room name
+  const [homeIORooms, setHomeIORooms] = useState([]);
+
   const handleRoomSelectCCTV = (room) => {
     setSelectedRoomCCTV(room);
     setIsOpen(false);
@@ -34,6 +39,20 @@ function SmartHomePage() {
   const handleRoomSelect = (room) => {
     setSelectedRoom(room);
     setIsOpenLR(false);
+  };
+  
+  const handleAddRoom = async () => {
+    if (!newRoomName) return;
+    await api.post(`/rooms/`, {
+      name: newRoomName,
+      smart_home: smartHomeId,
+    });
+    setNewRoomName(""); // Clear the input field
+    setIsModalOpen(false); // Close the modal after adding the room
+    // Refresh the room list
+    api.get(`/rooms/?smart_home=${smartHomeId}`).then((res) => {
+      setRooms(res.data);
+    });
   };
 
   useEffect(() => {
@@ -44,6 +63,12 @@ function SmartHomePage() {
     // Fetch supported devices
     api.get("/supporteddevices/").then((res) => {
       setSupportedDevices(res.data);
+    });
+    // Fetch homeio-rooms
+    api.get("/homeio-rooms/").then((res) => {
+      setHomeIORooms(res.data); // Store the fetched homeio-rooms data
+    }).catch((error) => {
+      console.error("Error fetching homeio-rooms:", error);
     });
   }, [smartHomeId]);
 
@@ -58,16 +83,7 @@ function SmartHomePage() {
 
   return (
     <div className="smart-home-page">
-      <div className="sidebar">
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="/smart-homes">Back</a></li>
-        </ul>
-      </div>
-     
+      <Sidebar />
       <div className="shp-information">
         <div className="shp-CCTV">
         <button onClick={() => setIsOpen(!isOpen)}>
@@ -147,9 +163,39 @@ function SmartHomePage() {
           </ul>
           </div>
 
-          <button className="shp-add-room-button">+ Add Room</button>
+          <button
+            className="shp-add-room-button"
+            onClick={() => setIsModalOpen(true)}
+          >
+            + Add Room
+          </button>
 
         </div>
+
+        {/* Modal */}
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>Add New Room</h2>
+              <select
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+                className="room-dropdown"
+              >
+                <option value="">Select a Room</option>
+                {homeIORooms.map((room) => (
+                  <option key={room.id} value={room.name}>
+                    {room.name}
+                  </option>
+                ))}
+              </select>
+              <div className="modal-buttons">
+                <button onClick={handleAddRoom}>Add Room</button>
+                <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Appliances Container */}
         <div className="shp-appliances">

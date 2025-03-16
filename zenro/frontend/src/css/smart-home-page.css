@@ -5,74 +5,74 @@ html, body {
     overflow: hidden;
 }
 
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+    .smart-home-page {
+        flex-direction: column; /* Stack sidebar and main content vertically */
+        align-items: stretch; /* Ensure full width for all elements */
+    }
+
+    .shp-information {
+        margin-left: 0 !important; /* Force removal of the left margin */
+        width: 100% !important; /* Force full width */
+        height: auto; /* Allow height to adjust based on content */
+        box-sizing: border-box; /* Ensure padding is included in width/height */
+    }
+}
+
 .smart-home-page {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
     height: 100vh;
-	padding: 20px;
-	background: linear-gradient(to bottom, #DD946A, #BF5E40);
+	/* padding: 20px; */
+	/* background: linear-gradient(to bottom, #DD946A, #BF5E40); */
     overflow: hidden;
-    padding-top: 140%;
-}
-
-/* Sidebar Navigation */
-.sidebar {
-    width: 150px;
-    height: 100vh;
-    background: linear-gradient(to bottom,#DD946A, #BF5E40);
-    color: white;
-    padding: 20px;
-    position: fixed;
-}
-
-/* Sidebar Menu */
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    margin: 20px 0;
-}
-
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-    transition: 0.3s;
+    width: 100vw;
 }
 
 .shp-information {
     display: flex;
-    flex-direction: column;
-    padding: 20px;
-    position: absolute;
-    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
-    width: calc(100% - 170px);
-    height: 100vh;
-    margin-left: 170px; /* Match the left spacing of CCTV */
-    overflow: hidden;
+    flex-wrap: wrap; /* Allow wrapping to create rows */
+    justify-content: space-between; /* Add spacing between items */
+    gap: 20px; /* Add spacing between containers */
+    padding: 30px;
+    padding-top: 50px;
+    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40); /* Background gradient */
+    width: calc(100% - 150px); /* Full width minus the sidebar width */
+    height: 100vh; /* Full height of the viewport */
+    margin-left: 150px; /* Match the width of the sidebar */
+    box-sizing: border-box; /* Include padding in width/height calculations */
+    overflow-y: auto; /* Allow scrolling for overflowing content */
+    scrollbar-width: none;
+}
+/* Individual containers inside shp-information */
+.shp-information > div {
+    flex: 1 1 calc(50% - 20px); /* Take 50% width minus the gap */
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+    .shp-information > div {
+        flex: 1 1 100%; /* Full width for smaller screens */
+    }
 }
 
 /* CCTV container */
 .shp-CCTV {
     display: flex;
     flex-direction: column;
-    align-content: left;
-
-    width: 57%;
-    height: 37%;
+    align-content: flex-start;
+    width: 100%; 
+    height: auto; 
     padding: 20px;
-    position: absolute;
-
     background: #fbdba7;
     border: 3px solid white;
     border-radius: 20px;
-    border-color: linear-gradient(to bottom, #FFF6E7, #FFE9C5);
+    margin-bottom: 20px; /* Add spacing between containers */
+    padding-top: 0px;
 }
 
 .shp-CCTV button {
@@ -168,18 +168,13 @@ html, body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    box-sizing: border-box;
+    width: 100%; /* Full width of the parent container */
+    height: auto; /* Adjust height based on content */
     padding: 20px;
-
-    width: 34%;
-    height: 43%;
-    right: 40px;    
-    position: absolute;
-    
     background: peachpuff;
     border: 3px solid white;
     border-radius: 20px;
-    border-color: linear-gradient(to bottom, #FFF6E7, #FFE9C5);
+    margin-bottom: 20px; /* Add spacing between containers */
 }
 
 .shp-rooms h1 {
@@ -214,6 +209,7 @@ html, body {
     box-sizing: border-box;
     list-style-type: none;
     padding: 5px;
+    padding-top: 20px;
 
     text-align: left;
     overflow-x: hidden;
@@ -276,19 +272,26 @@ html, body {
 
 .shp-add-room-button {
     background-color: #CB5A55;
-    width: 100%;
-    height: 13%;
+    width: auto; /* Adjust width to fit the text content */
+    height: auto; /* Adjust height to fit the text content */
+    margin-top: 30px;
+    padding: 10px 20px; /* Add padding for a standard button size */
     border: 0px;
-    border-radius: 20px;
+    border-radius: 10px; /* Slightly rounded corners */
     box-shadow: 0px 3px 3px black;
     color: white;
+    font-size: 16px; /* Standard font size */
+    font-weight: bold;
     text-shadow: 0px 3px 3px black;
+    cursor: pointer; /* Add pointer cursor for better UX */
     transition: background-color 0.2s ease, transform 0.2s ease;
+
+    align-self: flex-end; /* Align the button to the right in a flex container */
 }
 
 .shp-add-room-button:hover {
     background-color: #BD3F3F;
-    transform: scale(1.05);
+    transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 /* appliances container */
@@ -297,19 +300,18 @@ html, body {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: top;
+    align-items: flex-start;
 
-    width: 44%;
-    height: 37%;
+    width: 100%; /* Full width of the parent container */
+    height: auto; /* Adjust height based on content */
     padding: 20px;
-    position: absolute;
-    left: 20px;     
-    bottom: 65px;   
-    
+
     background: peachpuff;
     border: 3px solid #FFF6E7; 
     border-radius: 20px;
     box-shadow: 0px 3px 3px #5D252D;
+
+    margin-bottom: 20px; /* Add spacing between containers */
 }
 
 .shp-appliances-room-select {
@@ -440,17 +442,16 @@ html, body {
     flex-direction: column;
     justify-content: flex-start;
 
-    width: 44%;
-    height: 37%;
-    position: absolute;
+    width: 100%; /* Full width of the parent container */
+    height: auto; /* Adjust height based on content */
     padding: 20px;
-    right: 40px;    
-    bottom: 65px;   
-    
+
     background: #fbdba7;
     border: 3px solid #FFF6E7;  
     border-radius: 20px;
     box-shadow: 0px 3px 3px #5D252D;
+
+    margin-bottom: 20px; /* Add spacing between containers */
 }
 
 .shp-most-used-title {
@@ -458,15 +459,12 @@ html, body {
     text-align: left;
     font-weight: bold;
 
-    position: absolute;
-    top: 0;
-    left: 20px;
-    width: 100%;
-
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
+
+    margin-bottom: 10px; /* Add spacing below the title */
 }
 
 .shp-most-used h4 {
@@ -482,12 +480,13 @@ html, body {
 }
 
 .shp-most-used-list {
-    width: 90%;
+    width: 100%;
     height: 80%;
     max-height: 80%;
-    margin: 0;
+    margin-top: 20px;
     padding: 0 20px 0 10px;
     margin-right: -15px;
+    gap: 5px;
 
     display: flex;
     flex-direction: column;
@@ -544,4 +543,126 @@ html, body {
     background-color: #BD3F3F;
 }
 
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal Container */
+  .modal {
+    background-color: #ffffff; /* White background */
+    padding: 30px;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25); /* Subtle shadow */
+    width: 400px;
+    max-width: 90%; /* Responsive width */
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in animation */
+  }
+  
+  /* Modal Title */
+  .modal h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333333; /* Dark text color */
+  }
+  
+  /* Modal Input */
+  .modal input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Modal Buttons Container */
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  /* Add Room Button */
+  .modal-buttons button:first-child {
+    background-color: #4caf50; /* Green for Add Room */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .modal-buttons button:first-child:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+  
+  /* Cancel Button */
+  .modal-buttons button:last-child {
+    background-color: #f44336; /* Red for Cancel */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .modal-buttons button:last-child:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+  }
+  
+  /* Fade-in Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
+  /* Dropdown Styling */
+.room-dropdown {
+    width: 100%; /* Full width of the container */
+    padding: 10px; /* Add padding for better usability */
+    margin-bottom: 20px; /* Add spacing below the dropdown */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Standard font size */
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text color */
+    box-sizing: border-box; /* Include padding and border in width */
+    appearance: none; /* Remove default browser styling */
+    cursor: pointer; /* Pointer cursor for better UX */
+  }
+  
+  /* Dropdown Focus State */
+  .room-dropdown:focus {
+    outline: none; /* Remove default outline */
+    border-color: #4caf50; /* Green border on focus */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Subtle green glow */
+  }
+  
+  /* Dropdown Option Styling */
+  .room-dropdown option {
+    padding: 10px; /* Add padding inside options */
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text color */
+  }
