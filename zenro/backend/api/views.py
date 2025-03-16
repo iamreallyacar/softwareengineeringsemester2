@@ -1,8 +1,8 @@
 from django.http import HttpResponse
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from django.db import models, IntegrityError
 from django.shortcuts import get_object_or_404
@@ -16,11 +16,11 @@ from .models import (
 )
 from .serializers import (
     DeviceLogMonthlySerializer, UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
-    DeviceSerializer, RoomSerializer,
-    DeviceLogDailySerializer, RoomLogDailySerializer, HomeIOControlSerializer, UnlockRoomSerializer,
-    AddDeviceSerializer, DeviceLog1MinSerializer, RoomLog1MinSerializer, HomeIORoomSerializer, 
-    RoomLogMonthlySerializer, EnergyGeneration1MinSerializer, EnergyGenerationDailySerializer, 
-    EnergyGenerationMonthlySerializer
+    DeviceSerializer, RoomSerializer, DeviceLogDailySerializer, RoomLogDailySerializer, 
+    HomeIOControlSerializer, UnlockRoomSerializer, AddDeviceSerializer, DeviceLog1MinSerializer, 
+    RoomLog1MinSerializer, HomeIORoomSerializer, RoomLogMonthlySerializer, 
+    EnergyGeneration1MinSerializer, EnergyGenerationDailySerializer, 
+    EnergyGenerationMonthlySerializer, DeviceControlSerializer
 )
 from .home_io.home_io_services import HomeIOService
 
@@ -475,39 +475,53 @@ def dashboard_summary(request):
 
 class DeviceControlView(APIView):
     """
-    API endpoint to directly control devices
+    API endpoint to directly control devices.
+    
+    POST /api/devices/{id}/control/ - Controls a device's status or analogue value
+    
+    Request Body:
+    - status (boolean, optional): Turn device on/off
+    - analogue_value (integer, optional): Set device's intensity (0-10)
+    
+    Either status or analogue_value must be provided.
     """
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request, pk):
         device = get_object_or_404(Device, pk=pk)
-        status_value = request.data.get('status')
-        analogue_value = request.data.get('analogue_value')
         
-        if status_value is None and analogue_value is None:
-            return Response({"error": "Either status or analogue_value must be provided"}, 
-                          status=status.HTTP_400_BAD_REQUEST)
+        # Check if user has access to the device's smart home
+        smart_home = device.room.smart_home
+        if not SmartHome.objects.filter(
+            models.Q(creator=request.user) | models.Q(members=request.user),
+            id=smart_home.id
+        ).exists():
+            return Response(
+                {"error": "You don't have permission to control this device"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        serializer = DeviceControlSerializer(data=request.data)
+        if serializer.is_valid():
+            status_value = serializer.validated_data.get('status')
+            analogue_value = serializer.validated_data.get('analogue_value')
             
-        try:
-            # Update status if provided
+            # Update device properties
             if status_value is not None:
                 device.status = status_value
             
-            # Update analogue_value if provided
             if analogue_value is not None:
-                # Validate that analogue_value is in the allowed range
-                try:
-                    analogue_value = int(analogue_value)
-                    if analogue_value < 0 or analogue_value > 10:
-                        return Response({"error": "Analogue value must be between 0 and 10"}, 
-                                      status=status.HTTP_400_BAD_REQUEST)
-                    device.analogue_value = analogue_value
-                except ValueError:
-                    return Response({"error": "Analogue value must be an integer"}, 
-                                  status=status.HTTP_400_BAD_REQUEST)
-            
+                device.analogue_value = analogue_value
+                
             device.save()  # This will trigger the pre_save signal
-            return Response({"status": "Device updated successfully"}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            # Return the updated device
+            return Response(
+                DeviceSerializer(device).data, 
+                status=status.HTTP_200_OK
+            )
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EnergyGeneration1MinViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -659,14 +673,16 @@ def energy_summary(request):
 @api_view(['GET'])
 def dashboard_summary(request):
     """
-    Provides a summary of energy usage data for the dashboard.
+    Provides a summary of energy usage and generation data for the dashboard.
+    
+    GET /api/dashboard/?home={id} - Get energy summary for a specific home
     
     Returns:
         - today_usage: Total energy usage across all rooms for today
         - yesterday_usage: Total energy usage across all rooms for yesterday
         - room_summary: Per-room breakdown of today's energy usage
         - device_summary: Top energy-consuming devices today
-        - energy_generation: Energy generation data
+        - energy_generation: Energy generation data including net usage
     """
     try:
         today = timezone.now().date()
@@ -717,7 +733,7 @@ def dashboard_summary(request):
         for room in rooms:
             room_logs = RoomLog1Min.objects.filter(room=room, created_at__date=today)
             room_usage = room_logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
-            if room_usage > 0:  # Only include rooms with usage
+            if room_usage > 0 or True:  # Include all rooms regardless of usage
                 room_summary.append({
                     'id': room.id,
                     'name': room.name,

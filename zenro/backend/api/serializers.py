@@ -71,36 +71,12 @@ class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = '__all__'  # Include all fields from the Device model
-    
-    def create(self, validated_data):
-        # Removed the old 'smart_home' assignment
-        return super().create(validated_data)
 
 # Replace DeviceLog5SecSerializer with DeviceLog1MinSerializer
 class DeviceLog1MinSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeviceLog1Min
         fields = '__all__'
-
-    def get_energy_usage(self, obj, start_time, end_time):
-        """Fetch total energy usage for a given time range."""
-        logs = DeviceLog1Min.objects.filter(
-            device=obj, created_at__gte=start_time, created_at__lte=end_time
-        )
-        return logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
-
-    def get_past_24_hours_usage(self, obj, end_time=None):
-        """Get energy usage for the past 24 hours from a specified end_time (defaults to now)."""
-        if end_time is None:
-            end_time = timezone.now()
-        start_time = end_time - timedelta(hours=24)
-        return self.get_energy_usage(obj, start_time, end_time)
-
-    def get_yesterday_usage(self, obj):
-        """Get energy usage for yesterday (00:00 - 23:59)."""
-        today = timezone.now().date()
-        yesterday = today - timedelta(days=1)
-        return self.get_energy_usage(obj, yesterday, today)
 
 class DeviceLogDailySerializer(serializers.ModelSerializer):
     class Meta:
@@ -126,15 +102,15 @@ class RoomLogMonthlySerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     devices = DeviceSerializer(many=True, read_only=True)
     daily_usage = serializers.SerializerMethodField()
+    home_io_room_name = serializers.CharField(source='home_io_room.name', read_only=True)
 
     class Meta:
         model = Room
-        fields = ['id', 'name', 'smart_home', 'devices', 'daily_usage']
+        fields = ['id', 'name', 'smart_home', 'devices', 'daily_usage', 
+                 'is_unlocked', 'home_io_room', 'home_io_room_name']
 
     def get_daily_usage(self, obj):
-        from django.utils import timezone
         today = timezone.now().date()
-        # Updated to use RoomLog1Min instead of RoomLog5Sec
         logs = RoomLog1Min.objects.filter(room=obj, created_at__date=today)
         total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
         return total_usage
@@ -183,3 +159,22 @@ class EnergyGenerationMonthlySerializer(serializers.ModelSerializer):
     class Meta:
         model = EnergyGenerationMonthly
         fields = '__all__'
+
+# Add specific serializer for device control
+class DeviceControlSerializer(serializers.Serializer):
+    status = serializers.BooleanField(required=False)
+    analogue_value = serializers.IntegerField(
+        required=False,
+        min_value=0,
+        max_value=10
+    )
+    
+    def validate(self, data):
+        """
+        Check that at least one of status or analogue_value is provided
+        """
+        if not data:
+            raise serializers.ValidationError(
+                "Either status or analogue_value must be provided"
+            )
+        return data
