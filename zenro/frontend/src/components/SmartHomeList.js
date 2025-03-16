@@ -36,7 +36,7 @@ const UserProfile = () => (
 );
 
 // Extract Smart Home Creation Form
-const CreateHomeForm = ({ homeName, setHomeName, handleCreateSmartHome }) => (
+const CreateHomeForm = ({ homeName, setHomeName, handleCreateSmartHome, isCreating }) => (
     <div className="create-home">
         <form onSubmit={handleCreateSmartHome}>
             <input
@@ -45,7 +45,9 @@ const CreateHomeForm = ({ homeName, setHomeName, handleCreateSmartHome }) => (
                 onChange={(e) => setHomeName(e.target.value)}
                 placeholder="Home Name"
             />
-            <button type="submit">Create Smart Home</button>
+            <button type="submit" disabled={isCreating}>
+                {isCreating ? "Creating ..." : "Create Smart Home"}
+                </button>
         </form>
     </div>
 );
@@ -113,6 +115,7 @@ function SmartHomeList() {
     const [homeName, setHomeName] = useState("");
     const [isOwnedExpanded, setIsOwnedExpanded] = useState(false);
     const [isJoinedExpanded, setIsJoinedExpanded] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
     const userId = localStorage.getItem("userId");
     const navigate = useNavigate();
 
@@ -141,6 +144,7 @@ function SmartHomeList() {
 
     const handleCreateSmartHome = async (event) => {
         event.preventDefault();
+        setIsCreating(true);
         try {
             await api.post("/smarthomes/", { 
                 name: homeName
@@ -150,6 +154,8 @@ function SmartHomeList() {
         } catch (err) {
             console.error("Error creating smart home:", err);
             setError("Error creating new smart home");
+        } finally {
+            setIsCreating(false);
         }
     };
 
@@ -184,6 +190,7 @@ function SmartHomeList() {
                     homeName={homeName}
                     setHomeName={setHomeName}
                     handleCreateSmartHome={handleCreateSmartHome}
+                    isCreating={isCreating}
                 />
                 <OwnedHomesList
                     isOwnedExpanded={isOwnedExpanded}

@@ -25,6 +25,7 @@ def create_home_layout(sender, instance, created, **kwargs):
                 Device.objects.create(
                     name=s_device.model_name,  # You might append additional info if needed
                     status=False,              # Initial device status is off/false
+                    analogue_value=0 if s_device.type in ["lighting", "heating"] else None,
                     room=new_room,
                     supported_device=s_device,
                     is_unlocked=False          # Initially locked

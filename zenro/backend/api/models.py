@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Model representing a smart home
 # SmartHome stores home info, creator, members, timestamps
@@ -50,6 +51,7 @@ class SupportedDevice(models.Model):
 
     model_name = models.CharField(max_length=255)
     type = models.CharField(max_length=50, default=None, null=True)
+    number = models.IntegerField(default=None, null=True)
     home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE, null=True, default=None)
     address = models.IntegerField()
     data_type = models.CharField(max_length=10)
@@ -84,7 +86,15 @@ class SupportedDevice(models.Model):
 # updated_at - Timestamp when the device instance was last updated
 class Device(models.Model):
     name = models.CharField(max_length=100)                             
-    status = models.BooleanField(default=False)                         
+    status = models.BooleanField(default=False)                     
+    analogue_value = models.IntegerField(
+        null=True, 
+        default=None,
+        validators=[
+            MinValueValidator(0, message="Value must be at least 0"),
+            MaxValueValidator(10, message="Value cannot be greater than 10")
+        ]
+    ) 
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='devices', null=True) 
     supported_device = models.ForeignKey(SupportedDevice, on_delete=models.CASCADE) 
     created_at = models.DateTimeField(auto_now_add=True)                
@@ -179,6 +189,7 @@ class RoomLogMonthly(models.Model):
 # name - Name of the room in Home I/O
 class HomeIORoom(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    zone = models.CharField(max_length=5, default=None, null=True)
     unlock_order = models.PositiveIntegerField(null=True)  # Enforce fixed order
 
     def __str__(self):

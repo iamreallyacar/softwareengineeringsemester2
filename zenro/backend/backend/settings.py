@@ -186,4 +186,4 @@ SWAGGER_SETTINGS = {
 }
 
 # HomeIO Integration settings
-HOME_IO_API_URL = 'http://localhost:8080'  # Default to localhost for development
+HOME_IO_API_URL = 'http://192.168.1.112:9797'  # Your Windows machine IP
