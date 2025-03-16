@@ -229,20 +229,15 @@ const AvailableHomesList = ({
 };
 
 function SmartHomeList() {
-  const [ownedHomes, setOwnedHomes] = useState([]);
-  const [joinedHomes, setJoinedHomes] = useState([]);
-  const [availableHomes, setAvailableHomes] = useState([]);
-  const [error, setError] = useState("");
-  const [homeName, setHomeName] = useState("");
-  const [joinPassword, setJoinPassword] = useState("");
-  const [isOwnedExpanded, setIsOwnedExpanded] = useState(false);
-  const [isJoinedHomesExpanded, setIsJoinedHomesExpanded] = useState(false);
-  const [isAvailableExpanded, setIsAvailableExpanded] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const [homeWithPasswordOpen, setHomeWithPasswordOpen] = useState(null);
-  
-  const userId = localStorage.getItem("userId");
-  const navigate = useNavigate();
+    const [smartHomes, setSmartHomes] = useState([]);
+    const [availableHomes, setAvailableHomes] = useState([]);
+    const [error, setError] = useState("");
+    const [homeName, setHomeName] = useState("");
+    const [isOwnedExpanded, setIsOwnedExpanded] = useState(false);
+    const [isJoinedExpanded, setIsJoinedExpanded] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
+    // const userId = localStorage.getItem("userId");
+    // const navigate = useNavigate();
 
   useEffect(() => {
     fetchSmartHomes();
@@ -292,21 +287,26 @@ function SmartHomeList() {
     }
   };
 
-  // This function will be called when the password is submitted
-  const handleJoinHomeWithPassword = async (homeId, password) => {
-    try {
-      await api.post(`/smarthomes/${homeId}/join/`, {
-        join_password: password
-      });
-      
-      // Refresh both lists after successful join
-      await fetchSmartHomes();
-      await fetchAvailableHomes();
-    } catch (err) {
-      console.error("Error joining smart home:", err);
-      throw err; // Re-throw to be handled by the dropdown
-    }
-  };
+    const handleJoinHome = async (homeId) => {
+        try {
+            await api.post(`/smarthomes/${homeId}/join/`);
+            fetchSmartHomes();
+            fetchAvailableHomes();
+        } catch (err) {
+            setError("Error joining smart home");
+        }
+    };
+
+    // const handleLeaveHome = async (homeId) => {
+    //     try {
+    //         await api.post(`/smarthomes/${homeId}/leave/`);
+    //         fetchSmartHomes();
+    //         fetchAvailableHomes();
+    //     } catch (err) {
+    //         setError("Error leaving smart home");
+    //     }
+    // };
+
 
   return (
     <div className="dashboard-container">

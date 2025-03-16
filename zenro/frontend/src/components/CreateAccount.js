@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import api from "../api";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function CreateAccount() {
     // State variables to store user input and feedback messages
@@ -9,7 +9,11 @@ function CreateAccount() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const navigate = useNavigate();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [birthdate, setBirthdate] = useState("");
+    const [gender, setGender] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
 
     // handleSubmit posts new user details to create an account
     const handleSubmit = async (e) => {
@@ -27,9 +31,16 @@ function CreateAccount() {
             console.log("Account Created Successfully:", response.data);
             // On success, set a success message to be displayed to the user
             setSuccess("Account created successfully!");
+            
+            // Logs the user in automatically
+            const loginResponse = await api.post("/token/", { firstName, lastName, username, birthdate, gender, email, phoneNumber, password});
+            console.log("Login Successful:", loginResponse.data);
+            // Tokens are stored in local storage
+            localStorage.setItem("accessToken", response.data.access);
+            localStorage.setItem("userId", response.data.userId);
             // After a timeout of 2 seconds, navigate to the login page
             setTimeout(() => {
-                navigate("/");
+                window.location.href = "/smart-homes";
             }, 2000);
         } catch (error) {
             console.error("Account Creation Failed:", error);
@@ -47,58 +58,109 @@ function CreateAccount() {
 
     return (
         <div className="login-container">
-            <div className="login-card">
-                <div className="login-header">
-                    <h1 className="login-title">Create Account</h1>
-                    <p className="login-subtitle">Please enter your details</p>
-                </div>
+            <div className="login-content">
+                <p className="login-title">Create Account</p>
                 {/* Display success message if account creation is successful */}
                 {success && <p className="error">{success}</p>}
                 <form className="login-form" onSubmit={handleSubmit}>
-                    <div className="input-group">
+
+                    {/* Username */}
+                    <div className="input-group-long">
                         <input
                             type="text"
-                            className="login-input"
                             placeholder="Username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
                         />
                     </div>
-                    <div className="input-group">
+
+                    {/* First name and DOB */}
+                    <div className="input-group-short">
                         <input
-                            type="email"
-                            className="login-input"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                            placeholder="First name"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="date"
+                            placeholder="Date of Birth"
+                            value={birthdate}
+                            onChange={(e) => setBirthdate(e.target.value)}
                             required
                         />
                     </div>
-                    <div className="input-group">
+
+                    {/* Last name and gender */}
+                    <div className="input-group-short">
+                        <input
+                            type="text"
+                            placeholder="Last name"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            required
+                        />
+                        <select 
+                            value={gender} 
+                            onChange={(e) => setGender(e.target.value)} 
+                            required
+                        >
+                            <option value="m">Male</option>
+                            <option value="f">Female</option>
+                            <option value="0" selected>Rather not say</option>
+                        </select>
+                        </div>
+                        
+                        {/* Email */}
+                        <div className="input-group-long">
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                    </div>
+
+                    {/* Phone number */}
+                    <div className="input-group-long">
+                    <input
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        required
+                    />
+                    </div>
+
+                    {/* Password */}
+                    <div className="input-group-long">
                         <input
                             type="password"
-                            className="login-input"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
+
                     <button className="login-button" type="submit">
                         <span>Create Account</span>
                     </button>
                     {/* Display error message if account creation fails */}
                     {error && <p className="error">{error}</p>}
-                </form>
-                <div className="login-footer">
-                    <div className="signup-prompt">
-                        Already have an account? <Link to="/login" className="signup-link">Log in</Link>
+
+                    <div className="login-footer">
+                        <div className="signup-prompt">
+                            Already have an account? <Link to="/login" className="signup-link"> Log in </Link>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </form>
+            </div>   
         </div>
-    );
+);
 }
 
 export default CreateAccount;

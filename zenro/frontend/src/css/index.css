@@ -1,30 +1,93 @@
 /* Base styles */
 body {
-  background-color: #ffffff;
-  color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BC583B);
+  color: whitesmoke;
+  font-family: -apple-system, BlinkMacSystemFont ,"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
 
 /* Layout containers */
 .login-container {
+  border-radius: 15%;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
-  background-color: #ffffff;
+
+ 
+  padding: 1rem;
+  min-width: max-content;
+  min-height: max-content;
+  width: 45vw;
+  height: 80vh;
+  margin: auto;
+
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 10%) 0%, rgba(153, 153, 153, 10%));
+  backdrop-filter: blur(20px);
+  border-style: solid;
+  border-width: 1px;
+  border-color: ivory;
+  -webkit-border-color: linear-gradient(to bottom,rgba(255, 254, 253, 49%) #F8C3A5 #BF6D3D);
+
+
+}
+
+/* includes title and the login-form */
+.login-content {
+  overflow-y: auto;
+  border-radius: 15%;
+  
+  width: 45vw;
+  height: 80vh;
+  padding: 0.5rem;
+}
+
+/* refers to the whole form from the first input to the footer */
+.login-form {
+  display: grid;
+  grid-template-columns: 1fr; /* Ensures it takes full width */
+  gap: 10px;
+  align-items: center;
+  margin: 0 auto; 
+  width: 85%;
+}
+
+/* inclues all input type */
+.login-form input, select, button {
+  width: 100%;
+  padding: 0.75rem 1rem; 
+  border: 1.5px solid #fed7aa;
+  border-radius: 1rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 80%);
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  background-color: #FFF6E7;
+} 
+
+.login-form input::placeholder, .login-form select::placeholder {
+  color: rgba(0, 0, 0, 31%);
+}
+
+.login-form input:focus, .login-form select:focus {
+  outline: none;
+  color: #000000;
+  border-color: #ea580c;
+}
+
+/* input fields that will be on the same line:- firstName and DOB, lastName and gender */
+.input-group-short {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   width: 100%;
 }
 
-.login-card {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 1rem;
-  padding: 2.5rem;
+/* block level input fields:- username, email, phoneNumber, password */
+.input-group-long {
+  display: block;
   width: 100%;
-  max-width: 800px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .login-header {
@@ -32,61 +95,34 @@ body {
   margin-bottom: 2rem;
 }
 
+/* refers to "Create Account" */
 .login-title {
-  color: #ea580c;
-  font-size: 2.5rem;
+  display:block;
+  color: #FFFFFF;
+  text-shadow: 2px 2px #9ca3af;
+  font-size: 2.5em;
   font-weight: 700;
-  margin-bottom: 0.5rem;
-}
+  padding-top: 2rem;
+  padding-left: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
 
-.login-subtitle {
-  color: #9ca3af;
-  font-size: 0.875rem;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 2rem;
-}
-
-.input-group {
-  position: relative;
-  width: 80%;
-  max-width: 350px;
-}
-
-.login-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  /* Adjust padding */
-  border: 2px solid #fed7aa;
-  border-radius: 1rem;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.login-input:focus {
-  outline: none;
-  border-color: #ea580c;
 }
 
 .login-button {
   width: 80%;
   max-width: 300px;
-  background-color: #ea580c;
-  color: white;
-  border: none;
+  background-color: rgba(255, 246, 231, 51%);
+  border-color: linear-gradient(to bottom,rgb(255, 255, 255), #FFD7B1);
   border-radius: 0.5rem;
+  color: #FFFFFF;
   padding: 0.75rem 1.5rem;
+  margin-top: 2rem;
+  margin: 2rem auto;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,13 +130,19 @@ body {
 }
 
 .login-button:hover {
-  background-color: #c2410c;
+  background-color: rgba(255, 246, 231, 51%);
+  color: #f8f8f8;
+  text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2), 0px 0px 20px rgba(255, 213, 200, 0.476);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2), 0px 0px 20px rgba(255, 213, 200, 0.476);
+  border-color: linear-gradient(to bottom, rgb(255, 255, 255), rgb(234, 88, 12));
+  transform: translateY(-3px);
 }
 
+/* 
 .button-icon {
   width: 1.25rem;
   height: 1.25rem;
-}
+} */
 
 .login-footer {
   display: flex;
@@ -110,6 +152,8 @@ body {
   text-align: center;
   width: 60%;
   max-width: 250px;
+  margin-left: auto;
+  margin-right: auto;
   margin-left: auto;
   margin-right: auto;
 }
@@ -125,15 +169,15 @@ body {
 .signup-prompt {
   margin-top: 1.5rem;
   font-size: 1rem;
-  color: #6b7280;
+  color: rgba(0, 0, 0, 31%);
   width: 100%;
   text-align: center;
 }
 
 .signup-link {
-  color: #ea580c;
-  text-decoration: none;
+  color: #FFFFFF;
   font-weight: 600;
+  margin-left: 5px;
 }
 
 /* Responsive adjustments */
@@ -156,10 +200,10 @@ body {
 
 /* Link styles */
 a {
-  color: #63b3ed;
+  color: #FFD700;
   text-decoration: none;
 }
 
 a:hover {
-  color: #90cdf4;
+  color: #ffffff;
 }
