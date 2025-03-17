@@ -6,56 +6,122 @@ from .models import (
     User, SmartHome, SupportedDevice, Device, Room, DeviceLog1Min, 
     DeviceLogDaily, DeviceLogMonthly, RoomLog1Min, RoomLogDaily, 
     RoomLogMonthly, HomeIORoom, EnergyGeneration1Min, EnergyGenerationDaily, 
-    EnergyGenerationMonthly
+    EnergyGenerationMonthly, UserProfile
 )
 
-# Serializer for the User model
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'user', 'date_of_birth', 'gender', 'phone_number']
+        read_only_fields = ['user']
+
+# Enhanced UserSerializer to handle nested profile updates
 class UserSerializer(serializers.ModelSerializer):
-    # The 'password' field is write-only for security.
-    password = serializers.CharField(write_only=True)
+    # Make profile data writable
+    profile = UserProfileSerializer(required=False)
+    password = serializers.CharField(write_only=True, required=False)
     
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password']
+        fields = ['id', 'username', 'email', 'password', 'profile', 'first_name', 'last_name', 'date_joined', 'last_login']
         extra_kwargs = {
             'password': {'write_only': True},
-            'id': {'read_only': True}
+            'id': {'read_only': True},
+            'date_joined': {'read_only': True},
+            'last_login': {'read_only': True}
         }
     
     def create(self, validated_data):
-        # Create a new user with the provided validated data
+        # Extract profile data if present
+        profile_data = validated_data.pop('profile', None)
+        
+        # Create the user
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
+            email=validated_data.get('email', ''),
+            password=validated_data['password'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', '')
         )
+        
+        # If profile data was provided, update the auto-created profile
+        if profile_data:
+            UserProfile.objects.filter(user=user).update(**profile_data)
+            
         return user
 
     def update(self, instance, validated_data):
-        # Update the user instance with the provided validated data
+        # Extract and handle profile data if present
+        profile_data = validated_data.pop('profile', None)
+        
+        # Update user fields
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        
+        # Update password if provided
         password = validated_data.get('password', None)
         if password:
-            # If a new password is provided, set it for the user instance
             instance.set_password(password)
+        
         instance.save()
+        
+        # Update profile if data was provided
+        if profile_data and hasattr(instance, 'profile'):
+            profile = instance.profile
+            for attr, value in profile_data.items():
+                setattr(profile, attr, value)
+            profile.save()
+            
         return instance
 
-# Serializer for the SmartHome model
+# Enhanced SmartHomeSerializer to validate members
 class SmartHomeSerializer(serializers.ModelSerializer):
     is_creator = serializers.SerializerMethodField()
+    creator_name = serializers.ReadOnlyField(source='creator.username')
+    member_count = serializers.SerializerMethodField()
     
     class Meta:
         model = SmartHome
-        fields = ['id', 'name', 'creator', 'members', 'created_at', 'is_creator']
-        read_only_fields = ['creator']
+        fields = ['id', 'name', 'creator', 'creator_name', 'members', 'created_at', 'updated_at', 'is_creator', 'member_count']
+        read_only_fields = ['creator', 'created_at', 'updated_at']
     
     def get_is_creator(self, obj):
         request = self.context.get('request')
         return request and request.user == obj.creator
 
+    def get_member_count(self, obj):
+        return obj.members.count()
+
+    def validate_members(self, value):
+        """
+        Check that the creator is not in the members list
+        """
+        request = self.context.get('request')
+        
+        # For create operations, the creator will be the current user
+        if self.instance is None and request:
+            creator = request.user
+            if creator in value:
+                raise serializers.ValidationError("The creator cannot be added as a member")
+        
+        # For update operations, check against the existing creator
+        elif self.instance:
+            creator = self.instance.creator
+            if creator in value:
+                raise serializers.ValidationError("The creator cannot be added as a member")
+                
+        return value
+        
     def create(self, validated_data):
+        # Ensure members doesn't contain the creator
+        if 'members' in validated_data:
+            members = validated_data.get('members', [])
+            creator = self.context['request'].user
+            if creator in members:
+                members.remove(creator)
+            
         # Set creator to current user
         validated_data['creator'] = self.context['request'].user
         return super().create(validated_data)
@@ -103,10 +169,11 @@ class RoomSerializer(serializers.ModelSerializer):
     devices = DeviceSerializer(many=True, read_only=True)
     daily_usage = serializers.SerializerMethodField()
     home_io_room_name = serializers.CharField(source='home_io_room.name', read_only=True)
+    smart_home_name = serializers.CharField(source='smart_home.name', read_only=True)  # Add this line
 
     class Meta:
         model = Room
-        fields = ['id', 'name', 'smart_home', 'devices', 'daily_usage', 
+        fields = ['id', 'name', 'smart_home', 'smart_home_name', 'devices', 'daily_usage', 
                  'is_unlocked', 'home_io_room', 'home_io_room_name']
 
     def get_daily_usage(self, obj):

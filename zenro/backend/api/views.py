@@ -12,7 +12,8 @@ from .models import (
     User, SmartHome, SupportedDevice, Device,  
     DeviceLogDaily, DeviceLogMonthly, RoomLogDaily, 
     RoomLogMonthly, Room, HomeIORoom, RoomLog1Min, DeviceLog1Min,
-    EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly
+    EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly,
+    UserProfile
 )
 from .serializers import (
     DeviceLogMonthlySerializer, UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
@@ -20,18 +21,44 @@ from .serializers import (
     HomeIOControlSerializer, UnlockRoomSerializer, AddDeviceSerializer, DeviceLog1MinSerializer, 
     RoomLog1MinSerializer, HomeIORoomSerializer, RoomLogMonthlySerializer, 
     EnergyGeneration1MinSerializer, EnergyGenerationDailySerializer, 
-    EnergyGenerationMonthlySerializer, DeviceControlSerializer
+    EnergyGenerationMonthlySerializer, DeviceControlSerializer,
+    UserProfileSerializer
 )
 from .home_io.home_io_services import HomeIOService
 
 class UserViewSet(viewsets.ModelViewSet):
     """
-    Handles CRUD operations for User model.
+    Handles CRUD operations for User model including their profile.
     """
-    # Allow any user (including anonymous) to access UserViewSet.
-    permission_classes = [AllowAny]
-    queryset = User.objects.all()
+    permission_classes = [AllowAny]  # Consider restricting this in production
+    queryset = User.objects.all().select_related('profile')
     serializer_class = UserSerializer
+    
+    # No need to override create since the serializer now handles profile creation
+    
+    @action(detail=True, methods=['GET', 'PUT', 'PATCH'])
+    def profile(self, request, pk=None):
+        """
+        Get or update the user's profile directly.
+        This provides a convenient endpoint for updating just the profile.
+        """
+        user = self.get_object()
+        
+        if request.method == 'GET':
+            serializer = UserProfileSerializer(user.profile)
+            return Response(serializer.data)
+            
+        if hasattr(user, 'profile'):
+            serializer = UserProfileSerializer(user.profile, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(
+                {"detail": "Profile not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 class SmartHomeViewSet(viewsets.ModelViewSet):
     """
@@ -56,6 +83,14 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def join(self, request, pk=None):
         smart_home = self.get_object()
+        
+        # Prevent creator from joining as a member
+        if request.user == smart_home.creator:
+            return Response(
+                {'error': 'You are already the creator of this home'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
         smart_home.members.add(request.user)
         return Response({'status': 'joined'})
 
@@ -789,4 +824,61 @@ def dashboard_summary(request):
     except Exception as e:
         print(f"Error in dashboard_summary: {e}")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows user profiles to be viewed or edited.
+    """
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    
+    def get_queryset(self):
+        """
+        Filter to return only the current user's profile or profiles they have permission to view.
+        """
+        if self.request.user.is_superuser:
+            return UserProfile.objects.all()
+        
+        # Regular users can only access their own profile
+        return UserProfile.objects.filter(user=self.request.user)
+    
+    def perform_create(self, serializer):
+        """
+        Associate the profile with the current user when creating.
+        """
+        serializer.save(user=self.request.user)
+        
+    def update(self, request, *args, **kwargs):
+        """
+        Ensure users can only update their own profile unless they're superusers
+        """
+        profile = self.get_object()
+        if profile.user != request.user and not request.user.is_superuser:
+            return Response(
+                {"detail": "You don't have permission to edit this profile"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        return super().update(request, *args, **kwargs)
+        
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Ensure users can only update their own profile unless they're superusers
+        """
+        profile = self.get_object()
+        if profile.user != request.user and not request.user.is_superuser:
+            return Response(
+                {"detail": "You don't have permission to edit this profile"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        return super().partial_update(request, *args, **kwargs)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def current_user_info(request):
+    """
+    Endpoint to retrieve current user information including profile data
+    """
+    user = request.user
+    serializer = UserSerializer(user, context={'request': request})
+    return Response(serializer.data)
 

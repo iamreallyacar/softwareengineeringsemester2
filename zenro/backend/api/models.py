@@ -210,3 +210,17 @@ class EnergyGenerationMonthly(models.Model):
     month = models.IntegerField()
     year = models.IntegerField()
     total_energy_generation = models.FloatField(default=0.0)
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    date_of_birth = models.DateField(null=True, default=None)
+    gender = models.CharField(
+        max_length=10, 
+        choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')], 
+        null=True,
+        default=None
+    )
+    phone_number = models.CharField(max_length=15, null=True, default=None)
+    
+    def __str__(self):
+        return f"Profile for {self.user.username}"

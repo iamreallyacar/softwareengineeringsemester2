@@ -11,7 +11,7 @@ from .views import (
     DeviceLog1MinViewSet, RoomLog1MinViewSet, dashboard_summary,
     DeviceLogMonthlyViewSet, RoomLogMonthlyViewSet, HomeIORoomViewSet, DeviceControlView,
     EnergyGeneration1MinViewSet, EnergyGenerationDailyViewSet, EnergyGenerationMonthlyViewSet,
-    energy_summary
+    energy_summary, UserProfileViewSet, current_user_info  # Add current_user_info here
 )
 
 # Create a router and register our viewsets with it
@@ -19,6 +19,7 @@ router = DefaultRouter()
 
 # Core data models (full CRUD - GET/POST/PUT/PATCH/DELETE)
 router.register(r'users', UserViewSet)                 
+router.register(r'user-profiles', UserProfileViewSet)
 router.register(r'smarthomes', SmartHomeViewSet)       
 router.register(r'devices', DeviceViewSet)
 router.register(r'rooms', RoomViewSet)
@@ -43,6 +44,7 @@ urlpatterns = [
     
     # Authentication endpoints
     path('register/', register_user, name='register'),
+    path('user/current/', current_user_info, name='current-user-info'),  # Add this line
     
     # Dashboard and analytics
     path('dashboard/', dashboard_summary, name='dashboard'),

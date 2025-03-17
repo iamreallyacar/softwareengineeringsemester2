@@ -5,7 +5,8 @@ from django.contrib import admin
 from .models import (
     SmartHome, HomeIORoom, SupportedDevice, Room, Device,
     DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly,
-    RoomLog1Min, RoomLogDaily, RoomLogMonthly, EnergyGenerationDaily, EnergyGenerationMonthly, EnergyGeneration1Min
+    RoomLog1Min, RoomLogDaily, RoomLogMonthly, EnergyGenerationDaily, EnergyGenerationMonthly, EnergyGeneration1Min,
+    UserProfile
 )
 
 # Create a custom form for Device
@@ -22,6 +23,10 @@ class DeviceAdminForm(forms.ModelForm):
 class DeviceAdmin(admin.ModelAdmin):
     form = DeviceAdminForm
 
+# Created a custom admin class for UserProfile
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'gender', 'phone_number')
+
 # Register your models with the admin site
 admin.site.register(SmartHome)
 admin.site.register(HomeIORoom)
@@ -37,3 +42,4 @@ admin.site.register(RoomLogMonthly)
 admin.site.register(EnergyGeneration1Min)
 admin.site.register(EnergyGenerationDaily)
 admin.site.register(EnergyGenerationMonthly)
+admin.site.register(UserProfile, UserProfileAdmin)

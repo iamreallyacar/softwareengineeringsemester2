@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from api.models import SmartHome, HomeIORoom, SupportedDevice, Room, Device
+from api.models import SmartHome, HomeIORoom, SupportedDevice, Room, Device, UserProfile, User
 
 @receiver(post_save, sender=SmartHome)
 def create_home_layout(sender, instance, created, **kwargs):
@@ -30,3 +30,12 @@ def create_home_layout(sender, instance, created, **kwargs):
                     supported_device=s_device,
                     is_unlocked=False          # Initially locked
                 )
+
+# Add signal to create UserProfile automatically when a User is created
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """
+    When a new User is created, this signal handler creates a UserProfile for them.
+    """
+    if created:
+        UserProfile.objects.create(user=instance)
