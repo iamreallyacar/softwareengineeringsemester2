@@ -24,6 +24,11 @@ function Sidebar() {
       {/* Sidebar */}
       <div className={`sidebar ${isOpen ? "active" : ""}`}>
         <ul>
+          <li style={{ fontSize: "35px" }}>
+            <Link to="/" onClick={closeSidebar}>
+              <i class="fa-solid fa-circle-user"></i>
+            </Link>
+          </li>
           <li>
             <Link to="/" onClick={closeSidebar}>Home</Link>
           </li>

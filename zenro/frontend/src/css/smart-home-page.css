@@ -243,12 +243,18 @@ html, body {
 }
 
 .shp-rooms-list-container {
-    width: 100%;
-    height: 80%;
+    width: 100%; /* Full width of the container */
+    max-height: 300px; /* Set a static maximum height */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    padding: 10px; /* Add padding for spacing */
+    box-sizing: border-box; /* Include padding in width/height calculations */
+    background-color: peachpuff; /* Optional: Background color for the container */
+    border-radius: 10px; /* Optional: Rounded corners */
 }
 
 .shp-rooms-list {
@@ -287,15 +293,19 @@ html, body {
 }
 
 .shp-rooms ul li {
-    padding-left: 30px;
+    display: flex; /* Use Flexbox for alignment */
+    align-items: center; /* Vertically center the icon and text */
+    padding-left: 10px; /* Adjust padding for spacing */
     width: 95%;
-    height: 30%;
+    height: 50px; /* Set a fixed height for consistency */
     font-weight: bold;
-    align-content: center;
     color: #5D252D;
     border-radius: 20px;
     position: relative;
     transition: background-color 0.2s ease;
+    background-color: peachpuff; /* Optional: Background color */
+    margin-bottom: 5px; /* Add spacing between list items */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .shp-rooms ul li:after {
@@ -309,14 +319,35 @@ html, body {
     background-color: white;
 }
 
+/* Add spacing between the icon and the text */
+.shp-room-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px; /* Fixed width for the icon container */
+    height: 40px; /* Fixed height for the icon container */
+    background-color: #CB5A55; /* Background color for the icon */
+    border-radius: 50%; /* Make it a circle */
+    margin-right: 10px; /* Add spacing between the icon and the text */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Style for the icon inside the circle */
+.shp-room-icon i {
+    color: white; /* White icon color */
+    font-size: 18px; /* Adjust icon size */
+}
+
+/* Style for the room link text */
 .shp-rooms-list-links {
-    padding-left: 30px;
-    width: 100%;
-    height: 20%;
-    color: #5D252D;
-    gap: 10px;
-    border-radius: 20px;
-    font-weight: bold;
+    text-decoration: none; /* Remove underline */
+    color: #5D252D; /* Text color */
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold; /* Make the text bold */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for long text */
+    flex: 1; /* Allow the text to take up remaining space */
 }
 
 .shp-add-room-button {

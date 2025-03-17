@@ -27,9 +27,13 @@ function SmartHomePage() {
   // boolean to check if the appliances is turning on or off, in appliances container
   const [isOn, setIsOn] = useState(false);
 
+  // State to store the list of added rooms
+  const [addedRooms, setAddedRooms] = useState([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [newRoomName, setNewRoomName] = useState(""); // State for the new room name
   const [homeIORooms, setHomeIORooms] = useState([]);
+  const [selectedHomeIORoom, setSelectedHomeIORoom] = useState(null);
 
   const handleRoomSelectCCTV = (room) => {
     setSelectedRoomCCTV(room);
@@ -41,45 +45,66 @@ function SmartHomePage() {
     setIsOpenLR(false);
   };
   
+  // Function to handle adding a room
   const handleAddRoom = async () => {
-    if (!newRoomName) return;
-    await api.post(`/rooms/`, {
-      name: newRoomName,
-      smart_home: smartHomeId,
-    });
-    setNewRoomName(""); // Clear the input field
-    setIsModalOpen(false); // Close the modal after adding the room
-    // Refresh the room list
-    api.get(`/rooms/?smart_home=${smartHomeId}`).then((res) => {
-      setRooms(res.data);
-    });
+    if (!selectedHomeIORoom || !newRoomName) {
+      alert("Please select a room and enter a name.");
+      return;
+    }
+  
+    const payload = {
+      home_io_room: selectedHomeIORoom, // The ID of the HomeIORoom
+      smart_home: smartHomeId, // The ID of the current smart home
+      name: newRoomName, // The custom name of the room
+    };
+  
+    console.log("Sending payload:", payload); // Log the payload
+  
+    try {
+      // Send the POST request to add the room
+      const response = await api.post(`/rooms/`, payload);
+  
+      // Update the local state with the newly added room
+      setAddedRooms((prevRooms) => [...prevRooms, response.data]);
+  
+      // Clear the input and close the modal
+      setSelectedHomeIORoom(null);
+      setNewRoomName("");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Failed to add room:", error.response?.data || error.message);
+      alert("Failed to add room. Please try again.");
+    }
   };
 
   useEffect(() => {
     // Fetch rooms for this smart home
-    api.get(`/rooms/?smart_home=${smartHomeId}`).then((res) => {
-      setRooms(res.data);
-    });
+    api.get(`/rooms/?smart_home=${smartHomeId}`)
+      .then((res) => {
+        setAddedRooms(res.data); // Populate the addedRooms state with the fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching rooms:", error);
+      });
+  
     // Fetch supported devices
-    api.get("/supporteddevices/").then((res) => {
-      setSupportedDevices(res.data);
-    });
+    api.get("/supporteddevices/")
+      .then((res) => {
+        setSupportedDevices(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching supported devices:", error);
+      });
+  
     // Fetch homeio-rooms
-    api.get("/homeio-rooms/").then((res) => {
-      setHomeIORooms(res.data); // Store the fetched homeio-rooms data
-    }).catch((error) => {
-      console.error("Error fetching homeio-rooms:", error);
-    });
+    api.get("/homeio-rooms/")
+      .then((res) => {
+        setHomeIORooms(res.data); // Store the fetched homeio-rooms data
+      })
+      .catch((error) => {
+        console.error("Error fetching homeio-rooms:", error);
+      });
   }, [smartHomeId]);
-
-  const handleAddDevice = async () => {
-    if (!selectedRoomId || !selectedSupportedDevice || !deviceName) return;
-    await api.post(`/rooms/${selectedRoomId}/add_device/`, {
-      name: deviceName,
-      supported_device_id: selectedSupportedDevice,
-    });
-    setDeviceName("");
-  };
 
   return (
     <div className="smart-home-page">
@@ -146,14 +171,13 @@ function SmartHomePage() {
           <h1>Rooms</h1>
           <hr className="shp-rooms-divider"/>
 
-          <div className="shp-rooms-list-container">
+          {/* <div className="shp-rooms-list-container">
           <ul className="shp-rooms-list">
             {rooms.map((room) => (
               <li key={room.id}>
                 <Link to={`/room/${room.name}/${smartHomeId}`}>{room.name}</Link>
               </li>
             ))}
-            {/* The following fixed links should also use the dynamic smartHomeId */}
             <li>
             <i class="fa-solid fa-couch"></i>
               <Link to={`/room/living-room/${smartHomeId}`} className="shp-rooms-list-links">Living Room</Link>
@@ -179,7 +203,30 @@ function SmartHomePage() {
               <Link to={`/room/backyard/${smartHomeId}`} className="shp-rooms-list-links">Backyard</Link>
             </li>
           </ul>
-          </div>
+          </div> */}
+
+            <div className="shp-rooms-list-container">
+              <ul className="shp-rooms-list">
+                {addedRooms.length === 0 ? (
+                  <h4>No rooms added yet. Use the "Add Room" button to add a room.</h4>
+                ) : (
+                  addedRooms.map((room) => (
+                    <li key={room.id}>
+                      <div className="shp-room-icon">
+                        <i className="fa-solid fa-couch"></i>
+                      </div>
+                      <Link
+                        to={`/room/${room.id}/${smartHomeId}`}
+                        className="shp-rooms-list-links"
+                      >
+                        {/* {room.id} is to check the room's id */}
+                        {room.name} (ID: {room.id})
+                      </Link>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
 
           <button
             className="shp-add-room-button"
@@ -196,17 +243,24 @@ function SmartHomePage() {
             <div className="modal">
               <h2>Add New Room</h2>
               <select
-                value={newRoomName}
-                onChange={(e) => setNewRoomName(e.target.value)}
+                value={selectedHomeIORoom}
+                onChange={(e) => setSelectedHomeIORoom(e.target.value)}
                 className="room-dropdown"
               >
                 <option value="">Select a Room</option>
                 {homeIORooms.map((room) => (
-                  <option key={room.id} value={room.name}>
+                  <option key={room.id} value={room.id}>
                     {room.name}
                   </option>
                 ))}
               </select>
+              <input
+                type="text"
+                placeholder="Enter Custom Room Name"
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+                className="room-name-input"
+              />
               <div className="modal-buttons">
                 <button onClick={handleAddRoom}>Add Room</button>
                 <button onClick={() => setIsModalOpen(false)}>Cancel</button>
