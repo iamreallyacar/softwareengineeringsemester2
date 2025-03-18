@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import NavigationBar from "./NavigationBar.js";
+import Sidebar from "./Sidebar";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
 import { Chart } from 'chart.js/auto';
@@ -691,7 +691,7 @@ function SmartHomePage() {
 
   return (
     <div className="smart-home-page">
-      <NavigationBar />
+      <Sidebar />
       <div className="shp-information">
         {/* Simple smart home name header - just text, no card */}
         {smartHome && (
@@ -821,52 +821,6 @@ function SmartHomePage() {
           <h1>Rooms</h1>
           <hr className="shp-rooms-divider" />
 
-          {/* Unlocked rooms selection */}
-          <div className="shp-rooms-list-container">
-          <ul className="shp-rooms-list">
-            {rooms.map((room) => (
-              <li key={room.id} style={{ display: "flex", alignItems: "center" }}>
-              <div className="shp-room-icon" style={{ marginRight: "10px" }}>
-                <i className="fa-solid fa-couch"></i>
-              </div>
-              {/* </li><li key={room.id}> */}
-                <Link 
-                to={`/room/${room.id}/${smartHomeId}`}
-                className="shp-rooms-list-links"
-                style={{ textDecoration: "none", color: "#333", fontWeight: "bold" }}
-                >
-                  {room.name}
-                </Link>
-              </li>
-            ))}
-            {/* <li>
-            <i class="fa-solid fa-couch"></i>
-              <Link to={`/room/living-room/${smartHomeId}`} className="shp-rooms-list-links">Living Room</Link>
-            </li>
-            <li>
-            <i class='fas fa-hamburger'></i>
-              <Link to={`/room/kitchen/${smartHomeId}`} className="shp-rooms-list-links">Kitchen</Link>
-            </li>
-            <li>
-            <i class="fa-solid fa-bed"></i>
-              <Link to={`/room/bedroom/${smartHomeId}`} className="shp-rooms-list-links">Bedroom</Link>
-            </li>
-            <li>
-            <i class="fa-solid fa-shower"></i>
-              <Link to={`/room/bathroom/${smartHomeId}`} className="shp-rooms-list-links">Bathroom</Link>
-            </li>
-            <li>
-            <i class="fa-solid fa-warehouse"></i>
-              <Link to={`/room/garage/${smartHomeId}`} className="shp-rooms-list-links">Garage</Link>
-            </li>
-            <li>
-            <i class="fa-solid fa-tree"></i>
-              <Link to={`/room/backyard/${smartHomeId}`} className="shp-rooms-list-links">Backyard</Link>
-            </li> */}
-          </ul>
-          </div> 
-
-          /* Locked rooms selection */
           <div className="shp-rooms-list-container">
             <ul className="shp-rooms-list">
               {addedRooms.length === 0 ? (

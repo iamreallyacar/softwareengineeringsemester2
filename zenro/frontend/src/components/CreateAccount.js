@@ -30,25 +30,27 @@ function CreateAccount() {
         try {
             // Send a POST request to the API to create a new account
             const response = await api.post("/register/", {
-                username: username,
-                email: email,
-                password: password,
+                username,
+                email,
+                password,
                 first_name,
                 last_name,
-                birthdate,
-                gender,
-                phone_number,
+                profile: {
+                    date_of_birth: birthdate,
+                    gender,
+                    phone_number,
+                }
             });
             console.log("Account Created Successfully:", response.data);
             // On success, set a success message to be displayed to the user
             setSuccess("Account created successfully!");
             
             // Logs the user in automatically
-            const loginResponse = await api.post("/token/", { first_name, last_name, username, birthdate, gender, email, phone_number, password});
-            console.log("Login Successful:", loginResponse.data);
+            const loginResponse = await api.post("/token/", {username, password});
+            console.log("Login Successful:", response.data);
             // Tokens are stored in local storage
-            localStorage.setItem("accessToken", loginResponse.data.access);
-            localStorage.setItem("userId", loginResponse.data.userId);
+            localStorage.setItem("accessToken", response.data.access);
+            localStorage.setItem("userId", response.data.userId);
             // After a timeout of 2 seconds, navigate to smart homes page
             setTimeout(() => {
                 setLoading(false);
@@ -58,14 +60,19 @@ function CreateAccount() {
             console.error("Account Creation Failed:", error);
             setLoading(false);
             // Handle errors from the API response
-            if (error.response) {
-                const errorMessage = error.response.data.detail ||
+            if (error.response && error.response.data) {
+                try {
+                    const errorMessage = error.response.data.detail ||
                     Object.values(error.response.data)[0] ||
-                    "Error creating account. Please try again.";
-                setError(errorMessage);
-            } else {
-                setError("Error creating account. Please try again.");
-            }
+                    (typeof error.response.data === "object" 
+                        ? Object.values(error.response.data)[0] 
+                        : "Error creating account. Please try again.");
+                    setError(errorMessage);
+                } catch {
+                    setError("Unexpected error occurred.");
+                }
+                
+            } 
         }
     };
 
@@ -125,10 +132,10 @@ function CreateAccount() {
                                     onChange={(e) => setGender(e.target.value)} 
                                     required
                                 >
-                                    <option value="" disabled selected hidden>Gender</option>
-                                    <option value="m">Male</option>
-                                    <option value="f">Female</option>
-                                    <option value="0">Rather not say</option>
+                                    <option value="" disabled hidden>Gender</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                    <option value="O">Rather not say</option>
                                 </select>
                                 </div>
                                 
