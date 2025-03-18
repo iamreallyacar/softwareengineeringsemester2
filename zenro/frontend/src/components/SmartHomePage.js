@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import NavigationBar from "./NavigationBar.js";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
 import { Chart } from 'chart.js/auto';
@@ -691,7 +691,7 @@ function SmartHomePage() {
 
   return (
     <div className="smart-home-page">
-      <Sidebar />
+      <NavigationBar />
       <div className="shp-information">
         {/* Simple smart home name header - just text, no card */}
         {smartHome && (

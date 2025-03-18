@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingElement from "./LoadingElement.js";
+import Background from "./Background.js";
 
 const Login = ({ setIsAuthenticated }) => {
     const navigate = useNavigate();
@@ -40,37 +41,40 @@ const Login = ({ setIsAuthenticated }) => {
         loading ? (
             <LoadingElement /> // Show loader while fetching data
         ) : (
-            <div className="login-container-circle">
-                <div className="login-content-circle">
-                    <h1 className="login-title-circle">Login</h1>
-                    {error && <p className="error">{error}</p>}
-                    <form className="login-form" onSubmit={handleSubmit}>
-                        <div className="input-group-long">
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="input-group-long">
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
-                        <button className="login-button" type="submit">
-                            <span>Login</span>
-                        </button>
-                    </form>
-                    <div className="login-footer">
-                        <div className="signup-prompt-circle">
-                            Don't have an account? <Link to="/create-account" className="signup-link">Sign up</Link>
+            <div className="login-page">
+                <Background />
+                <div className="login-container-circle">
+                    <div className="login-content-circle">
+                        <h1 className="login-title-circle">Login</h1>
+                        {error && <p className="error">{error}</p>}
+                        <form className="login-form" onSubmit={handleSubmit}>
+                            <div className="input-group-long">
+                                <input
+                                    type="text"
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group-long">
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
+                            <button className="login-button" type="submit">
+                                <span>Login</span>
+                            </button>
+                        </form>
+                        <div className="login-footer">
+                            <div className="signup-prompt-circle">
+                                Don't have an account? <Link to="/create-account" className="signup-link">Sign up</Link>
+                            </div>
                         </div>
                     </div>
                 </div>

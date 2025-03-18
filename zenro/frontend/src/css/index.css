@@ -5,6 +5,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont ,"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   margin: 0;
   padding: 0;
+
 }
 
 /* Layout containers */
@@ -252,4 +253,3 @@ body {
 .error {
   color: #ee5705;
 }
-

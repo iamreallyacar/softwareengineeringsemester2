@@ -1,25 +1,82 @@
-.sidebar {
-    position: fixed;  /* Keeps it fixed on the screen */
-    top: 0;           /* Stick to the top */
-    left: 0;          /* Stick to the left */
-    width: 250px;     /* Adjust width as needed */
-    height: 100vh;    /* Full height of the viewport */
-    background-color: #222; /* Background color */
-    color: white;     /* Text color */
+
+  /* Sidebar Navigation */
+  .sidebar {
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
-}
-
-.sidebar a {
+    justify-content: space-between;
+    width: 120px; /* Fixed sidebar width */
+    height: 100vh;
+    background: linear-gradient(to bottom, #F5C39C, #DD946A, #BC583B);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2), 0px 0px 20px rgba(255, 213, 200, 0.476);
     color: white;
-    text-decoration: none;
-    padding: 15px;
-    display: block;
-    font-size: 18px;
-}
-
-.sidebar a:hover {
-    background-color: #444; /* Hover effect */
-}
-
+    padding: 20px 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+  
+  /* Sidebar Navigation Icons */
+  .sidebar a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .nav-icon {
+    width: 40px; /* Adjust icon size */
+    height: 40px;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .nav-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Sidebar Logo */
+  .sidebar-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    padding: 10px 0;
+  }
+  
+  .sidebar-logo img {
+    max-width: 90%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex-grow: 1; /* Allows the content to take the remaining space */
+    padding: 20px;
+    background-color: #f5f5f5; /* Light background for contrast */
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column; /* Stack elements on smaller screens */
+    }
+  
+    .sidebar {
+      width: 100%;
+      height: auto;
+      flex-direction: row;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+  
+    .nav-icon {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .sidebar-logo {
+      display: none; /* Hide logo in small screens */
+    }
+  }
+  
