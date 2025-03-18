@@ -1,124 +1,134 @@
 .room-text {
-    color: #C14600; 
-    font-weight: bold;
-    display: inline-block;
-    margin: 0;
+  color: #C14600;
+  font-weight: bold;
+  display: inline-block;
+  margin: 0;
 }
 
 .room-text .number {
-    font-size: 36px;
-    font-weight: bold; 
-    margin-right: 5px;
+  font-size: 36px;
+  font-weight: bold;
+  margin-right: 5px;
 }
 
 .room-text-val {
-    color: #C14600; 
-    font-weight: normal;
-    display: inline-block;
-    margin: 0;
-    margin-top: 30px; 
+  color: #C14600;
+  font-weight: normal;
+  display: inline-block;
+  margin: 0;
+  margin-top: 30px;
 }
 
 .room-text-with-line {
-    color: #C14600;
-    font-size: 20px;
-    text-align: left; 
-    margin: 0; 
-    padding-bottom: 10px; 
-    border-bottom: 2px solid #f8e7d4; 
-    text-underline-position: under;
+  color: #C14600;
+  font-size: 20px;
+  text-align: left;
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f8e7d4;
+  text-underline-position: under;
 }
+
 .room-container {
   width: 100%;
 }
 
 .room-content {
   display: flex;
-  align-items: center; /* Align items vertically */
-  justify-content: space-between; /* Space between text and image */
+  align-items: center;
+  /* Align items vertically */
+  justify-content: space-between;
+  /* Space between text and image */
 }
 
 .room-text-container {
   display: flex;
-  flex-direction: column; /* Stack "Brightness" and "50%" vertically */
-  align-items: flex-start; /* Align text to the left */
+  flex-direction: column;
+  /* Stack "Brightness" and "50%" vertically */
+  align-items: flex-start;
+  /* Align text to the left */
 }
 
 .room-appliances-img-container {
-  flex-shrink: 0; /* Prevent image from shrinking */
+  flex-shrink: 0;
+  /* Prevent image from shrinking */
 }
 
 .room-appliances-img {
-  width: 50px; /* Adjust size as needed */
+  width: 50px;
+  /* Adjust size as needed */
   height: auto;
 }
 
 .columns {
-    display: flex;
-    width: 80%;
-    padding-left: 90px;
-    gap: 20px; 
-    overflow: hidden; 
+  display: flex;
+  width: 80%;
+  padding-left: 90px;
+  gap: 20px;
+  overflow: hidden;
 }
 
 .column1 {
-    flex: 2; 
-    /* background-color: #fbdba7; */
-    padding: 20px;
-    border-radius: 10px;
-    overflow: hidden; 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
-    gap: 20px
+  flex: 2;
+  /* background-color: #fbdba7; */
+  padding: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px
 }
 
 .column2 {
-    flex: 1; 
-    /* background-color: #ffe9c5; */
-    padding: 20px;
-    border-radius: 10px;
-    
-    max-height: 500px; 
-    overflow-y: auto; 
-    overflow-x: hidden; 
+  flex: 1;
+  /* background-color: #ffe9c5; */
+  padding: 20px;
+  border-radius: 10px;
+
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .column2::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
+  display: none;
+  /* For Chrome, Safari, and Opera */
 }
 
 .energy-consumption {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start; 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
-    width: 100%; 
-    max-height: 400px; 
-    padding: 40px;
-    margin-top: 20px;
-    margin-left: 0;
-    position: relative;
-    
-    background: linear-gradient(to bottom, #f7cda0, #f3ceb5); /* Peach gradient */
-    border: 2px solid;
-    border-radius: 20px;
-    border-color: white;
+  width: 100%;
+  max-height: 400px;
+  padding: 40px;
+  margin-top: 20px;
+  margin-left: 0;
+  position: relative;
 
-    overflow: hidden; 
-    box-sizing: border-box; 
+  background: linear-gradient(to bottom, #f7cda0, #f3ceb5);
+  /* Peach gradient */
+  border: 2px solid;
+  border-radius: 20px;
+  border-color: white;
 
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15), 
+  overflow: hidden;
+  box-sizing: border-box;
+
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15),
     0px 0px 15px rgba(0, 0, 0, 0.2);
 }
 
 .switch {
   position: absolute;
-  top: 10px; 
+  top: 10px;
   right: 10px;
   display: inline-block;
-  width: 80px; /* Increased width to fit the text */
+  width: 80px;
+  /* Increased width to fit the text */
   height: 25px;
 }
 
@@ -144,7 +154,7 @@
   font-size: 12px;
   font-weight: bold;
   color: white;
-  padding: 0 8px; 
+  padding: 0 8px;
 }
 
 .slider:before {
@@ -160,23 +170,26 @@
 }
 
 .slider:after {
-  content: "OFF ALL"; /* Default text */
+  content: "OFF ALL";
+  /* Default text */
   position: absolute;
   right: 8px;
   color: white;
   font-size: 12px;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #4caf50;
 }
 
-input:checked + .slider:before {
-  transform: translateX(55px); /* Move the circle to the right */
+input:checked+.slider:before {
+  transform: translateX(55px);
+  /* Move the circle to the right */
 }
 
-input:checked + .slider:after {
-  content: "ON ALL"; /* Change text to ON */
+input:checked+.slider:after {
+  content: "ON ALL";
+  /* Change text to ON */
   left: 8px;
   right: auto;
 }
@@ -184,30 +197,30 @@ input:checked + .slider:after {
 
 /* The .room-page styles */
 .room-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    min-height: 100vh; 
-    width: 100vw;
-    margin: 0; 
-    padding: 20px; 
-    background: linear-gradient(to bottom, #DD946A, #BF5E40);
-    background-size: cover;
-    background-position: center; 
-    background-attachment: fixed; 
-    box-sizing: border-box; 
-    position: relative; 
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(to bottom, #DD946A, #BF5E40);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
 }
 
 .page-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-    padding-left: 30vw;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  padding-left: 30vw;
 }
 
 .room-appliances-img-container {

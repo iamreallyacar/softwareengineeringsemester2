@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -8,63 +9,84 @@ html, body {
 /* Responsive styles for smaller screens */
 @media (max-width: 768px) {
     .smart-home-page {
-        flex-direction: column; /* Stack sidebar and main content vertically */
-        align-items: stretch; /* Ensure full width for all elements */
+        flex-direction: column;
+        /* Stack sidebar and main content vertically */
+        align-items: stretch;
+        /* Ensure full width for all elements */
     }
 
     .shp-information {
-        margin-left: 0 !important; /* Force removal of the left margin */
-        width: 100% !important; /* Force full width */
-        height: auto; /* Allow height to adjust based on content */
-        box-sizing: border-box; /* Ensure padding is included in width/height */
+        margin-left: 0 !important;
+        /* Force removal of the left margin */
+        width: 100% !important;
+        /* Force full width */
+        height: auto;
+        /* Allow height to adjust based on content */
+        box-sizing: border-box;
+        /* Ensure padding is included in width/height */
     }
 }
 
 .smart-home-page {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
-	/* padding: 20px; */
-	/* background: linear-gradient(to bottom, #DD946A, #BF5E40); */
+    /* padding: 20px; */
+    /* background: linear-gradient(to bottom, #DD946A, #BF5E40); */
     overflow: hidden;
     width: 100vw;
 }
 
 .shp-information {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping to create rows */
-    justify-content: space-between; /* Add spacing between items */
-    gap: 20px; /* Add spacing between containers */
+    flex-wrap: wrap;
+    /* Allow wrapping to create rows */
+    justify-content: space-between;
+    /* Add spacing between items */
+    gap: 20px;
+    /* Add spacing between containers */
     padding: 30px;
     padding-top: 50px;
-    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40); /* Background gradient */
-    width: calc(100% - 150px); /* Full width minus the sidebar width */
-    height: 100vh; /* Full height of the viewport */
-    margin-left: 150px; /* Match the width of the sidebar */
-    box-sizing: border-box; /* Include padding in width/height calculations */
-    overflow-y: auto; /* Allow scrolling for overflowing content */
+    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+    /* Background gradient */
+    width: calc(100% - 150px);
+    /* Full width minus the sidebar width */
+    height: 100vh;
+    /* Full height of the viewport */
+    margin-left: 150px;
+    /* Match the width of the sidebar */
+    box-sizing: border-box;
+    /* Include padding in width/height calculations */
+    overflow-y: auto;
+    /* Allow scrolling for overflowing content */
     scrollbar-width: none;
 }
+
 /* Individual containers inside shp-information */
-.shp-information > div {
-    flex: 1 1 calc(50% - 20px); /* Take 50% width minus the gap */
-    box-sizing: border-box; /* Include padding and border in width */
+.shp-information>div {
+    flex: 1 1 calc(50% - 20px);
+    /* Take 50% width minus the gap */
+    box-sizing: border-box;
+    /* Include padding and border in width */
 }
 
 /* Ensure responsiveness */
 @media (max-width: 768px) {
-    .shp-information > div {
-        flex: 1 1 100%; /* Full width for smaller screens */
+    .shp-information>div {
+        flex: 1 1 100%;
+        /* Full width for smaller screens */
     }
 }
 
 /* CCTV container */
 .shp-CCTV {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    justify-content: space-between; /* Push .shp-statistics to the bottom */
+    flex-direction: column;
+    /* Stack items vertically */
+    justify-content: space-between;
+    /* Push .shp-statistics to the bottom */
     align-items: flex-start;
     width: 100%;
     height: auto;
@@ -72,7 +94,8 @@ html, body {
     background: #fbdba7;
     border: 3px solid white;
     border-radius: 20px;
-    margin-bottom: 20px; /* Add spacing between containers */
+    margin-bottom: 20px;
+    /* Add spacing between containers */
     box-sizing: border-box;
 }
 
@@ -95,11 +118,16 @@ html, body {
 
 .shp-cctv-statistics {
     display: flex;
-    justify-content: space-between; /* Distribute items evenly across the row */
-    align-items: center; /* Vertically center the items */
-    gap: 20px; /* Add spacing between items */
-    width: 100%; /* Full width of the parent container */
-    margin-top: auto; /* Push the statistics to the bottom of the .shp-CCTV container */
+    justify-content: space-between;
+    /* Distribute items evenly across the row */
+    align-items: center;
+    /* Vertically center the items */
+    gap: 20px;
+    /* Add spacing between items */
+    width: 100%;
+    /* Full width of the parent container */
+    margin-top: auto;
+    /* Push the statistics to the bottom of the .shp-CCTV container */
     padding-top: 10px;
     box-sizing: border-box;
     background: none;
@@ -123,7 +151,7 @@ html, body {
     box-shadow: 0px 3px 3px black;
     background-color: beige;
     color: black;
-    font-weight: bold;      
+    font-weight: bold;
     font-size: 10px;
     width: 100%;
     height: 20%;
@@ -150,23 +178,34 @@ html, body {
 /* Statistics container inside CCTV */
 .shp-cctv-statistics {
     display: flex;
-    justify-content: space-between; /* Distribute items evenly across the row */
-    align-items: center; /* Vertically center the items */
-    gap: 10px; /* Add spacing between items */
-    width: 100%; /* Full width of the parent container */
-    margin-top: auto; /* Push to the bottom of the .shp-CCTV container */
+    justify-content: space-between;
+    /* Distribute items evenly across the row */
+    align-items: center;
+    /* Vertically center the items */
+    gap: 10px;
+    /* Add spacing between items */
+    width: 100%;
+    /* Full width of the parent container */
+    margin-top: auto;
+    /* Push to the bottom of the .shp-CCTV container */
     padding-top: 10px;
     box-sizing: border-box;
-    flex-wrap: wrap; /* Allow wrapping if necessary */
-    overflow: visible; /* Prevent overflow */
+    flex-wrap: wrap;
+    /* Allow wrapping if necessary */
+    overflow: visible;
+    /* Prevent overflow */
 }
 
 /* Individual statistic items */
 .shp-statistics {
-    display: flex; /* Use Flexbox to align icon and text horizontally */
-    align-items: center; /* Vertically center the icon and text */
-    justify-content: center; /* Center the content horizontally */
-    flex: 1 1 calc(25% - 10px); /* Each item takes 25% of the row minus the gap */
+    display: flex;
+    /* Use Flexbox to align icon and text horizontally */
+    align-items: center;
+    /* Vertically center the icon and text */
+    justify-content: center;
+    /* Center the content horizontally */
+    flex: 1 1 calc(25% - 10px);
+    /* Each item takes 25% of the row minus the gap */
     text-align: center;
     background: beige;
     border: 2px solid #ddd;
@@ -177,39 +216,49 @@ html, body {
     color: #333;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    margin-bottom: 10px; /* Add spacing below each item */
+    margin-bottom: 10px;
+    /* Add spacing below each item */
 }
 
 /* Add padding to the left of the text */
 .shp-statistics span {
-    padding-left: 8px; /* Add padding to the left of the text */
+    padding-left: 8px;
+    /* Add padding to the left of the text */
 }
 
 /* Ensure responsiveness for smaller screens */
 @media (max-width: 768px) {
     .shp-cctv-statistics {
         display: flex;
-        flex-wrap: wrap; /* Prevent wrapping */
-        justify-content: space-between; /* Distribute items evenly */
+        flex-wrap: wrap;
+        /* Prevent wrapping */
+        justify-content: space-between;
+        /* Distribute items evenly */
         margin-bottom: 30px;
     }
 
     .shp-statistics {
-        flex: 1 1 calc(25% - 10px); /* Each item takes 25% of the row minus the gap */
-        margin-bottom: 15px; /* Remove spacing between rows */
+        flex: 1 1 calc(25% - 10px);
+        /* Each item takes 25% of the row minus the gap */
+        margin-bottom: 15px;
+        /* Remove spacing between rows */
     }
 }
 
 /* For very small screens like iPhone SE */
 @media (max-width: 375px) {
     .shp-cctv-statistics {
-        flex-wrap: wrap; /* Allow wrapping for very small screens */
-        justify-content: center; /* Center the items */
+        flex-wrap: wrap;
+        /* Allow wrapping for very small screens */
+        justify-content: center;
+        /* Center the items */
     }
 
     .shp-statistics {
-        flex: 1 1 calc(50% - 10px); /* Each item takes 50% of the row minus the gap */
-        margin-bottom: 15px; /* Add spacing between rows */
+        flex: 1 1 calc(50% - 10px);
+        /* Each item takes 50% of the row minus the gap */
+        margin-bottom: 15px;
+        /* Add spacing between rows */
     }
 }
 
@@ -219,13 +268,16 @@ html, body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    width: 100%; /* Full width of the parent container */
-    height: auto; /* Adjust height based on content */
+    width: 100%;
+    /* Full width of the parent container */
+    height: auto;
+    /* Adjust height based on content */
     padding: 20px;
     background: peachpuff;
     border: 3px solid white;
     border-radius: 20px;
-    margin-bottom: 20px; /* Add spacing between containers */
+    margin-bottom: 20px;
+    /* Add spacing between containers */
 }
 
 .shp-rooms h1 {
@@ -245,24 +297,32 @@ html, body {
 }
 
 .shp-rooms-list-container {
-    width: 100%; /* Full width of the container */
-    max-height: 300px; /* Set a static maximum height */
+    width: 100%;
+    /* Full width of the container */
+    max-height: 300px;
+    /* Set a static maximum height */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    overflow-y: auto; /* Enable vertical scrolling */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    padding: 10px; /* Add padding for spacing */
-    box-sizing: border-box; /* Include padding in width/height calculations */
-    background-color: peachpuff; /* Optional: Background color for the container */
-    border-radius: 10px; /* Optional: Rounded corners */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
+    padding: 10px;
+    /* Add padding for spacing */
+    box-sizing: border-box;
+    /* Include padding in width/height calculations */
+    background-color: peachpuff;
+    /* Optional: Background color for the container */
+    border-radius: 10px;
+    /* Optional: Rounded corners */
 }
 
 .shp-rooms-list {
     width: 100%;
     height: 100%;
-    max-height: 100%; 
+    max-height: 100%;
     box-sizing: border-box;
     list-style-type: none;
     padding: 5px;
@@ -270,7 +330,7 @@ html, body {
 
     text-align: left;
     overflow-x: hidden;
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
 .shp-rooms ul::-webkit-scrollbar-button {
@@ -280,34 +340,41 @@ html, body {
 .shp-rooms ul::-webkit-scrollbar {
     width: 10px;
     border: 3px solid transparent;
-    border-radius: 10px ;
+    border-radius: 10px;
 }
 
 .shp-rooms ul::-webkit-scrollbar-thumb {
-    background: white; 
-    border: 3px solid white; 
-    border-radius: 20px; 
+    background: white;
+    border: 3px solid white;
+    border-radius: 20px;
 }
 
 .shp-rooms ul::-webkit-scrollbar-track {
-    background: transparent; 
+    background: transparent;
     border-radius: 10px;
 }
 
 .shp-rooms ul li {
-    display: flex; /* Use Flexbox for alignment */
-    align-items: center; /* Vertically center the icon and text */
-    padding-left: 10px; /* Adjust padding for spacing */
+    display: flex;
+    /* Use Flexbox for alignment */
+    align-items: center;
+    /* Vertically center the icon and text */
+    padding-left: 10px;
+    /* Adjust padding for spacing */
     width: 95%;
-    height: 50px; /* Set a fixed height for consistency */
+    height: 50px;
+    /* Set a fixed height for consistency */
     font-weight: bold;
     color: #5D252D;
     border-radius: 20px;
     position: relative;
     transition: background-color 0.2s ease;
-    background-color: peachpuff; /* Optional: Background color */
-    margin-bottom: 5px; /* Add spacing between list items */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: peachpuff;
+    /* Optional: Background color */
+    margin-bottom: 5px;
+    /* Add spacing between list items */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
 }
 
 .shp-rooms ul li:after {
@@ -323,82 +390,120 @@ html, body {
 
 /* Style for the delete button */
 .delete-room-button {
-    width: 40px; /* Fixed width for the button */
-    height: 40px; /* Fixed height for the button */
-    background-color: rgb(245, 54, 54); /* Red background */
-    border: none; /* Remove border */
-    border-radius: 50%; /* Make it circular */
-    display: flex; /* Use Flexbox for alignment */
-    justify-content: center; /* Center the icon horizontally */
-    align-items: center; /* Center the icon vertically */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth hover effect */
+    width: 40px;
+    /* Fixed width for the button */
+    height: 40px;
+    /* Fixed height for the button */
+    background-color: rgb(245, 54, 54);
+    /* Red background */
+    border: none;
+    /* Remove border */
+    border-radius: 50%;
+    /* Make it circular */
+    display: flex;
+    /* Use Flexbox for alignment */
+    justify-content: center;
+    /* Center the icon horizontally */
+    align-items: center;
+    /* Center the icon vertically */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    transition: background-color 0.3s ease;
+    /* Smooth hover effect */
     margin-left: 10px;
 }
 
 /* Style for the delete icon inside the button */
 .delete-room-button .delete-icon {
-    color: white; /* White icon color */
-    font-size: 18px; /* Adjust icon size */
+    color: white;
+    /* White icon color */
+    font-size: 18px;
+    /* Adjust icon size */
 }
 
 /* Hover effect for the delete button */
 .delete-room-button:hover {
-    background-color: darkred; /* Darker red on hover */
+    background-color: darkred;
+    /* Darker red on hover */
 }
+
 /* Add spacing between the icon and the text */
 .shp-room-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px; /* Fixed width for the icon container */
-    height: 40px; /* Fixed height for the icon container */
-    background-color: #CB5A55; /* Background color for the icon */
-    border-radius: 50%; /* Make it a circle */
-    margin-right: 10px; /* Add spacing between the icon and the text */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 40px;
+    /* Fixed width for the icon container */
+    height: 40px;
+    /* Fixed height for the icon container */
+    background-color: #CB5A55;
+    /* Background color for the icon */
+    border-radius: 50%;
+    /* Make it a circle */
+    margin-right: 10px;
+    /* Add spacing between the icon and the text */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
 }
 
 /* Style for the icon inside the circle */
 .shp-room-icon i {
-    color: white; /* White icon color */
-    font-size: 18px; /* Adjust icon size */
+    color: white;
+    /* White icon color */
+    font-size: 18px;
+    /* Adjust icon size */
 }
 
 /* Style for the room link text */
 .shp-rooms-list-links {
-    text-decoration: none; /* Remove underline */
-    color: #5D252D; /* Text color */
-    font-size: 16px; /* Adjust font size */
-    font-weight: bold; /* Make the text bold */
-    white-space: nowrap; /* Prevent text wrapping */
-    overflow: hidden; /* Hide overflowing text */
-    text-overflow: ellipsis; /* Add ellipsis for long text */
-    flex: 1; /* Allow the text to take up remaining space */
+    text-decoration: none;
+    /* Remove underline */
+    color: #5D252D;
+    /* Text color */
+    font-size: 16px;
+    /* Adjust font size */
+    font-weight: bold;
+    /* Make the text bold */
+    white-space: nowrap;
+    /* Prevent text wrapping */
+    overflow: hidden;
+    /* Hide overflowing text */
+    text-overflow: ellipsis;
+    /* Add ellipsis for long text */
+    flex: 1;
+    /* Allow the text to take up remaining space */
 }
 
 .shp-add-room-button {
     background-color: #CB5A55;
-    width: auto; /* Adjust width to fit the text content */
-    height: auto; /* Adjust height to fit the text content */
+    width: auto;
+    /* Adjust width to fit the text content */
+    height: auto;
+    /* Adjust height to fit the text content */
     margin-top: 30px;
-    padding: 10px 20px; /* Add padding for a standard button size */
+    padding: 10px 20px;
+    /* Add padding for a standard button size */
     border: 0px;
-    border-radius: 10px; /* Slightly rounded corners */
+    border-radius: 10px;
+    /* Slightly rounded corners */
     box-shadow: 0px 3px 3px black;
     color: white;
-    font-size: 16px; /* Standard font size */
+    font-size: 16px;
+    /* Standard font size */
     font-weight: bold;
     text-shadow: 0px 3px 3px black;
-    cursor: pointer; /* Add pointer cursor for better UX */
+    cursor: pointer;
+    /* Add pointer cursor for better UX */
     transition: background-color 0.2s ease, transform 0.2s ease;
 
-    align-self: flex-end; /* Align the button to the right in a flex container */
+    align-self: flex-end;
+    /* Align the button to the right in a flex container */
 }
 
 .shp-add-room-button:hover {
     background-color: #BD3F3F;
-    transform: scale(1.05); /* Slightly enlarge on hover */
+    transform: scale(1.05);
+    /* Slightly enlarge on hover */
 }
 
 /* appliances container */
@@ -409,33 +514,36 @@ html, body {
     justify-content: center;
     align-items: flex-start;
 
-    width: 100%; /* Full width of the parent container */
-    height: auto; /* Adjust height based on content */
+    width: 100%;
+    /* Full width of the parent container */
+    height: auto;
+    /* Adjust height based on content */
     padding: 20px;
 
     background: peachpuff;
-    border: 3px solid #FFF6E7; 
+    border: 3px solid #FFF6E7;
     border-radius: 20px;
     box-shadow: 0px 3px 3px #5D252D;
 
-    margin-bottom: 20px; /* Add spacing between containers */
+    margin-bottom: 20px;
+    /* Add spacing between containers */
 }
 
 .shp-appliances-room-select {
     width: 70%;
     height: 30%;
-    display:flex;
+    display: flex;
     justify-content: flex-start;
     flex-direction: column;
     align-items: flex-start;
 }
 
 .shp-appliances-room-select h3,
-.shp-room-select p {  
+.shp-room-select p {
     margin: 0;
 }
 
-.shp-appliances-room-select h3{
+.shp-appliances-room-select h3 {
     cursor: pointer;
     font-weight: bold;
     color: #BD3F3F;
@@ -460,7 +568,7 @@ html, body {
     border: 0px;
     background-color: #CB5A55;
     color: white;
-    font-weight: bold;      
+    font-weight: bold;
     font-size: 15px;
     width: 150%;
     height: 20%;
@@ -508,12 +616,12 @@ html, body {
 
 .status-dot {
     position: flex;
-    align-items: right; 
+    align-items: right;
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: red; 
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); 
+    background-color: red;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -534,18 +642,25 @@ html, body {
 
 .shp-appliances-statistics {
     display: flex;
-    justify-content: space-between; /* Distribute items evenly across the row */
-    align-items: center; /* Vertically center the items */
-    gap: 10px; /* Add spacing between items */
-    width: 100%; /* Full width of the parent container */
-    margin-top: auto; /* Push to the bottom of the .shp-appliances container */
+    justify-content: space-between;
+    /* Distribute items evenly across the row */
+    align-items: center;
+    /* Vertically center the items */
+    gap: 10px;
+    /* Add spacing between items */
+    width: 100%;
+    /* Full width of the parent container */
+    margin-top: auto;
+    /* Push to the bottom of the .shp-appliances container */
     padding-top: 10px;
     box-sizing: border-box;
-    flex-wrap: wrap; /* Allow wrapping if necessary */
-    overflow: hidden; /* Prevent overflow */
+    flex-wrap: wrap;
+    /* Allow wrapping if necessary */
+    overflow: hidden;
+    /* Prevent overflow */
 }
 
-.shp-appliances-statistics p{
+.shp-appliances-statistics p {
     margin: 15px;
     width: 20% !important;
 }
@@ -556,16 +671,19 @@ html, body {
     flex-direction: column;
     justify-content: flex-start;
 
-    width: 100%; /* Full width of the parent container */
-    height: auto; /* Adjust height based on content */
+    width: 100%;
+    /* Full width of the parent container */
+    height: auto;
+    /* Adjust height based on content */
     padding: 20px;
 
     background: #fbdba7;
-    border: 3px solid #FFF6E7;  
+    border: 3px solid #FFF6E7;
     border-radius: 20px;
     box-shadow: 0px 3px 3px #5D252D;
 
-    margin-bottom: 20px; /* Add spacing between containers */
+    margin-bottom: 20px;
+    /* Add spacing between containers */
 }
 
 .shp-most-used-title {
@@ -578,7 +696,8 @@ html, body {
     justify-content: flex-start;
     flex-direction: column;
 
-    margin-bottom: 10px; /* Add spacing below the title */
+    margin-bottom: 10px;
+    /* Add spacing below the title */
 }
 
 .shp-most-used h4 {
@@ -619,17 +738,17 @@ html, body {
 .shp-most-used-list::-webkit-scrollbar {
     width: 10px;
     border: 3px solid transparent;
-    border-radius: 10px ;
+    border-radius: 10px;
 }
 
 .shp-most-used-list::-webkit-scrollbar-thumb {
-    background: white; 
-    border: 3px solid white; 
-    border-radius: 20px; 
+    background: white;
+    border: 3px solid white;
+    border-radius: 20px;
 }
 
 .shp-most-used-list::-webkit-scrollbar-track {
-    background: transparent; 
+    background: transparent;
     border-radius: 10px;
 }
 
@@ -664,34 +783,41 @@ html, body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent background */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-  }
-  
-  /* Modal Container */
-  .modal {
-    background-color: beige; /* White background */
+}
+
+/* Modal Container */
+.modal {
+    background-color: beige;
+    /* White background */
     padding: 30px;
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25); /* Subtle shadow */
+    border-radius: 15px;
+    /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    /* Subtle shadow */
     width: 400px;
-    max-width: 90%; /* Responsive width */
+    max-width: 90%;
+    /* Responsive width */
     text-align: center;
-    animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in animation */
-  }
-  
-  /* Modal Title */
-  .modal h2 {
+    animation: fadeIn 0.3s ease-in-out;
+    /* Smooth fade-in animation */
+}
+
+/* Modal Title */
+.modal h2 {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #333333; /* Dark text color */
-  }
-  
-  /* Modal Input */
-  .modal input {
+    color: #333333;
+    /* Dark text color */
+}
+
+/* Modal Input */
+.modal input {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -699,85 +825,107 @@ html, body {
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
-  }
-  
-  /* Modal Buttons Container */
-  .modal-buttons {
+}
+
+/* Modal Buttons Container */
+.modal-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
     padding-top: 20px;
-  }
-  
-  /* Add Room Button */
-  .modal-buttons button:first-child {
-    background-color: #4caf50; /* Green for Add Room */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .modal-buttons button:first-child:hover {
-    background-color: #45a049; /* Darker green on hover */
-  }
-  
-  /* Cancel Button */
-  .modal-buttons button:last-child {
-    background-color: #f44336; /* Red for Cancel */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .modal-buttons button:last-child:hover {
-    background-color: #d32f2f; /* Darker red on hover */
-  }
-  
-  /* Fade-in Animation */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
+}
 
-  /* Dropdown Styling */
+/* Add Room Button */
+.modal-buttons button:first-child {
+    background-color: #4caf50;
+    /* Green for Add Room */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.modal-buttons button:first-child:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
+
+/* Cancel Button */
+.modal-buttons button:last-child {
+    background-color: #f44336;
+    /* Red for Cancel */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.modal-buttons button:last-child:hover {
+    background-color: #d32f2f;
+    /* Darker red on hover */
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Dropdown Styling */
 .room-dropdown {
-    width: 100%; /* Full width of the container */
-    padding: 10px; /* Add padding for better usability */
-    margin-bottom: 20px; /* Add spacing below the dropdown */
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Standard font size */
-    background-color: #fff; /* White background */
-    color: #333; /* Dark text color */
-    box-sizing: border-box; /* Include padding and border in width */
-    appearance: none; /* Remove default browser styling */
-    cursor: pointer; /* Pointer cursor for better UX */
-  }
-  
-  /* Dropdown Focus State */
-  .room-dropdown:focus {
-    outline: none; /* Remove default outline */
-    border-color: #4caf50; /* Green border on focus */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Subtle green glow */
-  }
-  
-  /* Dropdown Option Styling */
-  .room-dropdown option {
-    padding: 10px; /* Add padding inside options */
-    background-color: #fff; /* White background */
-    color: #333; /* Dark text color */
-  }
+    width: 100%;
+    /* Full width of the container */
+    padding: 10px;
+    /* Add padding for better usability */
+    margin-bottom: 20px;
+    /* Add spacing below the dropdown */
+    border: 1px solid #ccc;
+    /* Light gray border */
+    border-radius: 5px;
+    /* Rounded corners */
+    font-size: 16px;
+    /* Standard font size */
+    background-color: #fff;
+    /* White background */
+    color: #333;
+    /* Dark text color */
+    box-sizing: border-box;
+    /* Include padding and border in width */
+    appearance: none;
+    /* Remove default browser styling */
+    cursor: pointer;
+    /* Pointer cursor for better UX */
+}
+
+/* Dropdown Focus State */
+.room-dropdown:focus {
+    outline: none;
+    /* Remove default outline */
+    border-color: #4caf50;
+    /* Green border on focus */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    /* Subtle green glow */
+}
+
+/* Dropdown Option Styling */
+.room-dropdown option {
+    padding: 10px;
+    /* Add padding inside options */
+    background-color: #fff;
+    /* White background */
+    color: #333;
+    /* Dark text color */
+}
