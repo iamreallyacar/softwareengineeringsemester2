@@ -4,12 +4,6 @@ import peach2 from "../assets/images/peach2.png";
 import peach3 from "../assets/images/peach3.png";
 import peach4 from "../assets/images/peach4.png";
 import peach5 from "../assets/images/peach5.png";
-import peach11 from "../assets/images/pixel-peach1.png";
-import peach12 from "../assets/images/pixel-peach2.png";
-import peach13 from "../assets/images/pixel-peach3.png";
-import peach14 from "../assets/images/pixel-peach4.png";
-import peach15 from "../assets/images/pixel-peach5.png";
-
 import logo from "../assets/images/logo-3.png";
 
 

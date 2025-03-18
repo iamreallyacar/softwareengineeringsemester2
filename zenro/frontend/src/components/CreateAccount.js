@@ -11,11 +11,11 @@ function CreateAccount() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [first_name, setFirstName] = useState("");
+    const [last_name, setLastName] = useState("");
     const [birthdate, setBirthdate] = useState("");
     const [gender, setGender] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
+    const [phone_number, setPhoneNumber] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -32,18 +32,23 @@ function CreateAccount() {
             const response = await api.post("/register/", {
                 username: username,
                 email: email,
-                password: password
+                password: password,
+                first_name,
+                last_name,
+                birthdate,
+                gender,
+                phone_number,
             });
             console.log("Account Created Successfully:", response.data);
             // On success, set a success message to be displayed to the user
             setSuccess("Account created successfully!");
             
             // Logs the user in automatically
-            const loginResponse = await api.post("/token/", { firstName, lastName, username, birthdate, gender, email, phoneNumber, password});
+            const loginResponse = await api.post("/token/", { first_name, last_name, username, birthdate, gender, email, phone_number, password});
             console.log("Login Successful:", loginResponse.data);
             // Tokens are stored in local storage
-            localStorage.setItem("accessToken", response.data.access);
-            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("accessToken", loginResponse.data.access);
+            localStorage.setItem("userId", loginResponse.data.userId);
             // After a timeout of 2 seconds, navigate to smart homes page
             setTimeout(() => {
                 setLoading(false);
@@ -93,7 +98,7 @@ function CreateAccount() {
                                 <input
                                     type="text"
                                     placeholder="First name"
-                                    value={firstName}
+                                    value={first_name}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     required
                                 />
@@ -111,7 +116,7 @@ function CreateAccount() {
                                 <input
                                     type="text"
                                     placeholder="Last name"
-                                    value={lastName}
+                                    value={last_name}
                                     onChange={(e) => setLastName(e.target.value)}
                                     required
                                 />
@@ -143,7 +148,7 @@ function CreateAccount() {
                             <input
                                 type="tel"
                                 placeholder="Phone Number"
-                                value={phoneNumber}
+                                value={phone_number}
                                 onChange={(e) => setPhoneNumber(e.target.value)}
                                 required
                             />

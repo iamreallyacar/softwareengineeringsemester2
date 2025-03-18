@@ -3,7 +3,7 @@ import user from "../assets/images/user.svg";
 import notification from "../assets/images/notification.svg";
 import overview from "../assets/images/overview.svg";
 import security from "../assets/images/security.svg";
-import temperature from "../assets/images/temperature.svg";
+import temperature from "../assets/images/Temperature.svg";
 import logo from "../assets/images/logo.svg";
 
 const Navbar = () => {
