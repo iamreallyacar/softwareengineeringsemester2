@@ -35,9 +35,9 @@ function CreateAccount() {
             console.error("Account Creation Failed:", error);
             // Handle errors from the API response
             if (error.response) {
-                const errorMessage = error.response.data.detail || 
-                                   Object.values(error.response.data)[0] ||
-                                   "Error creating account. Please try again.";
+                const errorMessage = error.response.data.detail ||
+                    Object.values(error.response.data)[0] ||
+                    "Error creating account. Please try again.";
                 setError(errorMessage);
             } else {
                 setError("Error creating account. Please try again.");

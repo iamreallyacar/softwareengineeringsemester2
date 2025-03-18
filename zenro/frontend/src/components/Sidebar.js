@@ -20,7 +20,7 @@ function Sidebar() {
       <button className="burger-menu" onClick={toggleSidebar}>
         ☰
       </button>
-  
+
       {/* Sidebar */}
       <div className={`sidebar ${isOpen ? "active" : ""}`}>
         <ul>
@@ -45,10 +45,10 @@ function Sidebar() {
             <Link to="/smart-homes" onClick={closeSidebar}>Back</Link>
           </li>
         </ul>
-  
+
         {/* Logo at the bottom */}
         <div className="sidebar-logo">
-            <img src={peachesLogo} alt="Peaches Logo" />
+          <img src={peachesLogo} alt="Peaches Logo" />
         </div>
       </div>
     </>

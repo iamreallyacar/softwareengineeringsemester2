@@ -37,31 +37,31 @@ function RoomsPage() {
                 // First get all devices in the room
                 const roomResponse = await api.get(`/rooms/${roomId}/`);
                 console.log("Room data:", roomResponse.data); // Debug log
-                
+
                 const devices = roomResponse.data.devices;
                 if (!devices || devices.length === 0) {
                     console.log("No devices found in room");
                     return;
                 }
-                
+
                 // Then get daily logs for each device
-                const logsPromises = devices.map(device => 
+                const logsPromises = devices.map(device =>
                     api.get(`/devicelogs/daily/?device=${device.id}`)
                 );
-                
+
                 const logResponses = await Promise.all(logsPromises);
                 const deviceLogsData = devices.map((device, index) => ({
                     device: device,
                     logs: logResponses[index].data
                 }));
-                
+
                 console.log("Device logs data:", deviceLogsData); // Debug log
                 setDeviceLogs(deviceLogsData);
             } catch (error) {
                 console.error("Error fetching device logs:", error);
             }
         };
-    
+
         if (roomId) {
             fetchDeviceLogs();
         }
@@ -74,20 +74,20 @@ function RoomsPage() {
                 console.log("Chart ref not found");
                 return;
             }
-    
+
             console.log("Rendering donut chart"); // Debug log
-    
+
             const existingChart = Chart.getChart(chartRef.current);
             if (existingChart) {
                 existingChart.destroy();
             }
-    
+
             const ctx = chartRef.current.getContext('2d');
             if (!ctx) {
                 console.log("Could not get chart context");
                 return;
             }
-    
+
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -127,7 +127,7 @@ function RoomsPage() {
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     return `${context.label}: ${context.raw} kWh`;
                                 }
                             }
@@ -136,7 +136,7 @@ function RoomsPage() {
                 }
             });
         };
-    
+
         renderChart();
     }, [roomId]);
 
@@ -146,20 +146,20 @@ function RoomsPage() {
                 console.log("Weekly chart ref not found");
                 return;
             }
-    
+
             console.log("Rendering weekly chart"); // Debug log
-    
+
             const existingChart = Chart.getChart(weeklyChartRef.current);
             if (existingChart) {
                 existingChart.destroy();
             }
-    
+
             const ctx = weeklyChartRef.current.getContext('2d');
             if (!ctx) {
                 console.log("Could not get weekly chart context");
                 return;
             }
-    
+
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -217,16 +217,16 @@ function RoomsPage() {
                 }
             });
         };
-    
+
         // Call the render function
         renderWeeklyChart();
     }, [roomId]); // Remove roomData dependency since we're using hardcoded data
-  
-  return (
-    <div className="room-page">
-      {/* Page Header Section */}
-      <div className="page-header">
-        {/* <div className="sidebar">
+
+    return (
+        <div className="room-page">
+            {/* Page Header Section */}
+            <div className="page-header">
+                {/* <div className="sidebar">
           <ul>
               <li><a href="#">Home</a></li>
               <li><a href="#">About</a></li>
@@ -235,154 +235,154 @@ function RoomsPage() {
               <li><a href="/smart-homes">Back</a></li>
           </ul>
         </div> */}
-        
-        <Link to={`/smarthomepage/${smartHomeId}`}>
-            <h1><i className="fas fa-arrow-left"></i> Overview</h1>
-        </Link>
-      </div>
 
-        {/* Columns for Energy Consumption */}
-        <div className="columns">
-            {/* Column 1 */}
-            <div className="column1">
-                {/* Row 1: Bedroom energy consumption for today */}
-                <div className="energy-consumption">
-                <h4 className="room-text-with-line">{roomId} Energy Consumption Today</h4>
-                <div style={{ 
-                    height: '270px',  // Reduced from 400px
-                    width: '90%',     // Reduced from 100%
-                    position: 'relative',
-                    marginBottom: '1rem',
-                    margin: 'auto'    // Center the chart
-                }}>
-                    <canvas ref={chartRef}></canvas>
-                </div>
+                <Link to={`/smarthomepage/${smartHomeId}`}>
+                    <h1><i className="fas fa-arrow-left"></i> Overview</h1>
+                </Link>
+            </div>
+
+            {/* Columns for Energy Consumption */}
+            <div className="columns">
+                {/* Column 1 */}
+                <div className="column1">
+                    {/* Row 1: Bedroom energy consumption for today */}
+                    <div className="energy-consumption">
+                        <h4 className="room-text-with-line">{roomId} Energy Consumption Today</h4>
+                        <div style={{
+                            height: '270px',  // Reduced from 400px
+                            width: '90%',     // Reduced from 100%
+                            position: 'relative',
+                            marginBottom: '1rem',
+                            margin: 'auto'    // Center the chart
+                        }}>
+                            <canvas ref={chartRef}></canvas>
+                        </div>
+                    </div>
+
+                    {/* Row 2: Weekly bedroom energy consumption */}
+                    <div className="energy-consumption">
+                        <h4 className="room-text-with-line">Weekly {roomId} Energy Consumption</h4>
+                        <div style={{
+                            height: '270px',  // Reduced from 400px
+                            width: '90%',     // Reduced from 100%
+                            margin: 'auto',   // Center the chart
+                            position: 'relative'
+                        }}>
+                            <canvas ref={weeklyChartRef}></canvas>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Row 2: Weekly bedroom energy consumption */}
-                <div className="energy-consumption">
-                <h4 className="room-text-with-line">Weekly {roomId} Energy Consumption</h4>
-                <div style={{ 
-                    height: '270px',  // Reduced from 400px
-                    width: '90%',     // Reduced from 100%
-                    margin: 'auto',   // Center the chart
-                    position: 'relative'
-                }}>
-                    <canvas ref={weeklyChartRef}></canvas>
-                </div>
+                {/* Column 2 */}
+                <div className="column2">
+                    {/* Row 1: Living Room energy consumption for today */}
+                    <div className="energy-consumption">
+                        {/* button for on/off  */}
+                        <label className="switch">
+                            <input type="checkbox" />
+                            <span className="slider"></span>
+                        </label>
+
+                        <h3 className="room-text">
+                            <span className="number">4</span> devices
+                        </h3>
+                        <h3 className="room-text">Lights</h3>
+                        <div className="col-12 room-container">
+                            <div className="room-content">
+                                <div className="room-text-container">
+                                    <h3 className="room-text-val">Brightness</h3>
+                                    <h3 className="room-text">50%</h3>
+                                </div>
+                                <div className="room-appliances-img-container">
+                                    <img className="room-appliances-img" src={lightBulb} alt="Light Bulb" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Content for living room energy consumption */}
+                    </div>
+
+                    {/* Row 2: Weekly living room energy consumption */}
+                    <div className="energy-consumption">
+                        <label className="switch">
+                            <input type="checkbox" />
+                            <span className="slider"></span>
+                        </label>
+                        <h3 className="room-text">
+                            <span className="number">4</span> devices
+                        </h3>
+                        <h3 className="room-text">Smart Blinds</h3>
+                        <div className="col-12 room-container">
+                            <div className="room-content">
+                                <div className="room-text-container">
+                                    <h3 className="room-text-val">UV Index</h3>
+                                    <h3 className="room-text">Low</h3>
+                                </div>
+                                <div className="room-appliances-img-container">
+                                    <img className="room-appliances-img" src={smartBlind} alt="Smart Blind" />
+                                </div>
+                            </div>
+                        </div>
+                        {/* Content for weekly living room energy consumption */}
+                    </div>
+
+                    {/* Row 2: Weekly living room energy consumption */}
+                    <div className="energy-consumption">
+                        <label className="switch">
+                            <input type="checkbox" />
+                            <span className="slider"></span>
+                        </label>
+                        <h3 className="room-text">
+                            <span className="number">1</span> devices
+                        </h3>
+                        <h3 className="room-text">Smart TV</h3>
+                        <div className="col-12 room-container">
+                            <div className="room-content">
+                                <div className="room-text-container">
+                                    <h3 className="room-text-val">Attribute</h3>
+                                    <h3 className="room-text">Desc</h3>
+                                </div>
+                                <div className="room-appliances-img-container">
+                                    <img className="room-appliances-img" src={smartTV} alt="Smart TV" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Content for weekly living room energy consumption */}
+                    </div>
+
+                    {/* Row 2: Weekly living room energy consumption */}
+                    <div className="energy-consumption">
+                        <label className="switch">
+                            <input type="checkbox" />
+                            <span className="slider"></span>
+                        </label>
+                        <h3 className="room-text">
+                            <span className="number">2</span> devices
+                        </h3>
+                        <h3 className="room-text">Air Conditioners</h3>
+                        <div className="col-12 room-container">
+                            <div className="room-content">
+                                <div className="room-text-container">
+                                    <h3 className="room-text-val">Temperature</h3>
+                                    <h3 className="room-text">19</h3>
+                                </div>
+                                <div className="room-appliances-img-container">
+                                    <img className="room-appliances-img" src={airCond} alt="Air Conditioner" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Content for weekly living room energy consumption */}
+                    </div>
+
+
+
                 </div>
             </div>
 
-            {/* Column 2 */}
-            <div className="column2">
-                {/* Row 1: Living Room energy consumption for today */}
-                <div className="energy-consumption">
-                {/* button for on/off  */}
-                <label className="switch">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                </label>
-
-                <h3 className="room-text">
-                    <span className="number">4</span> devices
-                </h3>
-                <h3 className="room-text">Lights</h3>
-                <div className="col-12 room-container">
-                    <div className="room-content">
-                        <div className="room-text-container">
-                            <h3 className="room-text-val">Brightness</h3>
-                            <h3 className="room-text">50%</h3>
-                        </div>
-                        <div className="room-appliances-img-container">
-                            <img className="room-appliances-img" src={lightBulb} alt="Light Bulb"/>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Content for living room energy consumption */}
-                </div>
-
-                {/* Row 2: Weekly living room energy consumption */}
-                <div className="energy-consumption">
-                <label className="switch">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                </label>
-                <h3 className="room-text">
-                    <span className="number">4</span> devices
-                </h3>
-                <h3 className="room-text">Smart Blinds</h3>
-                <div className="col-12 room-container">
-                    <div className="room-content">
-                        <div className="room-text-container">
-                            <h3 className="room-text-val">UV Index</h3>
-                            <h3 className="room-text">Low</h3>
-                        </div>
-                        <div className="room-appliances-img-container">
-                            <img className="room-appliances-img" src={smartBlind} alt="Smart Blind"/>
-                        </div>
-                    </div>
-                </div>
-                {/* Content for weekly living room energy consumption */}
-                </div>
-
-                {/* Row 2: Weekly living room energy consumption */}
-                <div className="energy-consumption">
-                <label className="switch">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                </label>
-                <h3 className="room-text">
-                    <span className="number">1</span> devices
-                </h3>
-                <h3 className="room-text">Smart TV</h3>
-                <div className="col-12 room-container">
-                    <div className="room-content">
-                        <div className="room-text-container">
-                            <h3 className="room-text-val">Attribute</h3>
-                            <h3 className="room-text">Desc</h3>
-                        </div>
-                        <div className="room-appliances-img-container">
-                            <img className="room-appliances-img" src={smartTV} alt="Smart TV"/>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Content for weekly living room energy consumption */}
-                </div>
-
-                {/* Row 2: Weekly living room energy consumption */}
-                <div className="energy-consumption">
-                <label className="switch">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                </label>
-                <h3 className="room-text">
-                    <span className="number">2</span> devices
-                </h3>
-                <h3 className="room-text">Air Conditioners</h3>
-                <div className="col-12 room-container">
-                    <div className="room-content">
-                        <div className="room-text-container">
-                            <h3 className="room-text-val">Temperature</h3>
-                            <h3 className="room-text">19</h3>
-                        </div>
-                        <div className="room-appliances-img-container">
-                            <img className="room-appliances-img" src={airCond} alt="Air Conditioner"/>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Content for weekly living room energy consumption */}
-                </div>
-
-                
-
-            </div>
         </div>
-
-    </div>
-  );
+    );
 }
 
 export default RoomsPage;

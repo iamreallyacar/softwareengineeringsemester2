@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, Home, Users } from "lucide-react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import { ChevronLeft, User } from "lucide-react";
 
 // Extract Header Component
 const DashboardHeader = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleBack = () => {
         localStorage.removeItem("accessToken"); // Clear the access token
@@ -47,7 +47,7 @@ const CreateHomeForm = ({ homeName, setHomeName, handleCreateSmartHome, isCreati
             />
             <button type="submit" disabled={isCreating}>
                 {isCreating ? "Creating ..." : "Create Smart Home"}
-                </button>
+            </button>
         </form>
     </div>
 );
@@ -94,8 +94,8 @@ const AvailableHomesList = ({ isJoinedExpanded, setIsJoinedExpanded, availableHo
             {isJoinedExpanded && (
                 <div className="homes-list">
                     {availableHomes.map((home) => (
-                        <button 
-                            key={home.id} 
+                        <button
+                            key={home.id}
                             className="home-button"
                             onClick={() => handleJoinHome(home.id)}
                         >
@@ -146,7 +146,7 @@ function SmartHomeList() {
         event.preventDefault();
         setIsCreating(true);
         try {
-            await api.post("/smarthomes/", { 
+            await api.post("/smarthomes/", {
                 name: homeName
             });
             setHomeName("");
@@ -179,14 +179,14 @@ function SmartHomeList() {
         }
     };
 
-    
+
     return (
         <div className="dashboard-container">
             <DashboardHeader />
             <UserProfile />
             <div className="dashboard-content">
                 {error && <p className="error">{error}</p>}
-                <CreateHomeForm 
+                <CreateHomeForm
                     homeName={homeName}
                     setHomeName={setHomeName}
                     handleCreateSmartHome={handleCreateSmartHome}

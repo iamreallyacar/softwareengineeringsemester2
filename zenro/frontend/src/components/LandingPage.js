@@ -18,7 +18,7 @@ const scrollToElement = (elementId) => {
 function Navbar() {
   const [isSticky, setIsSticky] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 50);
@@ -113,10 +113,10 @@ function About() {
             <div className="about-text">
               <h3>Our Story</h3>
               <p>
-              PeachesOS is a smart monitoring solution designed to optimize energy usage, track resource consumption, and enhance sustainability in net-zero homes and care facilities. 
+                PeachesOS is a smart monitoring solution designed to optimize energy usage, track resource consumption, and enhance sustainability in net-zero homes and care facilities.
               </p>
               <p>
-              By integrating IoT sensors, AI-driven analytics, and real-time data visualization, the system enables homeowners and facility managers to monitor solar energy generation, water usage, indoor air quality, and overall energy efficiency.
+                By integrating IoT sensors, AI-driven analytics, and real-time data visualization, the system enables homeowners and facility managers to monitor solar energy generation, water usage, indoor air quality, and overall energy efficiency.
               </p>
               <div className="about-boxes">
                 <div className="about-box">
@@ -160,7 +160,7 @@ function Contact() {
       // Here you would typically send the form data to your backend
       console.log("Form submitted:", formData);
       setSuccess("Thank you for your message! We'll get back to you soon.");
-      
+
       // Clear form after submission
       setFormData({
         name: "",
@@ -168,7 +168,7 @@ function Contact() {
         subject: "",
         message: "",
       });
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccess("");
@@ -223,7 +223,7 @@ function Contact() {
             <div className="contact-form-container">
               <div className="contact-card">
                 <h3>Send Us a Message</h3>
-                
+
                 {success && <p className="success">{success}</p>}
 
                 <form onSubmit={handleSubmit}>
@@ -285,12 +285,12 @@ function Contact() {
 // Footer Component
 function Footer() {
   const currentYear = new Date().getFullYear();
-  
+
   const handleSocialClick = (e) => {
     e.preventDefault();
     // Social media link handler would go here
   };
-  
+
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
     // Newsletter subscription logic would go here
@@ -367,12 +367,12 @@ function LandingPage() {
   useEffect(() => {
     // Ensure the page starts at the top when loaded
     window.scrollTo(0, 0);
-    document.body.style.overflow = "auto";    
+    document.body.style.overflow = "auto";
     return () => {
       // Cleanup if needed
     };
   }, []);
-  
+
   return (
     <main className="landing-page">
       <Navbar />

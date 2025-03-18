@@ -47,29 +47,29 @@ function SmartHomePage() {
     setSelectedRoom(room);
     setIsOpenLR(false);
   };
-  
+
   // Function to handle adding a room
   const handleAddRoom = async () => {
     if (!selectedHomeIORoom || !newRoomName) {
       alert("Please select a room and enter a name.");
       return;
     }
-  
+
     const payload = {
       home_io_room: selectedHomeIORoom, // The ID of the HomeIORoom
       smart_home: smartHomeId, // The ID of the current smart home
       name: newRoomName, // The custom name of the room
     };
-  
+
     console.log("Sending payload:", payload); // Log the payload
-  
+
     try {
       // Send the POST request to add the room
       const response = await api.post(`/rooms/`, payload);
-  
+
       // Update the local state with the newly added room
       setAddedRooms((prevRooms) => [...prevRooms, response.data]);
-  
+
       // Clear the input and close the modal
       setSelectedHomeIORoom(null);
       setNewRoomName("");
@@ -100,7 +100,7 @@ function SmartHomePage() {
       .catch((error) => {
         console.error("Error fetching rooms:", error);
       });
-  
+
     // Fetch supported devices
     api.get("/supporteddevices/")
       .then((res) => {
@@ -109,7 +109,7 @@ function SmartHomePage() {
       .catch((error) => {
         console.error("Error fetching supported devices:", error);
       });
-  
+
     // Fetch homeio-rooms
     api.get("/homeio-rooms/")
       .then((res) => {
@@ -125,36 +125,36 @@ function SmartHomePage() {
       <Sidebar />
       <div className="shp-information">
         <div className="shp-CCTV">
-        <button onClick={() => setIsOpen(!isOpen)}>
+          <button onClick={() => setIsOpen(!isOpen)}>
             {selectedRoomCCTV} {isOpen ? "▲" : "▼"}
-        </button>
+          </button>
 
-        <AnimatePresence>
-                {isOpen && (
-                    <motion.div 
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        style={{ overflow: "hidden" }}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                style={{ overflow: "hidden" }}
+              >
+                <ul className="shp-cctv-room-list">
+                  {allRooms.map((room, index) => (
+                    <motion.li
+                      key={room}
+                      onClick={() => handleRoomSelectCCTV(room)}
+                      initial={{ opacity: 0, y: -30 }}
+                      animate={{ opacity: 1, y: -20 }}
+                      exit={{ opacity: 0, y: -30 }}
+                      transition={{ delay: index * 0.2, duration: 0.3 }}
                     >
-                        <ul className="shp-cctv-room-list">
-                            {allRooms.map((room, index) => (
-                                <motion.li
-                                    key={room}
-                                    onClick={() => handleRoomSelectCCTV(room)}
-                                    initial={{ opacity: 0, y: -30 }}
-                                    animate={{ opacity: 1, y: -20 }}
-                                    exit={{ opacity: 0, y: -30 }}
-                                    transition={{ delay: index * 0.2, duration: 0.3 }}
-                                >
-                                    {room}
-                                </motion.li>
-                            ))}
-                        </ul>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                      {room}
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="shp-cctv-view">
             <h1>CCTV</h1>
@@ -162,20 +162,20 @@ function SmartHomePage() {
 
           <div className="shp-cctv-statistics">
             <div className="shp-statistics">
-              <i className="fas fa-temperature-low"></i> 
-              <span>Temperature</span> 
+              <i className="fas fa-temperature-low"></i>
+              <span>Temperature</span>
             </div>
             <div className="shp-statistics">
               <i class="fa-solid fa-bolt"></i>
-              <span>Power Usage</span> 
+              <span>Power Usage</span>
             </div>
             <div className="shp-statistics">
               <i class="fa-solid fa-droplet"></i>
-              <span>Humidity</span> 
+              <span>Humidity</span>
             </div>
             <div className="shp-statistics">
               <i class="fa-solid fa-lightbulb"></i>
-              <span>Light</span> 
+              <span>Light</span>
             </div>
           </div>
 
@@ -183,7 +183,7 @@ function SmartHomePage() {
 
         <div className="shp-rooms">
           <h1>Rooms</h1>
-          <hr className="shp-rooms-divider"/>
+          <hr className="shp-rooms-divider" />
 
           {/* <div className="shp-rooms-list-container">
           <ul className="shp-rooms-list">
@@ -333,61 +333,61 @@ function SmartHomePage() {
 
         {/* Appliances Container */}
         <div className="shp-appliances">
-            <div className="shp-appliances-room-select">
+          <div className="shp-appliances-room-select">
 
-              <h3 onClick={() => setIsOpenLR(!isOpenLR)}>
-                {selectedRoom} {isOpenLR ? "▲" : "▼" }
-              </h3>
+            <h3 onClick={() => setIsOpenLR(!isOpenLR)}>
+              {selectedRoom} {isOpenLR ? "▲" : "▼"}
+            </h3>
 
-              <AnimatePresence>
-                {isOpenLR && (
-                  <motion.div 
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    style={{ overflow: "hidden" }}
+            <AnimatePresence>
+              {isOpenLR && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  style={{ overflow: "hidden" }}
                 >
-                    <ul className="shp-appliances-room-list">
-                        {allRooms.map((room, index) => (
-                            <motion.li 
-                            onClick={() => handleRoomSelect(room)}
-                            key={room}
-                            initial={{ opacity: 0, y: -30 }}
-                            animate={{ opacity: 1, y: -20 }}
-                            exit={{ opacity: 0, y: -30 }}
-                            transition={{ delay: index * 0.2, duration: 0.3 }}
-                        >
-                            {room}
-                        </motion.li>
-                        ))}
-                    </ul>
-                  </motion.div>
-                )}
+                  <ul className="shp-appliances-room-list">
+                    {allRooms.map((room, index) => (
+                      <motion.li
+                        onClick={() => handleRoomSelect(room)}
+                        key={room}
+                        initial={{ opacity: 0, y: -30 }}
+                        animate={{ opacity: 1, y: -20 }}
+                        exit={{ opacity: 0, y: -30 }}
+                        transition={{ delay: index * 0.2, duration: 0.3 }}
+                      >
+                        {room}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
             </AnimatePresence>
 
-              <p>Smart Air Conditioner</p>
-            </div>
+            <p>Smart Air Conditioner</p>
+          </div>
 
-            <div className="shp-appliances-on-off-button">
-              <button
-                onClick={() => setIsOn(!isOn)}
-                className={isOn ? "shp-appliances-button-on":"shp-appliances-button-off"}
-              >
+          <div className="shp-appliances-on-off-button">
+            <button
+              onClick={() => setIsOn(!isOn)}
+              className={isOn ? "shp-appliances-button-on" : "shp-appliances-button-off"}
+            >
               <span className="status-dot"></span>
               {isOn ? "ON" : "OFF"}
-              </button>
-            </div>
-            
-            <div className="shp-appliances-img-container">
-              <img className="shp-appliances-img" src={airCond} alt="Air Conditioner"/>
-            </div>
+            </button>
+          </div>
 
-            <div className="shp-appliances-statistics">
-              <p className="shp-statistics">Total Uptime</p>
-              <p className="shp-statistics">Fan Speed</p>
-              <p className="shp-statistics">Temperature</p>
-            </div>  
+          <div className="shp-appliances-img-container">
+            <img className="shp-appliances-img" src={airCond} alt="Air Conditioner" />
+          </div>
+
+          <div className="shp-appliances-statistics">
+            <p className="shp-statistics">Total Uptime</p>
+            <p className="shp-statistics">Fan Speed</p>
+            <p className="shp-statistics">Temperature</p>
+          </div>
         </div>
 
         {/* Most Used Container */}
@@ -486,8 +486,8 @@ function SmartHomePage() {
 
           <button onClick={handleAddDevice}>Add Device</button>
         </div>
-      */}  
-    </div>  
+      */}
+    </div>
   );
 }
 
