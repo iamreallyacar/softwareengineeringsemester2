@@ -44,9 +44,12 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=validated_data.get('last_name', '')
         )
         
-        # If profile data was provided, update the auto-created profile
+        # If profile data was provided, ensure profile exists and update it
         if profile_data:
-            UserProfile.objects.filter(user=user).update(**profile_data)
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            for key, value in profile_data.items():
+                setattr(profile, key, value)
+            profile.save()
             
         return user
 
