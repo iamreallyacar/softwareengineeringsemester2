@@ -9,11 +9,6 @@ import 'font-awesome/css/font-awesome.min.css';
 import './css/App.css';
 import LandingPage from "./components/LandingPage";
 
-/*
- * Things that are missing:
- * 1. Device page
- * 2. Room page
- */
 function App() {
     return (
         <BrowserRouter>

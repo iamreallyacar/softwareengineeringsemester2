@@ -18,6 +18,6 @@ const root = createRoot(document.getElementById('root'));
 // root.render(...) attaches the <App /> component to the page
 root.render(
   <React.StrictMode>
-      <App />
+    <App />
   </React.StrictMode>
 );
