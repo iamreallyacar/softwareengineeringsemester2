@@ -61,12 +61,24 @@ def generate_minute_data():
 
 def aggregate_energy_generation():
     """
-    Aggregates daily and monthly logs for all Smart Homes.
-    Runs at 00:05 daily to handle data from the previous day or month.
-    
-    Process:
-    1. For each home, aggregate all 1-minute logs from yesterday into a daily entry
-    2. On first day of month, aggregate previous month's daily logs into a monthly entry
+    Aggregates energy generation data into daily and monthly summaries for all Smart Homes.
+    This function runs as a scheduled task at 00:05 daily and processes data from the previous day.
+    It also creates monthly aggregations at the beginning of each month.
+    Process flow:
+    1. Waits 30 seconds to ensure all 1-minute logs have been generated
+    2. For daily aggregation:
+       - Iterates through all Smart Homes
+       - Collects all 1-minute energy generation logs from previous day
+       - Calculates total generation for each home
+       - Creates or updates EnergyGenerationDaily records
+    3. For monthly aggregation (only on first day of month):
+       - Iterates through all Smart Homes
+       - Collects all daily energy logs from the previous month
+       - Calculates total generation for the month
+       - Creates or updates EnergyGenerationMonthly records
+    All database operations are wrapped in a transaction to ensure data integrity.
+    Raises:
+        Exception: Re-raises any exceptions that occur during processing after logging
     """
     time.sleep(30) # Delay to ensure all 1-minute logs are generated
     

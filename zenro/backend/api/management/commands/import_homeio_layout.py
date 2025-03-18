@@ -4,6 +4,48 @@ from django.core.management.base import BaseCommand, CommandError
 from api.models import HomeIORoom, SupportedDevice
 
 class Command(BaseCommand):
+    """
+    Management command to import Home I/O layout from a JSON file.
+    This command reads a JSON file containing Home I/O layout information and
+    imports it into the HomeIORoom and SupportedDevice database models. The import
+    process handles both input and output devices for each room.
+    Example:
+        python manage.py import_homeio_layout path/to/home_io_layout.json
+    Args:
+        json_path (str): Path to the JSON file containing Home I/O layout data
+    The JSON file should have the following structure:
+    {
+        "rooms": [
+            {
+                "name": "Room name",
+                "zone": "Zone name",
+                "unlock_order": 1,
+                "input_devices": [
+                    {
+                        "model_name": "Device model",
+                        "address": "Memory address",
+                        "contact_type": "Contact type or NULL",
+                        "data_type": "Data type",
+                        "type": "Device type (e.g., sensor, light_switch)"
+                    },
+                    ...
+                ],
+                "output_devices": [
+                    {
+                        "model_name": "Device model",
+                        "address": "Memory address",
+                        "number": "Number or NULL",
+                        "contact_type": "Contact type or NULL",
+                        "data_type": "Data type",
+                        "type": "Device type (e.g., lighting, heating)",
+                        "power_consumption_rate": "Consumption rate value"
+                    },
+                    ...
+                ]
+            },
+            ...
+        ]
+    """
     help = "Import Home I/O layout from a JSON file into HomeIORoom and SupportedDevice tables"
 
     def add_arguments(self, parser):
