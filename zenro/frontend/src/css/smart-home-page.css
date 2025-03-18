@@ -158,7 +158,7 @@ html, body {
     padding-top: 10px;
     box-sizing: border-box;
     flex-wrap: wrap; /* Allow wrapping if necessary */
-    overflow: hidden; /* Prevent overflow */
+    overflow: visible; /* Prevent overflow */
 }
 
 /* Individual statistic items */
@@ -188,8 +188,10 @@ html, body {
 /* Ensure responsiveness for smaller screens */
 @media (max-width: 768px) {
     .shp-cctv-statistics {
-        flex-wrap: nowrap; /* Prevent wrapping */
+        display: flex;
+        flex-wrap: wrap; /* Prevent wrapping */
         justify-content: space-between; /* Distribute items evenly */
+        margin-bottom: 30px;
     }
 
     .shp-statistics {
@@ -319,6 +321,31 @@ html, body {
     background-color: white;
 }
 
+/* Style for the delete button */
+.delete-room-button {
+    width: 40px; /* Fixed width for the button */
+    height: 40px; /* Fixed height for the button */
+    background-color: rgb(245, 54, 54); /* Red background */
+    border: none; /* Remove border */
+    border-radius: 50%; /* Make it circular */
+    display: flex; /* Use Flexbox for alignment */
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    margin-left: 10px;
+}
+
+/* Style for the delete icon inside the button */
+.delete-room-button .delete-icon {
+    color: white; /* White icon color */
+    font-size: 18px; /* Adjust icon size */
+}
+
+/* Hover effect for the delete button */
+.delete-room-button:hover {
+    background-color: darkred; /* Darker red on hover */
+}
 /* Add spacing between the icon and the text */
 .shp-room-icon {
     display: flex;
@@ -677,8 +704,9 @@ html, body {
   /* Modal Buttons Container */
   .modal-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: 10px;
+    padding-top: 20px;
   }
   
   /* Add Room Button */

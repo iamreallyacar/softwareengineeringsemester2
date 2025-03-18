@@ -35,6 +35,9 @@ function SmartHomePage() {
   const [homeIORooms, setHomeIORooms] = useState([]);
   const [selectedHomeIORoom, setSelectedHomeIORoom] = useState(null);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal visibility
+  const [roomToDelete, setRoomToDelete] = useState(null); // State to store the room to be deleted
+
   const handleRoomSelectCCTV = (room) => {
     setSelectedRoomCCTV(room);
     setIsOpen(false);
@@ -74,6 +77,17 @@ function SmartHomePage() {
     } catch (error) {
       console.error("Failed to add room:", error.response?.data || error.message);
       alert("Failed to add room. Please try again.");
+    }
+  };
+
+  const handleDeleteRoom = async (roomId) => {
+    try {
+      // await api.delete(`/rooms/${roomId}/`); // Send DELETE request to the API
+      // setAddedRooms((prevRooms) => prevRooms.filter((room) => room.id !== roomId)); // Remove the room from the state
+      // alert("Room deleted successfully.");
+    } catch (error) {
+      console.error("Failed to delete room:", error.response?.data || error.message);
+      alert("Failed to delete room. Please try again.");
     }
   };
 
@@ -205,28 +219,76 @@ function SmartHomePage() {
           </ul>
           </div> */}
 
-            <div className="shp-rooms-list-container">
-              <ul className="shp-rooms-list">
-                {addedRooms.length === 0 ? (
-                  <h4>No rooms added yet. Use the "Add Room" button to add a room.</h4>
-                ) : (
-                  addedRooms.map((room) => (
-                    <li key={room.id}>
-                      <div className="shp-room-icon">
+          <div className="shp-rooms-list-container">
+            <ul className="shp-rooms-list">
+              {addedRooms.length === 0 ? (
+                <h4>No rooms added yet. Use the "Add Room" button to add a room.</h4>
+              ) : (
+                addedRooms.map((room) => (
+                  <div
+                    key={room.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <li style={{ listStyle: "none", flex: 1, display: "flex", alignItems: "center" }}>
+                      <div className="shp-room-icon" style={{ marginRight: "10px" }}>
                         <i className="fa-solid fa-couch"></i>
                       </div>
                       <Link
                         to={`/room/${room.id}/${smartHomeId}`}
                         className="shp-rooms-list-links"
+                        style={{ textDecoration: "none", color: "#333", fontWeight: "bold" }}
                       >
-                        {/* {room.id} is to check the room's id */}
-                        {room.name} (ID: {room.id})
+                        {room.name}
                       </Link>
                     </li>
-                  ))
-                )}
-              </ul>
+                    <button
+                      className="delete-room-button"
+                      onClick={() => {
+                        setRoomToDelete(room.id); // Set the room ID to be deleted
+                        setIsDeleteModalOpen(true); // Open the delete confirmation modal
+                      }}
+                    >
+                      <i className="fa-solid fa-trash delete-icon"></i>
+                    </button>
+                  </div>
+                ))
+              )}
+            </ul>
+          </div>
+
+          {isDeleteModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h2>Delete Room</h2>
+                <p style={{ fontSize: "17px", color: "#666", marginTop: "10px" }}>
+                  Are you sure you want to delete this room?
+                  Deleting this room will also remove all associated devices.
+                </p>
+                <div className="modal-buttons">
+                  <button
+                    onClick={() => {
+                      handleDeleteRoom(roomToDelete); // Handle room deletion
+                      setIsDeleteModalOpen(false); // Close the modal
+                    }}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsDeleteModalOpen(false); // Close the modal without deleting
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
+          )}
 
           <button
             className="shp-add-room-button"
