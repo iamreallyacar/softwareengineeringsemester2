@@ -126,112 +126,138 @@ function SmartHomePage() {
       });
   }, [smartHomeId]);
 
-  // useEffect for chart display
+  //UseEffect for charts to show energy usage for day, week, month
   useEffect(() => {
-    const renderEnergyChart = () => {
-      if (!energyChartRef.current) return;
+    const fetchEnergyData = async () => {
+        if (!energyChartRef.current) return;
 
-      const existingChart = Chart.getChart(energyChartRef.current);
-      if (existingChart) {
-        existingChart.destroy();
-      }
+        try {
+            let chartData = null;
+            let chartConfig = null;
 
-      const ctx = energyChartRef.current.getContext('2d');
+            switch (selectedPeriod) {
+                case 'daily':
+                    // Fetch 1-minute device logs for today
+                    const today = new Date().toISOString().split('T')[0];
+                    const roomDevices = await api.get(`/rooms/${selectedEnergyRoom}/devices/`);
+                    const deviceLogsPromises = roomDevices.data.map(device => 
+                        api.get(`/devicelogs/?device=${device.id}&date=${today}`)
+                    );
+                    const deviceLogsResponses = await Promise.all(deviceLogsPromises);
+                    
+                    // Process device data
+                    const deviceTotals = roomDevices.data.map((device, index) => ({
+                        name: device.name,
+                        total: deviceLogsResponses[index].data.reduce((sum, log) => sum + log.energy_usage, 0)
+                    }));
 
-      let chartConfig = {
-        type: 'doughnut',
-        data: {
-          labels: [],
-          datasets: []
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
+                    chartConfig = {
+                        type: 'doughnut',
+                        data: {
+                            labels: deviceTotals.map(d => d.name),
+                            datasets: [{
+                                data: deviceTotals.map(d => d.total),
+                                backgroundColor: ['#FFB357', '#DD946A', '#BF5E40', '#8C4646']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Daily Device Energy Usage (kWh)'
+                                }
+                            }
+                        }
+                    };
+                    break;
+
+                case 'weekly':
+                    // Fetch daily room logs
+                    const weeklyData = await api.get(`/roomlogs/daily/?room=${selectedEnergyRoom}`);
+                    const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                    
+                    chartConfig = {
+                        type: 'bar',
+                        data: {
+                            labels: weekDays,
+                            datasets: [{
+                                label: 'Energy Usage',
+                                data: weekDays.map(day => {
+                                    const dayLog = weeklyData.data.find(log => 
+                                        new Date(log.date).toLocaleDateString('en-US', { weekday: 'long' }) === day
+                                    );
+                                    return dayLog ? dayLog.total_energy_usage : 0;
+                                }),
+                                backgroundColor: '#FFB357'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Weekly Room Energy Usage (kWh)'
+                                }
+                            }
+                        }
+                    };
+                    break;
+
+                case 'monthly':
+                    // Fetch monthly room logs
+                    const monthlyData = await api.get(`/roomlogs/monthly/?room=${selectedEnergyRoom}`);
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    
+                    chartConfig = {
+                        type: 'line',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Energy Usage',
+                                data: months.map((_, index) => {
+                                    const monthLog = monthlyData.data.find(log => 
+                                        new Date(log.date).getMonth() === index
+                                    );
+                                    return monthLog ? monthLog.total_energy_usage : 0;
+                                }),
+                                borderColor: '#FFB357',
+                                tension: 0.3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Monthly Room Energy Usage (kWh)'
+                                }
+                            }
+                        }
+                    };
+                    break;
+            }
+
+            // Create or update chart
+            const existingChart = Chart.getChart(energyChartRef.current);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            if (chartConfig) {
+                new Chart(energyChartRef.current.getContext('2d'), chartConfig);
+            }
+
+        } catch (error) {
+            console.error('Error fetching energy data:', error);
         }
-      };
-
-      switch (selectedPeriod) {
-        case 'daily':
-          chartConfig = {
-            type: 'doughnut',
-            data: {
-              labels: ['Lights', 'AC', 'TV', 'Smart Blinds'],
-              datasets: [{
-                data: [30, 45, 15, 10],
-                backgroundColor: ['#FFB357', '#DD946A', '#BF5E40', '#8C4646']
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                title: {
-                  display: true,
-                  text: `Daily Energy Usage - ${selectedEnergyRoom}`,
-                  font: { size: 16 }
-                }
-              }
-            }
-          };
-          break;
-
-        case 'weekly':
-          chartConfig = {
-            type: 'bar',
-            data: {
-              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-              datasets: [{
-                label: 'Energy Usage (kWh)',
-                data: [65, 59, 80, 81, 56, 55, 40],
-                backgroundColor: '#FFB357'
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                title: {
-                  display: true,
-                  text: `Weekly Energy Usage - ${selectedEnergyRoom}`,
-                  font: { size: 16 }
-                }
-              }
-            }
-          };
-          break;
-
-        case 'monthly':
-          chartConfig = {
-            type: 'line',
-            data: {
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-              datasets: [{
-                label: 'Energy Usage (kWh)',
-                data: [1200, 1900, 1500, 1700, 2000, 1800],
-                borderColor: '#FFB357',
-                tension: 0.3
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                title: {
-                  display: true,
-                  text: `Monthly Energy Usage - ${selectedEnergyRoom}`,
-                  font: { size: 16 }
-                }
-              }
-            }
-          };
-          break;
-      }
-
-      new Chart(ctx, chartConfig);
     };
 
-    renderEnergyChart();
-  }, [selectedPeriod, selectedEnergyRoom]);
+    fetchEnergyData();
+}, [selectedPeriod, selectedEnergyRoom]);
 
   return (
     <div className="smart-home-page">
