@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
+import { Chart } from 'chart.js/auto'
 
 import airCond from "../assets/images/aircond.png";
 
@@ -37,6 +38,11 @@ function SmartHomePage() {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal visibility
   const [roomToDelete, setRoomToDelete] = useState(null); // State to store the room to be deleted
+
+  // State to store the energy data
+  const [selectedPeriod, setSelectedPeriod] = useState('daily');
+  const [selectedEnergyRoom, setSelectedEnergyRoom] = useState('Living Room');
+  const energyChartRef = useRef(null);
 
   const handleRoomSelectCCTV = (room) => {
     setSelectedRoomCCTV(room);
@@ -119,6 +125,113 @@ function SmartHomePage() {
         console.error("Error fetching homeio-rooms:", error);
       });
   }, [smartHomeId]);
+
+  // useEffect for chart display
+  useEffect(() => {
+    const renderEnergyChart = () => {
+      if (!energyChartRef.current) return;
+
+      const existingChart = Chart.getChart(energyChartRef.current);
+      if (existingChart) {
+        existingChart.destroy();
+      }
+
+      const ctx = energyChartRef.current.getContext('2d');
+
+      let chartConfig = {
+        type: 'doughnut',
+        data: {
+          labels: [],
+          datasets: []
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        }
+      };
+
+      switch (selectedPeriod) {
+        case 'daily':
+          chartConfig = {
+            type: 'doughnut',
+            data: {
+              labels: ['Lights', 'AC', 'TV', 'Smart Blinds'],
+              datasets: [{
+                data: [30, 45, 15, 10],
+                backgroundColor: ['#FFB357', '#DD946A', '#BF5E40', '#8C4646']
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: `Daily Energy Usage - ${selectedEnergyRoom}`,
+                  font: { size: 16 }
+                }
+              }
+            }
+          };
+          break;
+
+        case 'weekly':
+          chartConfig = {
+            type: 'bar',
+            data: {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              datasets: [{
+                label: 'Energy Usage (kWh)',
+                data: [65, 59, 80, 81, 56, 55, 40],
+                backgroundColor: '#FFB357'
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: `Weekly Energy Usage - ${selectedEnergyRoom}`,
+                  font: { size: 16 }
+                }
+              }
+            }
+          };
+          break;
+
+        case 'monthly':
+          chartConfig = {
+            type: 'line',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+              datasets: [{
+                label: 'Energy Usage (kWh)',
+                data: [1200, 1900, 1500, 1700, 2000, 1800],
+                borderColor: '#FFB357',
+                tension: 0.3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: `Monthly Energy Usage - ${selectedEnergyRoom}`,
+                  font: { size: 16 }
+                }
+              }
+            }
+          };
+          break;
+      }
+
+      new Chart(ctx, chartConfig);
+    };
+
+    renderEnergyChart();
+  }, [selectedPeriod, selectedEnergyRoom]);
 
   return (
     <div className="smart-home-page">
@@ -390,25 +503,36 @@ function SmartHomePage() {
           </div>
         </div>
 
-        {/* Most Used Container */}
-        <div className="shp-most-used">
-          <div className="shp-most-used-title">
-            <h3> {selectedRoom} </h3>
+        {/* Energy Information */}
+        <div className="energy-info">
+          <div className="energy-info-header">
+            <div className="period-buttons">
+              {['daily', 'weekly', 'monthly'].map((period) => (
+                <button
+                  key={period}
+                  onClick={() => setSelectedPeriod(period)}
+                  className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
+                >
+                  {period.charAt(0).toUpperCase() + period.slice(1)}
+                </button>
+              ))}
+            </div>
+            <select
+              value={selectedEnergyRoom}
+              onChange={(e) => setSelectedEnergyRoom(e.target.value)}
+              className="room-selector"
+            >
+              {addedRooms.map((room) => (
+                <option key={room.id} value={room.name}>
+                  {room.name}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <h4>Most Used Appliances</h4>
-
-          <div style={{ width: "100%", height: "200%" }}>
-            <ul className="shp-most-used-list">
-              <li className="shp-most-used-appliances">Smart Air Conditioner</li>
-              <li className="shp-most-used-appliances">Smart Lights</li>
-              <li className="shp-most-used-appliances">Smart TV</li>
-              <li className="shp-most-used-appliances">Smart Fridge</li>
-              <li className="shp-most-used-appliances">Smart Oven</li>
-              <li className="shp-most-used-appliances">Smart Washing Machine</li>
-            </ul>
+          <div style={{ height: '300px', width: '100%', position: 'relative' }}>
+            <canvas ref={energyChartRef}></canvas>
           </div>
-
         </div>
 
       </div>
