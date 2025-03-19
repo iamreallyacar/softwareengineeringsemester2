@@ -200,7 +200,7 @@ class HomeIORoomSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = HomeIORoom
-        fields = ['id', 'name', 'unlock_order', 'is_unlocked']
+        fields = ['id', 'name', 'zone', 'unlock_order', 'is_unlocked']
     
     def get_is_unlocked(self, obj):
         # Check if this HomeIORoom is linked to any Room
