@@ -673,6 +673,14 @@ body {
     border-radius: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+    position: relative;
+    transition: transform 0.6s ease, background-color 0.6s ease;
+    transform-style: preserve-3d;
+}
+
+.energy-info.generation-view {
+    background: #e0f2e0; /* Lighter green background for generation view */
+    border-color: #4CAF50;
 }
 
 .energy-info-header {
@@ -748,13 +756,26 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     text-align: center;
-    color: #666;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 15px;
-    border-radius: 10px;
     width: 80%;
-    max-width: 400px;
+    max-width: 300px;
+    z-index: 10;
+}
+
+.no-data-message p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    word-wrap: break-word; /* Ensures long text wraps properly */
+}
+
+.generation-chart {
+    position: relative;
+    min-height: 300px;
 }
 
 /* Modal Overlay */
@@ -909,4 +930,84 @@ body {
     /* White background */
     color: #333;
     /* Dark text color */
+}
+
+/* Energy info styles for the card flip effect */
+.energy-info {
+    position: relative;
+    transition: transform 0.6s ease, background-color 0.6s ease;
+    transform-style: preserve-3d;
+}
+
+.energy-info.generation-view {
+    background: #e0f2e0; /* Lighter green background for generation view */
+    border-color: #4CAF50;
+}
+
+.view-toggle-button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.view-toggle-button.generation {
+    background-color: #4CAF50; /* Green for "View Home Energy Generation" */
+    color: white;
+}
+
+.view-toggle-button.consumption {
+    background-color: #F44336; /* Red for "View Room Energy Consumption" */
+    color: white;
+}
+
+.view-toggle-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.chart-container.generation-chart {
+    position: relative;
+}
+
+.consumption-chart, .generation-chart {
+    width: 100%;
+    position: relative;
+}
+
+/* Add these styles to fix the chart sizing */
+
+/* Adjust consumption chart to account for room selector */
+.consumption-chart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 330px; /* Slightly increased height */
+}
+
+.consumption-chart canvas {
+  margin-top: 10px;
+  height: calc(100% - 50px) !important; /* Subtract room selector height */
+  width: 100% !important;
+}
+
+/* Adjust generation chart which doesn't have a selector */
+.generation-chart {
+  position: relative;
+  height: 330px;
+}
+
+.generation-chart canvas {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Ensure the room selector doesn't take too much space */
+.room-selector {
+  margin-bottom: 10px;
+  align-self: flex-start;
+  max-width: 300px;
 }

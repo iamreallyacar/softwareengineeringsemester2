@@ -237,3 +237,137 @@ body,
   background-color: rgba(255, 237, 213, 0.6);
   color: #ea580c;
 }
+
+/* Add these styles for the create home form and join password field */
+
+.create-home {
+  width: 85%;
+  margin-bottom: 1.5rem;
+}
+
+.create-home form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.create-home input {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--input);
+  transition: border-color 0.2s ease;
+  font-size: 1rem;
+}
+
+.create-home input:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.1);
+}
+
+.create-home button {
+  padding: 0.75rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  font-size: 1rem;
+}
+
+.create-home button:hover:not(:disabled) {
+  background-color: #c2410c;
+}
+
+.create-home button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.join-password-input {
+  font-family: sans-serif; /* Ensure password dots look consistent */
+}
+
+/* Add these styles for the join modal */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.join-modal {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.join-modal h2 {
+  color: var(--primary);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.join-modal p {
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+}
+
+.error-message {
+  color: var(--destructive) !important;
+  font-size: 0.875rem;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.join-button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 1;
+}
+
+.join-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 1;
+}
+
+.no-homes-message {
+  padding: 1rem 2rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+  text-align: center;
+}

@@ -96,7 +96,7 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
         # Prevent creator from joining as a member
         if request.user == smart_home.creator:
             return Response(
-                {"error": "You are already the owner of this home"}, 
+                {"error": "You cannot join your own smart home"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -104,8 +104,8 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
         provided_password = request.data.get('join_password', '')
         if provided_password != smart_home.join_password:
             return Response(
-                {"error": "Incorrect join password"}, 
-                status=status.HTTP_403_FORBIDDEN
+                {"error": "Incorrect join password"},
+                status=status.HTTP_400_BAD_REQUEST
             )
         
         smart_home.members.add(request.user)
@@ -116,6 +116,19 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
         smart_home = self.get_object()
         smart_home.members.remove(request.user)
         return Response({'status': 'left'})
+
+    @action(detail=False, methods=['GET'])
+    def available(self, request):
+        """Return smart homes created by other users that the current user hasn't joined"""
+        user = request.user
+        
+        # Get homes where user is not creator and not a member
+        available_homes = SmartHome.objects.exclude(
+            models.Q(creator=user) | models.Q(members=user)
+        )
+        
+        serializer = self.get_serializer(available_homes, many=True)
+        return Response(serializer.data)
 
 class SupportedDeviceViewSet(viewsets.ModelViewSet):
     """

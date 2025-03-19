@@ -34,8 +34,8 @@ router.register(r'roomlogs', RoomLog1MinViewSet, basename='roomlogs')
 router.register(r'roomlogs/daily', RoomLogDailyViewSet, basename='roomlogs_daily')
 router.register(r'roomlogs/monthly', RoomLogMonthlyViewSet, basename='roomlogs_monthly')
 router.register(r'energy-generation', EnergyGeneration1MinViewSet, basename='energy-generation')
-router.register(r'energy-generation/daily', EnergyGenerationDailyViewSet, basename='energy-generation-daily')
-router.register(r'energy-generation/monthly', EnergyGenerationMonthlyViewSet, basename='energy-generation-monthly')
+router.register(r'energy-generation-daily', EnergyGenerationDailyViewSet, basename='energy-generation-daily')
+router.register(r'energy-generation-monthly', EnergyGenerationMonthlyViewSet, basename='energy-generation-monthly')
 
 # New URLs for frontend compatibility
 router.register(r'roomlogs1min', RoomLog1MinViewSet, basename='roomlog1min')  
