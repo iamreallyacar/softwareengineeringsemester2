@@ -22,7 +22,7 @@ from .serializers import (
     RoomLog1MinSerializer, HomeIORoomSerializer, RoomLogMonthlySerializer, 
     EnergyGeneration1MinSerializer, EnergyGenerationDailySerializer, 
     EnergyGenerationMonthlySerializer, DeviceControlSerializer,
-    UserProfileSerializer
+    UserProfileSerializer, SmartHomeListSerializer
 )
 from .home_io.home_io_services import HomeIOService
 
@@ -80,6 +80,12 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
             models.Q(creator=user) | models.Q(members=user)
         ).distinct()
 
+    def get_serializer_class(self):
+        """Use a different serializer for list views to protect the join password"""
+        if self.action == 'list':
+            return SmartHomeListSerializer  # We'll create this below
+        return self.serializer_class
+
     @action(detail=True, methods=['POST'])
     def join(self, request, pk=None):
         smart_home = self.get_object()
@@ -87,12 +93,20 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
         # Prevent creator from joining as a member
         if request.user == smart_home.creator:
             return Response(
-                {'error': 'You are already the creator of this home'}, 
+                {"error": "You are already the owner of this home"}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
-            
+        
+        # Check password
+        provided_password = request.data.get('join_password', '')
+        if provided_password != smart_home.join_password:
+            return Response(
+                {"error": "Incorrect join password"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
         smart_home.members.add(request.user)
-        return Response({'status': 'joined'})
+        return Response({'status': 'joined'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['POST'])
     def leave(self, request, pk=None):
@@ -878,4 +892,3 @@ def current_user_info(request):
     user = request.user
     serializer = UserSerializer(user, context={'request': request})
     return Response(serializer.data)
-

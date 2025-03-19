@@ -16,6 +16,7 @@ class SmartHome(models.Model):
     members = models.ManyToManyField(User, related_name='joined_homes', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    join_password = models.CharField(max_length=50, default="", blank=True) 
 
 # Questions
 # 1. Should we add a field for privileged users?
