@@ -17,210 +17,221 @@ function RoomsPage() {
     const [roomData, setRoomData] = useState(null);
     const [deviceLogs, setDeviceLogs] = useState([]);
 
+    // UseEffect for daily chart data and rendering
     useEffect(() => {
-        const fetchRoomData = async () => {
+        const fetchDeviceData = async () => {
             try {
-                const response = await api.get(`/roomlogs/?room=${roomId}`);
-                setRoomData(response.data);
-            } catch (error) {
-                console.error("Error fetching room data:", error);
-            }
-        };
-
-        fetchRoomData();
-    }, [roomId]);
-
-    // Add a new useEffect to fetch device logs
-    useEffect(() => {
-        const fetchDeviceLogs = async () => {
-            try {
+                // Get today's date in YYYY-MM-DD format
+                const today = new Date().toISOString().split('T')[0];
+                
                 // First get all devices in the room
                 const roomResponse = await api.get(`/rooms/${roomId}/`);
-                console.log("Room data:", roomResponse.data); // Debug log
-
                 const devices = roomResponse.data.devices;
+
                 if (!devices || devices.length === 0) {
                     console.log("No devices found in room");
                     return;
                 }
 
-                // Then get daily logs for each device
-                const logsPromises = devices.map(device =>
-                    api.get(`/devicelogs/daily/?device=${device.id}`)
+                // Get today's logs for each device
+                const deviceLogsPromises = devices.map(device => 
+                    api.get(`/devicelogs/?device=${device.id}&start_date=${today}&end_date=${today}`)
                 );
 
-                const logResponses = await Promise.all(logsPromises);
-                const deviceLogsData = devices.map((device, index) => ({
-                    device: device,
-                    logs: logResponses[index].data
-                }));
+                const logResponses = await Promise.all(deviceLogsPromises);
+                
+                // Calculate total energy usage for each device
+                const deviceTotals = devices.map((device, index) => {
+                    const logs = logResponses[index].data;
+                    const totalEnergy = logs.reduce((sum, log) => sum + log.energy_usage, 0);
+                    return {
+                        name: device.name,
+                        energy: totalEnergy
+                    };
+                });
 
-                console.log("Device logs data:", deviceLogsData); // Debug log
-                setDeviceLogs(deviceLogsData);
-            } catch (error) {
-                console.error("Error fetching device logs:", error);
-            }
-        };
+                // Render the donut chart
+                const ctx = chartRef.current.getContext('2d');
+                
+                // Get existing chart instance if it exists
+                const existingChart = Chart.getChart(chartRef.current);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
 
-        if (roomId) {
-            fetchDeviceLogs();
-        }
-    }, [roomId]);
-
-    // Update the chartRef useEffect
-    useEffect(() => {
-        const renderChart = () => {
-            if (!chartRef.current) {
-                console.log("Chart ref not found");
-                return;
-            }
-
-            console.log("Rendering donut chart"); // Debug log
-
-            const existingChart = Chart.getChart(chartRef.current);
-            if (existingChart) {
-                existingChart.destroy();
-            }
-
-            const ctx = chartRef.current.getContext('2d');
-            if (!ctx) {
-                console.log("Could not get chart context");
-                return;
-            }
-
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Lights', 'Security Camera', 'Air Conditioner'],
-                    datasets: [{
-                        data: [200, 120, 225],
-                        backgroundColor: [
-                            '#FFB357', // Orange for Lights
-                            '#DD946A', // Light Brown for Camera
-                            '#BF5E40'  // Dark Brown for AC
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '60%',
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                padding: 20,
-                                font: {
-                                    size: 14
+                // Create new chart
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: deviceTotals.map(device => device.name),
+                        datasets: [{
+                            data: deviceTotals.map(device => device.energy),
+                            backgroundColor: [
+                                '#FFB357', // Orange
+                                '#DD946A', // Light Brown
+                                '#BF5E40', // Dark Brown
+                                '#8C4646'  // Burgundy
+                            ],
+                            borderWidth: 0,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    padding: 20,
+                                    font: {
+                                        size: 14
+                                    }
                                 }
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: `${roomId} Energy Usage by Device (kWh)`,
-                            font: {
-                                size: 16,
-                                weight: 'bold'
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    return `${context.label}: ${context.raw} kWh`;
+                            },
+                            title: {
+                                display: true,
+                                text: `${roomId} Energy Usage by Device (kWh)`,
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw.toFixed(2)} kWh`;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+
+            } catch (error) {
+                console.error("Error fetching device data:", error);
+            }
         };
 
-        renderChart();
+        if (chartRef.current) {
+            fetchDeviceData();
+        }
     }, [roomId]);
 
+    //UseEffect for weekly chart data and rendering
     useEffect(() => {
-        const renderWeeklyChart = () => {
+        const fetchWeeklyData = async () => {
             if (!weeklyChartRef.current) {
                 console.log("Weekly chart ref not found");
                 return;
             }
 
-            console.log("Rendering weekly chart"); // Debug log
+            try {
+                // Get all devices in the room
+                const roomResponse = await api.get(`/rooms/${roomId}/`);
+                const devices = roomResponse.data.devices;
 
-            const existingChart = Chart.getChart(weeklyChartRef.current);
-            if (existingChart) {
-                existingChart.destroy();
-            }
+                if (!devices || devices.length === 0) {
+                    console.log("No devices found in room");
+                    return;
+                }
 
-            const ctx = weeklyChartRef.current.getContext('2d');
-            if (!ctx) {
-                console.log("Could not get weekly chart context");
-                return;
-            }
+                // Get weekly logs for each device
+                const deviceLogsPromises = devices.map(device => 
+                    api.get(`/devicelogs/daily/?device=${device.id}`)
+                );
 
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                    datasets: [
-                        {
-                            label: 'Lights',
-                            data: [90, 90, 120, 200, 40, 250, 250],
-                            backgroundColor: '#FFB357'
-                        },
-                        {
-                            label: 'Security Camera',
-                            data: [120, 120, 120, 120, 120, 120, 120],
-                            backgroundColor: '#DD946A'
-                        },
-                        {
-                            label: 'Air Conditioner',
-                            data: [200, 200, 50, 225, 20, 200, 150],
-                            backgroundColor: '#BF5E40'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            stacked: true,
-                            grid: {
-                                display: false
+                const logResponses = await Promise.all(deviceLogsPromises);
+                
+                // Process the data for each device
+                const deviceDatasets = devices.map((device, deviceIndex) => {
+                    const deviceLogs = logResponses[deviceIndex].data;
+                    
+                    // Map logs to days of the week
+                    const dailyData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                        .map(day => {
+                            const dayLog = deviceLogs.find(log => {
+                                const logDate = new Date(log.date);
+                                return logDate.getDay() === ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(day);
+                            });
+                            return dayLog ? dayLog.total_energy_usage : 0;
+                        });
+
+                    return {
+                        label: device.name,
+                        data: dailyData,
+                        backgroundColor: [
+                            '#FFB357',
+                            '#DD946A',
+                            '#BF5E40',
+                            '#8C4646'
+                        ][deviceIndex % 4]
+                    };
+                });
+
+                // Create or update the chart
+                const existingChart = Chart.getChart(weeklyChartRef.current);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+
+                const ctx = weeklyChartRef.current.getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                        datasets: deviceDatasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Energy Usage (kWh)'
+                                }
                             }
                         },
-                        y: {
-                            stacked: true,
-                            beginAtZero: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
                             title: {
                                 display: true,
-                                text: 'Energy Usage (kWh)'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: `Weekly ${roomId} Energy Usage by Device`,
-                            font: {
-                                size: 16,
-                                weight: 'bold'
+                                text: `Weekly ${roomId} Energy Usage by Device`,
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw.toFixed(2)} kWh`;
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+
+            } catch (error) {
+                console.error("Error fetching weekly device data:", error);
+            }
         };
 
-        // Call the render function
-        renderWeeklyChart();
-    }, [roomId]); // Remove roomData dependency since we're using hardcoded data
+        fetchWeeklyData();
+    }, [roomId]);
 
     return (
         <div className="room-page">
