@@ -62,10 +62,16 @@
 
 .columns {
   display: flex;
-  width: 80%;
-  padding-left: 90px;
-  gap: 20px;
-  overflow: hidden;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 20px 20px 20px;
+  width: calc(100% - 150px);
+  height: 100vh;
+  margin-left: 150px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .column1 {
@@ -85,8 +91,7 @@
   /* background-color: #ffe9c5; */
   padding: 20px;
   border-radius: 10px;
-
-  max-height: 500px;
+  max-height: 850px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -196,7 +201,7 @@ input:checked+.slider:after {
 
 
 /* The .room-page styles */
-.room-page {
+/* .room-page {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -212,15 +217,33 @@ input:checked+.slider:after {
   box-sizing: border-box;
   position: relative;
   overflow-x: hidden;
+} */
+
+.room-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+  overflow: hidden;
+  width: 100vw;
 }
 
 .page-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
-  padding-left: 30vw;
+  width: calc(100% - 150px);
+  display: flex; /* Use Flexbox for alignment */
+  flex-wrap: wrap; /* Wrap items to the next line */
+  justify-content: space-between; /* Space items evenly across the row */
+  align-items: center; /* Vertically center the items */
+  box-sizing: border-box; /* Include padding in width calculations */
+  gap: 20px;
+  padding: 20px 0 5px 50px;
+  margin-left: 150px; /* Match the width of the sidebar */
+}
+
+.page-header h1 {
+  color:#C14600;
 }
 
 .room-appliances-img-container {

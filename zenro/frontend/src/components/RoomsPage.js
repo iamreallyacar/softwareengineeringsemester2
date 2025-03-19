@@ -8,6 +8,7 @@ import lightBulb from "../assets/images/light-bulb.png";
 import smartBlind from "../assets/images/smart-blind.png";
 import airCond from "../assets/images/aircond.png";
 import smartTV from "../assets/images/smart-tv.png";
+import Sidebar from "./Sidebar";
 
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
@@ -235,18 +236,9 @@ function RoomsPage() {
 
     return (
         <div className="room-page">
+            <Sidebar />
             {/* Page Header Section */}
             <div className="page-header">
-                {/* <div className="sidebar">
-          <ul>
-              <li><a href="#">Home</a></li>
-              <li><a href="#">About</a></li>
-              <li><a href="#">Services</a></li>
-              <li><a href="#">Contact</a></li>
-              <li><a href="/smart-homes">Back</a></li>
-          </ul>
-        </div> */}
-
                 <Link to={`/smarthomepage/${smartHomeId}`}>
                     <h1><i className="fas fa-arrow-left"></i> Overview</h1>
                 </Link>
