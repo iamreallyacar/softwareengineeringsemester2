@@ -667,9 +667,9 @@ body {
 
 /* Energy info container */
 .energy-info {
-    background: #fbdba7;  /* Match CCTV background */
+    background: #fbdba7;
     padding: 20px;
-    border: 3px solid white;  /* Match CCTV border */
+    border: 3px solid white;
     border-radius: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
@@ -680,6 +680,14 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.period-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .period-buttons {
@@ -688,7 +696,7 @@ body {
 }
 
 .period-button {
-    background-color: beige;  /* Match CCTV button background */
+    background-color: beige;
     color: black;
     font-weight: bold;
     padding: 8px 16px;
@@ -699,17 +707,16 @@ body {
     transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.period-button:hover {
-    background-color: rgb(241, 241, 188);  /* Match CCTV button hover */
-    transform: scale(1.05);
-}
-
-.period-button.active {
+.period-button:hover, .period-button.active {
     background-color: rgb(241, 241, 188);
     transform: scale(1.05);
 }
 
-.room-selector {
+.time-selector {
+    min-width: 200px;
+}
+
+.date-selector, .month-selector, .year-selector, .room-selector {
     background-color: beige;
     color: black;
     font-weight: bold;
@@ -718,22 +725,36 @@ body {
     border: 0px;
     box-shadow: 0px 3px 3px black;
     cursor: pointer;
+    width: 100%;
 }
 
-.room-selector:hover {
+.date-selector:hover, .month-selector:hover, .year-selector:hover, .room-selector:hover {
     background-color: rgb(241, 241, 188);
 }
 
-/* Chart title styling */
-.energy-info canvas {
-    margin-top: 20px;
+.date-selector:disabled, .month-selector:disabled, .year-selector:disabled, .room-selector:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.energy-info h4 {
-    color: black;
-    font-weight: bold;
-    margin: 0;
-    padding: 10px 0;
+.chart-container {
+    height: 300px;
+    width: 100%;
+    position: relative;
+}
+
+.no-data-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #666;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
 }
 
 /* Modal Overlay */

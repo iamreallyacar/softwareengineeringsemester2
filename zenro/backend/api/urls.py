@@ -31,11 +31,16 @@ router.register(r'devicelogs', DeviceLog1MinViewSet, basename='devicelogs')
 router.register(r'devicelogs/daily', DeviceLogDailyViewSet, basename='devicelogdaily')
 router.register(r'devicelogs/monthly', DeviceLogMonthlyViewSet, basename='devicelogsmonthly')
 router.register(r'roomlogs', RoomLog1MinViewSet, basename='roomlogs')
-router.register(r'roomlogs/daily', RoomLogDailyViewSet, basename='roomlogdaily')
-router.register(r'roomlogs/monthly', RoomLogMonthlyViewSet, basename='roomlogsmonthly')
+router.register(r'roomlogs/daily', RoomLogDailyViewSet, basename='roomlogs_daily')
+router.register(r'roomlogs/monthly', RoomLogMonthlyViewSet, basename='roomlogs_monthly')
 router.register(r'energy-generation', EnergyGeneration1MinViewSet, basename='energy-generation')
 router.register(r'energy-generation/daily', EnergyGenerationDailyViewSet, basename='energy-generation-daily')
 router.register(r'energy-generation/monthly', EnergyGenerationMonthlyViewSet, basename='energy-generation-monthly')
+
+# New URLs for frontend compatibility
+router.register(r'roomlogs1min', RoomLog1MinViewSet, basename='roomlog1min')  
+router.register(r'roomlogsdaily', RoomLogDailyViewSet, basename='roomlogdaily_alt') # Changed basename
+router.register(r'roomlogsmonthly', RoomLogMonthlyViewSet, basename='roomlogsmonthly_alt') # Changed basename
 
 # Organized URL patterns by function
 urlpatterns = [

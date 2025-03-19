@@ -1,4 +1,3 @@
-// filepath: /home/zenro/frontend/src/api.js
 import axios from "axios";
 
 // The axios instance includes a base URL for backend API calls
@@ -28,5 +27,26 @@ api.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+// Add handling for 401 responses
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      // Clear token and redirect to login
+      localStorage.removeItem("accessToken");
+      window.location = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
+export const getSmartHomes = () => api.get('/smarthomes/');
+export const getRooms = (smartHomeId) => api.get(`/rooms/?smart_home=${smartHomeId}`);
+export const controlDevice = (deviceId, data) => api.post(`/devices/${deviceId}/control/`, data);
+
+export const getAvailableDates = (roomId) => api.get(`/available_dates/?room=${roomId}`);
+export const getAvailableMonths = (roomId) => api.get(`/available_months/?room=${roomId}`);
+export const getAvailableYears = (roomId) => api.get(`/available_years/?room=${roomId}`);
 
 export default api;

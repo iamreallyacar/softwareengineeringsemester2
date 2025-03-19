@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from rest_framework import viewsets, status, permissions
+import datetime
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -25,6 +26,8 @@ from .serializers import (
     UserProfileSerializer, SmartHomeListSerializer
 )
 from .home_io.home_io_services import HomeIOService
+from django_filters import rest_framework as filters
+from rest_framework import viewsets, status, permissions, filters as drf_filters
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -281,26 +284,26 @@ class RoomLog1MinViewSet(viewsets.ReadOnlyModelViewSet):
     - end_date: Filter by end date (YYYY-MM-DD)
     """
     serializer_class = RoomLog1MinSerializer
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['room', 'created_at']
     
     def get_queryset(self):
-        queryset = RoomLog1Min.objects.all().order_by('-created_at')
-        
-        # Filter by room if specified
+        queryset = RoomLog1Min.objects.all()
         room_id = self.request.query_params.get('room')
+        date_str = self.request.query_params.get('date')
+        
         if room_id:
             queryset = queryset.filter(room_id=room_id)
             
-        # Filter by date range if specified
-        start_date = self.request.query_params.get('start_date')
-        if start_date:
-            queryset = queryset.filter(created_at__date__gte=start_date)
-                
-        end_date = self.request.query_params.get('end_date')
-        if end_date:
-            queryset = queryset.filter(created_at__date__lte=end_date)
+        if date_str:
+            date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+            next_day = date + datetime.timedelta(days=1)
+            queryset = queryset.filter(
+                created_at__gte=datetime.datetime.combine(date, datetime.time.min),
+                created_at__lt=datetime.datetime.combine(next_day, datetime.time.min)
+            )
             
-        # Limit results to prevent performance issues
-        return queryset[:1000]  # Limit to 1000 most recent records
+        return queryset
 
 class DeviceLogMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
     """

@@ -40,9 +40,18 @@ function SmartHomePage() {
   const [roomToDelete, setRoomToDelete] = useState(null); // State to store the room to be deleted
 
   // State to store the energy data
-  const [selectedPeriod, setSelectedPeriod] = useState('daily');
-  const [selectedEnergyRoom, setSelectedEnergyRoom] = useState('Living Room');
+  const [selectedPeriod, setSelectedPeriod] = useState('day');
+  const [selectedEnergyRoom, setSelectedEnergyRoom] = useState(null);
+  const [unlockedRooms, setUnlockedRooms] = useState([]);
   const energyChartRef = useRef(null);
+
+  // New state variables for date selection
+  const [availableDates, setAvailableDates] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [availableYears, setAvailableYears] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // Today
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // Current month
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
 
   const handleRoomSelectCCTV = (room) => {
     setSelectedRoomCCTV(room);
@@ -102,6 +111,14 @@ function SmartHomePage() {
     api.get(`/rooms/?smart_home=${smartHomeId}`)
       .then((res) => {
         setAddedRooms(res.data); // Populate the addedRooms state with the fetched data
+        // Filter only unlocked rooms
+        const unlocked = res.data.filter(room => room.is_unlocked);
+        setUnlockedRooms(unlocked);
+        
+        // Set default room if available
+        if (unlocked.length > 0 && !selectedEnergyRoom) {
+          setSelectedEnergyRoom(unlocked[0].id);
+        }
       })
       .catch((error) => {
         console.error("Error fetching rooms:", error);
@@ -126,138 +143,289 @@ function SmartHomePage() {
       });
   }, [smartHomeId]);
 
-  //UseEffect for charts to show energy usage for day, week, month
+  // Add new useEffect to fetch available dates when room changes
   useEffect(() => {
-    const fetchEnergyData = async () => {
-        if (!energyChartRef.current) return;
-
-        try {
-            let chartData = null;
-            let chartConfig = null;
-
-            switch (selectedPeriod) {
-                case 'daily':
-                    // Fetch 1-minute device logs for today
-                    const today = new Date().toISOString().split('T')[0];
-                    const roomDevices = await api.get(`/rooms/${selectedEnergyRoom}/devices/`);
-                    const deviceLogsPromises = roomDevices.data.map(device => 
-                        api.get(`/devicelogs/?device=${device.id}&date=${today}`)
-                    );
-                    const deviceLogsResponses = await Promise.all(deviceLogsPromises);
-                    
-                    // Process device data
-                    const deviceTotals = roomDevices.data.map((device, index) => ({
-                        name: device.name,
-                        total: deviceLogsResponses[index].data.reduce((sum, log) => sum + log.energy_usage, 0)
-                    }));
-
-                    chartConfig = {
-                        type: 'doughnut',
-                        data: {
-                            labels: deviceTotals.map(d => d.name),
-                            datasets: [{
-                                data: deviceTotals.map(d => d.total),
-                                backgroundColor: ['#FFB357', '#DD946A', '#BF5E40', '#8C4646']
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: 'Daily Device Energy Usage (kWh)'
-                                }
-                            }
-                        }
-                    };
-                    break;
-
-                case 'weekly':
-                    // Fetch daily room logs
-                    const weeklyData = await api.get(`/roomlogs/daily/?room=${selectedEnergyRoom}`);
-                    const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                    
-                    chartConfig = {
-                        type: 'bar',
-                        data: {
-                            labels: weekDays,
-                            datasets: [{
-                                label: 'Energy Usage',
-                                data: weekDays.map(day => {
-                                    const dayLog = weeklyData.data.find(log => 
-                                        new Date(log.date).toLocaleDateString('en-US', { weekday: 'long' }) === day
-                                    );
-                                    return dayLog ? dayLog.total_energy_usage : 0;
-                                }),
-                                backgroundColor: '#FFB357'
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: 'Weekly Room Energy Usage (kWh)'
-                                }
-                            }
-                        }
-                    };
-                    break;
-
-                case 'monthly':
-                    // Fetch monthly room logs
-                    const monthlyData = await api.get(`/roomlogs/monthly/?room=${selectedEnergyRoom}`);
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    
-                    chartConfig = {
-                        type: 'line',
-                        data: {
-                            labels: months,
-                            datasets: [{
-                                label: 'Energy Usage',
-                                data: months.map((_, index) => {
-                                    const monthLog = monthlyData.data.find(log => 
-                                        new Date(log.date).getMonth() === index
-                                    );
-                                    return monthLog ? monthLog.total_energy_usage : 0;
-                                }),
-                                borderColor: '#FFB357',
-                                tension: 0.3
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: 'Monthly Room Energy Usage (kWh)'
-                                }
-                            }
-                        }
-                    };
-                    break;
-            }
-
-            // Create or update chart
-            const existingChart = Chart.getChart(energyChartRef.current);
-            if (existingChart) {
-                existingChart.destroy();
-            }
-
-            if (chartConfig) {
-                new Chart(energyChartRef.current.getContext('2d'), chartConfig);
-            }
-
-        } catch (error) {
-            console.error('Error fetching energy data:', error);
+    if (!selectedEnergyRoom) return;
+    
+    // Fetch available dates for the selected room (1Min logs)
+    api.get(`/roomlogs1min/available-dates/?room=${selectedEnergyRoom}`)
+      .then(res => {
+        setAvailableDates(res.data.dates || []);
+        if (res.data.dates && res.data.dates.length > 0) {
+          setSelectedDate(res.data.dates[res.data.dates.length - 1]); // Select most recent date
         }
-    };
+      })
+      .catch(error => {
+        console.error("Error fetching available dates:", error);
+      });
+    
+    // Fetch available months for the selected room (Daily logs)
+    api.get(`/roomlogsdaily/available-months/?room=${selectedEnergyRoom}`)
+      .then(res => {
+        setAvailableMonths(res.data.months || []);
+        if (res.data.months && res.data.months.length > 0) {
+          setSelectedMonth(res.data.months[res.data.months.length - 1]); // Select most recent month
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching available months:", error);
+      });
+    
+    // Fetch available years for the selected room (Monthly logs)
+    api.get(`/roomlogsmonthly/available-years/?room=${selectedEnergyRoom}`)
+      .then(res => {
+        setAvailableYears(res.data.years || []);
+        if (res.data.years && res.data.years.length > 0) {
+          setSelectedYear(res.data.years[res.data.years.length - 1]); // Select most recent year
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching available years:", error);
+      });
+  }, [selectedEnergyRoom]);
 
+  // Replace the energy chart useEffect
+  useEffect(() => {
+    if (!energyChartRef.current || !selectedEnergyRoom) return;
+    
+    const fetchEnergyData = async () => {
+      try {
+        let labels = [];
+        let dataPoints = [];
+        let chartTitle = '';
+        
+        // Find the room object for display name
+        const roomObj = unlockedRooms.find(r => r.id === selectedEnergyRoom);
+        const roomName = roomObj ? roomObj.name : 'Selected Room';
+        
+        switch (selectedPeriod) {
+          case 'day':
+            // Just get all logs and filter on frontend
+            const response = await api.get(`/roomlogs1min/?room=${selectedEnergyRoom}`);
+            console.log("API response length:", response.data.length);
+            
+            // Filter logs for selected date
+            const dailyLogs = response.data.filter(log => {
+              // Use dates with UTC offset removed for consistent comparison 
+              // Parse the date string from created_at
+              const createdAtDate = new Date(log.created_at);
+              
+              // Get date as string in format "YYYY-MM-DD"
+              const createdAtDateString = log.created_at.split('T')[0];
+              
+              // Direct string comparison with selected date
+              return createdAtDateString === selectedDate;
+            });
+            
+            console.log("Selected date:", selectedDate);
+            console.log("Filtered logs count:", dailyLogs.length);
+            
+            // Group logs by hour
+            const hourlyData = Array(24).fill(0);
+            dailyLogs.forEach(log => {
+              const hour = new Date(log.created_at).getHours();
+              hourlyData[hour] += log.energy_usage;
+            });
+            
+            labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+            dataPoints = hourlyData;
+            
+            // Format date for display - direct string manipulation without timezone issues
+            const parts = selectedDate.split('-');
+            // Create date display in MM/DD/YYYY format directly from parts
+            const displayDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
+            chartTitle = `Energy Usage on ${displayDate} (${roomName})`;
+            break;
+            
+          case 'month':
+            // Get all daily logs for this room
+            const monthlyResponse = await api.get(`/roomlogsdaily/?room=${selectedEnergyRoom}`);
+            console.log("Monthly response:", monthlyResponse.data.length);
+            
+            // Filter for selected month
+            const [year, month] = selectedMonth.split('-');
+            const monthlyLogs = monthlyResponse.data.filter(log => {
+              const logDate = new Date(log.date);
+              return logDate.getFullYear() === parseInt(year) && 
+                     logDate.getMonth() === parseInt(month) - 1;
+            });
+            
+            console.log("Filtered monthly logs:", monthlyLogs.length);
+            
+            // Create day labels based on days in month
+            const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
+            labels = Array.from({length: daysInMonth}, (_, i) => `${i+1}`);
+            
+            // Map daily logs to days
+            dataPoints = Array(daysInMonth).fill(0);
+            monthlyLogs.forEach(log => {
+              const day = new Date(log.date).getDate();
+              dataPoints[day-1] = log.total_energy_usage;
+            });
+            
+            // Format month for display
+            const displayMonth = new Date(selectedMonth + '-01').toLocaleDateString('default', { month: 'long', year: 'numeric' });
+            chartTitle = `Energy Usage for ${displayMonth} (${roomName})`;
+            break;
+            
+          case 'year':
+            // Get all monthly logs for this room
+            const yearlyResponse = await api.get(`/roomlogsmonthly/?room=${selectedEnergyRoom}`);
+            console.log("Yearly response:", yearlyResponse.data.length);
+            
+            // Filter for selected year
+            const yearlyLogs = yearlyResponse.data.filter(log => 
+              log.year === parseInt(selectedYear)
+            );
+            
+            console.log("Filtered yearly logs:", yearlyLogs.length);
+            
+            // Set up month labels
+            labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            // Map logs to months
+            dataPoints = Array(12).fill(0);
+            yearlyLogs.forEach(log => {
+              dataPoints[log.month-1] = log.total_energy_usage;
+            });
+            
+            chartTitle = `Energy Usage for ${selectedYear} (${roomName})`;
+            break;
+        }
+        
+        console.log("Chart data points:", dataPoints);
+        
+        // Check if we have any data to display
+        const isEmpty = dataPoints.every(val => val === 0 || val === null);
+        if (isEmpty) {
+          // Create empty chart with message
+          const ctx = energyChartRef.current.getContext('2d');
+          // Clear any previous chart
+          const existingChart = Chart.getChart(energyChartRef.current);
+          if (existingChart) {
+            existingChart.destroy();
+          }
+          
+          // Clear canvas
+          ctx.clearRect(0, 0, energyChartRef.current.width, energyChartRef.current.height);
+          
+          // Show friendly message
+          ctx.font = '16px Arial';
+          ctx.fillStyle = '#666';
+          ctx.textAlign = 'center';
+          ctx.fillText(`No energy data available for this ${selectedPeriod}`, 
+                      energyChartRef.current.width / 2, 
+                      energyChartRef.current.height / 2);
+          return; // Skip chart creation
+        }
+        
+        // Create chart configuration
+        const chartConfig = {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Energy Usage (kWh)',
+              data: dataPoints,
+              backgroundColor: 'rgba(237, 62, 62, 0.2)',
+              borderColor: 'rgb(237, 62, 62)',
+              borderWidth: 2,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: chartTitle,
+                font: { size: 16, weight: 'bold' }
+              },
+              legend: {
+                position: 'bottom'
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Energy (kWh)'
+                }
+              }
+            }
+          }
+        };
+        
+        // Create or update chart
+        const existingChart = Chart.getChart(energyChartRef.current);
+        if (existingChart) {
+          existingChart.destroy();
+        }
+        
+        new Chart(energyChartRef.current.getContext('2d'), chartConfig);
+        
+      } catch (error) {
+        console.error('Error fetching energy data:', error);
+      }
+    };
+    
     fetchEnergyData();
-}, [selectedPeriod, selectedEnergyRoom]);
+  }, [selectedPeriod, selectedEnergyRoom, selectedDate, selectedMonth, selectedYear, unlockedRooms]);
+
+  // Add these functions BEFORE the return statement, after all your useEffect hooks:
+
+// Generate date ranges for selectors
+const generateDateOptions = () => {
+  // Generate last 7 days
+  const options = [];
+  for (let i = 0; i < 7; i++) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    
+    // Create date strings in local timezone (not UTC)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    const formattedValue = `${year}-${month}-${day}`;
+    const formattedLabel = date.toLocaleDateString();
+    
+    options.push({ value: formattedValue, label: formattedLabel });
+  }
+  return options;
+};
+
+const generateMonthOptions = () => {
+  // Generate last 12 months
+  const options = [];
+  for (let i = 0; i < 12; i++) {
+    const date = new Date();
+    date.setMonth(date.getMonth() - i);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const formattedMonth = `${year}-${month}`;
+    const label = date.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+    options.push({ value: formattedMonth, label });
+  }
+  return options;
+};
+
+const generateYearOptions = () => {
+  // Generate last 5 years
+  const options = [];
+  const currentYear = new Date().getFullYear();
+  for (let i = 0; i < 5; i++) {
+    const year = currentYear - i;
+    options.push({ value: year.toString(), label: year.toString() });
+  }
+  return options;
+};
+
+// Date options - define these here so they're available to the JSX
+const dateOptions = generateDateOptions();
+const monthOptions = generateMonthOptions();
+const yearOptions = generateYearOptions();
 
   return (
     <div className="smart-home-page">
@@ -532,32 +700,89 @@ function SmartHomePage() {
         {/* Energy Information */}
         <div className="energy-info">
           <div className="energy-info-header">
-            <div className="period-buttons">
-              {['daily', 'weekly', 'monthly'].map((period) => (
-                <button
-                  key={period}
-                  onClick={() => setSelectedPeriod(period)}
-                  className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
-                >
-                  {period.charAt(0).toUpperCase() + period.slice(1)}
-                </button>
-              ))}
+            <div className="period-selector">
+              <div className="period-buttons">
+                {['day', 'month', 'year'].map((period) => (
+                  <button
+                    key={period}
+                    onClick={() => setSelectedPeriod(period)}
+                    className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
+                  >
+                    {period.charAt(0).toUpperCase() + period.slice(1)}
+                  </button>
+                ))}
+              </div>
+              
+              <div className="time-selector">
+                {selectedPeriod === 'day' && (
+                  <select
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="date-selector"
+                  >
+                    {dateOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                
+                {selectedPeriod === 'month' && (
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    className="month-selector"
+                  >
+                    {monthOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                
+                {selectedPeriod === 'year' && (
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    className="year-selector"
+                  >
+                    {yearOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
             </div>
+            
             <select
               value={selectedEnergyRoom}
               onChange={(e) => setSelectedEnergyRoom(e.target.value)}
               className="room-selector"
+              disabled={unlockedRooms.length === 0}
             >
-              {addedRooms.map((room) => (
-                <option key={room.id} value={room.name}>
-                  {room.name}
-                </option>
-              ))}
+              {unlockedRooms.length === 0 ? (
+                <option value="">No unlocked rooms</option>
+              ) : (
+                unlockedRooms.map((room) => (
+                  <option key={room.id} value={room.id}>
+                    {room.name}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
-          <div style={{ height: '300px', width: '100%', position: 'relative' }}>
+          <div className="chart-container">
             <canvas ref={energyChartRef}></canvas>
+            {unlockedRooms.length === 0 && (
+              <div className="no-data-message">
+                <p>No unlocked rooms available. Please unlock rooms to view energy data.</p>
+              </div>
+            )}
           </div>
         </div>
 
