@@ -13,8 +13,6 @@ import "../css/rooms-page.css";
 
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
-    const chartRef = useRef(null);
-    const weeklyChartRef = useRef(null);
     
     // Device management state
     const [roomData, setRoomData] = useState(null);
@@ -30,221 +28,14 @@ function RoomsPage() {
     const [isDeleteDeviceModalOpen, setIsDeleteDeviceModalOpen] = useState(false);
     const [deviceToDelete, setDeviceToDelete] = useState(null);
 
-    // UseEffect for daily chart data and rendering
-    useEffect(() => {
-        const fetchDeviceData = async () => {
-            try {
-                // Get today's date in YYYY-MM-DD format
-                const today = new Date().toISOString().split('T')[0];
-                
-                // First get all devices in the room
-                const roomResponse = await api.get(`/rooms/${roomId}/`);
-                const devices = roomResponse.data.devices;
-
-                if (!devices || devices.length === 0) {
-                    console.log("No devices found in room");
-                    return;
-                }
-
-                // Get today's logs for each device
-                const deviceLogsPromises = devices.map(device => 
-                    api.get(`/devicelogs/?device=${device.id}&start_date=${today}&end_date=${today}`)
-                );
-
-                const logResponses = await Promise.all(deviceLogsPromises);
-                
-                // Calculate total energy usage for each device
-                const deviceTotals = devices.map((device, index) => {
-                    const logs = logResponses[index].data;
-                    const totalEnergy = logs.reduce((sum, log) => sum + log.energy_usage, 0);
-                    return {
-                        name: device.name,
-                        energy: totalEnergy
-                    };
-                });
-
-                // Render the donut chart
-                const ctx = chartRef.current.getContext('2d');
-                
-                // Get existing chart instance if it exists
-                const existingChart = Chart.getChart(chartRef.current);
-                if (existingChart) {
-                    existingChart.destroy();
-                }
-
-                // Create new chart
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: deviceTotals.map(device => device.name),
-                        datasets: [{
-                            data: deviceTotals.map(device => device.energy),
-                            backgroundColor: [
-                                '#FFB357', // Orange
-                                '#DD946A', // Light Brown
-                                '#BF5E40', // Dark Brown
-                                '#8C4646'  // Burgundy
-                            ],
-                            borderWidth: 0,
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '60%',
-                        plugins: {
-                            legend: {
-                                position: 'right',
-                                labels: {
-                                    padding: 20,
-                                    font: {
-                                        size: 14
-                                    }
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: `${roomId} Energy Usage by Device (kWh)`,
-                                font: {
-                                    size: 16,
-                                    weight: 'bold'
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.label}: ${context.raw.toFixed(2)} kWh`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-
-            } catch (error) {
-                console.error("Error fetching device data:", error);
-            }
-        };
-
-        if (chartRef.current) {
-            fetchDeviceData();
-        }
-    }, [roomId]);
-
-    //UseEffect for weekly chart data and rendering
-    useEffect(() => {
-        const fetchWeeklyData = async () => {
-            if (!weeklyChartRef.current) {
-                console.log("Weekly chart ref not found");
-                return;
-            }
-
-            try {
-                // Get all devices in the room
-                const roomResponse = await api.get(`/rooms/${roomId}/`);
-                const devices = roomResponse.data.devices;
-
-                if (!devices || devices.length === 0) {
-                    console.log("No devices found in room");
-                    return;
-                }
-
-                // Get weekly logs for each device
-                const deviceLogsPromises = devices.map(device => 
-                    api.get(`/devicelogs/daily/?device=${device.id}`)
-                );
-
-                const logResponses = await Promise.all(deviceLogsPromises);
-                
-                // Process the data for each device
-                const deviceDatasets = devices.map((device, deviceIndex) => {
-                    const deviceLogs = logResponses[deviceIndex].data;
-                    
-                    // Map logs to days of the week
-                    const dailyData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-                        .map(day => {
-                            const dayLog = deviceLogs.find(log => {
-                                const logDate = new Date(log.date);
-                                return logDate.getDay() === ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(day);
-                            });
-                            return dayLog ? dayLog.total_energy_usage : 0;
-                        });
-
-                    return {
-                        label: device.name,
-                        data: dailyData,
-                        backgroundColor: [
-                            '#FFB357',
-                            '#DD946A',
-                            '#BF5E40',
-                            '#8C4646'
-                        ][deviceIndex % 4]
-                    };
-                });
-
-                // Create or update the chart
-                const existingChart = Chart.getChart(weeklyChartRef.current);
-                if (existingChart) {
-                    existingChart.destroy();
-                }
-
-                const ctx = weeklyChartRef.current.getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                        datasets: deviceDatasets
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                stacked: true,
-                                grid: {
-                                    display: false
-                                }
-                            },
-                            y: {
-                                stacked: true,
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Energy Usage (kWh)'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: `Weekly ${roomId} Energy Usage by Device`,
-                                font: {
-                                    size: 16,
-                                    weight: 'bold'
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.dataset.label}: ${context.raw.toFixed(2)} kWh`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-
-            } catch (error) {
-                console.error("Error fetching weekly device data:", error);
-            }
-        };
-
-        fetchWeeklyData();
-    }, [roomId]);
+    // Add these right after other state variables
+    const energyChartRef = useRef(null);
+    const [selectedPeriod, setSelectedPeriod] = useState('day');
+    const [selectedEnergyDevice, setSelectedEnergyDevice] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
+    const [isDataEmpty, setIsDataEmpty] = useState(false);
 
     // New useEffect to fetch room and device data
     useEffect(() => {
@@ -275,6 +66,8 @@ function RoomsPage() {
                 
                 setUnlockedDevices(unlocked);
                 setLockedDevices(locked);
+
+                
             } catch (error) {
                 console.error("Error fetching room and device data:", error);
             }
@@ -644,10 +437,239 @@ function RoomsPage() {
         return null;
     };
 
+    // Add these helper functions before the return statement
+    const generateDateOptions = () => {
+        const options = [];
+        for (let i = 0; i < 7; i++) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            
+            // Format date to YYYY-MM-DD for value and readable format for label
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            
+            const formattedValue = `${year}-${month}-${day}`;
+            const formattedLabel = date.toLocaleDateString();
+            
+            options.push({ value: formattedValue, label: formattedLabel });
+        }
+        return options;
+    };
+
+    const generateMonthOptions = () => {
+        const options = [];
+        for (let i = 0; i < 12; i++) {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const formattedValue = `${year}-${month}`;
+            
+            const formattedLabel = date.toLocaleDateString('default', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            options.push({ value: formattedValue, label: formattedLabel });
+        }
+        return options;
+    };
+
+    const generateYearOptions = () => {
+        const options = [];
+        const currentYear = new Date().getFullYear();
+        
+        for (let i = 0; i < 5; i++) {
+            const year = currentYear - i;
+            options.push({ value: year.toString(), label: year.toString() });
+        }
+        return options;
+    };
+
+    const dateOptions = generateDateOptions();
+    const monthOptions = generateMonthOptions();
+    const yearOptions = generateYearOptions();
+
     // Sort unlocked devices alphabetically by name
     const sortedUnlockedDevices = [...unlockedDevices].sort((a, b) => 
         a.name.localeCompare(b.name)
     );
+
+    // Add this useEffect
+    useEffect(() => {
+        if (!energyChartRef.current || !selectedEnergyDevice) return;
+        
+        const fetchEnergyData = async () => {
+            try {
+                let labels = [];
+                let dataPoints = [];
+                let chartTitle = '';
+                
+                // Find the device object for display name
+                const deviceObj = unlockedDevices.find(d => d.id === parseInt(selectedEnergyDevice));
+                const deviceName = deviceObj ? deviceObj.name : 'Selected Device';
+                
+                switch (selectedPeriod) {
+                    case 'day':
+                        // Fetch 1-minute logs for the selected day
+                        const minuteResponse = await api.get(`/devicelogs1min/?device=${selectedEnergyDevice}`);
+                        const dailyLogs = minuteResponse.data.filter(log => {
+                            const logDate = log.created_at.split('T')[0];
+                            return logDate === selectedDate;
+                        });
+                        
+                        // Group by hour (0-23)
+                        const hourlyData = Array(24).fill(0);
+                        dailyLogs.forEach(log => {
+                            const hour = new Date(log.created_at).getHours();
+                            hourlyData[hour] += log.energy_usage;
+                        });
+                        
+                        labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+                        dataPoints = hourlyData;
+                        
+                        // Format date for display
+                        const displayDate = new Date(selectedDate).toLocaleDateString();
+                        chartTitle = `Energy Usage on ${displayDate} - ${deviceName}`;
+                        break;
+                        
+                    case 'month':
+                        // Fetch daily logs for selected month
+                        const dailyResponse = await api.get(`/devicelogsdaily/?device=${selectedEnergyDevice}`);
+                        
+                        const [year, month] = selectedMonth.split('-');
+                        const monthlyLogs = dailyResponse.data.filter(log => {
+                            const logDate = new Date(log.date);
+                            return logDate.getFullYear() === parseInt(year) && 
+                                   logDate.getMonth() === parseInt(month) - 1;
+                        });
+                        
+                        // Get days in month and prepare data array
+                        const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
+                        labels = Array.from({length: daysInMonth}, (_, i) => `${i+1}`);
+                        dataPoints = Array(daysInMonth).fill(0);
+                        
+                        // Map daily logs to days of month
+                        monthlyLogs.forEach(log => {
+                            const day = new Date(log.date).getDate();
+                            dataPoints[day-1] = log.total_energy_usage;
+                        });
+                        
+                        // Format month name for display
+                        const monthName = new Date(selectedMonth + '-01').toLocaleDateString('default', { 
+                            month: 'long', 
+                            year: 'numeric' 
+                        });
+                        chartTitle = `Energy Usage for ${monthName} - ${deviceName}`;
+                        break;
+                        
+                    case 'year':
+                        // Fetch monthly logs for selected year
+                        const monthlyResponse = await api.get(`/devicelogsmonthly/?device=${selectedEnergyDevice}`);
+                        const yearLogs = monthlyResponse.data.filter(log => 
+                            log.year === parseInt(selectedYear)
+                        );
+                        
+                        // Set up month labels and data array
+                        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        dataPoints = Array(12).fill(0);
+                        
+                        // Map monthly logs to months
+                        yearLogs.forEach(log => {
+                            dataPoints[log.month-1] = log.total_energy_usage;
+                        });
+                        
+                        chartTitle = `Energy Usage for ${selectedYear} - ${deviceName}`;
+                        break;
+                }
+                
+                // Check if we have any data to display
+                const isEmpty = dataPoints.every(val => val === 0);
+                setIsDataEmpty(isEmpty);
+                
+                // Destroy existing chart if it exists
+                const existingChart = Chart.getChart(energyChartRef.current);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                
+                if (isEmpty) {
+                    // Create empty chart with "No data" message
+                    new Chart(energyChartRef.current.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: ['No data available'],
+                            datasets: [{
+                                data: [0],
+                                backgroundColor: 'rgba(0, 0, 0, 0.1)'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: chartTitle,
+                                    font: { size: 16, weight: 'bold' }
+                                },
+                                legend: { display: false },
+                                tooltip: { enabled: false }
+                            },
+                            scales: {
+                                y: { display: false, beginAtZero: true },
+                                x: { display: true }
+                            }
+                        }
+                    });
+                    return;
+                }
+                
+                // Create the chart with data
+                new Chart(energyChartRef.current.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Energy Usage (kWh)',
+                            data: dataPoints,
+                            backgroundColor: 'rgba(193, 70, 0, 0.2)',
+                            borderColor: 'rgb(193, 70, 0)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: chartTitle,
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Energy (kWh)'
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching energy data:', error);
+                setIsDataEmpty(true);
+            }
+        };
+        
+        fetchEnergyData();
+    }, [selectedPeriod, selectedEnergyDevice, selectedDate, selectedMonth, selectedYear, unlockedDevices]);
 
     return (
         <div className="room-page">
@@ -660,67 +682,157 @@ function RoomsPage() {
                 {roomData && <h1>{roomData.name}</h1>}
             </div>
 
-            {/* Columns for Energy Consumption */}
             <div className="columns">
-                {/* Column 1 */}
+                {/* Left column: Energy chart */}
                 <div className="column1">
-                    {/* Row 1: Bedroom energy consumption for today */}
                     <div className="energy-consumption">
-                        <h4 className="room-text-with-line">{roomId} Energy Consumption Today</h4>
-                        <div style={{
-                            height: '270px',  // Reduced from 400px
-                            width: '90%',     // Reduced from 100%
-                            position: 'relative',
-                            marginBottom: '1rem',
-                            margin: 'auto'    // Center the chart
-                        }}>
-                            <canvas ref={chartRef}></canvas>
+                        <h4 className="room-text-with-line">Device Energy Consumption</h4>
+                        <div className="chart-controls">
+                            <div className="period-selector">
+                                <div className="period-buttons">
+                                    {['day', 'month', 'year'].map((period) => (
+                                        <button
+                                            key={period}
+                                            onClick={() => setSelectedPeriod(period)}
+                                            className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
+                                            style={{ 
+                                                padding: '8px 15px', 
+                                                margin: '0 5px',
+                                                background: selectedPeriod === period ? '#c14600' : '#f0f0f0',
+                                                color: selectedPeriod === period ? 'white' : '#333',
+                                                border: 'none',
+                                                borderRadius: '4px',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            {period.charAt(0).toUpperCase() + period.slice(1)}
+                                        </button>
+                                    ))}
+                                </div>
+                                
+                                <div className="selectors-container" style={{ display: 'flex', marginTop: '10px' }}>
+                                    <div className="time-selector" style={{ flex: '1', marginRight: '10px' }}>
+                                        {selectedPeriod === 'day' && (
+                                            <select
+                                                value={selectedDate}
+                                                onChange={(e) => setSelectedDate(e.target.value)}
+                                                style={{ 
+                                                    width: '100%', 
+                                                    padding: '8px'
+                                                }}
+                                            >
+                                                {dateOptions.map((option) => (
+                                                    <option key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
+                                        
+                                        {selectedPeriod === 'month' && (
+                                            <select
+                                                value={selectedMonth}
+                                                onChange={(e) => setSelectedMonth(e.target.value)}
+                                                style={{ 
+                                                    width: '100%', 
+                                                    padding: '8px'
+                                                }}
+                                            >
+                                                {monthOptions.map((option) => (
+                                                    <option key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
+                                        
+                                        {selectedPeriod === 'year' && (
+                                            <select
+                                                value={selectedYear}
+                                                onChange={(e) => setSelectedYear(e.target.value)}
+                                                style={{ 
+                                                    width: '100%', 
+                                                    padding: '8px'
+                                                }}
+                                            >
+                                                {yearOptions.map((option) => (
+                                                    <option key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="device-selector" style={{ flex: '1' }}>
+                                        <select
+                                            value={selectedEnergyDevice || ''}
+                                            onChange={(e) => setSelectedEnergyDevice(e.target.value)}
+                                            disabled={unlockedDevices.length === 0}
+                                            style={{ 
+                                                width: '100%', 
+                                                padding: '8px'
+                                            }}
+                                        >
+                                            {unlockedDevices.length > 0 ? (
+                                                unlockedDevices.map((device) => (
+                                                    <option key={device.id} value={device.id}>
+                                                        {device.name}
+                                                    </option>
+                                                ))
+                                            ) : (
+                                                <option value="">No devices available</option>
+                                            )}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                    {/* Row 2: Weekly bedroom energy consumption */}
-                    <div className="energy-consumption">
-                        <h4 className="room-text-with-line">Weekly {roomId} Energy Consumption</h4>
-                        <div style={{
-                            height: '270px',  // Reduced from 400px
-                            width: '90%',     // Reduced from 100%
-                            margin: 'auto',   // Center the chart
-                            position: 'relative'
-                        }}>
-                            <canvas ref={weeklyChartRef}></canvas>
+                        
+                        <div style={{ height: '300px', position: 'relative', marginTop: '15px' }}>
+                            {!selectedEnergyDevice && (
+                                <div style={{ 
+                                    position: 'absolute', 
+                                    top: '50%', 
+                                    left: '50%', 
+                                    transform: 'translate(-50%, -50%)',
+                                    textAlign: 'center',
+                                    color: '#666'
+                                }}>
+                                    <p>No device selected. Add a device to view energy usage.</p>
+                                </div>
+                            )}
+                            <canvas ref={energyChartRef}></canvas>
+                            {isDataEmpty && selectedEnergyDevice && (
+                                <div style={{ 
+                                    position: 'absolute', 
+                                    top: '50%', 
+                                    left: '50%', 
+                                    transform: 'translate(-50%, -50%)',
+                                    textAlign: 'center',
+                                    color: '#666'
+                                }}>
+                                    <p>No energy data available for this device during the selected {selectedPeriod}</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
-
-                {/* Column 2 */}
+                
+                {/* Right column: Device management */}
                 <div className="column2">
                     {/* Add Device Button */}
                     {lockedDevices.length > 0 && (
                         <button 
                             className="add-device-button"
                             onClick={() => setIsAddDeviceModalOpen(true)}
-                            style={{
-                                background: '#C14600',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                padding: '8px 15px',
-                                margin: '10px 0 20px 0',
-                                cursor: 'pointer',
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '100%'
-                            }}
                         >
                             <i className="fa-solid fa-plus" style={{ marginRight: '8px' }}></i>
                             Add Device
                         </button>
                     )}
 
-                    {/* Unlocked Devices */}
+                    {/* Unlocked Devices - keep this part the same */}
                     {sortedUnlockedDevices.length > 0 ? (
                         sortedUnlockedDevices.map(device => {
                             const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();

@@ -446,3 +446,45 @@ input:checked+.slider:after {
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+/* Energy chart controls */
+.period-buttons {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.period-button {
+  padding: 8px 15px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.period-button.active {
+  background-color: #c14600;
+  color: white;
+}
+
+.period-button:not(.active) {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.selectors-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.time-selector, .device-selector {
+  flex: 1;
+}
+
+.time-selector select, .device-selector select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
