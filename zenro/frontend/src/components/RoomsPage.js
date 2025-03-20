@@ -549,33 +549,33 @@ function RoomsPage() {
                         
                         const [year, month] = selectedMonth.split('-');
                         const monthlyLogs = dailyResponse.data.filter(log => {
-                            // Parse date safely regardless of format (YYYY-MM-DD or date object)
-                            const logDate = typeof log.date === 'string' ? new Date(log.date) : log.date;
-                            return logDate.getFullYear() === parseInt(year) && 
-                                   logDate.getMonth() === parseInt(month) - 1;
+                            // Try both date formats - handle different possible formats
+                            try {
+                                const logDate = new Date(log.date);
+                                return logDate.getFullYear() === parseInt(year) && 
+                                       logDate.getMonth() === parseInt(month) - 1;
+                            } catch (err) {
+                                // If date parsing fails, try alternative format
+                                return false;
+                            }
                         });
                         
-                        console.log("Filtered month logs:", monthlyLogs);
-                        
-                        // Get days in month and prepare data array
+                        // Get days in month
                         const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
                         labels = Array.from({length: daysInMonth}, (_, i) => `${i+1}`);
                         dataPoints = Array(daysInMonth).fill(0);
                         
-                        // Map daily logs to days of month
+                        // Map data
                         monthlyLogs.forEach(log => {
                             try {
-                                const logDate = typeof log.date === 'string' ? new Date(log.date) : log.date;
-                                const day = logDate.getDate();
-                                // Check for all possible field names
-                                const usage = parseFloat(log.total_energy_usage || log.energy_usage || 0);
-                                dataPoints[day-1] = usage;
+                                const day = new Date(log.date).getDate();
+                                dataPoints[day-1] = parseFloat(log.total_energy_usage || 0);
                             } catch (err) {
-                                console.error("Error processing log entry:", log, err);
+                                console.error("Error processing log:", log);
                             }
                         });
                         
-                        // Format month name for display
+                        // Format month for display
                         const monthName = new Date(selectedMonth + '-01').toLocaleDateString('default', { 
                             month: 'long', 
                             year: 'numeric' 
@@ -588,26 +588,20 @@ function RoomsPage() {
                         const monthlyResponse = await api.get(`/devicelogsmonthly/?device=${selectedEnergyDevice}`);
                         console.log("Year data response:", monthlyResponse.data);
                         
-                        const yearLogs = monthlyResponse.data.filter(log => {
-                            const logYear = log.year || new Date(log.date).getFullYear();
-                            return logYear === parseInt(selectedYear);
-                        });
-                        
-                        console.log("Filtered year logs:", yearLogs);
+                        const yearLogs = monthlyResponse.data.filter(log => 
+                            log.year === parseInt(selectedYear)
+                        );
                         
                         // Set up month labels and data array
                         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         dataPoints = Array(12).fill(0);
                         
-                        // Map monthly logs to months
+                        // Map data
                         yearLogs.forEach(log => {
                             try {
-                                const month = log.month || new Date(log.date).getMonth() + 1;
-                                // Check for all possible field names
-                                const usage = parseFloat(log.total_energy_usage || log.energy_usage || 0);
-                                dataPoints[month-1] = usage;
+                                dataPoints[log.month-1] = parseFloat(log.total_energy_usage || 0);
                             } catch (err) {
-                                console.error("Error processing yearly log entry:", log, err);
+                                console.error("Error processing yearly log:", log);
                             }
                         });
                         
@@ -678,6 +672,14 @@ function RoomsPage() {
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        animation: {
+                            duration: 1000, // Animation duration in milliseconds
+                            easing: 'easeOutQuart', // Animation easing function
+                            delay: function(context) {
+                                // Stagger animations of each bar
+                                return context.dataIndex * 50;
+                            }
+                        },
                         plugins: {
                             title: {
                                 display: true,
@@ -689,10 +691,33 @@ function RoomsPage() {
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(200, 200, 200, 0.3)'
+                                },
+                                ticks: {
+                                    padding: 10
+                                },
                                 title: {
                                     display: true,
-                                    text: 'Energy (kWh)'
+                                    text: 'Energy (kWh)',
+                                    padding: {top: 10, bottom: 10}
                                 }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    padding: 10
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                left: 10,
+                                right: 20,
+                                top: 20,
+                                bottom: 30
                             }
                         }
                     }
@@ -862,7 +887,7 @@ function RoomsPage() {
                             </div>
                         </div>
                         
-                        <div style={{ height: '300px', position: 'relative', marginTop: '15px' }}>
+                        <div style={{ height: '400px', position: 'relative', marginTop: '15px', marginBottom: '40px' }}>
                             {!selectedEnergyDevice && (
                                 <div style={{ 
                                     position: 'absolute', 
