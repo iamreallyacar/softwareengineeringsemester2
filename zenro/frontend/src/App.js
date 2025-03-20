@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import CreateAccount from "./components/CreateAccount";
 import SmartHomeList from "./components/SmartHomeList";
@@ -25,16 +26,20 @@ function App() {
     // defines where the navigation bars are shown
     const hideNavbarOnPaths = ["/", "/login", "/create-account", "/recovery-page"];
     const shouldShowNavbar = isAuthenticated && !hideNavbarOnPaths.includes(location.pathname);
-
+    
+    console.log("Before navigate, isAuthenticated:", isAuthenticated);
     return (
         <div className="App">
             {/* show navigation bar conditionally */}
             {shouldShowNavbar && <NavigationBar />}
             
             <Routes>
-                <Route path="/" element={<CreateAccount />} />
+            <Route 
+                path="/" 
+                element={isAuthenticated ? <Navigate to="/smart-homes" /> : <CreateAccount setIsAuthenticated={setIsAuthenticated} />} 
+            />
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-                <Route path="/create-account" element={<CreateAccount />} />
+                <Route path="/create-account" element={<CreateAccount setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/recovery-page" element={<RecoveryPage />} />
 
                 {/* Protected Routes (Require Authentication) */}

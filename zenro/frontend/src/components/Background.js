@@ -28,7 +28,7 @@ const Background = () => {
             <img 
                 src={logo} 
                 alt="Logo"
-                className="logo"
+                className="background-logo"
             />
         {peaches.map((peach, index) => (
           <img

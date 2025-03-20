@@ -7,7 +7,7 @@
     overflow: hidden;
     z-index: -1;
 }
-.logo {
+.background-logo {
     position: absolute;
     top: 7%;
     left: 6%;
@@ -19,7 +19,7 @@
  
 }
 
-.logo:hover {
+.background-logo:hover {
     transform: translate(-50%, -55%); /* Moves it up slightly */
     box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3); /* Bigger shadow */
 }

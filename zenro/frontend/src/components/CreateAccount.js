@@ -4,8 +4,10 @@ import "../css/index.css";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
+import { useEffect } from "react";
 
-function CreateAccount() {
+
+function CreateAccount({ setIsAuthenticated }) {
     // State variables to store user input and feedback messages
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -19,6 +21,7 @@ function CreateAccount() {
     const [phone_number, setPhoneNumber] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
 
     // handleSubmit posts new user details to create an account
     const handleSubmit = async (e) => {
@@ -48,10 +51,11 @@ function CreateAccount() {
             
             // Logs the user in automatically
             const loginResponse = await api.post("/token/", {username, password});
-            console.log("Login Successful:", response.data);
+            console.log("Login Successful:", loginResponse.data);
             // Tokens are stored in local storage
-            localStorage.setItem("accessToken", response.data.access);
-            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("accessToken", loginResponse.data.access);
+            localStorage.setItem("userId", loginResponse.data.userId);
+            setIsAuthenticated(true);
             // After a timeout of 2 seconds, navigate to smart homes page
             setTimeout(() => {
                 setLoading(false);

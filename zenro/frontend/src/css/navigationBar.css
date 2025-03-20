@@ -1,87 +1,117 @@
 
-  /* Sidebar Navigation */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space out profile, middle icons, and logo */
+  align-items: center;
+  height: 100vh;
+  width: 10vw; /* Responsive width */
+  min-width: 80px; /* Prevent it from getting too small */
+  max-width: 200px; /* Limit max size */
+  background: linear-gradient(to bottom, #F5C39C, #DD946A, #BC583B);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2), 0px 0px 20px rgba(255, 213, 200, 0.476);
+  padding: 2vh 0;
+  box-sizing: border-box;
+}
+
+/* Profile section */
+.navbar-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2vh; /* Space below */
+}
+
+/* Middle section with icons */
+.navbar-middle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1; /* Takes up remaining space */
+  gap: 2.5rem; /* Responsive spacing */
+}
+
+/* Logo at the bottom */
+.navbar-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2vh;
+}
+
+/* Individual Navigation Items */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 1vh;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Navigation Icons */
+.nav-icon {
+  width: 2.5rem; 
+  height: 2.5rem;
+  max-width: 100%;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.nav-text {
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  transition: opacity 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+  color: rgb(255, 255, 255);
+}
+
+/* Show text and add glow effect on hover */
+.nav-item:hover .nav-icon {
+  opacity: 0;
+}
+
+.nav-item:hover .nav-text {
+  opacity: 1;
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.6), 0 0 30px rgba(255, 0, 0, 0.4);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
   .sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 8vw; 
-    height: 100vh;
-    background: linear-gradient(to bottom, #F5C39C, #DD946A, #BC583B);
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2), 0px 0px 20px rgba(255, 213, 200, 0.476);
-    color: white;
-    padding: 20px 0;
-    box-sizing: border-box;
-    overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1000;
+      width: 20vw; /* Slightly larger on smaller screens */
+      min-width: 70px;
   }
-  
-  /* Sidebar Navigation Icons */
-  .sidebar a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-  }
-  
+
   .nav-icon {
-    width: 40px; /* Adjust icon size */
-    height: 40px;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .nav-icon:hover {
-    transform: scale(1.1);
-  }
-  
-  /* Sidebar Logo */
-  .sidebar-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    max-width: 90%;
-    height: auto;
-    object-fit: contain;
+      width: 2rem;
+      height: 2rem;
   }
 
-  .sidebar Link {
-    border:solid #F5C39C;
-      max-width: 80%;
-      /* Adjust the size of the logo */
-      height: auto;
-      object-fit: contain;
-      /* Maintain aspect ratio */
+  .nav-text {
+      font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+      width: 25vw;
+      min-width: 60px;
   }
 
-  /* Main Content */
-  .main-content {
-    flex-grow: 1; /* Allows the content to take the remaining space */
-    padding: 20px;
-    background-color: #f5f5f5; /* Light background for contrast */
+  .navbar-middle {
+      gap: 1.5rem; /* Reduce space for small screens */
   }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column; /* Stack elements on smaller screens */
-    }
-  
-    .sidebar {
-      width: 100%;
-      height: auto;
-      flex-direction: row;
-      justify-content: space-around;
-      padding: 10px 0;
-    }
-  
-    .nav-icon {
-      width: 30px;
-      height: 30px;
-    }
-  
-    .sidebar-logo {
-      display: none; /* Hide logo in small screens */
-    }
+
+  .nav-icon {
+      width: 1.8rem;
+      height: 1.8rem;
   }
-  
+
+  .nav-text {
+      font-size: 0.8rem;
+  }
+}
