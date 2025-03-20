@@ -27,6 +27,8 @@ function RoomsPage() {
     // New state for analog controls
     const [sliderValues, setSliderValues] = useState({});
     const [updatingDevices, setUpdatingDevices] = useState({});
+    const [isDeleteDeviceModalOpen, setIsDeleteDeviceModalOpen] = useState(false);
+    const [deviceToDelete, setDeviceToDelete] = useState(null);
 
     // UseEffect for daily chart data and rendering
     useEffect(() => {
@@ -308,10 +310,14 @@ function RoomsPage() {
             const response = await api.put(`/devices/${selectedDeviceToUnlock}/`, updatedDevice);
             console.log("Device unlocked successfully:", response.data);
             
-            // Update local state
+            // Update local state - sorting is handled in the render function
             setUnlockedDevices(prevDevices => [...prevDevices, response.data]);
+
+            // Update locked devices list - keep alphabetical order here too
             setLockedDevices(prevDevices => 
-                prevDevices.filter(device => device.id !== parseInt(selectedDeviceToUnlock))
+                prevDevices
+                    .filter(device => device.id !== parseInt(selectedDeviceToUnlock))
+                    .sort((a, b) => a.name.localeCompare(b.name))
             );
             
             // Reset form fields
@@ -320,6 +326,49 @@ function RoomsPage() {
         } catch (error) {
             console.error("Error unlocking device:", error.response?.data || error.message);
             alert("Failed to add device. Please try again.");
+        }
+    };
+
+    // Function to lock a device (remove it from display)
+    const handleLockDevice = async (deviceId) => {
+        try {
+            // Find the device in unlockedDevices
+            const deviceToLock = unlockedDevices.find(device => device.id === deviceId);
+            
+            if (!deviceToLock) {
+                throw new Error("Device not found in unlocked devices list");
+            }
+            
+            // First turn off the device
+            setUpdatingDevices(prev => ({...prev, [deviceId]: true}));
+            
+            // Update device to turn it off and lock it
+            const updatedDevice = {
+                ...deviceToLock,
+                status: false,
+                is_unlocked: false
+            };
+            
+            // PUT request to update the device
+            const response = await api.put(`/devices/${deviceId}/`, updatedDevice);
+            console.log("Device locked successfully:", response.data);
+            
+            // Update local state - remove from unlocked devices
+            setUnlockedDevices(prevDevices => 
+                prevDevices.filter(device => device.id !== deviceId)
+            );
+            
+            // Add to locked devices - also sort these alphabetically
+            setLockedDevices(prevDevices => 
+                [...prevDevices, response.data].sort((a, b) => a.name.localeCompare(b.name))
+            );
+            
+            // Clear updating state
+            setUpdatingDevices(prev => ({...prev, [deviceId]: false}));
+        } catch (error) {
+            setUpdatingDevices(prev => ({...prev, [deviceId]: false}));
+            console.error("Error locking device:", error.response?.data || error.message);
+            alert("Failed to remove device. Please try again.");
         }
     };
 
@@ -595,6 +644,11 @@ function RoomsPage() {
         return null;
     };
 
+    // Sort unlocked devices alphabetically by name
+    const sortedUnlockedDevices = [...unlockedDevices].sort((a, b) => 
+        a.name.localeCompare(b.name)
+    );
+
     return (
         <div className="room-page">
             <Sidebar />
@@ -667,13 +721,28 @@ function RoomsPage() {
                     )}
 
                     {/* Unlocked Devices */}
-                    {unlockedDevices.length > 0 ? (
-                        unlockedDevices.map(device => {
+                    {sortedUnlockedDevices.length > 0 ? (
+                        sortedUnlockedDevices.map(device => {
                             const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
                             const isSensor = deviceType?.includes('sensor');
+                            const isUpdating = !!updatingDevices[device.id];
                             
                             return (
                                 <div className="energy-consumption" key={device.id}>
+                                    {/* Rest of the device rendering remains the same */}
+                                    {/* Add device removal button */}
+                                    <button
+                                        className="delete-device-button"
+                                        onClick={() => {
+                                            setDeviceToDelete(device.id);
+                                            setIsDeleteDeviceModalOpen(true);
+                                        }}
+                                        disabled={isUpdating}
+                                        title="Remove Device"
+                                    >
+                                        <i className="fa-solid fa-trash delete-icon"></i>
+                                    </button>
+                                    
                                     {/* Show toggle for all devices */}
                                     <label className={`switch ${device.isUpdating ? 'updating' : ''}`}>
                                         <input 
@@ -713,6 +782,7 @@ function RoomsPage() {
                             );
                         })
                     ) : (
+                        // Empty state message
                         <div className="no-devices-message" style={{ textAlign: 'center', color: '#666' }}>
                             <p>No devices have been added to this room yet.</p>
                             {lockedDevices.length > 0 && (
@@ -722,6 +792,36 @@ function RoomsPage() {
                     )}
                 </div>
             </div>
+
+            {/* Delete Device Confirmation Modal */}
+            {isDeleteDeviceModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h2>Delete Device</h2>
+                        <p style={{ fontSize: "17px", color: "#666", marginTop: "10px" }}>
+                            Are you sure you want to remove this device?
+                            It will no longer appear in this room until you add it again.
+                        </p>
+                        <div className="modal-buttons">
+                            <button
+                                onClick={() => {
+                                    handleLockDevice(deviceToDelete);
+                                    setIsDeleteDeviceModalOpen(false);
+                                }}
+                            >
+                                Yes, Delete Device
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setIsDeleteDeviceModalOpen(false);
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Add Device Modal */}
             {isAddDeviceModalOpen && (

@@ -124,6 +124,7 @@
 
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15),
     0px 0px 15px rgba(0, 0, 0, 0.2);
+  padding-top: 45px; /* Increased to make room for buttons */
 }
 
 .switch {
@@ -414,4 +415,34 @@ input:checked+.slider:after {
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   z-index: 2;
+}
+
+/* Add to rooms-page.css */
+
+/* Style for the device delete button (similar to room delete button) */
+.delete-device-button {
+  position: absolute;
+  top: 10px;
+  right: 100px; /* Position to the left of the toggle switch */
+  background: none;
+  border: none;
+  color: #C14600;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  z-index: 10;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.delete-device-button:hover {
+  opacity: 1;
+}
+
+.delete-device-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
