@@ -505,12 +505,24 @@ function RoomsPage() {
                                 disabled={!device.status || isUpdating}
                                 className="slider-control"
                             />
+                            {/* Reduce number of ticks for better readability */}
                             <div className="slider-ticks">
-                                {[...Array(10)].map((_, i) => (
-                                    <span key={i} className="tick-mark">
-                                        <span className="tick-label">{(i+1)*10}%</span>
+                                {[1, 3, 5, 7, 10].map((value) => (
+                                    <span key={value} className="tick-mark" style={{left: `${(value-1) * 100/9}%`}}>
+                                        <span className="tick-label">{value*10}%</span>
                                     </span>
                                 ))}
+                            </div>
+                            
+                            {/* Current value indicator */}
+                            <div 
+                                className="slider-current-value"
+                                style={{
+                                    left: `${(currentSliderValue-1) * 100/9}%`,
+                                    display: currentSliderValue === device.analogue_value ? 'none' : 'block'
+                                }}
+                            >
+                                {currentSliderValue * 10}%
                             </div>
                         </div>
                         
@@ -541,7 +553,7 @@ function RoomsPage() {
                                 type="range" 
                                 min="12" 
                                 max="30" 
-                                step="2"
+                                step="1"
                                 value={sliderTemp} 
                                 onChange={(e) => {
                                     const tempValue = parseInt(e.target.value);
@@ -554,11 +566,22 @@ function RoomsPage() {
                                 className="slider-control"
                             />
                             <div className="slider-ticks">
-                                {[12, 16, 20, 24, 28, 30].map((temp) => (
-                                    <span key={temp} className="tick-mark">
-                                        <span className="tick-label">{temp}°</span>
+                                {[12, 18, 24, 30].map((temp) => (
+                                    <span key={temp} className="tick-mark" style={{left: `${(temp-12) * 100/18}%`}}>
+                                        <span className="tick-label">{temp}°C</span>
                                     </span>
                                 ))}
+                            </div>
+                            
+                            {/* Current value indicator */}
+                            <div 
+                                className="slider-current-value"
+                                style={{
+                                    left: `${(sliderTemp-12) * 100/18}%`,
+                                    display: currentSliderValue === device.analogue_value ? 'none' : 'block'
+                                }}
+                            >
+                                {sliderTemp}°C
                             </div>
                         </div>
                         

@@ -36,28 +36,31 @@
 .room-content {
   display: flex;
   align-items: center;
-  /* Align items vertically */
   justify-content: space-between;
-  /* Space between text and image */
+  gap: 20px; /* Add gap between elements */
+  padding: 5px 0;
 }
 
 .room-text-container {
   display: flex;
   flex-direction: column;
-  /* Stack "Brightness" and "50%" vertically */
   align-items: flex-start;
-  /* Align text to the left */
+  flex: 3; /* Take more space for controls */
 }
 
 .room-appliances-img-container {
   flex-shrink: 0;
-  /* Prevent image from shrinking */
+  flex: 1; /* Take less space for icon */
+  display: flex;
+  justify-content: center; /* Center icon horizontally */
+  align-items: center; /* Center icon vertically */
+  margin-left: 10px;
 }
 
 .room-appliances-img {
-  width: 50px;
-  /* Adjust size as needed */
-  height: auto;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 .columns {
@@ -76,7 +79,6 @@
 
 .column1 {
   flex: 2;
-  /* background-color: #fbdba7; */
   padding: 20px;
   border-radius: 10px;
   overflow: hidden;
@@ -88,7 +90,6 @@
 
 .column2 {
   flex: 1;
-  /* background-color: #ffe9c5; */
   padding: 20px;
   border-radius: 10px;
   max-height: 850px;
@@ -98,7 +99,6 @@
 
 .column2::-webkit-scrollbar {
   display: none;
-  /* For Chrome, Safari, and Opera */
 }
 
 .energy-consumption {
@@ -115,7 +115,6 @@
   position: relative;
 
   background: linear-gradient(to bottom, #f7cda0, #f3ceb5);
-  /* Peach gradient */
   border: 2px solid;
   border-radius: 20px;
   border-color: white;
@@ -133,7 +132,6 @@
   right: 10px;
   display: inline-block;
   width: 80px;
-  /* Increased width to fit the text */
   height: 25px;
 }
 
@@ -175,7 +173,7 @@
 }
 
 .slider:after {
-  content: "OFF";  /* Changed from "OFF ALL" */
+  content: "OFF";
   position: absolute;
   right: 10px;
   color: white;
@@ -188,16 +186,14 @@ input:checked+.slider {
 
 input:checked+.slider:before {
   transform: translateX(55px);
-  /* Move the circle to the right */
 }
 
 input:checked+.slider:after {
-  content: "ON";  /* Changed from "ON ALL" */
+  content: "ON";
   left: 10px;
   right: auto;
 }
 
-/* Loading state for toggle */
 .switch.updating {
   opacity: 0.6;
   pointer-events: none;
@@ -207,18 +203,17 @@ input:checked+.slider:after {
   background-color: #999;
 }
 
-/* Improved slider styles */
 .slider-container {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
   width: 100%;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .slider-with-ticks {
   position: relative;
-  width: 80%;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 .slider-control {
@@ -227,9 +222,10 @@ input:checked+.slider:after {
   appearance: none;
   height: 8px;
   border-radius: 5px;
-  background: #f0d0b0;
+  background: #e0b080; /* Darker, more visible track */
   outline: none;
-  margin-bottom: 20px; /* Space for ticks */
+  border: 1px solid #c14600; /* Add border to make track visible */
+  margin-bottom: 10px;
 }
 
 .slider-control::-webkit-slider-thumb {
@@ -252,32 +248,10 @@ input:checked+.slider:after {
   box-shadow: 0 0 2px rgba(0,0,0,0.4);
 }
 
-/* Slider ticks */
-.slider-ticks {
-  display: flex;
-  justify-content: space-between;
-  position: absolute;
-  width: 100%;
-  bottom: 0;
+.tick-mark, .tick-label {
+  display: none;
 }
 
-.tick-mark {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 1px;
-  background: #C14600;
-  height: 5px;
-}
-
-.tick-label {
-  position: absolute;
-  top: 8px;
-  font-size: 10px;
-  color: #C14600;
-}
-
-/* Set button styles */
 .set-value-button {
   background: #C14600;
   color: white;
@@ -289,6 +263,9 @@ input:checked+.slider:after {
   height: 30px;
   white-space: nowrap;
   transition: all 0.2s;
+  align-self: flex-end;
+  margin-top: 15px;
+  width: 80px;
 }
 
 .set-value-button:hover:not(:disabled) {
@@ -305,25 +282,6 @@ input:checked+.slider:after {
   opacity: 0.8;
 }
 
-/* The .room-page styles */
-/* .room-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  min-height: 100vh;
-  width: 100vw;
-  margin: 0;
-  padding: 20px;
-  background: linear-gradient(to bottom, #DD946A, #BF5E40);
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  box-sizing: border-box;
-  position: relative;
-  overflow-x: hidden;
-} */
-
 .room-page {
   display: flex;
   flex-direction: column;
@@ -337,14 +295,14 @@ input:checked+.slider:after {
 
 .page-header {
   width: calc(100% - 150px);
-  display: flex; /* Use Flexbox for alignment */
-  flex-wrap: wrap; /* Wrap items to the next line */
-  justify-content: space-between; /* Space items evenly across the row */
-  align-items: center; /* Vertically center the items */
-  box-sizing: border-box; /* Include padding in width calculations */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
   gap: 20px;
   padding: 20px 0 5px 50px;
-  margin-left: 150px; /* Match the width of the sidebar */
+  margin-left: 150px;
 }
 
 .page-header h1 {
@@ -367,7 +325,6 @@ input:checked+.slider:after {
   height: 100% !important;
 }
 
-/* Analog value slider */
 .slider-control {
   width: 100%;
   margin-top: 10px;
@@ -375,8 +332,10 @@ input:checked+.slider:after {
   appearance: none;
   height: 8px;
   border-radius: 5px;
-  background: #f0d0b0;
+  background: #e0b080; /* Darker, more visible track */
   outline: none;
+  border: 1px solid #c14600; /* Add border to make track visible */
+  margin-bottom: 10px;
 }
 
 .slider-control::-webkit-slider-thumb {
@@ -411,7 +370,6 @@ input:checked+.slider:after {
   width: 100%;
 }
 
-/* Add Device button */
 .add-device-button {
   background: #C14600;
   color: white;
@@ -433,14 +391,27 @@ input:checked+.slider:after {
   background: #A03900;
 }
 
-/* Device tile in energy-consumption container */
 .energy-consumption .room-content {
   width: 100%;
   margin-top: 15px;
 }
 
-/* Fix alignment for device controls */
 .room-text-container {
   flex-grow: 1;
   padding-right: 20px;
+}
+
+.slider-current-value {
+  position: absolute;
+  bottom: -20px; /* Move up slightly */
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  background: #C14600; /* Changed to orange background */
+  padding: 3px 8px;
+  border-radius: 10px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  z-index: 2;
 }
