@@ -175,10 +175,9 @@
 }
 
 .slider:after {
-  content: "OFF ALL";
-  /* Default text */
+  content: "OFF";  /* Changed from "OFF ALL" */
   position: absolute;
-  right: 8px;
+  right: 10px;
   color: white;
   font-size: 12px;
 }
@@ -193,12 +192,118 @@ input:checked+.slider:before {
 }
 
 input:checked+.slider:after {
-  content: "ON ALL";
-  /* Change text to ON */
-  left: 8px;
+  content: "ON";  /* Changed from "ON ALL" */
+  left: 10px;
   right: auto;
 }
 
+/* Loading state for toggle */
+.switch.updating {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.switch.updating .slider {
+  background-color: #999;
+}
+
+/* Improved slider styles */
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.slider-with-ticks {
+  position: relative;
+  width: 80%;
+}
+
+.slider-control {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 5px;
+  background: #f0d0b0;
+  outline: none;
+  margin-bottom: 20px; /* Space for ticks */
+}
+
+.slider-control::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #C14600;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0,0,0,0.4);
+}
+
+.slider-control::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #C14600;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0,0,0,0.4);
+}
+
+/* Slider ticks */
+.slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
+.tick-mark {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 1px;
+  background: #C14600;
+  height: 5px;
+}
+
+.tick-label {
+  position: absolute;
+  top: 8px;
+  font-size: 10px;
+  color: #C14600;
+}
+
+/* Set button styles */
+.set-value-button {
+  background: #C14600;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 30px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.set-value-button:hover:not(:disabled) {
+  background: #A03900;
+}
+
+.set-value-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.set-value-button.loading {
+  background: #999;
+  opacity: 0.8;
+}
 
 /* The .room-page styles */
 /* .room-page {

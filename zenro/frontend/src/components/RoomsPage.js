@@ -16,13 +16,17 @@ function RoomsPage() {
     const chartRef = useRef(null);
     const weeklyChartRef = useRef(null);
     
-    // New state variables for device management
+    // Device management state
     const [roomData, setRoomData] = useState(null);
     const [unlockedDevices, setUnlockedDevices] = useState([]);
     const [lockedDevices, setLockedDevices] = useState([]);
     const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
     const [selectedDeviceToUnlock, setSelectedDeviceToUnlock] = useState(null);
     const [deviceTypes, setDeviceTypes] = useState({});
+    
+    // New state for analog controls
+    const [sliderValues, setSliderValues] = useState({});
+    const [updatingDevices, setUpdatingDevices] = useState({});
 
     // UseEffect for daily chart data and rendering
     useEffect(() => {
@@ -322,21 +326,38 @@ function RoomsPage() {
     // Function to control device status (on/off)
     const handleToggleDeviceStatus = async (deviceId, currentStatus) => {
         try {
+            // Set loading state for this specific device
+            setUnlockedDevices(prevDevices => 
+                prevDevices.map(device => 
+                    device.id === deviceId 
+                        ? { ...device, isUpdating: true } 
+                        : device
+                )
+            );
+            
             const response = await api.post(`/devices/${deviceId}/control/`, {
                 status: !currentStatus
             });
             
-            // Update the device in our state
+            // Update the device in our state with new status and clear loading state
             setUnlockedDevices(prevDevices => 
                 prevDevices.map(device => 
                     device.id === deviceId 
-                        ? { ...device, status: !currentStatus } 
+                        ? { ...device, status: !currentStatus, isUpdating: false } 
                         : device
                 )
             );
             
             console.log("Device status updated:", response.data);
         } catch (error) {
+            // Clear loading state on error
+            setUnlockedDevices(prevDevices => 
+                prevDevices.map(device => 
+                    device.id === deviceId 
+                        ? { ...device, isUpdating: false } 
+                        : device
+                )
+            );
             console.error("Error toggling device status:", error);
             alert("Failed to update device status. Please try again.");
         }
@@ -345,6 +366,9 @@ function RoomsPage() {
     // Function to control device analog value (brightness, temperature, etc.)
     const handleUpdateAnalogValue = async (deviceId, newValue) => {
         try {
+            // Update the "updating" state for this device
+            setUpdatingDevices(prev => ({...prev, [deviceId]: true}));
+            
             const response = await api.post(`/devices/${deviceId}/control/`, {
                 analogue_value: newValue
             });
@@ -358,8 +382,13 @@ function RoomsPage() {
                 )
             );
             
+            // Clear updating state
+            setUpdatingDevices(prev => ({...prev, [deviceId]: false}));
+            
             console.log("Device analog value updated:", response.data);
         } catch (error) {
+            // Clear updating state on error
+            setUpdatingDevices(prev => ({...prev, [deviceId]: false}));
             console.error("Error updating device analog value:", error);
             alert("Failed to update device settings. Please try again.");
         }
@@ -435,44 +464,112 @@ function RoomsPage() {
         if (!hasAnalogControl(device)) return null;
         
         const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+        const deviceId = device.id;
+        
+        // Initialize slider value if not set
+        if (sliderValues[deviceId] === undefined) {
+            // This is safe to do conditionally since it doesn't use hooks
+            setSliderValues(prev => ({ 
+                ...prev, 
+                [deviceId]: device.analogue_value || 1 
+            }));
+        }
+        
+        const isUpdating = !!updatingDevices[deviceId];
+        const currentSliderValue = sliderValues[deviceId] || device.analogue_value || 1;
+        
+        const handleSliderChange = (e) => {
+            const newValue = parseInt(e.target.value);
+            setSliderValues(prev => ({...prev, [deviceId]: newValue}));
+        };
+        
+        const applyChange = () => {
+            handleUpdateAnalogValue(deviceId, currentSliderValue);
+        };
         
         if (deviceType?.includes('light')) {
             return (
                 <div className="analog-control">
                     <h3 className="room-text-val">Brightness</h3>
-                    <h3 className="room-text">{device.analogue_value * 10}%</h3>
-                    <input 
-                        type="range" 
-                        min="1" 
-                        max="10" 
-                        value={device.analogue_value || 1} 
-                        onChange={(e) => handleUpdateAnalogValue(device.id, parseInt(e.target.value))}
-                        disabled={!device.status}
-                        className="slider-control"
-                    />
+                    <h3 className="room-text">{(device.analogue_value || 1) * 10}%</h3>
+                    
+                    <div className="slider-container">
+                        <div className="slider-with-ticks">
+                            <input 
+                                type="range" 
+                                min="1" 
+                                max="10" 
+                                step="1"
+                                value={currentSliderValue} 
+                                onChange={handleSliderChange}
+                                disabled={!device.status || isUpdating}
+                                className="slider-control"
+                            />
+                            <div className="slider-ticks">
+                                {[...Array(10)].map((_, i) => (
+                                    <span key={i} className="tick-mark">
+                                        <span className="tick-label">{(i+1)*10}%</span>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        
+                        <button 
+                            className={`set-value-button ${isUpdating ? 'loading' : ''}`}
+                            onClick={applyChange}
+                            disabled={!device.status || isUpdating || currentSliderValue === device.analogue_value}
+                        >
+                            {isUpdating ? 'Setting...' : 'Set'}
+                        </button>
+                    </div>
                 </div>
             );
         }
         
         if (deviceType?.includes('heat') || deviceType?.includes('ac')) {
-            const temperature = mapValueToTemperature(device.analogue_value || 1);
+            const currentTemp = mapValueToTemperature(device.analogue_value || 1);
+            const sliderTemp = mapValueToTemperature(currentSliderValue);
+            
             return (
                 <div className="analog-control">
                     <h3 className="room-text-val">Temperature</h3>
-                    <h3 className="room-text">{temperature}°C</h3>
-                    <input 
-                        type="range" 
-                        min="12" 
-                        max="30" 
-                        value={temperature} 
-                        onChange={(e) => {
-                            const tempValue = parseInt(e.target.value);
-                            const analogValue = mapTemperatureToValue(tempValue);
-                            handleUpdateAnalogValue(device.id, analogValue);
-                        }}
-                        disabled={!device.status}
-                        className="slider-control"
-                    />
+                    <h3 className="room-text">{currentTemp}°C</h3>
+                    
+                    <div className="slider-container">
+                        <div className="slider-with-ticks">
+                            <input 
+                                type="range" 
+                                min="12" 
+                                max="30" 
+                                step="2"
+                                value={sliderTemp} 
+                                onChange={(e) => {
+                                    const tempValue = parseInt(e.target.value);
+                                    setSliderValues(prev => ({
+                                        ...prev, 
+                                        [deviceId]: mapTemperatureToValue(tempValue)
+                                    }));
+                                }}
+                                disabled={!device.status || isUpdating}
+                                className="slider-control"
+                            />
+                            <div className="slider-ticks">
+                                {[12, 16, 20, 24, 28, 30].map((temp) => (
+                                    <span key={temp} className="tick-mark">
+                                        <span className="tick-label">{temp}°</span>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        
+                        <button 
+                            className={`set-value-button ${isUpdating ? 'loading' : ''}`}
+                            onClick={applyChange}
+                            disabled={!device.status || isUpdating || currentSliderValue === device.analogue_value}
+                        >
+                            {isUpdating ? 'Setting...' : 'Set'}
+                        </button>
+                    </div>
                 </div>
             );
         }
@@ -557,11 +654,12 @@ function RoomsPage() {
                             <div className="energy-consumption" key={device.id}>
                                 {/* Only show toggle for controllable devices */}
                                 {isControllable(device) && (
-                                    <label className="switch">
+                                    <label className={`switch ${device.isUpdating ? 'updating' : ''}`}>
                                         <input 
                                             type="checkbox" 
                                             checked={device.status} 
                                             onChange={() => handleToggleDeviceStatus(device.id, device.status)}
+                                            disabled={device.isUpdating}
                                         />
                                         <span className="slider"></span>
                                     </label>
