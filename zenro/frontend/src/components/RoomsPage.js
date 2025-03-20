@@ -544,28 +544,27 @@ function RoomsPage() {
                         
                     case 'month':
                         // Fetch daily logs for selected month
-                        const dailyResponse = await api.get(`/devicelogsdaily/?device=${selectedEnergyDevice}`);
+                        const dailyResponse = await api.get(`/devicelogs/daily/?device=${selectedEnergyDevice}`);
                         console.log("Month data response:", dailyResponse.data);
                         
                         const [year, month] = selectedMonth.split('-');
                         const monthlyLogs = dailyResponse.data.filter(log => {
-                            // Try both date formats - handle different possible formats
                             try {
                                 const logDate = new Date(log.date);
                                 return logDate.getFullYear() === parseInt(year) && 
                                        logDate.getMonth() === parseInt(month) - 1;
-                            } catch (err) {
-                                // If date parsing fails, try alternative format
+                            } catch (e) {
+                                console.error("Error parsing date:", log.date, e);
                                 return false;
                             }
                         });
                         
-                        // Get days in month
+                        // Get days in month and prepare data array
                         const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
                         labels = Array.from({length: daysInMonth}, (_, i) => `${i+1}`);
                         dataPoints = Array(daysInMonth).fill(0);
                         
-                        // Map data
+                        // Map daily logs to days of month
                         monthlyLogs.forEach(log => {
                             try {
                                 const day = new Date(log.date).getDate();
@@ -575,7 +574,7 @@ function RoomsPage() {
                             }
                         });
                         
-                        // Format month for display
+                        // Format month name for display
                         const monthName = new Date(selectedMonth + '-01').toLocaleDateString('default', { 
                             month: 'long', 
                             year: 'numeric' 
@@ -585,7 +584,7 @@ function RoomsPage() {
                         
                     case 'year':
                         // Fetch monthly logs for selected year
-                        const monthlyResponse = await api.get(`/devicelogsmonthly/?device=${selectedEnergyDevice}`);
+                        const monthlyResponse = await api.get(`/devicelogs/monthly/?device=${selectedEnergyDevice}`);
                         console.log("Year data response:", monthlyResponse.data);
                         
                         const yearLogs = monthlyResponse.data.filter(log => 
@@ -596,7 +595,7 @@ function RoomsPage() {
                         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         dataPoints = Array(12).fill(0);
                         
-                        // Map data
+                        // Map monthly logs to months
                         yearLogs.forEach(log => {
                             try {
                                 dataPoints[log.month-1] = parseFloat(log.total_energy_usage || 0);
