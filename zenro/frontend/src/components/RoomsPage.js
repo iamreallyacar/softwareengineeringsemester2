@@ -514,10 +514,14 @@ function RoomsPage() {
                 const deviceObj = unlockedDevices.find(d => d.id === parseInt(selectedEnergyDevice));
                 const deviceName = deviceObj ? deviceObj.name : 'Selected Device';
                 
+                console.log(`Fetching ${selectedPeriod} data for device ID: ${selectedEnergyDevice}`);
+                
                 switch (selectedPeriod) {
                     case 'day':
                         // Fetch 1-minute logs for the selected day
                         const minuteResponse = await api.get(`/devicelogs/?device=${selectedEnergyDevice}`);
+                        console.log("Day data response:", minuteResponse.data);
+                        
                         const dailyLogs = minuteResponse.data.filter(log => {
                             const logDate = log.created_at.split('T')[0];
                             return logDate === selectedDate;
@@ -527,7 +531,7 @@ function RoomsPage() {
                         const hourlyData = Array(24).fill(0);
                         dailyLogs.forEach(log => {
                             const hour = new Date(log.created_at).getHours();
-                            hourlyData[hour] += log.energy_usage;
+                            hourlyData[hour] += parseFloat(log.energy_usage);
                         });
                         
                         labels = Array.from({length: 24}, (_, i) => `${i}:00`);
@@ -540,14 +544,18 @@ function RoomsPage() {
                         
                     case 'month':
                         // Fetch daily logs for selected month
-                        const dailyResponse = await api.get(`/devicelogs/daily/?device=${selectedEnergyDevice}`);
+                        const dailyResponse = await api.get(`/devicelogsdaily/?device=${selectedEnergyDevice}`);
+                        console.log("Month data response:", dailyResponse.data);
                         
                         const [year, month] = selectedMonth.split('-');
                         const monthlyLogs = dailyResponse.data.filter(log => {
-                            const logDate = new Date(log.date);
+                            // Parse date safely regardless of format (YYYY-MM-DD or date object)
+                            const logDate = typeof log.date === 'string' ? new Date(log.date) : log.date;
                             return logDate.getFullYear() === parseInt(year) && 
                                    logDate.getMonth() === parseInt(month) - 1;
                         });
+                        
+                        console.log("Filtered month logs:", monthlyLogs);
                         
                         // Get days in month and prepare data array
                         const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
@@ -556,8 +564,15 @@ function RoomsPage() {
                         
                         // Map daily logs to days of month
                         monthlyLogs.forEach(log => {
-                            const day = new Date(log.date).getDate();
-                            dataPoints[day-1] = log.total_energy_usage;
+                            try {
+                                const logDate = typeof log.date === 'string' ? new Date(log.date) : log.date;
+                                const day = logDate.getDate();
+                                // Check for all possible field names
+                                const usage = parseFloat(log.total_energy_usage || log.energy_usage || 0);
+                                dataPoints[day-1] = usage;
+                            } catch (err) {
+                                console.error("Error processing log entry:", log, err);
+                            }
                         });
                         
                         // Format month name for display
@@ -570,10 +585,15 @@ function RoomsPage() {
                         
                     case 'year':
                         // Fetch monthly logs for selected year
-                        const monthlyResponse = await api.get(`/devicelogs/monthly/?device=${selectedEnergyDevice}`);
-                        const yearLogs = monthlyResponse.data.filter(log => 
-                            log.year === parseInt(selectedYear)
-                        );
+                        const monthlyResponse = await api.get(`/devicelogsmonthly/?device=${selectedEnergyDevice}`);
+                        console.log("Year data response:", monthlyResponse.data);
+                        
+                        const yearLogs = monthlyResponse.data.filter(log => {
+                            const logYear = log.year || new Date(log.date).getFullYear();
+                            return logYear === parseInt(selectedYear);
+                        });
+                        
+                        console.log("Filtered year logs:", yearLogs);
                         
                         // Set up month labels and data array
                         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -581,26 +601,34 @@ function RoomsPage() {
                         
                         // Map monthly logs to months
                         yearLogs.forEach(log => {
-                            dataPoints[log.month-1] = log.total_energy_usage;
+                            try {
+                                const month = log.month || new Date(log.date).getMonth() + 1;
+                                // Check for all possible field names
+                                const usage = parseFloat(log.total_energy_usage || log.energy_usage || 0);
+                                dataPoints[month-1] = usage;
+                            } catch (err) {
+                                console.error("Error processing yearly log entry:", log, err);
+                            }
                         });
                         
                         chartTitle = `Energy Usage for ${selectedYear} - ${deviceName}`;
                         break;
                 }
                 
-                // Debug logs
-                console.log("API Response data points:", dataPoints);
-                console.log("Labels:", labels);
+                console.log("Chart data points:", dataPoints);
+                console.log("Chart labels:", labels);
                 
                 // Check if we have any data to display
                 const isEmpty = dataPoints.every(val => val === 0);
-                setIsDataEmpty(isEmpty);
                 
-                // Destroy existing chart if it exists
+                // Always destroy the previous chart before creating a new one
                 const existingChart = Chart.getChart(energyChartRef.current);
                 if (existingChart) {
                     existingChart.destroy();
                 }
+                
+                // Update the state AFTER clearing the chart
+                setIsDataEmpty(isEmpty);
                 
                 if (isEmpty) {
                     // Create empty chart with "No data" message
@@ -671,8 +699,45 @@ function RoomsPage() {
                 });
             } catch (error) {
                 console.error('Error fetching energy data:', error);
-                console.error('Error details:', error.response?.data || error.message);
+                console.error('API response details:', error.response?.data);
+                
+                // Set the empty state to ensure clean UI even on errors
                 setIsDataEmpty(true);
+                
+                // Always destroy existing chart on error
+                const existingChart = Chart.getChart(energyChartRef.current);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                
+                // Create an empty chart to show error state
+                new Chart(energyChartRef.current.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Error loading data'],
+                        datasets: [{
+                            data: [0],
+                            backgroundColor: 'rgba(220, 53, 69, 0.2)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `Error loading data for ${selectedPeriod}`,
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            y: { display: false, beginAtZero: true },
+                            x: { display: true }
+                        }
+                    }
+                });
             }
         };
         
