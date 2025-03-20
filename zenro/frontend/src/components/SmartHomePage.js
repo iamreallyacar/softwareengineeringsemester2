@@ -17,7 +17,10 @@ function SmartHomePage() {
   
   // Room management state
   const [addedRooms, setAddedRooms] = useState([]);
+  const [lockedRooms, setLockedRooms] = useState([]); 
+  const [selectedRoomToUnlock, setSelectedRoomToUnlock] = useState(null);
   const [homeIORooms, setHomeIORooms] = useState([]);
+  const [availableHomeIORooms, setAvailableHomeIORooms] = useState([]);
   const [selectedHomeIORoom, setSelectedHomeIORoom] = useState(null);
   const [newRoomName, setNewRoomName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,29 +58,52 @@ function SmartHomePage() {
   const [isConsumptionDataEmpty, setIsConsumptionDataEmpty] = useState(false);
 
   /**
-   * Add a new room to the smart home
+   * Unlock a room in the smart home
    */
-  const handleAddRoom = async () => {
-    if (!selectedHomeIORoom || !newRoomName) {
-      alert("Please select a room and enter a name.");
+  const handleUnlockRoom = async () => {
+    if (!selectedRoomToUnlock) {
+      alert("Please select a room to unlock.");
       return;
     }
 
-    const payload = {
-      home_io_room: selectedHomeIORoom,
-      smart_home: smartHomeId,
-      name: newRoomName,
-    };
-
     try {
-      const response = await api.post(`/rooms/`, payload);
-      setAddedRooms((prevRooms) => [...prevRooms, response.data]);
-      setSelectedHomeIORoom(null);
+      console.log("Unlocking room:", selectedRoomToUnlock);
+      
+      // Find the room object from our lockedRooms array
+      const roomToUnlock = lockedRooms.find(room => room.id === parseInt(selectedRoomToUnlock));
+      
+      if (!roomToUnlock) {
+        throw new Error("Selected room not found in locked rooms list");
+      }
+      
+      // Update room with new name (if provided) and set is_unlocked to true
+      const updatedRoom = {
+        ...roomToUnlock,
+        name: newRoomName.trim() ? newRoomName : roomToUnlock.name,
+        is_unlocked: true
+      };
+      
+      // PUT request to update the room
+      const response = await api.put(`/rooms/${selectedRoomToUnlock}/`, updatedRoom);
+      console.log("Room unlocked successfully:", response.data);
+      
+      // Update local state
+      setAddedRooms(prevRooms => [...prevRooms, response.data]);
+      setLockedRooms(prevRooms => prevRooms.filter(room => room.id !== parseInt(selectedRoomToUnlock)));
+      setUnlockedRooms(prevRooms => [...prevRooms, response.data]);
+      
+      // Reset form fields
+      setSelectedRoomToUnlock(null);
       setNewRoomName("");
       setIsModalOpen(false);
+      
+      // If this is the first room, select it for energy monitoring
+      if (!selectedEnergyRoom) {
+        setSelectedEnergyRoom(response.data.id);
+      }
     } catch (error) {
-      console.error("Failed to add room:", error.response?.data || error.message);
-      alert("Failed to add room. Please try again.");
+      console.error("Error unlocking room:", error.response?.data || error.message);
+      alert("Failed to unlock room. Please try again.");
     }
   };
 
@@ -86,8 +112,25 @@ function SmartHomePage() {
    */
   const handleDeleteRoom = async (roomId) => {
     try {
+      // Get the room details before deleting
+      const roomToDelete = addedRooms.find(room => room.id === roomId);
+      
       await api.delete(`/rooms/${roomId}/`);
+      
+      // Remove room from displayed list
       setAddedRooms((prevRooms) => prevRooms.filter((room) => room.id !== roomId));
+      
+      // Add the home_io_room back to available options
+      if (roomToDelete && roomToDelete.home_io_room) {
+        // Find the HomeIORoom object to add back
+        const homeIORoomToAdd = homeIORooms.find(
+          room => room.id === roomToDelete.home_io_room
+        );
+        
+        if (homeIORoomToAdd) {
+          setAvailableHomeIORooms(prevRooms => [...prevRooms, homeIORoomToAdd]);
+        }
+      }
     } catch (error) {
       console.error("Failed to delete room:", error.response?.data || error.message);
       alert("Failed to delete room. Please try again.");
@@ -114,18 +157,29 @@ function SmartHomePage() {
    * Fetch smart home data on initial load
    */
   useEffect(() => {
-    // Fetch rooms for this smart home
+    // Fetch ALL rooms for this smart home (both locked and unlocked)
     api.get(`/rooms/?smart_home=${smartHomeId}`)
       .then((res) => {
-        setAddedRooms(res.data);
+        const allSmartHomeRooms = res.data;
+        console.log("All rooms for smart home:", allSmartHomeRooms);
         
-        // Filter only unlocked rooms
-        const unlocked = res.data.filter(room => room.is_unlocked);
-        setUnlockedRooms(unlocked);
+        // Filter rooms into locked and unlocked categories
+        const unlockedRooms = allSmartHomeRooms.filter(room => room.is_unlocked);
+        const locked = allSmartHomeRooms.filter(room => !room.is_unlocked);
+        
+        console.log("Unlocked rooms:", unlockedRooms);
+        console.log("Locked rooms:", locked);
+        
+        // Update both state variables
+        setAddedRooms(unlockedRooms);
+        setLockedRooms(locked);
+        
+        // Set for energy monitor
+        setUnlockedRooms(unlockedRooms);
         
         // Set default room if available
-        if (unlocked.length > 0 && !selectedEnergyRoom) {
-          setSelectedEnergyRoom(unlocked[0].id);
+        if (unlockedRooms.length > 0 && !selectedEnergyRoom) {
+          setSelectedEnergyRoom(unlockedRooms[0].id);
         }
       })
       .catch((error) => {
@@ -140,16 +194,7 @@ function SmartHomePage() {
       .catch((error) => {
         console.error("Error fetching supported devices:", error);
       });
-
-    // Fetch homeio-rooms
-    api.get("/homeio-rooms/")
-      .then((res) => {
-        setHomeIORooms(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching homeio-rooms:", error);
-      });
-  }, [smartHomeId]);
+  }, [smartHomeId, selectedEnergyRoom]);
 
   /**
    * Update energy chart when data selection changes
@@ -712,9 +757,16 @@ function SmartHomePage() {
             </div>
           )}
 
+          {/* Always show the Add Room button if there are locked rooms */}
           <button
             className="shp-add-room-button"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              if (lockedRooms.length > 0) {
+                setIsModalOpen(true);
+              } else {
+                alert("All rooms have already been added to the Home. Consider expanding your Home to include more rooms?");
+              }
+            }}
           >
             + Add Room
           </button>
@@ -724,30 +776,43 @@ function SmartHomePage() {
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal">
-              <h2>Add New Room</h2>
-              <select
-                value={selectedHomeIORoom}
-                onChange={(e) => setSelectedHomeIORoom(e.target.value)}
-                className="room-dropdown"
-              >
-                <option value="">Select a Room</option>
-                {homeIORooms.map((room) => (
-                  <option key={room.id} value={room.id}>
-                    {room.name}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                placeholder="Enter Custom Room Name"
-                value={newRoomName}
-                onChange={(e) => setNewRoomName(e.target.value)}
-                className="room-name-input"
-              />
-              <div className="modal-buttons">
-                <button onClick={handleAddRoom}>Add Room</button>
-                <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-              </div>
+              <h2>Unlock Room</h2>
+              {lockedRooms.length > 0 ? (
+                <>
+                  <select
+                    value={selectedRoomToUnlock}
+                    onChange={(e) => setSelectedRoomToUnlock(e.target.value)}
+                    className="room-dropdown"
+                  >
+                    <option value="">Select a Room to Unlock</option>
+                    {lockedRooms.map((room) => (
+                      <option key={room.id} value={room.id}>
+                        {room.name || `Room ${room.id}`} ({room.home_io_room_name})
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Enter Custom Room Name (Optional)"
+                    value={newRoomName}
+                    onChange={(e) => setNewRoomName(e.target.value)}
+                    className="room-name-input"
+                  />
+                  <div className="modal-buttons">
+                    <button onClick={handleUnlockRoom}>Unlock Room</button>
+                    <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p style={{ margin: "20px 0", color: "#666" }}>
+                    All rooms have already been unlocked in this Home. Consider expanding your Home to include more rooms?
+                  </p>
+                  <div className="modal-buttons">
+                    <button onClick={() => setIsModalOpen(false)}>Close</button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
