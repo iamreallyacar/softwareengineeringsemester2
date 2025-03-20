@@ -67,7 +67,10 @@ function RoomsPage() {
                 setUnlockedDevices(unlocked);
                 setLockedDevices(locked);
 
-                
+                // Set a default device for energy monitoring if available
+                if (unlocked.length > 0 && !selectedEnergyDevice) {
+                    setSelectedEnergyDevice(unlocked[0].id);
+                }
             } catch (error) {
                 console.error("Error fetching room and device data:", error);
             }
@@ -514,7 +517,7 @@ function RoomsPage() {
                 switch (selectedPeriod) {
                     case 'day':
                         // Fetch 1-minute logs for the selected day
-                        const minuteResponse = await api.get(`/devicelogs1min/?device=${selectedEnergyDevice}`);
+                        const minuteResponse = await api.get(`/devicelogs/?device=${selectedEnergyDevice}`);
                         const dailyLogs = minuteResponse.data.filter(log => {
                             const logDate = log.created_at.split('T')[0];
                             return logDate === selectedDate;
@@ -537,7 +540,7 @@ function RoomsPage() {
                         
                     case 'month':
                         // Fetch daily logs for selected month
-                        const dailyResponse = await api.get(`/devicelogsdaily/?device=${selectedEnergyDevice}`);
+                        const dailyResponse = await api.get(`/devicelogs/daily/?device=${selectedEnergyDevice}`);
                         
                         const [year, month] = selectedMonth.split('-');
                         const monthlyLogs = dailyResponse.data.filter(log => {
@@ -567,7 +570,7 @@ function RoomsPage() {
                         
                     case 'year':
                         // Fetch monthly logs for selected year
-                        const monthlyResponse = await api.get(`/devicelogsmonthly/?device=${selectedEnergyDevice}`);
+                        const monthlyResponse = await api.get(`/devicelogs/monthly/?device=${selectedEnergyDevice}`);
                         const yearLogs = monthlyResponse.data.filter(log => 
                             log.year === parseInt(selectedYear)
                         );
@@ -584,6 +587,10 @@ function RoomsPage() {
                         chartTitle = `Energy Usage for ${selectedYear} - ${deviceName}`;
                         break;
                 }
+                
+                // Debug logs
+                console.log("API Response data points:", dataPoints);
+                console.log("Labels:", labels);
                 
                 // Check if we have any data to display
                 const isEmpty = dataPoints.every(val => val === 0);
@@ -664,6 +671,7 @@ function RoomsPage() {
                 });
             } catch (error) {
                 console.error('Error fetching energy data:', error);
+                console.error('Error details:', error.response?.data || error.message);
                 setIsDataEmpty(true);
             }
         };
