@@ -9,14 +9,20 @@ import smartBlind from "../assets/images/smart-blind.png";
 import airCond from "../assets/images/aircond.png";
 import smartTV from "../assets/images/smart-tv.png";
 import Sidebar from "./Sidebar";
+import "../css/rooms-page.css";
 
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
-    const [isOn, setIsOn] = useState(false);
     const chartRef = useRef(null);
     const weeklyChartRef = useRef(null);
+    
+    // New state variables for device management
     const [roomData, setRoomData] = useState(null);
-    const [deviceLogs, setDeviceLogs] = useState([]);
+    const [unlockedDevices, setUnlockedDevices] = useState([]);
+    const [lockedDevices, setLockedDevices] = useState([]);
+    const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
+    const [selectedDeviceToUnlock, setSelectedDeviceToUnlock] = useState(null);
+    const [deviceTypes, setDeviceTypes] = useState({});
 
     // UseEffect for daily chart data and rendering
     useEffect(() => {
@@ -234,6 +240,246 @@ function RoomsPage() {
         fetchWeeklyData();
     }, [roomId]);
 
+    // New useEffect to fetch room and device data
+    useEffect(() => {
+        const fetchRoomAndDevices = async () => {
+            try {
+                // Get room data including devices
+                const roomResponse = await api.get(`/rooms/${roomId}/`);
+                setRoomData(roomResponse.data);
+                
+                // Get supported device details to determine device types
+                const supportedDevicesResponse = await api.get('/supporteddevices/');
+                const deviceTypeMap = {};
+                supportedDevicesResponse.data.forEach(device => {
+                    deviceTypeMap[device.id] = {
+                        type: device.type,
+                        model_name: device.model_name
+                    };
+                });
+                setDeviceTypes(deviceTypeMap);
+                
+                // Sort devices into locked and unlocked categories
+                const allDevices = roomResponse.data.devices || [];
+                const unlocked = allDevices.filter(device => device.is_unlocked);
+                const locked = allDevices.filter(device => !device.is_unlocked);
+                
+                console.log("Unlocked devices:", unlocked);
+                console.log("Locked devices:", locked);
+                
+                setUnlockedDevices(unlocked);
+                setLockedDevices(locked);
+            } catch (error) {
+                console.error("Error fetching room and device data:", error);
+            }
+        };
+        
+        fetchRoomAndDevices();
+    }, [roomId]);
+
+    // Function to unlock a device
+    const handleUnlockDevice = async () => {
+        if (!selectedDeviceToUnlock) {
+            alert("Please select a device to add");
+            return;
+        }
+        
+        try {
+            // Find the device object from our lockedDevices array
+            const deviceToUnlock = lockedDevices.find(
+                device => device.id === parseInt(selectedDeviceToUnlock)
+            );
+            
+            if (!deviceToUnlock) {
+                throw new Error("Selected device not found in locked devices list");
+            }
+            
+            // Update device with is_unlocked=true
+            const updatedDevice = {
+                ...deviceToUnlock,
+                is_unlocked: true
+            };
+            
+            // PUT request to update the device
+            const response = await api.put(`/devices/${selectedDeviceToUnlock}/`, updatedDevice);
+            console.log("Device unlocked successfully:", response.data);
+            
+            // Update local state
+            setUnlockedDevices(prevDevices => [...prevDevices, response.data]);
+            setLockedDevices(prevDevices => 
+                prevDevices.filter(device => device.id !== parseInt(selectedDeviceToUnlock))
+            );
+            
+            // Reset form fields
+            setSelectedDeviceToUnlock(null);
+            setIsAddDeviceModalOpen(false);
+        } catch (error) {
+            console.error("Error unlocking device:", error.response?.data || error.message);
+            alert("Failed to add device. Please try again.");
+        }
+    };
+
+    // Function to control device status (on/off)
+    const handleToggleDeviceStatus = async (deviceId, currentStatus) => {
+        try {
+            const response = await api.post(`/devices/${deviceId}/control/`, {
+                status: !currentStatus
+            });
+            
+            // Update the device in our state
+            setUnlockedDevices(prevDevices => 
+                prevDevices.map(device => 
+                    device.id === deviceId 
+                        ? { ...device, status: !currentStatus } 
+                        : device
+                )
+            );
+            
+            console.log("Device status updated:", response.data);
+        } catch (error) {
+            console.error("Error toggling device status:", error);
+            alert("Failed to update device status. Please try again.");
+        }
+    };
+
+    // Function to control device analog value (brightness, temperature, etc.)
+    const handleUpdateAnalogValue = async (deviceId, newValue) => {
+        try {
+            const response = await api.post(`/devices/${deviceId}/control/`, {
+                analogue_value: newValue
+            });
+            
+            // Update the device in our state
+            setUnlockedDevices(prevDevices => 
+                prevDevices.map(device => 
+                    device.id === deviceId 
+                        ? { ...device, analogue_value: newValue } 
+                        : device
+                )
+            );
+            
+            console.log("Device analog value updated:", response.data);
+        } catch (error) {
+            console.error("Error updating device analog value:", error);
+            alert("Failed to update device settings. Please try again.");
+        }
+    };
+
+    // Helper function to get device icon based on type
+    const getDeviceIcon = (device) => {
+        if (!device || !device.supported_device) return lightBulb;
+        
+        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+        
+        if (deviceType?.includes('light')) return lightBulb;
+        if (deviceType?.includes('blind') || deviceType?.includes('shade')) return smartBlind;
+        if (deviceType?.includes('ac') || deviceType?.includes('heat')) return airCond;
+        if (deviceType?.includes('tv')) return smartTV;
+        
+        // Default icon
+        return lightBulb;
+    };
+
+    // Helper to get user-friendly device type name
+    const getDeviceTypeName = (device) => {
+        if (!device || !device.supported_device) return "Device";
+        
+        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+        
+        if (deviceType?.includes('light')) return "Light";
+        if (deviceType?.includes('blind') || deviceType?.includes('shade')) return "Smart Blind";
+        if (deviceType?.includes('ac')) return "Air Conditioner";
+        if (deviceType?.includes('heat')) return "Heater";
+        if (deviceType?.includes('tv')) return "Smart TV";
+        if (deviceType?.includes('sensor')) return "Sensor";
+        
+        return deviceTypes[device.supported_device]?.model_name || "Device";
+    };
+
+    // Helper to determine if a device has analog control
+    const hasAnalogControl = (device) => {
+        if (!device || !device.supported_device) return false;
+        
+        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+        
+        // Only lights and heaters have analog controls
+        return deviceType?.includes('light') || 
+               deviceType?.includes('heat') || 
+               deviceType?.includes('ac');
+    };
+
+    // Helper to determine if a device is controllable
+    const isControllable = (device) => {
+        if (!device || !device.supported_device) return false;
+        
+        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+        
+        // Sensors are not controllable
+        return !deviceType?.includes('sensor');
+    };
+
+    // Helper to map analog value to temperature (for heaters)
+    const mapValueToTemperature = (value) => {
+        // Map 1-10 to 12-30°C
+        return Math.round(12 + ((value - 1) * (30 - 12) / 9));
+    };
+
+    // Helper to map temperature to analog value (for heaters)
+    const mapTemperatureToValue = (temp) => {
+        // Map 12-30°C to 1-10
+        return Math.round(1 + ((temp - 12) * (10 - 1) / (30 - 12)));
+    };
+
+    // Helper to render analog value control based on device type
+    const renderAnalogControl = (device) => {
+        if (!hasAnalogControl(device)) return null;
+        
+        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+        
+        if (deviceType?.includes('light')) {
+            return (
+                <div className="analog-control">
+                    <h3 className="room-text-val">Brightness</h3>
+                    <h3 className="room-text">{device.analogue_value * 10}%</h3>
+                    <input 
+                        type="range" 
+                        min="1" 
+                        max="10" 
+                        value={device.analogue_value || 1} 
+                        onChange={(e) => handleUpdateAnalogValue(device.id, parseInt(e.target.value))}
+                        disabled={!device.status}
+                        className="slider-control"
+                    />
+                </div>
+            );
+        }
+        
+        if (deviceType?.includes('heat') || deviceType?.includes('ac')) {
+            const temperature = mapValueToTemperature(device.analogue_value || 1);
+            return (
+                <div className="analog-control">
+                    <h3 className="room-text-val">Temperature</h3>
+                    <h3 className="room-text">{temperature}°C</h3>
+                    <input 
+                        type="range" 
+                        min="12" 
+                        max="30" 
+                        value={temperature} 
+                        onChange={(e) => {
+                            const tempValue = parseInt(e.target.value);
+                            const analogValue = mapTemperatureToValue(tempValue);
+                            handleUpdateAnalogValue(device.id, analogValue);
+                        }}
+                        disabled={!device.status}
+                        className="slider-control"
+                    />
+                </div>
+            );
+        }
+        
+        return null;
+    };
+
     return (
         <div className="room-page">
             <Sidebar />
@@ -242,6 +488,7 @@ function RoomsPage() {
                 <Link to={`/smarthomepage/${smartHomeId}`}>
                     <h1><i className="fas fa-arrow-left"></i> Overview</h1>
                 </Link>
+                {roomData && <h1>{roomData.name}</h1>}
             </div>
 
             {/* Columns for Energy Consumption */}
@@ -278,112 +525,128 @@ function RoomsPage() {
 
                 {/* Column 2 */}
                 <div className="column2">
-                    {/* Row 1: Living Room energy consumption for today */}
-                    <div className="energy-consumption">
-                        {/* button for on/off  */}
-                        <label className="switch">
-                            <input type="checkbox" />
-                            <span className="slider"></span>
-                        </label>
+                    {/* Add Device Button */}
+                    {lockedDevices.length > 0 && (
+                        <button 
+                            className="add-device-button"
+                            onClick={() => setIsAddDeviceModalOpen(true)}
+                            style={{
+                                background: '#C14600',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '5px',
+                                padding: '8px 15px',
+                                margin: '10px 0 20px 0',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '100%'
+                            }}
+                        >
+                            <i className="fa-solid fa-plus" style={{ marginRight: '8px' }}></i>
+                            Add Device
+                        </button>
+                    )}
 
-                        <h3 className="room-text">
-                            <span className="number">4</span> devices
-                        </h3>
-                        <h3 className="room-text">Lights</h3>
-                        <div className="col-12 room-container">
-                            <div className="room-content">
-                                <div className="room-text-container">
-                                    <h3 className="room-text-val">Brightness</h3>
-                                    <h3 className="room-text">50%</h3>
-                                </div>
-                                <div className="room-appliances-img-container">
-                                    <img className="room-appliances-img" src={lightBulb} alt="Light Bulb" />
-                                </div>
-                            </div>
-                        </div>
+                    {/* Unlocked Devices */}
+                    {unlockedDevices.length > 0 ? (
+                        unlockedDevices.map(device => (
+                            <div className="energy-consumption" key={device.id}>
+                                {/* Only show toggle for controllable devices */}
+                                {isControllable(device) && (
+                                    <label className="switch">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={device.status} 
+                                            onChange={() => handleToggleDeviceStatus(device.id, device.status)}
+                                        />
+                                        <span className="slider"></span>
+                                    </label>
+                                )}
 
-                        {/* Content for living room energy consumption */}
-                    </div>
+                                <h3 className="room-text">
+                                    {device.name}
+                                </h3>
+                                <h3 className="room-text">
+                                    {getDeviceTypeName(device)}
+                                    {!isControllable(device) && " (Read-only)"}
+                                </h3>
 
-                    {/* Row 2: Weekly living room energy consumption */}
-                    <div className="energy-consumption">
-                        <label className="switch">
-                            <input type="checkbox" />
-                            <span className="slider"></span>
-                        </label>
-                        <h3 className="room-text">
-                            <span className="number">4</span> devices
-                        </h3>
-                        <h3 className="room-text">Smart Blinds</h3>
-                        <div className="col-12 room-container">
-                            <div className="room-content">
-                                <div className="room-text-container">
-                                    <h3 className="room-text-val">UV Index</h3>
-                                    <h3 className="room-text">Low</h3>
-                                </div>
-                                <div className="room-appliances-img-container">
-                                    <img className="room-appliances-img" src={smartBlind} alt="Smart Blind" />
-                                </div>
-                            </div>
-                        </div>
-                        {/* Content for weekly living room energy consumption */}
-                    </div>
-
-                    {/* Row 2: Weekly living room energy consumption */}
-                    <div className="energy-consumption">
-                        <label className="switch">
-                            <input type="checkbox" />
-                            <span className="slider"></span>
-                        </label>
-                        <h3 className="room-text">
-                            <span className="number">1</span> devices
-                        </h3>
-                        <h3 className="room-text">Smart TV</h3>
-                        <div className="col-12 room-container">
-                            <div className="room-content">
-                                <div className="room-text-container">
-                                    <h3 className="room-text-val">Attribute</h3>
-                                    <h3 className="room-text">Desc</h3>
-                                </div>
-                                <div className="room-appliances-img-container">
-                                    <img className="room-appliances-img" src={smartTV} alt="Smart TV" />
+                                <div className="col-12 room-container">
+                                    <div className="room-content">
+                                        <div className="room-text-container">
+                                            {/* Render appropriate controls based on device type */}
+                                            {renderAnalogControl(device)}
+                                        </div>
+                                        <div className="room-appliances-img-container">
+                                            <img 
+                                                className="room-appliances-img" 
+                                                src={getDeviceIcon(device)} 
+                                                alt={getDeviceTypeName(device)} 
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="no-devices-message" style={{ textAlign: 'center', color: '#666' }}>
+                            <p>No devices have been added to this room yet.</p>
+                            {lockedDevices.length > 0 && (
+                                <p>Click "Add Device" to add available devices.</p>
+                            )}
                         </div>
-
-                        {/* Content for weekly living room energy consumption */}
-                    </div>
-
-                    {/* Row 2: Weekly living room energy consumption */}
-                    <div className="energy-consumption">
-                        <label className="switch">
-                            <input type="checkbox" />
-                            <span className="slider"></span>
-                        </label>
-                        <h3 className="room-text">
-                            <span className="number">2</span> devices
-                        </h3>
-                        <h3 className="room-text">Air Conditioners</h3>
-                        <div className="col-12 room-container">
-                            <div className="room-content">
-                                <div className="room-text-container">
-                                    <h3 className="room-text-val">Temperature</h3>
-                                    <h3 className="room-text">19</h3>
-                                </div>
-                                <div className="room-appliances-img-container">
-                                    <img className="room-appliances-img" src={airCond} alt="Air Conditioner" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Content for weekly living room energy consumption */}
-                    </div>
-
-
-
+                    )}
                 </div>
             </div>
 
+            {/* Add Device Modal */}
+            {isAddDeviceModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h2>Add a Device</h2>
+                        {lockedDevices.length > 0 ? (
+                            <>
+                                <select
+                                    value={selectedDeviceToUnlock || ''}
+                                    onChange={(e) => setSelectedDeviceToUnlock(e.target.value)}
+                                    className="device-dropdown"
+                                    style={{
+                                        width: '100%',
+                                        padding: '10px',
+                                        marginBottom: '20px',
+                                        borderRadius: '5px',
+                                        border: '1px solid #ddd'
+                                    }}
+                                >
+                                    <option value="">Select a Device to Add</option>
+                                    {lockedDevices.map((device) => (
+                                        <option key={device.id} value={device.id}>
+                                            {device.name} ({getDeviceTypeName(device)})
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="modal-buttons">
+                                    <button onClick={handleUnlockDevice}>Add Device</button>
+                                    <button onClick={() => setIsAddDeviceModalOpen(false)}>Cancel</button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <p style={{ margin: "20px 0", color: "#666" }}>
+                                    All available devices have already been added to this room.
+                                </p>
+                                <div className="modal-buttons">
+                                    <button onClick={() => setIsAddDeviceModalOpen(false)}>Close</button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

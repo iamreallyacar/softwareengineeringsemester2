@@ -261,3 +261,81 @@ input:checked+.slider:after {
   width: 100% !important;
   height: 100% !important;
 }
+
+/* Analog value slider */
+.slider-control {
+  width: 100%;
+  margin-top: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 5px;
+  background: #f0d0b0;
+  outline: none;
+}
+
+.slider-control::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #C14600;
+  cursor: pointer;
+}
+
+.slider-control::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #C14600;
+  cursor: pointer;
+}
+
+.slider-control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.slider-control:disabled::-webkit-slider-thumb {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+.analog-control {
+  width: 100%;
+}
+
+/* Add Device button */
+.add-device-button {
+  background: #C14600;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 10px 0 20px 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.add-device-button:hover {
+  background: #A03900;
+}
+
+/* Device tile in energy-consumption container */
+.energy-consumption .room-content {
+  width: 100%;
+  margin-top: 15px;
+}
+
+/* Fix alignment for device controls */
+.room-text-container {
+  flex-grow: 1;
+  padding-right: 20px;
+}
