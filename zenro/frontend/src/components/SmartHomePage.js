@@ -776,7 +776,7 @@ function SmartHomePage() {
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal">
-              <h2>Unlock Room</h2>
+              <h2>Add a Room</h2>
               {lockedRooms.length > 0 ? (
                 <>
                   <select
@@ -784,7 +784,7 @@ function SmartHomePage() {
                     onChange={(e) => setSelectedRoomToUnlock(e.target.value)}
                     className="room-dropdown"
                   >
-                    <option value="">Select a Room to Unlock</option>
+                    <option value="">Select a Room to Add</option>
                     {lockedRooms.map((room) => (
                       <option key={room.id} value={room.id}>
                         {room.name || `Room ${room.id}`} ({room.home_io_room_name})
@@ -799,7 +799,7 @@ function SmartHomePage() {
                     className="room-name-input"
                   />
                   <div className="modal-buttons">
-                    <button onClick={handleUnlockRoom}>Unlock Room</button>
+                    <button onClick={handleUnlockRoom}>Add Room</button>
                     <button onClick={() => setIsModalOpen(false)}>Cancel</button>
                   </div>
                 </>
