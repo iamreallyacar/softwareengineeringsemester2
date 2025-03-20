@@ -33,15 +33,15 @@ def update_homeio_on_device_change(sender, instance, **kwargs):
             if not success:
                 logger.warning(f"Failed to control HomeIO device {instance.name} status")
             
-            # Special handling for false→true transition for devices that support analogue values
-            if not old_instance.status and instance.status:  # From OFF to ON
-                device_type = instance.supported_device.type
-                if device_type in ['lighting', 'heating'] and instance.analogue_value is not None:
-                    logger.info(f"Device {instance.name} turned ON - setting analogue value to {instance.analogue_value}")
-                    # Send request to set analogue value
-                    success = service.set_device_analogue_value(instance)
-                    if not success:
-                        logger.warning(f"Failed to set analogue value for HomeIO device {instance.name}")
+            # # Special handling for false→true transition for devices that support analogue values
+            # if not old_instance.status and instance.status:  # From OFF to ON
+            #     device_type = instance.supported_device.type
+            #     if device_type in ['lighting', 'heating'] and instance.analogue_value is not None:
+            #         logger.info(f"Device {instance.name} turned ON - setting analogue value to {instance.analogue_value}")
+            #         # Send request to set analogue value
+            #         success = service.set_device_analogue_value(instance)
+            #         if not success:
+            #             logger.warning(f"Failed to set analogue value for HomeIO device {instance.name}")
         
         # Handle direct analogue value changes (when status didn't change or changed in other ways)
         elif old_instance.analogue_value != instance.analogue_value:

@@ -439,12 +439,7 @@ function RoomsPage() {
 
     // Helper to determine if a device is controllable
     const isControllable = (device) => {
-        if (!device || !device.supported_device) return false;
-        
-        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
-        
-        // Sensors are not controllable
-        return !deviceType?.includes('sensor');
+        return true; // All devices are now controllable
     };
 
     // Helper to map analog value to temperature (for heaters)
@@ -673,10 +668,13 @@ function RoomsPage() {
 
                     {/* Unlocked Devices */}
                     {unlockedDevices.length > 0 ? (
-                        unlockedDevices.map(device => (
-                            <div className="energy-consumption" key={device.id}>
-                                {/* Only show toggle for controllable devices */}
-                                {isControllable(device) && (
+                        unlockedDevices.map(device => {
+                            const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+                            const isSensor = deviceType?.includes('sensor');
+                            
+                            return (
+                                <div className="energy-consumption" key={device.id}>
+                                    {/* Show toggle for all devices */}
                                     <label className={`switch ${device.isUpdating ? 'updating' : ''}`}>
                                         <input 
                                             type="checkbox" 
@@ -686,33 +684,34 @@ function RoomsPage() {
                                         />
                                         <span className="slider"></span>
                                     </label>
-                                )}
 
-                                <h3 className="room-text">
-                                    {device.name}
-                                </h3>
-                                <h3 className="room-text">
-                                    {getDeviceTypeName(device)}
-                                    {!isControllable(device) && " (Read-only)"}
-                                </h3>
+                                    {/* Only show device name, not type */}
+                                    <h3 className="room-text">
+                                        {device.name}
+                                    </h3>
 
-                                <div className="col-12 room-container">
-                                    <div className="room-content">
-                                        <div className="room-text-container">
-                                            {/* Render appropriate controls based on device type */}
-                                            {renderAnalogControl(device)}
-                                        </div>
-                                        <div className="room-appliances-img-container">
-                                            <img 
-                                                className="room-appliances-img" 
-                                                src={getDeviceIcon(device)} 
-                                                alt={getDeviceTypeName(device)} 
-                                            />
+                                    <div className="col-12 room-container">
+                                        <div className="room-content">
+                                            <div className="room-text-container">
+                                                {/* Only render analog controls for non-sensor devices */}
+                                                {!isSensor && renderAnalogControl(device)}
+                                            </div>
+                                            
+                                            {/* Only show icon for non-sensor devices */}
+                                            {!isSensor && (
+                                                <div className="room-appliances-img-container">
+                                                    <img 
+                                                        className="room-appliances-img" 
+                                                        src={getDeviceIcon(device)} 
+                                                        alt={device.name}
+                                                    />
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            );
+                        })
                     ) : (
                         <div className="no-devices-message" style={{ textAlign: 'center', color: '#666' }}>
                             <p>No devices have been added to this room yet.</p>
@@ -746,7 +745,7 @@ function RoomsPage() {
                                     <option value="">Select a Device to Add</option>
                                     {lockedDevices.map((device) => (
                                         <option key={device.id} value={device.id}>
-                                            {device.name} ({getDeviceTypeName(device)})
+                                            {device.name}
                                         </option>
                                     ))}
                                 </select>
