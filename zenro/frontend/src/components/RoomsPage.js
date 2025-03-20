@@ -672,6 +672,7 @@ function RoomsPage() {
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        resizeDelay: 100,
                         animation: {
                             duration: 1000, // Animation duration in milliseconds
                             easing: 'easeOutQuart', // Animation easing function
@@ -684,7 +685,8 @@ function RoomsPage() {
                             title: {
                                 display: true,
                                 text: chartTitle,
-                                font: { size: 16, weight: 'bold' }
+                                font: { size: 16, weight: 'bold' },
+                                padding: { top: 10, bottom: 20 }
                             },
                             legend: { display: false }
                         },
@@ -695,12 +697,14 @@ function RoomsPage() {
                                     color: 'rgba(200, 200, 200, 0.3)'
                                 },
                                 ticks: {
-                                    padding: 10
+                                    padding: 10,
+                                    font: { size: 12 }
                                 },
                                 title: {
                                     display: true,
                                     text: 'Energy (kWh)',
-                                    padding: {top: 10, bottom: 10}
+                                    padding: {top: 0, bottom: 10},
+                                    font: { size: 14 }
                                 }
                             },
                             x: {
@@ -708,16 +712,17 @@ function RoomsPage() {
                                     display: false
                                 },
                                 ticks: {
-                                    padding: 10
+                                    padding: 10,
+                                    font: { size: 12 }
                                 }
                             }
                         },
                         layout: {
                             padding: {
-                                left: 10,
-                                right: 20,
+                                left: 20,
+                                right: 30,
                                 top: 20,
-                                bottom: 30
+                                bottom: 40
                             }
                         }
                     }
@@ -887,7 +892,7 @@ function RoomsPage() {
                             </div>
                         </div>
                         
-                        <div style={{ height: '400px', position: 'relative', marginTop: '15px', marginBottom: '40px' }}>
+                        <div className="chart-wrapper">
                             {!selectedEnergyDevice && (
                                 <div style={{ 
                                     position: 'absolute', 

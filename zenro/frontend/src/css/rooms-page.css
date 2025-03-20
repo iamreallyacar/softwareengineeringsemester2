@@ -108,7 +108,7 @@
   align-items: flex-start;
 
   width: 100%;
-  max-height: 400px;
+  max-height: none !important;
   padding: 40px;
   margin-top: 20px;
   margin-left: 0;
@@ -125,9 +125,8 @@
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15),
     0px 0px 15px rgba(0, 0, 0, 0.2);
   padding-top: 45px; /* Increased to make room for buttons */
-  padding-bottom: 70px; /* Increase bottom padding for axis labels */
-  padding-bottom: 80px !important; /* More bottom padding */
-  min-height: 500px !important; /* Ensure enough height */
+  padding-bottom: 20px !important;
+  min-height: auto !important;
 }
 
 .switch {
@@ -329,7 +328,7 @@ input:checked+.slider:after {
   height: 100% !important;
   height: 100% !important;
   width: 100% !important;
-  max-height: 380px !important; /* Control maximum height */
+  max-height: none !important;
 }
 
 .slider-control {
@@ -496,11 +495,11 @@ input:checked+.slider:after {
 }
 
 /* Adjust the chart container height and padding */
-.energy-consumption > div[style*="height: 300px"] {
-  height: 350px !important; /* Increase height */
+.energy-consumption > div[style*="height: 300px"],
+.energy-consumption > div[style*="height: 400px"] {
+  height: auto !important;
   margin-bottom: 30px;
   margin-top: 25px;
-  height: 400px !important; /* Much more height */
   margin-bottom: 40px !important;
   margin-top: 30px !important;
   position: relative; /* Ensure proper positioning */
@@ -509,4 +508,25 @@ input:checked+.slider:after {
 /* Fix for chart padding */
 .chart-container {
   padding-bottom: 50px !important;
+}
+
+/* Fix for chart container - add these rules */
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 350px;
+  padding-bottom: 60px; /* Space for x-axis labels */
+  margin: 20px 0;
+}
+
+/* Adjust the energy-consumption container */
+.column1 .energy-consumption {
+  padding: 30px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make sure chart controls don't take too much space */
+.chart-controls {
+  margin-bottom: 15px;
 }
