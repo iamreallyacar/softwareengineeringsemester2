@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import "../css/Sidebar.css";
-import peachesLogo from "../assets/images/peaches-logo.png";
+import peachesLogo from "../assets/images/logo-2.png";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);

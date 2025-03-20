@@ -3,6 +3,7 @@ import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
+import "../css/index.css";
 
 const Login = ({ setIsAuthenticated }) => {
     const navigate = useNavigate();
@@ -73,7 +74,7 @@ const Login = ({ setIsAuthenticated }) => {
                         </form>
                         <div className="login-footer">
                             <div className="signup-prompt-circle">
-                                Don't have an account? <Link to="/create-account" className="signup-link">Sign up</Link>
+                                Don't have an account? <Link to="/create-account" className="login-signup-link">Sign up</Link>
                             </div>
                         </div>
                     </div>

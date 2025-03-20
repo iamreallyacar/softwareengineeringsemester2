@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../api";
+import "../css/index.css";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
@@ -180,7 +181,7 @@ function CreateAccount() {
 
                             <div className="login-footer">
                                 <div className="signup-prompt">
-                                    Already have an account? <Link to="/login" className="signup-link"> Log in </Link>
+                                    Already have an account? <Link to="/login" className="login-signup-link"> Log in </Link>
                                 </div>
                             </div>
                         </form>

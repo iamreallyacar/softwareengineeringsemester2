@@ -197,7 +197,7 @@ body {
   padding-top: 0.5rem;
 }
 
-.signup-link {
+.login-signup-link {
   color: #FFFFFF;
   font-weight: 600;
   margin-left: 5px;
@@ -205,7 +205,7 @@ body {
   transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.signup-link:hover {
+.login-signup-link:hover {
   color: #FFF6E7;
   text-decoration: underline;
   transform: translateY(-3px) scale(1.1);

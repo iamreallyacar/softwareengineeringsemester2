@@ -3,7 +3,6 @@ import { ChevronDown, Home, Users, UserPlus } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import { ChevronLeft, User } from "lucide-react";
-import { ChevronRight, ScanFace } from 'lucide-react';
 
 // Extract Header Component
 const DashboardHeader = () => {
@@ -32,7 +31,7 @@ const UserProfile = () => (
             <User className="avatar-icon" />
         </div>
         <h1 className="welcome-text">Welcome, User</h1>
-        <p className="welcome-caption">Manage your smart homes and account settings!</p>
+        <p className="welcome-caption">Manage your smart homes and account settings.</p>
     </div>
 );
 
@@ -55,7 +54,7 @@ const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, 
                 required
                 className="join-password-input"
             />
-            <button type="submit" className="shl-submit-button" disabled={isCreating}>
+            <button type="submit" disabled={isCreating}>
                 {isCreating ? "Creating ..." : "Create Smart Home"}
             </button>
         </form>
@@ -73,7 +72,7 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes }) => 
                     </div>
                     <span className="button-text">Smart Homes You Own</span>
                 </div>
-                <ChevronRight className={`chevron-icon ${isOwnedExpanded ? "rotated" : ""}`} />
+                <ChevronDown className={`chevron-icon ${isOwnedExpanded ? "rotated" : ""}`} />
             </button>
             {isOwnedExpanded && (
                 <div className="homes-list">
@@ -164,34 +163,6 @@ const AvailableHomesList = ({
 
   return (
     <div className="smart-home-list available">
-        <div className={`list-container ${isJoinedExpanded ? "expanded" : ""}`}>
-            <button className="expand-button" onClick={() => setIsJoinedExpanded(!isJoinedExpanded)}>
-                <div className="button-content">
-                    <div className="icon-container">
-                        <Users className="list-icon" />
-                    </div>
-                    <span className="button-text">Smart Homes Joined</span>
-                </div>
-                <ChevronRight className={`chevron-icon ${isJoinedExpanded ? "rotated" : ""}`} />
-            </button>
-            {isJoinedExpanded && (
-                <div className="homes-list">
-                    {availableHomes.length > 0 ? (
-                        availableHomes.map((home) => (
-                            <button
-                                key={home.id}
-                                className="home-button"
-                                onClick={() => handleJoinHome(home.id)}
-                            >
-                                {home.name}
-                            </button>
-                    ))
-                ) : (
-                    <p className="no-homes-message">No available homes to join.</p>
-                )}
-                </div>
-            )}
-        </div>
       <div className={`list-container ${isJoinedExpanded ? "expanded" : ""}`}>
         <button className="expand-button" onClick={() => setIsJoinedExpanded(!isJoinedExpanded)}>
           <div className="button-content">
@@ -258,22 +229,20 @@ const AvailableHomesList = ({
 };
 
 function SmartHomeList() {
-    // Homes you own
-    const [smartHomes, setSmartHomes] = useState([]);
-    // Homes you can join
-    const [availableHomes, setAvailableHomes] = useState([]);
-    // Error messages to display
-    const [error, setError] = useState("");
-    // Input field for new home name
-    const [homeName, setHomeName] = useState("");
-    // Whether "owned homes" section is expanded
-    const [isOwnedExpanded, setIsOwnedExpanded] = useState(true);
-    // Whether "joined homes" section is expanded
-    const [isJoinedExpanded, setIsJoinedExpanded] = useState(false);
-    // Loading state while creating a home
-    const [isCreating, setIsCreating] = useState(false);
-    // const userId = localStorage.getItem("userId");
-    const navigate = useNavigate();
+  const [ownedHomes, setOwnedHomes] = useState([]);
+  const [joinedHomes, setJoinedHomes] = useState([]);
+  const [availableHomes, setAvailableHomes] = useState([]);
+  const [error, setError] = useState("");
+  const [homeName, setHomeName] = useState("");
+  const [joinPassword, setJoinPassword] = useState("");
+  const [isOwnedExpanded, setIsOwnedExpanded] = useState(false);
+  const [isJoinedHomesExpanded, setIsJoinedHomesExpanded] = useState(false);
+  const [isAvailableExpanded, setIsAvailableExpanded] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [homeWithPasswordOpen, setHomeWithPasswordOpen] = useState(null);
+  
+  const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSmartHomes();
@@ -323,36 +292,21 @@ function SmartHomeList() {
     }
   };
 
-    const handleJoinHome = async (homeId) => {
-        try {
-            // API request to join the selected home
-            await api.post(`/smarthomes/${homeId}/join/`);
-            // Refresh both lists (owned homes and available homes)
-            fetchSmartHomes();
-            fetchAvailableHomes();
-            setError("");
-        } catch (err) {
-            console.error("Error joining smart home:", err);
-            if (err.response && err.response.data && err.response.data.detail) {
-                setError(err.response.data.detail);
-            } else {
-                setError("Error joining smart home. Please try again.");
-            }
-        }
-    };
-        
-
-
-    // const handleLeaveHome = async (homeId) => {
-    //     try {
-    //         await api.post(`/smarthomes/${homeId}/leave/`);
-    //         fetchSmartHomes();
-    //         fetchAvailableHomes();
-    //     } catch (err) {
-    //         setError("Error leaving smart home");
-    //     }
-    // };
-
+  // This function will be called when the password is submitted
+  const handleJoinHomeWithPassword = async (homeId, password) => {
+    try {
+      await api.post(`/smarthomes/${homeId}/join/`, {
+        join_password: password
+      });
+      
+      // Refresh both lists after successful join
+      await fetchSmartHomes();
+      await fetchAvailableHomes();
+    } catch (err) {
+      console.error("Error joining smart home:", err);
+      throw err; // Re-throw to be handled by the dropdown
+    }
+  };
 
   return (
     <div className="dashboard-container">
