@@ -125,6 +125,9 @@
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15),
     0px 0px 15px rgba(0, 0, 0, 0.2);
   padding-top: 45px; /* Increased to make room for buttons */
+  padding-bottom: 70px; /* Increase bottom padding for axis labels */
+  padding-bottom: 80px !important; /* More bottom padding */
+  min-height: 500px !important; /* Ensure enough height */
 }
 
 .switch {
@@ -324,6 +327,9 @@ input:checked+.slider:after {
 .energy-consumption canvas {
   width: 100% !important;
   height: 100% !important;
+  height: 100% !important;
+  width: 100% !important;
+  max-height: 380px !important; /* Control maximum height */
 }
 
 .slider-control {
@@ -487,4 +493,20 @@ input:checked+.slider:after {
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ddd;
+}
+
+/* Adjust the chart container height and padding */
+.energy-consumption > div[style*="height: 300px"] {
+  height: 350px !important; /* Increase height */
+  margin-bottom: 30px;
+  margin-top: 25px;
+  height: 400px !important; /* Much more height */
+  margin-bottom: 40px !important;
+  margin-top: 30px !important;
+  position: relative; /* Ensure proper positioning */
+}
+
+/* Fix for chart padding */
+.chart-container {
+  padding-bottom: 50px !important;
 }
