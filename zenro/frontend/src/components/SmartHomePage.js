@@ -108,32 +108,69 @@ function SmartHomePage() {
   };
 
   /**
-   * Delete a room from the smart home
+   * "Delete" a room by locking it and its devices
+   * This doesn't actually delete the room but sets is_unlocked to false
+   * Also turns off any devices that are currently on
    */
   const handleDeleteRoom = async (roomId) => {
     try {
-      // Get the room details before deleting
+      // Get the room details before updating
       const roomToDelete = addedRooms.find(room => room.id === roomId);
       
-      await api.delete(`/rooms/${roomId}/`);
-      
-      // Remove room from displayed list
-      setAddedRooms((prevRooms) => prevRooms.filter((room) => room.id !== roomId));
-      
-      // Add the home_io_room back to available options
-      if (roomToDelete && roomToDelete.home_io_room) {
-        // Find the HomeIORoom object to add back
-        const homeIORoomToAdd = homeIORooms.find(
-          room => room.id === roomToDelete.home_io_room
-        );
-        
-        if (homeIORoomToAdd) {
-          setAvailableHomeIORooms(prevRooms => [...prevRooms, homeIORoomToAdd]);
-        }
+      if (!roomToDelete) {
+        throw new Error("Room not found");
       }
+      
+      // 1. Get all devices
+      const devicesResponse = await api.get('/devices/');
+      const allDevices = devicesResponse.data;
+      
+      // Filter devices for this room
+      const roomDevices = allDevices.filter(device => device.room === parseInt(roomId));
+      
+      console.log(`Found ${roomDevices.length} devices in room ${roomId}`);
+      
+      // 2. Update each unlocked device to turn off and lock it
+      const updatePromises = roomDevices
+        .filter(device => device.is_unlocked) // Only update unlocked devices
+        .map(device => {
+          const updatedDevice = {
+            ...device,
+            status: false, // Turn off the device if it was on
+            is_unlocked: false // Lock the device
+          };
+          console.log(`Turning off and locking device: ${device.id} - ${device.name}`);
+          return api.put(`/devices/${device.id}/`, updatedDevice);
+        });
+      
+      // Wait for all device updates to complete
+      if (updatePromises.length > 0) {
+        await Promise.all(updatePromises);
+        console.log(`Turned off and locked ${updatePromises.length} devices in room ${roomId}`);
+      }
+      
+      // 3. Update the room to is_unlocked=false
+      const updatedRoom = {
+        ...roomToDelete,
+        is_unlocked: false
+      };
+      
+      const roomResponse = await api.put(`/rooms/${roomId}/`, updatedRoom);
+      console.log("Room locked:", roomResponse.data);
+      
+      // 4. Update state
+      // Remove from addedRooms (unlocked)
+      setAddedRooms(prevRooms => prevRooms.filter(room => room.id !== roomId));
+      
+      // Add to lockedRooms
+      setLockedRooms(prevRooms => [...prevRooms, {...roomToDelete, is_unlocked: false}]);
+      
+      // Update UI message
+      alert("Selected room has been successfully deleted");
+      
     } catch (error) {
-      console.error("Failed to delete room:", error.response?.data || error.message);
-      alert("Failed to delete room. Please try again.");
+      console.error("Failed to lock room:", error.response?.data || error.message);
+      alert("Failed to lock room. Please try again.");
     }
   };
 
@@ -734,7 +771,7 @@ function SmartHomePage() {
                 <h2>Delete Room</h2>
                 <p style={{ fontSize: "17px", color: "#666", marginTop: "10px" }}>
                   Are you sure you want to delete this room?
-                  Deleting this room will also remove all associated devices.
+                  This will remove the room and all its devices from your home.
                 </p>
                 <div className="modal-buttons">
                   <button
@@ -743,7 +780,7 @@ function SmartHomePage() {
                       setIsDeleteModalOpen(false);
                     }}
                   >
-                    Yes
+                    Yes, Delete Room
                   </button>
                   <button
                     onClick={() => {
