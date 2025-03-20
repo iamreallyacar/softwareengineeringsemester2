@@ -11,7 +11,7 @@ from .views import (
     DeviceLog1MinViewSet, RoomLog1MinViewSet, dashboard_summary,
     DeviceLogMonthlyViewSet, RoomLogMonthlyViewSet, HomeIORoomViewSet, DeviceControlView,
     EnergyGeneration1MinViewSet, EnergyGenerationDailyViewSet, EnergyGenerationMonthlyViewSet,
-    energy_summary, UserProfileViewSet, current_user_info  # Add current_user_info here
+    energy_summary, UserProfileViewSet, current_user_info, join_smart_home  
 )
 
 # Create a router and register our viewsets with it
@@ -44,8 +44,14 @@ router.register(r'roomlogsmonthly', RoomLogMonthlyViewSet, basename='roomlogsmon
 
 # Organized URL patterns by function
 urlpatterns = [
+    # Remove the existing smarthomes/<int:pk>/join/ pattern
+    # and add this one at the TOP of urlpatterns (before including router.urls)
+    path('smarthomes/<int:pk>/join/', join_smart_home, name='join-smart-home'),
+    
     # Router URLs
     path('', include(router.urls)),
+    
+    # Explicit pattern for join action
     
     # Authentication endpoints
     path('register/', register_user, name='register'),

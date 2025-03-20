@@ -23,7 +23,7 @@ from .serializers import (
     RoomLog1MinSerializer, HomeIORoomSerializer, RoomLogMonthlySerializer, 
     EnergyGeneration1MinSerializer, EnergyGenerationDailySerializer, 
     EnergyGenerationMonthlySerializer, DeviceControlSerializer,
-    UserProfileSerializer, SmartHomeListSerializer
+    UserProfileSerializer, SmartHomeListSerializer, JoinHomeSerializer
 )
 from .home_io.home_io_services import HomeIOService
 from django_filters import rest_framework as filters
@@ -91,6 +91,9 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def join(self, request, pk=None):
+        """
+        Allow a user to join a smart home if they provide the correct password
+        """
         smart_home = self.get_object()
         
         # Prevent creator from joining as a member
@@ -100,15 +103,32 @@ class SmartHomeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Check password
-        provided_password = request.data.get('join_password', '')
+        # Check if user is already a member
+        if request.user in smart_home.members.all():
+            return Response(
+                {"error": "You are already a member of this smart home"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Use the proper serializer to validate the input
+        serializer = JoinHomeSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get the password from the validated data
+        provided_password = serializer.validated_data['join_password']
+        
+        # Verify the password
         if provided_password != smart_home.join_password:
             return Response(
                 {"error": "Incorrect join password"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
+        # Add the user to the members list
         smart_home.members.add(request.user)
+        
+        # Return success response
         return Response({'status': 'joined'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['POST'])
@@ -908,3 +928,52 @@ def current_user_info(request):
     user = request.user
     serializer = UserSerializer(user, context={'request': request})
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def join_smart_home(request, pk):
+    """
+    Dedicated endpoint for joining a smart home with password
+    """
+    try:
+        smart_home = get_object_or_404(SmartHome, pk=pk)
+        
+        # Prevent creator from joining as a member
+        if request.user == smart_home.creator:
+            return Response(
+                {"error": "You cannot join your own smart home"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Check if user is already a member
+        if request.user in smart_home.members.all():
+            return Response(
+                {"error": "You are already a member of this smart home"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate the password
+        serializer = JoinHomeSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        provided_password = serializer.validated_data['join_password']
+        
+        # Verify the password
+        if provided_password != smart_home.join_password:
+            return Response(
+                {"error": "Incorrect join password"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Add the user to the members list
+        smart_home.members.add(request.user)
+        
+        # Return success response
+        return Response({'status': 'joined'}, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
