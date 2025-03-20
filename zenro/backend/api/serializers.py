@@ -82,21 +82,17 @@ class UserSerializer(serializers.ModelSerializer):
 # Enhanced SmartHomeSerializer to validate members
 class SmartHomeSerializer(serializers.ModelSerializer):
     is_creator = serializers.SerializerMethodField()
-    creator_name = serializers.ReadOnlyField(source='creator.username')
-    member_count = serializers.SerializerMethodField()
     
     class Meta:
         model = SmartHome
-        fields = ['id', 'name', 'creator', 'creator_name', 'members', 'created_at', 
-                  'updated_at', 'is_creator', 'member_count', 'join_password']
-        read_only_fields = ['creator', 'created_at', 'updated_at']
-        extra_kwargs = {
-            'join_password': {'write_only': True}  # Password should not be visible in responses
-        }
+        fields = ['id', 'name', 'creator', 'members', 'join_password', 'created_at', 'updated_at', 'is_creator']
+        read_only_fields = ['creator', 'created_at', 'updated_at', 'is_creator']
     
     def get_is_creator(self, obj):
         request = self.context.get('request')
-        return request and request.user == obj.creator
+        if request and hasattr(request, 'user'):
+            return obj.creator == request.user
+        return False
 
     def get_member_count(self, obj):
         return obj.members.count()

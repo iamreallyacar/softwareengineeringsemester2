@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Home, Users } from "lucide-react";
+import { ChevronDown, Home, Users, UserPlus } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import { ChevronLeft, User } from "lucide-react";
@@ -61,7 +61,7 @@ const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, 
     </div>
 );
 
-// Extract Owned Homes List
+// Extract Owned Homes List - modified to only show owned homes
 const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes }) => (
     <div className="smart-home-list owned">
         <div className={`list-container ${isOwnedExpanded ? "expanded" : ""}`}>
@@ -76,11 +76,45 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes }) => 
             </button>
             {isOwnedExpanded && (
                 <div className="homes-list">
-                    {smartHomes.map((home) => (
-                        <Link to={`/smarthomepage/${home.id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={home.id}>
-                            <button className="home-button">{home.name}</button>
-                        </Link>
-                    ))}
+                    {smartHomes.length === 0 ? (
+                        <div className="no-homes-message">You don't own any smart homes yet</div>
+                    ) : (
+                        smartHomes.map((home) => (
+                            <Link to={`/smarthomepage/${home.id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={home.id}>
+                                <button className="home-button">{home.name}</button>
+                            </Link>
+                        ))
+                    )}
+                </div>
+            )}
+        </div>
+    </div>
+);
+
+// New Component: Joined Homes List
+const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, joinedHomes }) => (
+    <div className="smart-home-list joined">
+        <div className={`list-container ${isJoinedHomesExpanded ? "expanded" : ""}`}>
+            <button className="expand-button" onClick={() => setIsJoinedHomesExpanded(!isJoinedHomesExpanded)}>
+                <div className="button-content">
+                    <div className="icon-container">
+                        <UserPlus className="list-icon" />
+                    </div>
+                    <span className="button-text">Smart Homes You Joined</span>
+                </div>
+                <ChevronDown className={`chevron-icon ${isJoinedHomesExpanded ? "rotated" : ""}`} />
+            </button>
+            {isJoinedHomesExpanded && (
+                <div className="homes-list">
+                    {joinedHomes.length === 0 ? (
+                        <div className="no-homes-message">You haven't joined any smart homes yet</div>
+                    ) : (
+                        joinedHomes.map((home) => (
+                            <Link to={`/smarthomepage/${home.id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={home.id}>
+                                <button className="home-button">{home.name}</button>
+                            </Link>
+                        ))
+                    )}
                 </div>
             )}
         </div>
@@ -195,16 +229,16 @@ const AvailableHomesList = ({
 };
 
 function SmartHomeList() {
-  const [smartHomes, setSmartHomes] = useState([]);
+  const [ownedHomes, setOwnedHomes] = useState([]);
+  const [joinedHomes, setJoinedHomes] = useState([]);
   const [availableHomes, setAvailableHomes] = useState([]);
   const [error, setError] = useState("");
   const [homeName, setHomeName] = useState("");
   const [joinPassword, setJoinPassword] = useState("");
   const [isOwnedExpanded, setIsOwnedExpanded] = useState(false);
-  const [isJoinedExpanded, setIsJoinedExpanded] = useState(false);
+  const [isJoinedHomesExpanded, setIsJoinedHomesExpanded] = useState(false);
+  const [isAvailableExpanded, setIsAvailableExpanded] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  
-  // Replace selectedHomeToJoin and isJoinModalOpen with:
   const [homeWithPasswordOpen, setHomeWithPasswordOpen] = useState(null);
   
   const userId = localStorage.getItem("userId");
@@ -218,7 +252,13 @@ function SmartHomeList() {
   const fetchSmartHomes = async () => {
     try {
       const response = await api.get("/smarthomes/");
-      setSmartHomes(response.data);
+      
+      // Split homes into owned and joined
+      const owned = response.data.filter(home => home.is_creator === true);
+      const joined = response.data.filter(home => home.is_creator === false);
+      
+      setOwnedHomes(owned);
+      setJoinedHomes(joined);
     } catch (err) {
       setError("Failed to load smart homes");
     }
@@ -285,11 +325,16 @@ function SmartHomeList() {
         <OwnedHomesList
           isOwnedExpanded={isOwnedExpanded}
           setIsOwnedExpanded={setIsOwnedExpanded}
-          smartHomes={smartHomes}
+          smartHomes={ownedHomes}
+        />
+        <JoinedHomesList
+          isJoinedHomesExpanded={isJoinedHomesExpanded}
+          setIsJoinedHomesExpanded={setIsJoinedHomesExpanded}
+          joinedHomes={joinedHomes}
         />
         <AvailableHomesList
-          isJoinedExpanded={isJoinedExpanded}
-          setIsJoinedExpanded={setIsJoinedExpanded}
+          isJoinedExpanded={isAvailableExpanded}
+          setIsJoinedExpanded={setIsAvailableExpanded}
           availableHomes={availableHomes}
           homeWithPasswordOpen={homeWithPasswordOpen}
           setHomeWithPasswordOpen={setHomeWithPasswordOpen}
