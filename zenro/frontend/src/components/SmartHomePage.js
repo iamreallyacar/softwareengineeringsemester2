@@ -726,61 +726,122 @@ function SmartHomePage() {
     <div className="smart-home-page">
       <Sidebar />
       <div className="shp-information">
-        {/* CCTV Container */}
-        <div className="shp-CCTV">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {selectedRoomCCTV} {isOpen ? "▲" : "▼"}
-          </button>
+        {/* Energy Information Section - NOW FIRST */}
+        <div className={`energy-info ${showGenerationView ? 'generation-view' : 'consumption-view'}`}>
+          <div className="energy-info-header">
+            <div className="period-selector">
+              <div className="period-buttons">
+                {['day', 'month', 'year'].map((period) => (
+                  <button
+                    key={period}
+                    onClick={() => setSelectedPeriod(period)}
+                    className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
+                  >
+                    {period.charAt(0).toUpperCase() + period.slice(1)}
+                  </button>
+                ))}
+              </div>
+              
+              <div className="time-selector">
+                {selectedPeriod === 'day' && (
+                  <select
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="date-selector"
+                  >
+                    {dateOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                
+                {selectedPeriod === 'month' && (
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    className="month-selector"
+                  >
+                    {monthOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                
+                {selectedPeriod === 'year' && (
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    className="year-selector"
+                  >
+                    {yearOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+            
+            {/* Toggle button that changes based on current view */}
+            <button 
+              onClick={toggleEnergyView} 
+              className={`view-toggle-button ${showGenerationView ? 'consumption' : 'generation'}`}
+            >
+              {showGenerationView 
+                ? "View Room Energy Consumption" 
+                : "View Home Energy Generation"}
+            </button>
+          </div>
 
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                style={{ overflow: "hidden" }}
+          {/* Consumption view */}
+          {!showGenerationView && (
+            <div className="chart-container consumption-chart">
+              <select
+                value={selectedEnergyRoom}
+                onChange={(e) => setSelectedEnergyRoom(e.target.value)}
+                className="room-selector"
+                disabled={unlockedRooms.length === 0}
               >
-                <ul className="shp-cctv-room-list">
-                  {allRooms.map((room, index) => (
-                    <motion.li
-                      key={room}
-                      onClick={() => handleRoomSelectCCTV(room)}
-                      initial={{ opacity: 0, y: -30 }}
-                      animate={{ opacity: 1, y: -20 }}
-                      exit={{ opacity: 0, y: -30 }}
-                      transition={{ delay: index * 0.2, duration: 0.3 }}
-                    >
-                      {room}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="shp-cctv-view">
-            <h1>CCTV</h1>
-          </div>
-
-          <div className="shp-cctv-statistics">
-            <div className="shp-statistics">
-              <i className="fas fa-temperature-low"></i>
-              <span>Temperature</span>
+                {unlockedRooms.length === 0 ? (
+                  <option value="">No unlocked rooms</option>
+                ) : (
+                  unlockedRooms.map((room) => (
+                    <option key={room.id} value={room.id}>
+                      {room.name}
+                    </option>
+                  ))
+                )}
+              </select>
+              <canvas ref={energyChartRef}></canvas>
+              {isConsumptionDataEmpty && (
+                <div className="no-data-message">
+                  <p>No energy data available for this {selectedPeriod} for this room</p>
+                </div>
+              )}
+              {unlockedRooms.length === 0 && (
+                <div className="no-data-message">
+                  <p>No unlocked rooms available. Please unlock rooms to view energy data.</p>
+                </div>
+              )}
             </div>
-            <div className="shp-statistics">
-              <i className="fa-solid fa-bolt"></i>
-              <span>Power Usage</span>
+          )}
+          
+          {/* Generation view */}
+          {showGenerationView && (
+            <div className="chart-container generation-chart">
+              <canvas ref={energyGenerationChartRef}></canvas>
+              {isGenerationDataEmpty && (
+                <div className="no-data-message">
+                  <p>No energy generation data available for this {selectedPeriod}</p>
+                </div>
+              )}
             </div>
-            <div className="shp-statistics">
-              <i className="fa-solid fa-droplet"></i>
-              <span>Humidity</span>
-            </div>
-            <div className="shp-statistics">
-              <i className="fa-solid fa-lightbulb"></i>
-              <span>Light</span>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Rooms Container */}
@@ -971,122 +1032,61 @@ function SmartHomePage() {
           </div>
         </div>
 
-        {/* Energy Information Section with Card Flip Effect */}
-        <div className={`energy-info ${showGenerationView ? 'generation-view' : 'consumption-view'}`}>
-          <div className="energy-info-header">
-            <div className="period-selector">
-              <div className="period-buttons">
-                {['day', 'month', 'year'].map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => setSelectedPeriod(period)}
-                    className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
-                  >
-                    {period.charAt(0).toUpperCase() + period.slice(1)}
-                  </button>
-                ))}
-              </div>
-              
-              <div className="time-selector">
-                {selectedPeriod === 'day' && (
-                  <select
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="date-selector"
-                  >
-                    {dateOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                
-                {selectedPeriod === 'month' && (
-                  <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                    className="month-selector"
-                  >
-                    {monthOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                
-                {selectedPeriod === 'year' && (
-                  <select
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                    className="year-selector"
-                  >
-                    {yearOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-            </div>
-            
-            {/* Toggle button that changes based on current view */}
-            <button 
-              onClick={toggleEnergyView} 
-              className={`view-toggle-button ${showGenerationView ? 'consumption' : 'generation'}`}
-            >
-              {showGenerationView 
-                ? "View Room Energy Consumption" 
-                : "View Home Energy Generation"}
-            </button>
+        {/* CCTV Container - NOW LAST */}
+        <div className="shp-CCTV">
+          <button onClick={() => setIsOpen(!isOpen)}>
+            {selectedRoomCCTV} {isOpen ? "▲" : "▼"}
+          </button>
+
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                style={{ overflow: "hidden" }}
+              >
+                <ul className="shp-cctv-room-list">
+                  {allRooms.map((room, index) => (
+                    <motion.li
+                      key={room}
+                      onClick={() => handleRoomSelectCCTV(room)}
+                      initial={{ opacity: 0, y: -30 }}
+                      animate={{ opacity: 1, y: -20 }}
+                      exit={{ opacity: 0, y: -30 }}
+                      transition={{ delay: index * 0.2, duration: 0.3 }}
+                    >
+                      {room}
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="shp-cctv-view">
+            <h1>CCTV</h1>
           </div>
 
-          {/* Consumption view */}
-          {!showGenerationView && (
-            <div className="chart-container consumption-chart">
-              <select
-                value={selectedEnergyRoom}
-                onChange={(e) => setSelectedEnergyRoom(e.target.value)}
-                className="room-selector"
-                disabled={unlockedRooms.length === 0}
-              >
-                {unlockedRooms.length === 0 ? (
-                  <option value="">No unlocked rooms</option>
-                ) : (
-                  unlockedRooms.map((room) => (
-                    <option key={room.id} value={room.id}>
-                      {room.name}
-                    </option>
-                  ))
-                )}
-              </select>
-              <canvas ref={energyChartRef}></canvas>
-              {isConsumptionDataEmpty && (
-                <div className="no-data-message">
-                  <p>No energy data available for this {selectedPeriod} for this room</p>
-                </div>
-              )}
-              {unlockedRooms.length === 0 && (
-                <div className="no-data-message">
-                  <p>No unlocked rooms available. Please unlock rooms to view energy data.</p>
-                </div>
-              )}
+          <div className="shp-cctv-statistics">
+            <div className="shp-statistics">
+              <i className="fas fa-temperature-low"></i>
+              <span>Temperature</span>
             </div>
-          )}
-          
-          {/* Generation view */}
-          {showGenerationView && (
-            <div className="chart-container generation-chart">
-              <canvas ref={energyGenerationChartRef}></canvas>
-              {isGenerationDataEmpty && (
-                <div className="no-data-message">
-                  <p>No energy generation data available for this {selectedPeriod}</p>
-                </div>
-              )}
+            <div className="shp-statistics">
+              <i className="fa-solid fa-bolt"></i>
+              <span>Power Usage</span>
             </div>
-          )}
+            <div className="shp-statistics">
+              <i className="fa-solid fa-droplet"></i>
+              <span>Humidity</span>
+            </div>
+            <div className="shp-statistics">
+              <i className="fa-solid fa-lightbulb"></i>
+              <span>Light</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
