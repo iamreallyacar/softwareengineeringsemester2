@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Navbar from "./NavigationBar";
 import api from "../api";
 import "../css/home-users-page.css";
 
@@ -201,7 +201,7 @@ function HomeUsersPage() {
   
   return (
     <div className="home-users-page">
-      <Sidebar />
+      <Navbar />
       
       <div className="home-users-content">
         {loading ? (
