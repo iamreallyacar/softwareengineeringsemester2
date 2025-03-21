@@ -1,8 +1,30 @@
-.home-users-page {
-  display: flex;
+/* Reset for full-width rendering */
+html, body, #root, .App {
+  margin: 0;
+  padding: 0;
   width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body {
   background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+  background-attachment: fixed;
+}
+
+/* Main container */
+.home-users-page {
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
 }
 
 .home-users-content {
@@ -43,6 +65,8 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 25px;
   margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .members-container h2 {
@@ -56,6 +80,9 @@
   color: #5D252D;
   font-style: italic;
   margin: 30px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
 }
 
 .members-list {
@@ -67,13 +94,15 @@
   gap: 15px;
 }
 
+/* Fixed member item layout */
 .member-item {
   background: beige;
   border-radius: 10px;
   padding: 15px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
+  gap: 15px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   transition: transform 0.2s ease;
 }
@@ -86,9 +115,12 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .member-icon {
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
   background-color: #CB5A55;
@@ -103,10 +135,15 @@
   font-size: 18px;
 }
 
+/* Fixed username display */
 .member-name {
   font-weight: bold;
   color: #5D252D;
   font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .remove-button {
@@ -122,6 +159,8 @@
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s;
+  white-space: nowrap;
+  justify-self: end;
 }
 
 .remove-button:hover {
@@ -134,20 +173,56 @@
   font-style: italic;
   margin-top: 20px;
   font-size: 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
 }
 
-.loading-message, .error-message {
-  text-align: center;
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
   margin: 50px 0;
-  font-size: 18px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+}
+
+.loading-spinner {
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 6px solid #C14600;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
   color: #5D252D;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .error-message {
+  text-align: center;
+  margin: 50px 0;
+  padding: 30px;
+  font-size: 18px;
   color: #c53030;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
+  border-left: 5px solid #c53030;
 }
 
-/* Modal Styling (consistent with other modals) */
+/* Modal Styling */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -196,14 +271,22 @@
   font-weight: bold;
 }
 
-.modal-buttons button:first-child {
+.remove-confirm-btn {
   background-color: #e94242;
   color: white;
 }
 
-.modal-buttons button:last-child {
+.remove-confirm-btn:hover {
+  background-color: #c53030;
+}
+
+.cancel-btn {
   background-color: #eee;
   color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #ddd;
 }
 
 /* Responsive styles */
@@ -212,7 +295,7 @@
     width: 100%;
     margin-left: 0;
     padding: 20px;
-    padding-top: 60px; /* Make room for the burger menu */
+    padding-top: 60px;
   }
   
   .home-name {
@@ -220,12 +303,11 @@
   }
   
   .member-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    grid-template-columns: 1fr;
   }
   
   .remove-button {
-    align-self: flex-end;
+    justify-self: flex-end;
+    margin-top: 10px;
   }
 }

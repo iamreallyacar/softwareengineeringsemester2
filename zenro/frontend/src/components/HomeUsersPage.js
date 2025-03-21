@@ -13,8 +13,32 @@ function HomeUsersPage() {
   const [memberToRemove, setMemberToRemove] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   
-  // Fetch smart home data and members
+  // Fetch current user info from localStorage token
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      // Simple way to get user ID from token
+      try {
+        const tokenData = JSON.parse(atob(token.split('.')[1]));
+        if (tokenData.user_id) {
+          // Fetch current user details
+          api.get(`/users/${tokenData.user_id}/`)
+            .then(response => {
+              setCurrentUser(response.data);
+            })
+            .catch(err => {
+              console.error("Error fetching current user:", err);
+            });
+        }
+      } catch (e) {
+        console.error("Error parsing token:", e);
+      }
+    }
+  }, []);
+  
+  // Fetch smart home data
   useEffect(() => {
     const fetchSmartHomeData = async () => {
       try {
@@ -43,7 +67,7 @@ function HomeUsersPage() {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching smart home data:", err);
-        setError("Failed to load home users. Please try again later.");
+        setError("Failed to load home users. Please try again.");
         setLoading(false);
       }
     };
@@ -67,6 +91,7 @@ function HomeUsersPage() {
       
       // Update local state
       setMembers(prevMembers => prevMembers.filter(member => member.id !== memberToRemove.id));
+      setSmartHome(prev => ({...prev, members: updatedMembers}));
       setIsDeleteModalOpen(false);
       setMemberToRemove(null);
       
@@ -83,22 +108,6 @@ function HomeUsersPage() {
   };
   
   // Check if current user is the owner
-  const [currentUser, setCurrentUser] = useState(null);
-  
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        // Try to get the user info from JWT token or session
-        const response = await api.get('/users/me/');  // Or your actual current user endpoint
-        setCurrentUser(response.data);
-      } catch (err) {
-        console.error("Error fetching current user:", err);
-      }
-    };
-    
-    fetchCurrentUser();
-  }, []);
-  
   const isOwner = currentUser && owner && currentUser.id === owner.id;
   
   return (
@@ -107,7 +116,10 @@ function HomeUsersPage() {
       
       <div className="home-users-content">
         {loading ? (
-          <div className="loading-message">Loading home details...</div>
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading home details...</p>
+          </div>
         ) : error ? (
           <div className="error-message">{error}</div>
         ) : (
@@ -124,7 +136,7 @@ function HomeUsersPage() {
               
               {members.length === 0 ? (
                 <p className="no-members-message">
-                  This home currently has no members besides the owner.
+                  This home currently has no additional members besides the owner.
                 </p>
               ) : (
                 <ul className="members-list">
@@ -150,7 +162,7 @@ function HomeUsersPage() {
                 </ul>
               )}
               
-              {!isOwner && (
+              {!isOwner && members.length > 0 && (
                 <p className="owner-note">
                   Note: Only the home owner can remove members.
                 </p>
@@ -165,14 +177,15 @@ function HomeUsersPage() {
             <div className="modal">
               <h2>Remove Member</h2>
               <p>
-                Are you sure you want to remove {memberToRemove?.username} from this home?
-                They will lose access to all devices and rooms.
+                Are you sure you want to remove <strong>{memberToRemove?.username}</strong> from this home?
+                <br /><br />
+                They will lose access to all devices and rooms in this smart home.
               </p>
               <div className="modal-buttons">
-                <button onClick={handleRemoveMember}>
+                <button onClick={handleRemoveMember} className="remove-confirm-btn">
                   Yes, Remove
                 </button>
-                <button onClick={() => setIsDeleteModalOpen(false)}>
+                <button onClick={() => setIsDeleteModalOpen(false)} className="cancel-btn">
                   Cancel
                 </button>
               </div>
