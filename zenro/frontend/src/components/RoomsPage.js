@@ -729,20 +729,18 @@ function RoomsPage() {
                         datasets: [{
                             label: 'Energy Usage (kWh)',
                             data: dataPoints,
-                            backgroundColor: 'rgba(193, 70, 0, 0.2)',
-                            borderColor: 'rgb(193, 70, 0)',
+                            backgroundColor: 'rgba(237, 62, 62, 0.2)',  // Match SmartHomePage red color
+                            borderColor: 'rgb(237, 62, 62)',            // Match SmartHomePage red color
                             borderWidth: 2
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        resizeDelay: 100,
                         animation: {
-                            duration: 1000, // Animation duration in milliseconds
-                            easing: 'easeOutQuart', // Animation easing function
+                            duration: 1000,
+                            easing: 'easeOutQuart',
                             delay: function(context) {
-                                // Stagger animations of each bar
                                 return context.dataIndex * 50;
                             }
                         },
@@ -750,10 +748,11 @@ function RoomsPage() {
                             title: {
                                 display: true,
                                 text: chartTitle,
-                                font: { size: 16, weight: 'bold' },
-                                padding: { top: 10, bottom: 20 }
+                                font: { size: 16, weight: 'bold' }
                             },
-                            legend: { display: false }
+                            legend: {
+                                display: false
+                            }
                         },
                         scales: {
                             y: {
@@ -762,14 +761,12 @@ function RoomsPage() {
                                     color: 'rgba(200, 200, 200, 0.3)'
                                 },
                                 ticks: {
-                                    padding: 10,
-                                    font: { size: 12 }
+                                    padding: 10
                                 },
                                 title: {
                                     display: true,
                                     text: 'Energy (kWh)',
-                                    padding: {top: 0, bottom: 10},
-                                    font: { size: 14 }
+                                    padding: {top: 10, bottom: 10}
                                 }
                             },
                             x: {
@@ -777,17 +774,16 @@ function RoomsPage() {
                                     display: false
                                 },
                                 ticks: {
-                                    padding: 10,
-                                    font: { size: 12 }
+                                    padding: 10
                                 }
                             }
                         },
                         layout: {
                             padding: {
-                                left: 20,
-                                right: 30,
+                                left: 10,
+                                right: 20,
                                 top: 20,
-                                bottom: 40
+                                bottom: 30
                             }
                         }
                     }
@@ -854,8 +850,7 @@ function RoomsPage() {
                 {/* Left column: Energy chart */}
                 <div className="column1">
                     <div className="energy-consumption">
-                        <h4 className="room-text-with-line">Device Energy Consumption</h4>
-                        <div className="chart-controls">
+                        <div className="energy-info-header">
                             <div className="period-selector">
                                 <div className="period-buttons">
                                     {['day', 'month', 'year'].map((period) => (
@@ -863,31 +858,19 @@ function RoomsPage() {
                                             key={period}
                                             onClick={() => setSelectedPeriod(period)}
                                             className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
-                                            style={{ 
-                                                padding: '8px 15px', 
-                                                margin: '0 5px',
-                                                background: selectedPeriod === period ? '#c14600' : '#f0f0f0',
-                                                color: selectedPeriod === period ? 'white' : '#333',
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                cursor: 'pointer'
-                                            }}
                                         >
                                             {period.charAt(0).toUpperCase() + period.slice(1)}
                                         </button>
                                     ))}
                                 </div>
                                 
-                                <div className="selectors-container" style={{ display: 'flex', marginTop: '10px' }}>
-                                    <div className="time-selector" style={{ flex: '1', marginRight: '10px' }}>
+                                <div className="selectors-container">
+                                    <div className="time-selector">
                                         {selectedPeriod === 'day' && (
                                             <select
                                                 value={selectedDate}
                                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                                style={{ 
-                                                    width: '100%', 
-                                                    padding: '8px'
-                                                }}
+                                                className="date-selector"
                                             >
                                                 {dateOptions.map((option) => (
                                                     <option key={option.value} value={option.value}>
@@ -901,10 +884,7 @@ function RoomsPage() {
                                             <select
                                                 value={selectedMonth}
                                                 onChange={(e) => setSelectedMonth(e.target.value)}
-                                                style={{ 
-                                                    width: '100%', 
-                                                    padding: '8px'
-                                                }}
+                                                className="month-selector"
                                             >
                                                 {monthOptions.map((option) => (
                                                     <option key={option.value} value={option.value}>
@@ -918,10 +898,7 @@ function RoomsPage() {
                                             <select
                                                 value={selectedYear}
                                                 onChange={(e) => setSelectedYear(e.target.value)}
-                                                style={{ 
-                                                    width: '100%', 
-                                                    padding: '8px'
-                                                }}
+                                                className="year-selector"
                                             >
                                                 {yearOptions.map((option) => (
                                                     <option key={option.value} value={option.value}>
@@ -932,15 +909,12 @@ function RoomsPage() {
                                         )}
                                     </div>
                                     
-                                    <div className="device-selector" style={{ flex: '1' }}>
+                                    <div className="device-selector">
                                         <select
                                             value={selectedEnergyDevice || ''}
                                             onChange={(e) => setSelectedEnergyDevice(e.target.value)}
                                             disabled={unlockedDevices.length === 0}
-                                            style={{ 
-                                                width: '100%', 
-                                                padding: '8px'
-                                            }}
+                                            className="device-selector"
                                         >
                                             {unlockedDevices.length > 0 ? (
                                                 unlockedDevices.map((device) => (
@@ -959,27 +933,13 @@ function RoomsPage() {
                         
                         <div className="chart-wrapper">
                             {!selectedEnergyDevice && (
-                                <div style={{ 
-                                    position: 'absolute', 
-                                    top: '50%', 
-                                    left: '50%', 
-                                    transform: 'translate(-50%, -50%)',
-                                    textAlign: 'center',
-                                    color: '#666'
-                                }}>
+                                <div className="no-data-message">
                                     <p>No device selected. Add a device to view energy usage.</p>
                                 </div>
                             )}
                             <canvas ref={energyChartRef}></canvas>
                             {isDataEmpty && selectedEnergyDevice && (
-                                <div style={{ 
-                                    position: 'absolute', 
-                                    top: '50%', 
-                                    left: '50%', 
-                                    transform: 'translate(-50%, -50%)',
-                                    textAlign: 'center',
-                                    color: '#666'
-                                }}>
+                                <div className="no-data-message">
                                     <p>No energy data available for this device during the selected {selectedPeriod}</p>
                                 </div>
                             )}

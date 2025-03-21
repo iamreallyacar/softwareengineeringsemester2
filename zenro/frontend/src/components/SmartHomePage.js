@@ -279,23 +279,61 @@ function SmartHomePage() {
           case 'month':
             // Fetch and filter daily logs
             const monthlyResponse = await api.get(`/roomlogsdaily/?room=${selectedEnergyRoom}`);
+            console.log("Month data response for room:", monthlyResponse.data);
             
             const [year, month] = selectedMonth.split('-');
-            const monthlyLogs = monthlyResponse.data.filter(log => {
-              const logDate = new Date(log.date);
-              return logDate.getFullYear() === parseInt(year) && 
-                     logDate.getMonth() === parseInt(month) - 1;
+            
+            // Use a Map to handle potential duplicates by date
+            const dailyUsageMap = new Map();
+            
+            // First pass: organize data by day to avoid duplicates
+            monthlyResponse.data.forEach(log => {
+              try {
+                // Only include data from our target room
+                if (log.room !== parseInt(selectedEnergyRoom)) {
+                  return;
+                }
+      
+                const dateStr = log.date;
+                if (!dateStr) return;
+                
+                const logDate = new Date(dateStr);
+                const logYear = logDate.getFullYear();
+                const logMonth = logDate.getMonth() + 1;
+                
+                // Only include data from our target month and year
+                if (logYear === parseInt(year) && logMonth === parseInt(month)) {
+                  // Use ISO date as key to avoid duplicates
+                  const dayKey = logDate.toISOString().split('T')[0];
+                  const day = logDate.getDate();
+                  
+                  // Get energy value
+                  const energyValue = parseFloat(log.total_energy_usage || 0);
+                  
+                  console.log(`Day ${day}: Found energy value: ${energyValue} for ${dayKey}`);
+                  
+                  // Only store the value if it doesn't already exist or if it's larger
+                  if (!dailyUsageMap.has(dayKey) || dailyUsageMap.get(dayKey) < energyValue) {
+                    dailyUsageMap.set(dayKey, energyValue);
+                  }
+                }
+              } catch (err) {
+                console.error("Error processing monthly room log:", log, err);
+              }
             });
             
             // Create day labels based on days in month
             const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
             labels = Array.from({length: daysInMonth}, (_, i) => `${i+1}`);
             
-            // Map daily logs to days
+            // Second pass: fill the dataPoints array from our map
             dataPoints = Array(daysInMonth).fill(0);
-            monthlyLogs.forEach(log => {
-              const day = new Date(log.date).getDate();
-              dataPoints[day-1] = log.total_energy_usage;
+            dailyUsageMap.forEach((value, dateStr) => {
+              const day = new Date(dateStr).getDate();
+              if (day >= 1 && day <= daysInMonth) {
+                dataPoints[day-1] = value;
+                console.log(`Final value for day ${day}: ${value} kWh`);
+              }
             });
             
             // Format month for display
@@ -306,18 +344,48 @@ function SmartHomePage() {
           case 'year':
             // Fetch and filter monthly logs
             const yearlyResponse = await api.get(`/roomlogsmonthly/?room=${selectedEnergyRoom}`);
+            console.log("Year data response for room:", yearlyResponse.data);
             
-            const yearlyLogs = yearlyResponse.data.filter(log => 
-              log.year === parseInt(selectedYear)
-            );
+            // Use a Map to handle potential duplicates by month
+            const monthlyUsageMap = new Map();
+            
+            // First pass: organize data by month to avoid duplicates
+            yearlyResponse.data.forEach(log => {
+              try {
+                // Only include data from our target room
+                if (log.room !== parseInt(selectedEnergyRoom)) {
+                  return;
+                }
+                
+                // Only include data from our target year
+                if (log.year === parseInt(selectedYear)) {
+                  const monthIndex = parseInt(log.month) - 1; // Convert to 0-based
+                  
+                  // Get energy value
+                  const energyValue = parseFloat(log.total_energy_usage || 0);
+                  
+                  console.log(`Month ${monthIndex+1}: Found energy value: ${energyValue}`);
+                  
+                  // Only store the value if it doesn't already exist or if it's larger
+                  if (!monthlyUsageMap.has(monthIndex) || monthlyUsageMap.get(monthIndex) < energyValue) {
+                    monthlyUsageMap.set(monthIndex, energyValue);
+                  }
+                }
+              } catch (err) {
+                console.error("Error processing yearly room log:", log, err);
+              }
+            });
             
             // Set up month labels
             labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             
-            // Map logs to months
+            // Second pass: fill the dataPoints array from our map
             dataPoints = Array(12).fill(0);
-            yearlyLogs.forEach(log => {
-              dataPoints[log.month-1] = log.total_energy_usage;
+            monthlyUsageMap.forEach((value, monthIndex) => {
+              if (monthIndex >= 0 && monthIndex < 12) {
+                dataPoints[monthIndex] = value;
+                console.log(`Final value for month ${monthIndex+1}: ${value} kWh`);
+              }
             });
             
             chartTitle = `Energy Usage for ${selectedYear} (${roomName})`;

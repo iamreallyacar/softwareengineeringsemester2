@@ -530,3 +530,107 @@ input:checked+.slider:after {
 .chart-controls {
   margin-bottom: 15px;
 }
+
+/* New styles for consistent chart appearance with SmartHomePage */
+.energy-consumption {
+  background: #fbdba7;
+  padding: 20px;
+  border: 3px solid white;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  position: relative;
+  transition: transform 0.6s ease, background-color 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+.energy-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.period-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.period-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.period-button {
+  background-color: beige;
+  color: black;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 0px;
+  box-shadow: 0px 3px 3px black;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.period-button:hover, .period-button.active {
+  background-color: rgb(241, 241, 188);
+  transform: scale(1.05);
+}
+
+.period-button.active {
+  background-color: #C14600;
+  color: white;
+}
+
+.time-selector {
+  min-width: 200px;
+}
+
+.date-selector, .month-selector, .year-selector, .device-selector select {
+  background-color: beige;
+  color: black;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 0px;
+  box-shadow: 0px 3px 3px black;
+  cursor: pointer;
+  width: 100%;
+}
+
+.date-selector:hover, .month-selector:hover, .year-selector:hover, .device-selector select:hover {
+  background-color: rgb(241, 241, 188);
+}
+
+.chart-wrapper {
+  height: 300px;
+  width: 100%;
+  position: relative;
+  margin-top: 20px;
+}
+
+.no-data-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 80%;
+  max-width: 300px;
+  z-index: 10;
+}
+
+.no-data-message p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  word-wrap: break-word;
+}
