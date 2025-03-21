@@ -296,20 +296,49 @@ input:checked+.slider:after {
   width: 100vw;
 }
 
+/* Fix the Overview button layout and position */
 .page-header {
   width: calc(100% - 150px);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  gap: 20px;
-  padding: 20px 0 5px 50px;
+  padding: 20px 50px 5px 50px;
   margin-left: 150px;
+  position: relative;
+  justify-content: flex-start; /* Align items to the left */
 }
 
+/* Properly center the room name */
 .page-header h1 {
-  color:#C14600;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  text-align: center;
+  width: 50%; /* Limit width for centering */
+  color: #C14600;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Fix the arrow position in the overview button */
+.page-header a {
+  display: flex;
+  flex-direction: row; /* Ensure horizontal layout */
+  align-items: center;
+  text-decoration: none;
+  color: #C14600;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 20px;
+  transition: background-color 0.2s;
+  position: relative;
+  z-index: 3;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.page-header a i {
+  margin-right: 8px; /* Space between icon and text */
 }
 
 .room-appliances-img-container {
@@ -494,6 +523,59 @@ input:checked+.slider:after {
   border: 1px solid #ddd;
 }
 
+/* Fix for device selector dropdown overflow */
+.device-selector {
+  flex: 1;
+  min-width: 150px;
+  max-width: 100%;
+  position: relative;
+}
+
+.device-selector select {
+  width: 100%;
+  padding: 8px 40px 8px 16px; /* More right padding for arrow */
+  border-radius: 20px;
+  border: 0;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+  background-color: beige;
+  color: black;
+  font-weight: bold;
+  text-overflow: ellipsis; /* Add ellipsis for overflow text */
+  overflow: hidden;
+  white-space: nowrap;
+  
+  /* Custom dropdown arrow */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23C14600' d='M6 9L0 3h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+}
+
+/* Make selectors container more responsive */
+.selectors-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+/* Fix dropdown option text */
+.device-selector select option {
+  white-space: normal; /* Allow wrapping in dropdown options */
+  padding: 8px;
+}
+
+/* Ensure time selector has consistent styling */
+.time-selector {
+  flex: 1;
+  min-width: 150px;
+}
+
 /* Adjust the chart container height and padding */
 .energy-consumption > div[style*="height: 300px"],
 .energy-consumption > div[style*="height: 400px"] {
@@ -639,11 +721,12 @@ input:checked+.slider:after {
 .period-button.active {
   background-color: #C14600;
   color: #ffffff; /* Brighter white */
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5); /* Add text shadow */
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.7); /* Stronger text shadow */
   font-weight: bold;
+  letter-spacing: 0.5px; /* Slightly spread out text */
   transform: scale(1.05);
-  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3), /* Stronger shadow */
-              inset 0px 0px 0px 2px rgba(255, 255, 255, 0.3); /* Inner glow */
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3),
+              inset 0px 0px 0px 2px rgba(255, 255, 255, 0.4); /* Stronger inner glow */
   border: 0px;
 }
 
