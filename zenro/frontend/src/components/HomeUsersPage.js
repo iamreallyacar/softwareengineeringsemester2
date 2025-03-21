@@ -177,7 +177,7 @@ function HomeUsersPage() {
   
   // Format date string (YYYY-MM-DD to readable format)
   const formatDate = (dateString) => {
-    if (!dateString) return "Not specified";
+    if (!dateString) return "NOT PROVIDED";
     
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -185,7 +185,7 @@ function HomeUsersPage() {
   
   // Format gender code to readable text
   const formatGender = (genderCode) => {
-    if (!genderCode) return "Not specified";
+    if (!genderCode) return "NOT PROVIDED";
     
     const genderMap = {
       'M': 'Male',
@@ -274,14 +274,14 @@ function HomeUsersPage() {
                                 <div className="profile-fields">
                                   <div className="profile-field">
                                     <span className="field-label">Email:</span>
-                                    <span className="field-value">{profileData[member.id].email || "Not provided"}</span>
+                                    <span className="field-value">{profileData[member.id].email || "NOT PROVIDED"}</span>
                                   </div>
                                   <div className="profile-field">
                                     <span className="field-label">Full Name:</span>
                                     <span className="field-value">
                                       {profileData[member.id].first_name || profileData[member.id].last_name 
                                         ? `${profileData[member.id].first_name || ""} ${profileData[member.id].last_name || ""}`.trim()
-                                        : "Not provided"}
+                                        : "NOT PROVIDED"}
                                     </span>
                                   </div>
                                 </div>
@@ -293,7 +293,7 @@ function HomeUsersPage() {
                                   <div className="profile-field">
                                     <span className="field-label">Phone:</span>
                                     <span className="field-value">
-                                      {profileData[member.id]?.profile?.phone_number || "Not provided"}
+                                      {profileData[member.id]?.profile?.phone_number || "NOT PROVIDED"}
                                     </span>
                                   </div>
                                 </div>
@@ -302,12 +302,12 @@ function HomeUsersPage() {
                               <div className="profile-section">
                                 <h3>Additional Details</h3>
                                 <div className="profile-fields">
-                                  <div className="profile-field">
+                                  <div className="profile-field date-of-birth-field">
                                     <span className="field-label">Date of Birth:</span>
                                     <span className="field-value">
                                       {profileData[member.id]?.profile?.date_of_birth 
                                         ? formatDate(profileData[member.id].profile.date_of_birth)
-                                        : "Not provided"}
+                                        : "NOT PROVIDED"}
                                     </span>
                                   </div>
                                   <div className="profile-field">
@@ -315,7 +315,7 @@ function HomeUsersPage() {
                                     <span className="field-value">
                                       {profileData[member.id]?.profile?.gender 
                                         ? formatGender(profileData[member.id].profile.gender)
-                                        : "Not provided"}
+                                        : "NOT PROVIDED"}
                                     </span>
                                   </div>
                                 </div>

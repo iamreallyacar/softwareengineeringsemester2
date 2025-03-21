@@ -59,7 +59,7 @@ body {
 }
 
 .members-container {
-  background: peachpuff;
+  background: rgb(252, 199, 153);
   border: 3px solid white;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -96,7 +96,7 @@ body {
 
 /* Member item styling changes */
 .member-item {
-  background: #f0d9b5; /* Darker background instead of beige */
+  background: #f9eacb; /* Darker background instead of beige */
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -414,6 +414,11 @@ body {
   background-color: #ddd;
 }
 
+/* Add extra spacing for the Date of Birth field */
+.date-of-birth-field {
+  gap: 20px !important; /* Increase from 8px to 20px */
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .home-users-content {
@@ -472,5 +477,13 @@ body {
   
   .member-item.expanded .member-name {
     font-size: 17px; /* Slightly smaller on mobile */
+  }
+  
+  .date-of-birth-field {
+    margin-bottom: 12px;
+  }
+  
+  .date-of-birth-field .field-label {
+    margin-bottom: 5px;
   }
 }
