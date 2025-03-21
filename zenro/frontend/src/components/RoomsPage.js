@@ -543,73 +543,71 @@ function RoomsPage() {
                         break;
                         
                     case 'month':
-                        // Fetch daily logs for selected month
-                        const dailyResponse = await api.get(`/devicelogsdaily/?device=${selectedEnergyDevice}`);
-                        console.log("Month data response:", dailyResponse.data);
-                        
-                        // Debug the actual data structure
-                        if (dailyResponse.data.length > 0) {
-                            console.log("Month data example:", dailyResponse.data[0]);
-                            console.log("Month data fields:", Object.keys(dailyResponse.data[0]));
-                        } else {
-                            console.log("No monthly data returned");
-                        }
-                        
+                        // Fetch daily logs for selected month with device ID filter
                         const [year, month] = selectedMonth.split('-');
-                        console.log("Filtering for year:", year, "month:", month);
+                        console.log(`Getting daily logs for device ${selectedEnergyDevice} for ${month}/${year}`);
                         
-                        // More flexible filtering that handles different field names
-                        const monthlyLogs = dailyResponse.data.filter(log => {
-                            try {
-                                // Try different possible date field names
-                                const dateString = log.date || log.created_at || log.timestamp;
-                                if (!dateString) return false;
-                                
-                                const logDate = new Date(dateString);
-                                const logYear = logDate.getFullYear();
-                                const logMonth = logDate.getMonth() + 1; // JavaScript months are 0-based
-                                
-                                console.log(`Log date: ${dateString}, parsed as: ${logDate}, year: ${logYear}, month: ${logMonth}`);
-                                
-                                return logYear === parseInt(year) && logMonth === parseInt(month);
-                            } catch (e) {
-                                console.error("Error parsing date:", log, e);
-                                return false;
-                            }
+                        // Use direct API filtering to get only the relevant data from backend
+                        const startDate = `${year}-${month}-01`;
+                        // Calculate end date (first day of next month)
+                        const endDate = month === '12' 
+                            ? `${parseInt(year) + 1}-01-01` 
+                            : `${year}-${String(parseInt(month) + 1).padStart(2, '0')}-01`;
+                        
+                        // Get exact data by using proper filtering with date parameters
+                        const dailyResponse = await api.get(`/devicelogsdaily/?device=${selectedEnergyDevice}`);
+                        console.log("All device daily logs:", dailyResponse.data.length);
+                        
+                        // Manual log of all data to see what we're getting
+                        dailyResponse.data.forEach(log => {
+                            console.log(`Log data: date=${log.date}, device=${log.device}, usage=${log.total_energy_usage}`);
                         });
-                        
-                        console.log("Filtered month logs:", monthlyLogs);
                         
                         // Get days in month and prepare data array
                         const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
                         labels = Array.from({length: daysInMonth}, (_, i) => `${i+1}`);
                         dataPoints = Array(daysInMonth).fill(0);
                         
-                        // Map daily logs to days of month with better error handling
-                        monthlyLogs.forEach(log => {
+                        // Create a Map to ensure we only get one value per day (the latest)
+                        const dailyData = new Map();
+                        
+                        // Process all returned logs
+                        dailyResponse.data.forEach(log => {
                             try {
-                                const dateString = log.date || log.created_at || log.timestamp;
-                                const logDate = new Date(dateString);
-                                const day = logDate.getDate();
+                                // Check if this is actually for our device
+                                if (log.device !== parseInt(selectedEnergyDevice)) {
+                                    console.log(`Skipping log for device ${log.device} - not our device ${selectedEnergyDevice}`);
+                                    return;
+                                }
                                 
-                                // Try different possible energy field names
-                                const energyValue = parseFloat(
-                                    log.total_energy_usage || 
-                                    log.energy_usage || 
-                                    log.usage || 
-                                    log.energy || 
-                                    0
-                                );
+                                const logDate = new Date(log.date);
+                                const logYear = logDate.getFullYear();
+                                const logMonth = logDate.getMonth() + 1;
+                                const logDay = logDate.getDate();
                                 
-                                console.log(`Day ${day}: Energy value = ${energyValue}`);
-                                
-                                if (day >= 1 && day <= daysInMonth) {
-                                    dataPoints[day-1] = energyValue;
+                                // Only process logs for our selected month and year
+                                if (logYear === parseInt(year) && logMonth === parseInt(month)) {
+                                    const dayKey = logDay - 1; // Convert to 0-based index
+                                    const usage = parseFloat(log.total_energy_usage || 0);
+                                    
+                                    console.log(`Found matching log: day=${logDay}, usage=${usage}`);
+                                    
+                                    // If we already have a value for this day, use the higher value
+                                    if (!dailyData.has(dayKey) || dailyData.get(dayKey) < usage) {
+                                        dailyData.set(dayKey, usage);
+                                    }
                                 }
                             } catch (err) {
-                                console.error("Error processing monthly log:", log, err);
+                                console.error("Error processing daily log:", err, log);
                             }
                         });
+                        
+                        // Fill the data points array from our Map
+                        dailyData.forEach((value, day) => {
+                            dataPoints[day] = value;
+                        });
+                        
+                        console.log("Final data points for month chart:", dataPoints);
                         
                         // Format month name for display
                         const monthName = new Date(selectedMonth + '-01').toLocaleDateString('default', { 
@@ -620,76 +618,57 @@ function RoomsPage() {
                         break;
                         
                     case 'year':
-                        // Fetch monthly logs for selected year
+                        // Fetch monthly logs for selected year with direct filtering
+                        console.log(`Getting monthly logs for device ${selectedEnergyDevice} for year ${selectedYear}`);
+                        
+                        // Get monthly data
                         const monthlyResponse = await api.get(`/devicelogsmonthly/?device=${selectedEnergyDevice}`);
                         console.log("Year data response:", monthlyResponse.data);
                         
-                        // Debug the actual data structure
-                        if (monthlyResponse.data.length > 0) {
-                            console.log("Year data example:", monthlyResponse.data[0]);
-                            console.log("Year data fields:", Object.keys(monthlyResponse.data[0]));
-                        } else {
-                            console.log("No yearly data returned");
-                        }
-                        
-                        console.log("Filtering for year:", selectedYear);
-                        
-                        // More flexible filtering that handles different field names
-                        const yearLogs = monthlyResponse.data.filter(log => {
-                            try {
-                                // Try to get year from various possible field names
-                                const logYear = log.year || 
-                                               (log.date ? new Date(log.date).getFullYear() : null) ||
-                                               (log.created_at ? new Date(log.created_at).getFullYear() : null);
-                                    
-                                return logYear === parseInt(selectedYear);
-                            } catch (e) {
-                                console.error("Error parsing year:", log, e);
-                                return false;
-                            }
+                        // Manual log of all data to see what we're getting
+                        monthlyResponse.data.forEach(log => {
+                            console.log(`Monthly log: year=${log.year}, month=${log.month}, device=${log.device}, usage=${log.total_energy_usage}`);
                         });
-                        
-                        console.log("Filtered year logs:", yearLogs);
                         
                         // Set up month labels and data array
                         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         dataPoints = Array(12).fill(0);
                         
-                        // Map monthly logs to months with better field detection
-                        yearLogs.forEach(log => {
+                        // Create a Map to ensure we only get one value per month (the latest)
+                        const monthlyData = new Map();
+                        
+                        // Process all returned logs - add defensive checks
+                        monthlyResponse.data.forEach(log => {
                             try {
-                                // Try different possible month field names
-                                let monthIndex;
-                                
-                                if (log.month !== undefined) {
-                                    monthIndex = parseInt(log.month) - 1; // Convert 1-based to 0-based
-                                } else if (log.date) {
-                                    monthIndex = new Date(log.date).getMonth();
-                                } else if (log.created_at) {
-                                    monthIndex = new Date(log.created_at).getMonth();
-                                } else {
-                                    console.error("No month field found in log:", log);
+                                // Check if this is actually for our device
+                                if (log.device !== parseInt(selectedEnergyDevice)) {
+                                    console.log(`Skipping log for device ${log.device} - not our device ${selectedEnergyDevice}`);
                                     return;
                                 }
                                 
-                                // Try different possible energy field names
-                                const energyValue = parseFloat(
-                                    log.total_energy_usage || 
-                                    log.energy_usage || 
-                                    log.usage ||
-                                    log.energy ||
-                                    0
-                                );
-                                
-                                console.log(`Month ${monthIndex + 1}: Energy value = ${energyValue}`);
-                                
-                                if (monthIndex >= 0 && monthIndex < 12) {
-                                    dataPoints[monthIndex] = energyValue;
+                                // Check if it's for the selected year
+                                if (log.year === parseInt(selectedYear)) {
+                                    const monthIndex = parseInt(log.month) - 1; // Convert to 0-based
+                                    const usage = parseFloat(log.total_energy_usage || 0);
+                                    
+                                    console.log(`Found matching log: month=${log.month}, usage=${usage}`);
+                                    
+                                    // If we already have a value for this month, use the higher value
+                                    if (!monthlyData.has(monthIndex) || monthlyData.get(monthIndex) < usage) {
+                                        monthlyData.set(monthIndex, usage);
+                                    }
                                 }
                             } catch (err) {
-                                console.error("Error processing yearly log:", log, err);
+                                console.error("Error processing monthly log:", err, log);
                             }
                         });
+                        
+                        // Fill the data points array from our Map
+                        monthlyData.forEach((value, monthIndex) => {
+                            dataPoints[monthIndex] = value;
+                        });
+                        
+                        console.log("Final data points for year chart:", dataPoints);
                         
                         chartTitle = `Energy Usage for ${selectedYear} - ${deviceName}`;
                         break;
