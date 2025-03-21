@@ -67,9 +67,17 @@ function RoomsPage() {
                 setUnlockedDevices(unlocked);
                 setLockedDevices(locked);
 
-                // Set a default device for energy monitoring if available
+                // Set a default device for energy monitoring if available (not a sensor)
                 if (unlocked.length > 0 && !selectedEnergyDevice) {
-                    setSelectedEnergyDevice(unlocked[0].id);
+                    // Find the first non-sensor device
+                    const firstNonSensorDevice = unlocked.find(device => {
+                        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+                        return !deviceType?.includes('sensor');
+                    });
+                    
+                    if (firstNonSensorDevice) {
+                        setSelectedEnergyDevice(firstNonSensorDevice.id);
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching room and device data:", error);
@@ -917,11 +925,17 @@ function RoomsPage() {
                                             className="device-selector"
                                         >
                                             {unlockedDevices.length > 0 ? (
-                                                unlockedDevices.map((device) => (
-                                                    <option key={device.id} value={device.id}>
-                                                        {device.name}
-                                                    </option>
-                                                ))
+                                                unlockedDevices
+                                                    .filter(device => {
+                                                        // Filter out sensor devices
+                                                        const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
+                                                        return !deviceType?.includes('sensor');
+                                                    })
+                                                    .map((device) => (
+                                                        <option key={device.id} value={device.id}>
+                                                            {device.name}
+                                                        </option>
+                                                    ))
                                             ) : (
                                                 <option value="">No devices available</option>
                                             )}

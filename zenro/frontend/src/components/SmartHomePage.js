@@ -76,10 +76,9 @@ function SmartHomePage() {
         throw new Error("Selected room not found in locked rooms list");
       }
       
-      // Update room with new name (if provided) and set is_unlocked to true
+      // Update room to set is_unlocked to true (keeping original name)
       const updatedRoom = {
         ...roomToUnlock,
-        name: newRoomName.trim() ? newRoomName : roomToUnlock.name,
         is_unlocked: true
       };
       
@@ -92,9 +91,8 @@ function SmartHomePage() {
       setLockedRooms(prevRooms => prevRooms.filter(room => room.id !== parseInt(selectedRoomToUnlock)));
       setUnlockedRooms(prevRooms => [...prevRooms, response.data]);
       
-      // Reset form fields
+      // Reset form field
       setSelectedRoomToUnlock(null);
-      setNewRoomName("");
       setIsModalOpen(false);
       
       // If this is the first room, select it for energy monitoring
@@ -892,18 +890,11 @@ function SmartHomePage() {
                     <option value="">Select a Room to Add</option>
                     {lockedRooms.map((room) => (
                       <option key={room.id} value={room.id}>
-                        {room.name || `Room ${room.id}`} ({room.home_io_room_name})
+                        {room.name || room.home_io_room_name}
                       </option>
                     ))}
                   </select>
-                  <input
-                    type="text"
-                    placeholder="Enter Custom Room Name (Optional)"
-                    value={newRoomName}
-                    onChange={(e) => setNewRoomName(e.target.value)}
-                    className="room-name-input"
-                  />
-                  <div className="modal-buttons">
+                  <div className="modal-buttons" style={{ marginTop: "20px" }}>
                     <button onClick={handleUnlockRoom}>Add Room</button>
                     <button onClick={() => setIsModalOpen(false)}>Cancel</button>
                   </div>
