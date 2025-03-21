@@ -48,7 +48,8 @@ function App() {
                         <Route path="/smarthomepage/:id" element={<SmartHomePage />} />
                         <Route path="/room/:roomId/:smartHomeId" element={<RoomsPage />} />
                         <Route path="/home-users/:id" element={<HomeUsersPage />} />
-                    <Route path="/landing-page" element={<LandingPage />} />
+                        <Route path="/landing-page" element={<LandingPage />} />
+                        <Route path="/profile" element={<Profile />} />
                     </>
                 ) : (
                     <Route path="*" element={<Login setIsAuthenticated={setIsAuthenticated} />} />

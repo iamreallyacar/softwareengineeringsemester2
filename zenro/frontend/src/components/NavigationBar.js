@@ -40,8 +40,6 @@ const Sidebar = () => {
         ☰
       </button>
 
-
-      
       <nav className={`sidebar ${isOpen ? "active" : ""}`}>
         {/* Profile icon at the top */}
         <div className="navbar-top">
@@ -61,11 +59,11 @@ const Sidebar = () => {
             <img src={temperature} alt="Temperature" className="nav-icon" />
             <span className="nav-text">Temperature</span>
           </Link>
-          <Link to="/security" className="nav-item">
+          <Link to="/room/:roomId/:smartHomeId" className="nav-item">
             <img src={security} alt="Security" className="nav-icon" />
             <span className="nav-text">Security</span>
           </Link>
-          <Link to="/notifications" className="nav-item">
+          <Link to="/landing-page" className="nav-item">
             <img src={notification} alt="Notifications" className="nav-icon" />
             <span className="nav-text">Notifications</span>
           </Link>

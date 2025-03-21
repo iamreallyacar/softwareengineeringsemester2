@@ -1,4 +1,3 @@
-
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -13,10 +12,13 @@
   padding: 2vh 0;
   box-sizing: border-box;
   z-index: 1000;
+  position: fixed; 
+  top: 0;
+  left: 0;
 }
 
 /* Profile section */
-  .navbar-top {
+.navbar-top {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +26,7 @@
 }
 
 /* Middle section with icons */
-  .navbar-middle {
+.navbar-middle {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,11 +35,22 @@
 }
 
 /* Logo at the bottom */
-  .navbar-bottom {
+.navbar-bottom {
   display: flex;
   justify-content: center;
   align-items: center;
   padding-top: 2vh;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar-logo {
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar-logo img {
+  max-width: 75%;
+  height: auto;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Individual Navigation Items */
@@ -114,18 +127,28 @@
 @media (max-width: 768px) {
   .navbar-burger-menu {
     display: inline; /* Show burger menu */
-    border:solid;
+    border: solid;
   }
 
   .sidebar {
-    width: 30vw; 
-    position: fixed;
-    left: -30vw; /* Move it completely off-screen */
+    left: -100%;
+    width: 30vw;
     transition: left 0.3s ease-in-out;
   }
 
   .sidebar.active {
     left: 0; /* Slide in when active */
+  }
+
+  .sidebar:not(.active) .navbar-bottom {
+    opacity: 0; /* Hide logo when sidebar is hidden */
+    transform: translateX(-20px); /* Slight movement effect */
+  }
+
+  .sidebar.active .navbar-bottom {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.2s; /* Delay appearance slightly */
   }
 
   .navbar-top, 
@@ -135,13 +158,42 @@
   }
 
   .navbar-bottom {
-      width: 100%;
-      max-width: inherit; 
+    width: 100%;
+    max-width: inherit;
+    padding: 1vh 10px;
+  }
+  
+  .sidebar-logo img {
+    max-width: 80%; /* Slightly smaller on mobile */
+    margin: 0 auto;
+    display: block;
   }
 }
 
 @media (min-width: 769px) {
   .sidebar {
     transform: translateX(0); /* Always visible on desktop */
+  }
+  
+  .navbar-bottom {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* For main content */
+.main-content {
+  margin-left: 10vw; /* Match sidebar width */
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0; /* No margin when sidebar is hidden */
+  }
+  
+  .sidebar.active + .main-content {
+    margin-left: 30vw; /* Add margin when sidebar is active */
   }
 }
