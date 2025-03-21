@@ -17,16 +17,9 @@ function SmartHomePage() {
   const [addedRooms, setAddedRooms] = useState([]);
   const [lockedRooms, setLockedRooms] = useState([]); 
   const [selectedRoomToUnlock, setSelectedRoomToUnlock] = useState(null);
-  const [homeIORooms, setHomeIORooms] = useState([]);
-  const [availableHomeIORooms, setAvailableHomeIORooms] = useState([]);
-  const [selectedHomeIORoom, setSelectedHomeIORoom] = useState(null);
-  const [newRoomName, setNewRoomName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [roomToDelete, setRoomToDelete] = useState(null);
-  
-  // Device management state
-  const [supportedDevices, setSupportedDevices] = useState([]);
   
   // Energy usage monitoring state
   const [selectedPeriod, setSelectedPeriod] = useState('day');
@@ -189,15 +182,6 @@ function SmartHomePage() {
       })
       .catch((error) => {
         console.error("Error fetching rooms:", error);
-      });
-
-    // Fetch supported devices
-    api.get("/supporteddevices/")
-      .then((res) => {
-        setSupportedDevices(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching supported devices:", error);
       });
   }, [smartHomeId, selectedEnergyRoom]);
 
