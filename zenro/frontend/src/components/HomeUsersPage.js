@@ -177,7 +177,7 @@ function HomeUsersPage() {
   
   // Format date string (YYYY-MM-DD to readable format)
   const formatDate = (dateString) => {
-    if (!dateString) return "NOT PROVIDED";
+    if (!dateString) return "-";
     
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -185,7 +185,7 @@ function HomeUsersPage() {
   
   // Format gender code to readable text
   const formatGender = (genderCode) => {
-    if (!genderCode) return "NOT PROVIDED";
+    if (!genderCode) return "-";
     
     const genderMap = {
       'M': 'Male',
@@ -274,14 +274,14 @@ function HomeUsersPage() {
                                 <div className="profile-fields">
                                   <div className="profile-field">
                                     <span className="field-label">Email:</span>
-                                    <span className="field-value">{profileData[member.id].email || "NOT PROVIDED"}</span>
+                                    <span className="field-value">{profileData[member.id].email || "-"}</span>
                                   </div>
                                   <div className="profile-field">
                                     <span className="field-label">Full Name:</span>
                                     <span className="field-value">
                                       {profileData[member.id].first_name || profileData[member.id].last_name 
                                         ? `${profileData[member.id].first_name || ""} ${profileData[member.id].last_name || ""}`.trim()
-                                        : "NOT PROVIDED"}
+                                        : "-"}
                                     </span>
                                   </div>
                                 </div>
@@ -293,7 +293,7 @@ function HomeUsersPage() {
                                   <div className="profile-field">
                                     <span className="field-label">Phone:</span>
                                     <span className="field-value">
-                                      {profileData[member.id]?.profile?.phone_number || "NOT PROVIDED"}
+                                      {profileData[member.id]?.profile?.phone_number || "-"}
                                     </span>
                                   </div>
                                 </div>
@@ -307,7 +307,7 @@ function HomeUsersPage() {
                                     <span className="field-value">
                                       {profileData[member.id]?.profile?.date_of_birth 
                                         ? formatDate(profileData[member.id].profile.date_of_birth)
-                                        : "NOT PROVIDED"}
+                                        : "-"}
                                     </span>
                                   </div>
                                   <div className="profile-field">
@@ -315,7 +315,7 @@ function HomeUsersPage() {
                                     <span className="field-value">
                                       {profileData[member.id]?.profile?.gender 
                                         ? formatGender(profileData[member.id].profile.gender)
-                                        : "NOT PROVIDED"}
+                                        : "-"}
                                     </span>
                                   </div>
                                 </div>
