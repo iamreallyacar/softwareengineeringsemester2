@@ -36,6 +36,8 @@ function SmartHomePage() {
   const [isGenerationDataEmpty, setIsGenerationDataEmpty] = useState(false);
   const [isConsumptionDataEmpty, setIsConsumptionDataEmpty] = useState(false);
 
+  const [smartHome, setSmartHome] = useState(null);
+
   /**
    * Unlock a room in the smart home
    */
@@ -184,6 +186,17 @@ function SmartHomePage() {
         console.error("Error fetching rooms:", error);
       });
   }, [smartHomeId, selectedEnergyRoom]);
+
+  // Fetch smart home data
+  useEffect(() => {
+    api.get(`/smarthomes/${smartHomeId}/`)
+      .then((res) => {
+        setSmartHome(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching smart home details:", error);
+      });
+  }, [smartHomeId]);
 
   /**
    * Update energy chart when data selection changes
@@ -680,7 +693,12 @@ function SmartHomePage() {
     <div className="smart-home-page">
       <Sidebar />
       <div className="shp-information">
-        {/* Energy Information Section - NOW FIRST */}
+        {/* Simple smart home name header - just text, no card */}
+        {smartHome && (
+          <h1 className="smart-home-title">{smartHome.name}</h1>
+        )}
+
+        {/* Energy Information Section */}
         <div className={`energy-info ${showGenerationView ? 'generation-view' : 'consumption-view'}`}>
           <div className="energy-info-header">
             <div className="period-selector">
