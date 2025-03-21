@@ -519,7 +519,7 @@ function RoomsPage() {
                 switch (selectedPeriod) {
                     case 'day':
                         // Fetch 1-minute logs for the selected day
-                        const minuteResponse = await api.get(`/devicelogs/?device=${selectedEnergyDevice}`);
+                        const minuteResponse = await api.get(`/devicelogs1min/?device=${selectedEnergyDevice}`);
                         console.log("Day data response:", minuteResponse.data);
                         
                         const dailyLogs = minuteResponse.data.filter(log => {
@@ -544,33 +544,70 @@ function RoomsPage() {
                         
                     case 'month':
                         // Fetch daily logs for selected month
-                        const dailyResponse = await api.get(`/devicelogs/daily/?device=${selectedEnergyDevice}`);
+                        const dailyResponse = await api.get(`/devicelogsdaily/?device=${selectedEnergyDevice}`);
                         console.log("Month data response:", dailyResponse.data);
                         
+                        // Debug the actual data structure
+                        if (dailyResponse.data.length > 0) {
+                            console.log("Month data example:", dailyResponse.data[0]);
+                            console.log("Month data fields:", Object.keys(dailyResponse.data[0]));
+                        } else {
+                            console.log("No monthly data returned");
+                        }
+                        
                         const [year, month] = selectedMonth.split('-');
+                        console.log("Filtering for year:", year, "month:", month);
+                        
+                        // More flexible filtering that handles different field names
                         const monthlyLogs = dailyResponse.data.filter(log => {
                             try {
-                                const logDate = new Date(log.date);
-                                return logDate.getFullYear() === parseInt(year) && 
-                                       logDate.getMonth() === parseInt(month) - 1;
+                                // Try different possible date field names
+                                const dateString = log.date || log.created_at || log.timestamp;
+                                if (!dateString) return false;
+                                
+                                const logDate = new Date(dateString);
+                                const logYear = logDate.getFullYear();
+                                const logMonth = logDate.getMonth() + 1; // JavaScript months are 0-based
+                                
+                                console.log(`Log date: ${dateString}, parsed as: ${logDate}, year: ${logYear}, month: ${logMonth}`);
+                                
+                                return logYear === parseInt(year) && logMonth === parseInt(month);
                             } catch (e) {
-                                console.error("Error parsing date:", log.date, e);
+                                console.error("Error parsing date:", log, e);
                                 return false;
                             }
                         });
+                        
+                        console.log("Filtered month logs:", monthlyLogs);
                         
                         // Get days in month and prepare data array
                         const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
                         labels = Array.from({length: daysInMonth}, (_, i) => `${i+1}`);
                         dataPoints = Array(daysInMonth).fill(0);
                         
-                        // Map daily logs to days of month
+                        // Map daily logs to days of month with better error handling
                         monthlyLogs.forEach(log => {
                             try {
-                                const day = new Date(log.date).getDate();
-                                dataPoints[day-1] = parseFloat(log.total_energy_usage || 0);
+                                const dateString = log.date || log.created_at || log.timestamp;
+                                const logDate = new Date(dateString);
+                                const day = logDate.getDate();
+                                
+                                // Try different possible energy field names
+                                const energyValue = parseFloat(
+                                    log.total_energy_usage || 
+                                    log.energy_usage || 
+                                    log.usage || 
+                                    log.energy || 
+                                    0
+                                );
+                                
+                                console.log(`Day ${day}: Energy value = ${energyValue}`);
+                                
+                                if (day >= 1 && day <= daysInMonth) {
+                                    dataPoints[day-1] = energyValue;
+                                }
                             } catch (err) {
-                                console.error("Error processing log:", log);
+                                console.error("Error processing monthly log:", log, err);
                             }
                         });
                         
@@ -584,23 +621,73 @@ function RoomsPage() {
                         
                     case 'year':
                         // Fetch monthly logs for selected year
-                        const monthlyResponse = await api.get(`/devicelogs/monthly/?device=${selectedEnergyDevice}`);
+                        const monthlyResponse = await api.get(`/devicelogsmonthly/?device=${selectedEnergyDevice}`);
                         console.log("Year data response:", monthlyResponse.data);
                         
-                        const yearLogs = monthlyResponse.data.filter(log => 
-                            log.year === parseInt(selectedYear)
-                        );
+                        // Debug the actual data structure
+                        if (monthlyResponse.data.length > 0) {
+                            console.log("Year data example:", monthlyResponse.data[0]);
+                            console.log("Year data fields:", Object.keys(monthlyResponse.data[0]));
+                        } else {
+                            console.log("No yearly data returned");
+                        }
+                        
+                        console.log("Filtering for year:", selectedYear);
+                        
+                        // More flexible filtering that handles different field names
+                        const yearLogs = monthlyResponse.data.filter(log => {
+                            try {
+                                // Try to get year from various possible field names
+                                const logYear = log.year || 
+                                               (log.date ? new Date(log.date).getFullYear() : null) ||
+                                               (log.created_at ? new Date(log.created_at).getFullYear() : null);
+                                    
+                                return logYear === parseInt(selectedYear);
+                            } catch (e) {
+                                console.error("Error parsing year:", log, e);
+                                return false;
+                            }
+                        });
+                        
+                        console.log("Filtered year logs:", yearLogs);
                         
                         // Set up month labels and data array
                         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         dataPoints = Array(12).fill(0);
                         
-                        // Map monthly logs to months
+                        // Map monthly logs to months with better field detection
                         yearLogs.forEach(log => {
                             try {
-                                dataPoints[log.month-1] = parseFloat(log.total_energy_usage || 0);
+                                // Try different possible month field names
+                                let monthIndex;
+                                
+                                if (log.month !== undefined) {
+                                    monthIndex = parseInt(log.month) - 1; // Convert 1-based to 0-based
+                                } else if (log.date) {
+                                    monthIndex = new Date(log.date).getMonth();
+                                } else if (log.created_at) {
+                                    monthIndex = new Date(log.created_at).getMonth();
+                                } else {
+                                    console.error("No month field found in log:", log);
+                                    return;
+                                }
+                                
+                                // Try different possible energy field names
+                                const energyValue = parseFloat(
+                                    log.total_energy_usage || 
+                                    log.energy_usage || 
+                                    log.usage ||
+                                    log.energy ||
+                                    0
+                                );
+                                
+                                console.log(`Month ${monthIndex + 1}: Energy value = ${energyValue}`);
+                                
+                                if (monthIndex >= 0 && monthIndex < 12) {
+                                    dataPoints[monthIndex] = energyValue;
+                                }
                             } catch (err) {
-                                console.error("Error processing yearly log:", log);
+                                console.error("Error processing yearly log:", log, err);
                             }
                         });
                         

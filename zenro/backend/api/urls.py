@@ -42,6 +42,11 @@ router.register(r'roomlogs1min', RoomLog1MinViewSet, basename='roomlog1min')
 router.register(r'roomlogsdaily', RoomLogDailyViewSet, basename='roomlogdaily_alt') # Changed basename
 router.register(r'roomlogsmonthly', RoomLogMonthlyViewSet, basename='roomlogsmonthly_alt') # Changed basename
 
+# Add these lines after the roomlogs1min/daily/monthly registrations
+router.register(r'devicelogs1min', DeviceLog1MinViewSet, basename='devicelog1min')  
+router.register(r'devicelogsdaily', DeviceLogDailyViewSet, basename='devicelogdaily_alt')
+router.register(r'devicelogsmonthly', DeviceLogMonthlyViewSet, basename='devicelogsmonthly_alt')
+
 # Organized URL patterns by function
 urlpatterns = [
     # Remove the existing smarthomes/<int:pk>/join/ pattern
