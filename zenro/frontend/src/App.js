@@ -12,7 +12,7 @@ import './css/App.css';
 import LandingPage from "./components/LandingPage";
 import NavigationBar from "./components/NavigationBar";
 import RecoveryPage from "./components/RecoveryPage";
-import AddDevices from "./components/AddDevices";
+import Profile from "./components/Profile";
 import OverviewPage from "./components/OverviewPage";
 
 function App() {

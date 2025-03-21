@@ -15,7 +15,7 @@
 }
 
 /* Profile section */
-.navbar-top {
+  .navbar-top {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,7 +23,7 @@
 }
 
 /* Middle section with icons */
-.navbar-middle {
+  .navbar-middle {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,7 +32,7 @@
 }
 
 /* Logo at the bottom */
-.navbar-bottom {
+  .navbar-bottom {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,42 +76,71 @@
 
 .nav-item:hover .nav-text {
   opacity: 1;
-  text-shadow: 0 0 10px rgba(255, 140, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.6), 0 0 30px rgba(255, 0, 0, 0.4);
+  text-shadow: 0px 0px 10px rgb(239, 185, 141); /*0 0 10px rgba(255, 140, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.6), 0 0 30px rgba(255, 0, 0, 0.4);*/
 }
 
-/* Responsive Styles */
+.navbar-burger-menu {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+  background: #ea580c;
+  text-shadow: 0px 0px 10px rgb(239, 185, 141);
+  border-radius: 4px;
+  padding: 5px 10px;
+  width: auto;
+  height: auto;
+  text-align: left;
+  line-height: 1;
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-bottom-menu:hover {
+  transform: scale(1.2);
+  color: #ea580c;
+  background: white;
+  text-shadow: 0px 0px 10px rgb(239, 185, 141);
+}
+
+.hidden {
+  display: none !important; /* Hide when sidebar is open */
+}
+
 @media (max-width: 768px) {
+  .navbar-burger-menu {
+    display: inline; /* Show burger menu */
+    border:solid;
+  }
+
   .sidebar {
-      width: 20vw; /* Slightly larger on smaller screens */
-      min-width: 70px;
+    width: 30vw; 
+    position: fixed;
+    left: -30vw; /* Move it completely off-screen */
+    transition: left 0.3s ease-in-out;
   }
 
-  .nav-icon {
-      width: 2rem;
-      height: 2rem;
+  .sidebar.active {
+    left: 0; /* Slide in when active */
   }
 
-  .nav-text {
-      font-size: 0.9rem;
+  .navbar-top, 
+  .navbar-middle {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .navbar-bottom {
+      width: 100%;
+      max-width: inherit; 
   }
 }
 
-@media (max-width: 480px) {
+@media (min-width: 769px) {
   .sidebar {
-      width: 25vw;
-      min-width: 60px;
-  }
-
-  .navbar-middle {
-      gap: 1.5rem; /* Reduce space for small screens */
-  }
-
-  .nav-icon {
-      width: 1.8rem;
-      height: 1.8rem;
-  }
-
-  .nav-text {
-      font-size: 0.8rem;
+    transform: translateX(0); /* Always visible on desktop */
   }
 }

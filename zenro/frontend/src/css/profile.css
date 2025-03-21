@@ -1,0 +1,188 @@
+/* Profile Page Styles */
+.profile-info {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 1rem 0 2rem 0;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #FFFFFF;
+  }
+  
+  .profile-info p {
+    margin: 0.75rem 0;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-info strong {
+    color: #FFF6E7;
+    display: inline-block;
+    min-width: 120px;
+  }
+  
+  /* Owned Homes Section */
+  .profile-owned-homes {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .section-icon {
+    color: #FFF6E7;
+  }
+  
+  .homes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .home-item {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .home-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .home-header strong {
+    font-size: 1.2rem;
+    color: #FFF6E7;
+  }
+  
+  .view-home-link {
+    background-color: rgba(255, 246, 231, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .view-home-link:hover {
+    background-color: rgba(255, 246, 231, 0.5);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .home-id, .home-password {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+  }
+  
+  /* Password update form */
+  .password-update-form {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .password-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #fed7aa;
+    border-radius: 1rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.8);
+    background-color: #FFF6E7;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  .password-input:focus {
+    outline: none;
+    color: #000000;
+    border-color: #ea580c;
+  }
+  
+  .update-password-button {
+    width: 100%;
+    background-color: rgba(255, 246, 231, 0.51);
+    border: none;
+    border-radius: 0.5rem;
+    color: #FFFFFF;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .update-password-button:hover {
+    background-color: rgba(255, 246, 231, 0.7);
+    color: #f8f8f8;
+    text-shadow: 0 0 10px rgba(255, 213, 200, 0.5);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 213, 200, 0.5);
+    transform: translateY(-3px);
+  }
+  
+  .success-message {
+    color: #bbf7d0;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+    text-align: center;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .error-message {
+    color: #fe9c67;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+    text-align: center;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Media query for responsive design */
+  @media (max-width: 768px) {
+    .login-container {
+      width: 90vw;
+      height: 85vh;
+    }
+    
+    .login-content {
+      width: 90vw;
+    }
+    
+    .profile-info strong {
+      min-width: 100px;
+    }
+    
+    .home-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    
+    .view-home-link {
+      align-self: flex-start;
+    }
+  }
