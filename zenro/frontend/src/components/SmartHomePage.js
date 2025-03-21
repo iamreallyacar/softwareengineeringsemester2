@@ -6,8 +6,6 @@ import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
 import { Chart } from 'chart.js/auto';
 
-import airCond from "../assets/images/aircond.png";
-
 /**
  * SmartHomePage component displays the main dashboard for a smart home
  * Features include room management, energy monitoring, and device control
@@ -29,18 +27,6 @@ function SmartHomePage() {
   
   // Device management state
   const [supportedDevices, setSupportedDevices] = useState([]);
-  
-  // CCTV display state
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedRoomCCTV, setSelectedRoomCCTV] = useState("Living Room");
-  
-  // Appliances control state
-  const [isOpenLR, setIsOpenLR] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState("Living Room");
-  const [isOn, setIsOn] = useState(false);
-  
-  // Room selector options
-  const allRooms = ["Living Room", "Kitchen", "Bedroom", "Bathroom", "Garage", "Backyard"];
   
   // Energy usage monitoring state
   const [selectedPeriod, setSelectedPeriod] = useState('day');
@@ -170,22 +156,6 @@ function SmartHomePage() {
       console.error("Failed to lock room:", error.response?.data || error.message);
       alert("Failed to lock room. Please try again.");
     }
-  };
-
-  /**
-   * Update CCTV room selection
-   */
-  const handleRoomSelectCCTV = (room) => {
-    setSelectedRoomCCTV(room);
-    setIsOpen(false);
-  };
-
-  /**
-   * Update appliance room selection
-   */
-  const handleRoomSelect = (room) => {
-    setSelectedRoom(room);
-    setIsOpenLR(false);
   };
 
   /**
@@ -973,121 +943,6 @@ function SmartHomePage() {
             </div>
           </div>
         )}
-
-        {/* Appliances Container */}
-        <div className="shp-appliances">
-          <div className="shp-appliances-room-select">
-            <h3 onClick={() => setIsOpenLR(!isOpenLR)}>
-              {selectedRoom} {isOpenLR ? "▲" : "▼"}
-            </h3>
-
-            <AnimatePresence>
-              {isOpenLR && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
-                  style={{ overflow: "hidden" }}
-                >
-                  <ul className="shp-appliances-room-list">
-                    {allRooms.map((room, index) => (
-                      <motion.li
-                        onClick={() => handleRoomSelect(room)}
-                        key={room}
-                        initial={{ opacity: 0, y: -30 }}
-                        animate={{ opacity: 1, y: -20 }}
-                        exit={{ opacity: 0, y: -30 }}
-                        transition={{ delay: index * 0.2, duration: 0.3 }}
-                      >
-                        {room}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <p>Smart Air Conditioner</p>
-          </div>
-
-          <div className="shp-appliances-on-off-button">
-            <button
-              onClick={() => setIsOn(!isOn)}
-              className={isOn ? "shp-appliances-button-on" : "shp-appliances-button-off"}
-            >
-              <span className="status-dot"></span>
-              {isOn ? "ON" : "OFF"}
-            </button>
-          </div>
-
-          <div className="shp-appliances-img-container">
-            <img className="shp-appliances-img" src={airCond} alt="Air Conditioner" />
-          </div>
-
-          <div className="shp-appliances-statistics">
-            <p className="shp-statistics">Total Uptime</p>
-            <p className="shp-statistics">Fan Speed</p>
-            <p className="shp-statistics">Temperature</p>
-          </div>
-        </div>
-
-        {/* CCTV Container - NOW LAST */}
-        <div className="shp-CCTV">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {selectedRoomCCTV} {isOpen ? "▲" : "▼"}
-          </button>
-
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                style={{ overflow: "hidden" }}
-              >
-                <ul className="shp-cctv-room-list">
-                  {allRooms.map((room, index) => (
-                    <motion.li
-                      key={room}
-                      onClick={() => handleRoomSelectCCTV(room)}
-                      initial={{ opacity: 0, y: -30 }}
-                      animate={{ opacity: 1, y: -20 }}
-                      exit={{ opacity: 0, y: -30 }}
-                      transition={{ delay: index * 0.2, duration: 0.3 }}
-                    >
-                      {room}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="shp-cctv-view">
-            <h1>CCTV</h1>
-          </div>
-
-          <div className="shp-cctv-statistics">
-            <div className="shp-statistics">
-              <i className="fas fa-temperature-low"></i>
-              <span>Temperature</span>
-            </div>
-            <div className="shp-statistics">
-              <i className="fa-solid fa-bolt"></i>
-              <span>Power Usage</span>
-            </div>
-            <div className="shp-statistics">
-              <i className="fa-solid fa-droplet"></i>
-              <span>Humidity</span>
-            </div>
-            <div className="shp-statistics">
-              <i className="fa-solid fa-lightbulb"></i>
-              <span>Light</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
