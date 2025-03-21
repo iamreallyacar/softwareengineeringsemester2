@@ -165,19 +165,24 @@ body {
   overflow: hidden;
 }
 
-/* Dropdown indicator animation */
+/* Fix dropdown indicator animation */
 .dropdown-indicator {
   color: #CB5A55;
-  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  width: 24px;
+  height: 24px;
 }
 
+/* Remove the transform from here (the i element already has the right class) */
 .member-item.expanded .dropdown-indicator i {
-  transform: rotate(180deg);
   color: #e94242;
+}
+
+/* Add smooth transition for the icon change */
+.fa-chevron-down, .fa-chevron-up {
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
 /* Profile dropdown content */
