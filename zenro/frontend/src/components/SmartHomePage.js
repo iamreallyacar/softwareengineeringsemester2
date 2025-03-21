@@ -57,9 +57,6 @@ function SmartHomePage() {
   const [isGenerationDataEmpty, setIsGenerationDataEmpty] = useState(false);
   const [isConsumptionDataEmpty, setIsConsumptionDataEmpty] = useState(false);
 
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState(""); // State to handle errors
-
   /**
    * Unlock a room in the smart home
    */
@@ -185,7 +182,6 @@ function SmartHomePage() {
     setIsOpen(false);
   };
 
-
   /**
    * Update appliance room selection
    */
@@ -193,23 +189,6 @@ function SmartHomePage() {
     setSelectedRoom(room);
     setIsOpenLR(false);
   };
-
-  
-  // Fetch user data on component mount
-  useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-            const response = await api.get("/user/current/"); // Fetch user data
-            setUser(response.data); // Set user data in state
-            console.log("Fetched user data:", response.data); // Debugging
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-            setError("Failed to fetch user data.");
-        }
-    };
-
-    fetchUserData();
-}, []);
 
   /**
    * Fetch smart home data on initial load
@@ -758,40 +737,27 @@ function SmartHomePage() {
                       marginBottom: "10px",
                     }}
                   >
-                    <li
-                      style={{
-                        listStyle: "none",
-                        flex: 1,
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
+                    <li style={{ listStyle: "none", flex: 1, display: "flex", alignItems: "center" }}>
                       <div className="shp-room-icon" style={{ marginRight: "10px" }}>
                         <i className="fa-solid fa-couch"></i>
                       </div>
                       <Link
                         to={`/room/${room.id}/${smartHomeId}`}
                         className="shp-rooms-list-links"
-                        style={{
-                          textDecoration: "none",
-                          color: "#333",
-                          fontWeight: "bold",
-                        }}
+                        style={{ textDecoration: "none", color: "#333", fontWeight: "bold" }}
                       >
                         {room.name}
                       </Link>
                     </li>
-                      {user?.is_staff && user?.is_active && (
-                        <button
-                          className="delete-room-button"
-                          onClick={() => {
-                            setRoomToDelete(room.id);
-                            setIsDeleteModalOpen(true);
-                          }}
-                        >
-                          <i className="fa-solid fa-trash delete-icon"></i>
-                        </button>
-                      )}
+                    <button
+                      className="delete-room-button"
+                      onClick={() => {
+                        setRoomToDelete(room.id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    >
+                      <i className="fa-solid fa-trash delete-icon"></i>
+                    </button>
                   </div>
                 ))
               )}
@@ -829,21 +795,18 @@ function SmartHomePage() {
           )}
 
           {/* Always show the Add Room button if there are locked rooms */}
-          {/* normal user cant add rooms, only is_staff can add rooms */}
-          {user?.is_staff && user?.is_active && (
-            <button
-              className="shp-add-room-button"
-              onClick={() => {
-                if (lockedRooms.length > 0) {
-                  setIsModalOpen(true);
-                } else {
-                  alert("All rooms have already been added to the Home. Consider expanding your Home to include more rooms?");
-                }
-              }}
-            >
-              + Add Room
-            </button>
-          )}
+          <button
+            className="shp-add-room-button"
+            onClick={() => {
+              if (lockedRooms.length > 0) {
+                setIsModalOpen(true);
+              } else {
+                alert("All rooms have already been added to the Home. Consider expanding your Home to include more rooms?");
+              }
+            }}
+          >
+            + Add Room
+          </button>
         </div>
 
         {/* Add Room Modal */}
