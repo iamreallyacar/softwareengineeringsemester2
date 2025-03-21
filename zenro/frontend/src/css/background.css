@@ -1,3 +1,11 @@
+body {
+    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BC583B);
+    color: whitesmoke;
+    font-family: -apple-system, BlinkMacSystemFont ,Georgia, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
 .peach-container {
     position: fixed;
     top: 0;
@@ -7,6 +15,7 @@
     overflow: hidden;
     z-index: -1;
 }
+
 .background-logo {
     position: absolute;
     top: 7%;
@@ -16,13 +25,13 @@
     transform: translate(-50%, -50%);
     z-index: 10;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
- 
 }
 
 .background-logo:hover {
     transform: translate(-50%, -55%); /* Moves it up slightly */
     box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3); /* Bigger shadow */
 }
+
 .peach {
     position: absolute;
     filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.3));
@@ -49,5 +58,29 @@
 .peach.animated {
     animation: float 5s infinite ease-in-out alternate;
 }
-  
+
+@media (max-width: 1024px) {
+    .background-logo {
+        width: 12vw; /* Slightly larger for tablets */
+        top: 8%; /* Adjust position */
+        left: 9%
+    }
+}
+
+@media (max-width: 768px) {
+    .background-logo {
+        width: 12vw; /* Adjust for medium screens */
+        top: 5%;
+        left: 10%;
+    }
+}
+
+@media (max-width: 480px) {
+    .background-logo {
+        width: 15vw; /* Larger for small mobile screens */
+        top: 5%; /* Adjust position */
+        left: 10%;
+    }
+}
+
   

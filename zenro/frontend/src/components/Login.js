@@ -3,7 +3,6 @@ import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
-import "../css/index.css";
 
 const Login = ({ setIsAuthenticated }) => {
     const navigate = useNavigate();
@@ -47,7 +46,7 @@ const Login = ({ setIsAuthenticated }) => {
                 <div className="login-container-circle">
                     <div className="login-content-circle">
                         <h1 className="login-title-circle">Login</h1>
-                        {error && <p className="error">{error}</p>}
+                        {error && <p className="login-error">{error}</p>}
                         <form className="login-form" onSubmit={handleSubmit}>
                             <div className="input-group-long">
                                 <input

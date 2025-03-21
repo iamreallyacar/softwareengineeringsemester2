@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import api from "../api";
-import "../css/index.css";
 import { Link } from "react-router-dom";
 import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
@@ -83,9 +82,9 @@ function ProfilePage() {
     return (
         <div className="login-page">
             <Background showLogo={false} />
-            <div className="login-container">
-                <div className="login-content">
-                    <p className="login-title">Profile</p>
+            <div className="profile-login-container">
+                <div className="profile-login-content">
+                    <p className="profile-login-title">Profile</p>
                     <div className="profile-info">
                         <p><strong>Username:</strong> {userData.username}</p>
                         <p><strong>First Name:</strong> {userData.first_name}</p>

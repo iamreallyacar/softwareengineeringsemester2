@@ -1,0 +1,359 @@
+/* Base styles */
+.login-page {
+    color: whitesmoke;
+    font-family: -apple-system, BlinkMacSystemFont, Georgia, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.login-container-circle {
+    border-radius: 20%;
+    width: min(35vw, 450px); /* Limit max width */
+    height: auto; /* Remove fixed height ratio */
+    aspect-ratio: 1 / 1; /* Maintain circle shape while allowing content to determine height */
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: min(2rem, 5vw); /* Responsive padding */
+}
+
+/* includes title and the login-form */
+.login-content-circle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    border-radius: 15%;
+    align-items: center;
+    
+    padding: 0.5rem;  
+}
+
+/* refers to the whole form from the first input to the footer */
+.login-form {
+    display: grid;
+    grid-template-columns: 1fr; /* Ensures it takes full width */
+    gap: 1rem;
+    align-items: center;
+    margin: 0 auto; 
+    width: 85%;
+    max-width: 350px;
+}
+
+/* includes all input type */
+.login-form input, .login-form select, .login-form button {
+    width: 100%;
+    padding: 0.75rem 1rem; 
+    border: 1.5px solid #fed7aa;
+    border-radius: 1rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: clamp(0.875rem, 2vw, 1rem); /* Responsive font size */
+    
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+
+    background-color: rgba(255, 246, 231, 51%);
+} 
+
+.login-button {
+    width: 100%;
+    max-width: 200px;
+    margin: 1.5rem auto 0;
+    padding: 0.75rem 1.5rem;
+    
+    background-color: rgba(255, 246, 231, 0.51);
+    border: none;
+    border-radius: 0.5rem;
+    
+    color: #FFFFFF;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 2px 2px rgba(156, 163, 175, 0.5);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 213, 200, 0.5);
+    transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+    font-weight: 600;
+}
+
+.login-button:hover {
+    transform: translateY(-3px) scale(1);
+    text-shadow: 0px 0px 10px #FFF6E7;
+}
+
+
+.login-form input::placeholder, .login-form select::placeholder {
+    color: rgba(0, 0, 0, 50%);
+}
+
+.login-form input:focus, .login-form select:focus {
+    outline: none;
+    color: #000000;
+    border-color: #ea580c;
+}
+
+
+/* block level input fields:- username, email, phoneNumber, password */
+.input-group-long {
+    display: block;
+    width: 100%;
+}
+
+
+.login-title-circle {
+    display: block;
+    color: #FFFFFF;
+    text-shadow: 2px 2px #9ca3af;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    width: 85%;
+    max-width: 350px;
+}
+
+/* refers to:- Don't have an account? */
+.signup-prompt-circle {
+    font-size: clamp(0.8rem, 2vw, 1rem); /* Responsive font size */
+    color: rgba(0, 0, 0, 45%);
+    width: 100%;
+    text-align: center;
+    padding-top: 0.5rem;
+}
+
+.login-signup-link {
+    color: #FFFFFF;
+    font-weight: 600;
+    margin-left: 5px;
+    text-shadow: 2px 2px 2 #9ca3af;
+    transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.login-signup-link:hover {
+    color: #FFF6E7;
+    text-decoration: underline;
+    transform: translateY(-3px) scale(1.1);
+    text-shadow: 0px 0px 10px #FFF6E7;
+}
+
+.forgot-password {
+    color: rgba(0, 0, 0, 45%);
+    text-decoration: none;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem); /* Responsive font size */
+    width: 100%;
+    text-align: right;
+    text-shadow: 2px 2px 2 #9ca3af;
+    transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #ea580c;
+    text-shadow: 0px 0px 10px rgb(239, 185, 141);
+    text-decoration: underline;
+    transform: translateY(-3px);
+    width: 100%;
+    text-align: right;
+}
+
+.login-error {
+    color: #fff5f5; 
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgb(255, 55, 0); 
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 1200px) {
+    .login-container-circle {
+        width: min(45vw, 450px);
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .login-container-circle {
+        width: min(55vw, 450px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .login-container-circle {
+        width: min(65vw, 400px);
+        border-radius: 15%; /* Slightly less rounded on smaller screens */
+    }
+    
+    .login-content-circle {
+        border-radius: 12%;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .login-container-circle {
+        width: 85vw;
+        aspect-ratio: auto; /* Allow height to adjust based on content */
+        min-height: 85vw;
+        border-radius: 10%; /* Even less rounded on mobile */
+    }
+    
+    .login-content-circle {
+        border-radius: 8%;
+        width: 100%;
+    }
+    
+    .login-form {
+        width: 90%;
+    }
+    
+    .login-title-circle {
+        width: 90%;
+        margin-bottom: 1rem;
+    }
+}
+
+@media screen and (max-height: 600px) {
+    .login-container-circle {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 2rem auto;
+        height: auto;
+        min-height: unset;
+    }
+    
+    .login-page {
+        min-height: 100vh;
+        height: auto;
+        padding: 2rem 0;
+    }
+}
+
+/* Fix for very small screens */
+@media screen and (max-width: 350px) {
+    .login-container-circle {
+        width: 95vw;
+        padding: 1rem;
+    }
+    
+    .login-form input, 
+    .login-form select, 
+    .login-form button {
+        padding: 0.6rem 0.8rem;
+    }
+}
+
+/* Medium devices (tablets) */
+@media (max-width: 768px) {
+.login-container-circle {
+    width: 60vw;
+    min-width: 280px;
+}
+
+.login-form {
+    width: 90%;
+}
+}
+
+/* Small devices (phones) */
+@media (max-width: 576px) {
+.login-container-circle {
+    width: 80vw;
+    border-radius: 15%;
+    padding: 1.5rem;
+}
+
+.login-title-circle {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.login-form input {
+    padding: 0.6rem 0.8rem;
+}
+
+.login-button {
+    padding: 0.6rem 1.2rem;
+}
+
+.forgot-password {
+    font-size: 0.8rem;
+}
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+.login-container-circle {
+    width: 90vw;
+    height: 90vw;
+    padding: 1rem;
+    border-radius: 10%;
+}
+
+.login-content-circle {
+    padding: 0.5rem;
+}
+
+.login-form {
+    width: 95%;
+    gap: 0.8rem;
+}
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+.login-container-circle {
+    aspect-ratio: auto;
+    height: 80vh;
+    width: auto;
+    border-radius: 15%;
+}
+
+.login-content-circle {
+    justify-content: flex-start;
+    padding-top: 1rem;
+}
+
+.login-title-circle {
+    margin-bottom: 0.8rem;
+}
+
+.login-form {
+    gap: 0.6rem;
+}
+
+.login-button {
+    margin-top: 1rem;
+}
+
+.login-footer {
+    margin-top: 1rem;
+}
+}
+  
+  
+  
+

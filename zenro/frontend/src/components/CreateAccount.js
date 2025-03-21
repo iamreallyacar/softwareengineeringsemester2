@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import api from "../api";
-import "../css/index.css";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
@@ -85,17 +84,17 @@ function CreateAccount({ setIsAuthenticated }) {
         loading ? (
             <LoadingElement /> // Show loader while fetching data
         ) : (
-            <div className="login-page">
+            <div className="createAccount-page">
                 <Background showLogo={true} />
-                <div className="login-container">
-                    <div className="login-content">
-                        <p className="login-title">Create Account</p>
+                <div className="ca-login-container">
+                    <div className="ca-login-content">
+                        <p className="ca-login-title">Create Account</p>
                         {/* Display success message if account creation is successful */}
-                        {success && <p className="error">{success}</p>}
-                        <form className="login-form" onSubmit={handleSubmit}>
+                        {success && <p className="ca-error">{success}</p>}
+                        <form className="ca-login-form" onSubmit={handleSubmit}>
 
                             {/* Username */}
-                            <div className="input-group-long">
+                            <div className="ca-input-group-long">
                                 <input
                                     type="text"
                                     placeholder="Username"
@@ -106,7 +105,7 @@ function CreateAccount({ setIsAuthenticated }) {
                             </div>
 
                             {/* First name and DOB */}
-                            <div className="input-group-short">
+                            <div className="ca-input-group-short">
                                 <input
                                     type="text"
                                     placeholder="First name"
@@ -124,7 +123,7 @@ function CreateAccount({ setIsAuthenticated }) {
                             </div>
 
                             {/* Last name and gender */}
-                            <div className="input-group-short">
+                            <div className="ca-input-group-short">
                                 <input
                                     type="text"
                                     placeholder="Last name"
@@ -145,7 +144,7 @@ function CreateAccount({ setIsAuthenticated }) {
                                 </div>
                                 
                                 {/* Email */}
-                                <div className="input-group-long">
+                                <div className="ca-input-group-long">
                                     <input
                                         type="email"
                                         placeholder="Email"
@@ -156,7 +155,7 @@ function CreateAccount({ setIsAuthenticated }) {
                             </div>
 
                             {/* Phone number */}
-                            <div className="input-group-long">
+                            <div className="ca-input-group-long">
                             <input
                                 type="tel"
                                 placeholder="Phone Number"
@@ -167,7 +166,7 @@ function CreateAccount({ setIsAuthenticated }) {
                             </div>
 
                             {/* Password */}
-                            <div className="input-group-long">
+                            <div className="ca-input-group-long">
                                 <input
                                     type="password"
                                     placeholder="Password"
@@ -177,15 +176,15 @@ function CreateAccount({ setIsAuthenticated }) {
                                 />
                             </div>
 
-                            <button className="login-button" type="submit">
+                            <button className="ca-login-button" type="submit">
                                 <span>Create Account</span>
                             </button>
                             {/* Display error message if account creation fails */}
-                            {error && <p className="error">{error}</p>}
+                            {error && <p className="ca-error">{error}</p>}
 
-                            <div className="login-footer">
-                                <div className="signup-prompt">
-                                    Already have an account? <Link to="/login" className="login-signup-link"> Log in </Link>
+                            <div className="ca-login-footer">
+                                <div className="ca-signup-prompt">
+                                    Already have an account? <Link to="/login" className="ca-login-signup-link"> Log in </Link>
                                 </div>
                             </div>
                         </form>

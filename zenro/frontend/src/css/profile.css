@@ -163,12 +163,12 @@
   
   /* Media query for responsive design */
   @media (max-width: 768px) {
-    .login-container {
+    .profile-login-container {
       width: 90vw;
       height: 85vh;
     }
     
-    .login-content {
+    .profile-login-content {
       width: 90vw;
     }
     

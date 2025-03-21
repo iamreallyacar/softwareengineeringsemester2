@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import "../css/landing-page.css";
 
 // Utility function for consistent scrolling behavior
 const scrollToElement = (elementId) => {
