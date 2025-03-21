@@ -46,7 +46,7 @@ body {
   color: #C14600;
   font-size: 32px;
   font-weight: bold;
-  margin: 0 0 20px 0;
+  margin: 0 0 10px 0; /* Reduced from 20px bottom margin */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -64,10 +64,10 @@ body {
     /* Allow wrapping to create rows */
     justify-content: space-between;
     /* Add spacing between items */
-    gap: 20px;
+    gap: 15px; /* Reduced from 20px */
     /* Add spacing between containers */
     padding: 30px;
-    padding-top: 50px;
+    padding-top: 30px; /* Reduced from 50px */
     background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
     /* Background gradient */
     width: calc(100% - 150px);
@@ -109,11 +109,11 @@ body {
     /* Full width of the parent container */
     height: auto;
     /* Adjust height based on content */
-    padding: 20px;
+    padding: 15px; /* Reduced from 20px */
     background: peachpuff;
     border: 3px solid white;
     border-radius: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Reduced from 20px */
     /* Add spacing between containers */
 }
 
@@ -136,7 +136,7 @@ body {
 .shp-rooms-list-container {
     width: 100%;
     /* Full width of the container */
-    max-height: 300px;
+    max-height: 250px; /* Reduced from 300px */
     /* Set a static maximum height */
     display: flex;
     flex-direction: column;
@@ -146,7 +146,7 @@ body {
     /* Enable vertical scrolling */
     overflow-x: hidden;
     /* Prevent horizontal scrolling */
-    padding: 10px;
+    padding: 5px; /* Reduced from 10px */
     /* Add padding for spacing */
     box-sizing: border-box;
     /* Include padding in width/height calculations */
@@ -199,7 +199,7 @@ body {
     padding-left: 10px;
     /* Adjust padding for spacing */
     width: 95%;
-    height: 50px;
+    height: 40px; /* Reduced from 50px */
     /* Set a fixed height for consistency */
     font-weight: bold;
     color: #5D252D;
@@ -208,7 +208,7 @@ body {
     transition: background-color 0.2s ease;
     background-color: peachpuff;
     /* Optional: Background color */
-    margin-bottom: 5px;
+    margin-bottom: 3px; /* Reduced from 5px */
     /* Add spacing between list items */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     /* Subtle shadow */
@@ -317,7 +317,7 @@ body {
     /* Adjust width to fit the text content */
     height: auto;
     /* Adjust height to fit the text content */
-    margin-top: 30px;
+    margin-top: 15px; /* Reduced from 30px */
     padding: 10px 20px;
     /* Add padding for a standard button size */
     border: 0px;
@@ -346,11 +346,11 @@ body {
 /* Energy info container */
 .energy-info {
     background: #fbdba7;
-    padding: 20px;
+    padding: 15px; /* Reduced from 20px */
     border: 3px solid white;
     border-radius: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Reduced from 20px */
     position: relative;
     transition: transform 0.6s ease, background-color 0.6s ease;
     transform-style: preserve-3d;
@@ -365,7 +365,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Reduced from 20px */
     flex-wrap: wrap;
     gap: 15px;
 }
@@ -424,7 +424,7 @@ body {
 }
 
 .chart-container {
-    height: 300px;
+    height: 250px; /* Reduced from 300px */
     width: 100%;
     position: relative;
 }
@@ -654,6 +654,7 @@ body {
 .consumption-chart, .generation-chart {
     width: 100%;
     position: relative;
+    height: 280px; /* Reduced from 330px */
 }
 
 /* Add these styles to fix the chart sizing */
@@ -663,7 +664,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 330px; /* Slightly increased height */
+  height: 280px; /* Reduced from 330px */
 }
 
 .consumption-chart canvas {
@@ -675,7 +676,7 @@ body {
 /* Adjust generation chart which doesn't have a selector */
 .generation-chart {
   position: relative;
-  height: 330px;
+  height: 280px; /* Reduced from 330px */
 }
 
 .generation-chart canvas {
@@ -706,4 +707,57 @@ body {
 .period-button.active:hover {
   background-color: #A53900; /* Slightly darker on hover */
   transform: scale(1.08);
+}
+
+/* Add this at the end of the file */
+
+/* View Home Users button container */
+.view-home-users-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -5px; /* Changed from 10px to a negative value to overlap space */
+  margin-bottom: 10px; /* Reduced from 20px */
+}
+
+/* View Home Users button */
+.view-home-users-button {
+  background-color: #5B9BD5; /* Changed to a light blue color */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.view-home-users-button:hover {
+  background-color: #3A7CBD; /* Darker blue on hover */
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.view-home-users-button i {
+  font-size: 18px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .view-home-users-container {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .view-home-users-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
 }

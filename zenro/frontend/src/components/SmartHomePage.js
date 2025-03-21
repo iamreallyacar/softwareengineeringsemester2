@@ -945,6 +945,16 @@ function SmartHomePage() {
             </div>
           </div>
         )}
+
+        {/* View Home Users Button - add this before the closing div */}
+        <div className="view-home-users-container">
+          <Link 
+            to={`/home-users/${smartHomeId}`} 
+            className="view-home-users-button"
+          >
+            <i className="fa-solid fa-users"></i> View Home Users
+          </Link>
+        </div>
       </div>
     </div>
   );
