@@ -5,6 +5,7 @@ import CreateAccount from "./components/CreateAccount";
 import SmartHomeList from "./components/SmartHomeList";
 import SmartHomePage from './components/SmartHomePage';
 import RoomsPage from "./components/RoomsPage";
+import HomeUsersPage from "./components/HomeUsersPage";
 import 'font-awesome/css/font-awesome.min.css';
 import './css/App.css';
 import LandingPage from "./components/LandingPage";
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/smart-homes" element={<SmartHomeList />} />
                     <Route path="/smarthomepage/:id" element={<SmartHomePage />} />
                     <Route path="/room/:roomId/:smartHomeId" element={<RoomsPage />} />
+                    <Route path="/home-users/:id" element={<HomeUsersPage />} />
                     <Route path="/landing-page" element={<LandingPage />} />
                 </Routes>
             </div>

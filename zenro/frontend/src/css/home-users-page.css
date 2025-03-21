@@ -1,0 +1,231 @@
+.home-users-page {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
+}
+
+.home-users-content {
+  width: calc(100% - 150px);
+  margin-left: 150px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.home-name {
+  color: #C14600;
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.home-owner {
+  color: #5D252D;
+  font-size: 18px;
+  margin: 5px 0 20px 0;
+}
+
+.home-owner span {
+  font-weight: bold;
+}
+
+.members-container {
+  background: peachpuff;
+  border: 3px solid white;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 25px;
+  margin-bottom: 20px;
+}
+
+.members-container h2 {
+  color: rgb(237, 62, 62);
+  margin: 0 0 20px 0;
+  font-size: 22px;
+}
+
+.no-members-message {
+  text-align: center;
+  color: #5D252D;
+  font-style: italic;
+  margin: 30px 0;
+}
+
+.members-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.member-item {
+  background: beige;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.member-item:hover {
+  transform: translateY(-2px);
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.member-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #CB5A55;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.member-icon i {
+  color: white;
+  font-size: 18px;
+}
+
+.member-name {
+  font-weight: bold;
+  color: #5D252D;
+  font-size: 16px;
+}
+
+.remove-button {
+  background-color: #e94242;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+  background-color: #c53030;
+}
+
+.owner-note {
+  text-align: center;
+  color: #5D252D;
+  font-style: italic;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.loading-message, .error-message {
+  text-align: center;
+  margin: 50px 0;
+  font-size: 18px;
+  color: #5D252D;
+}
+
+.error-message {
+  color: #c53030;
+}
+
+/* Modal Styling (consistent with other modals) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+}
+
+.modal h2 {
+  color: #C14600;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.modal p {
+  margin-bottom: 25px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-buttons button:first-child {
+  background-color: #e94242;
+  color: white;
+}
+
+.modal-buttons button:last-child {
+  background-color: #eee;
+  color: #333;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .home-users-content {
+    width: 100%;
+    margin-left: 0;
+    padding: 20px;
+    padding-top: 60px; /* Make room for the burger menu */
+  }
+  
+  .home-name {
+    font-size: 28px;
+  }
+  
+  .member-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .remove-button {
+    align-self: flex-end;
+  }
+}
