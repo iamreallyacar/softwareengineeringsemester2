@@ -14,6 +14,9 @@ function HomeUsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [expandedMember, setExpandedMember] = useState(null);
+  const [profileData, setProfileData] = useState({});
+  const [loadingProfiles, setLoadingProfiles] = useState({});
   
   // Fetch current user info from localStorage token
   useEffect(() => {
@@ -75,6 +78,56 @@ function HomeUsersPage() {
     fetchSmartHomeData();
   }, [smartHomeId]);
   
+  // Toggle member profile dropdown
+  const toggleMemberProfile = async (memberId) => {
+    // If this member is already expanded, collapse it
+    if (expandedMember === memberId) {
+      setExpandedMember(null);
+      return;
+    }
+    
+    // If we're switching to a new member, set it as expanded
+    setExpandedMember(memberId);
+    
+    // Check if we already have this profile data
+    if (!profileData[memberId]) {
+      // Set loading state for this profile
+      setLoadingProfiles(prev => ({ ...prev, [memberId]: true }));
+      
+      try {
+        // First, get the basic user information (it might already include profile data)
+        const userResponse = await api.get(`/users/${memberId}/`);
+        const userData = userResponse.data;
+        
+        // Attempt to fetch additional profile data if it exists
+        try {
+          const profileResponse = await api.get(`/users/${memberId}/profile/`);
+          const profileData = profileResponse.data;
+          
+          // Combine user and profile data
+          setProfileData(prev => ({
+            ...prev,
+            [memberId]: {
+              ...userData,
+              profile: profileData
+            }
+          }));
+        } catch (profileErr) {
+          // If profile endpoint fails, just use the basic user data
+          console.warn("Couldn't fetch detailed profile, using basic user data:", profileErr);
+          setProfileData(prev => ({
+            ...prev,
+            [memberId]: userData
+          }));
+        }
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+      } finally {
+        setLoadingProfiles(prev => ({ ...prev, [memberId]: false }));
+      }
+    }
+  };
+  
   // Handle member removal
   const handleRemoveMember = async () => {
     if (!memberToRemove || !smartHome) return;
@@ -95,6 +148,16 @@ function HomeUsersPage() {
       setIsDeleteModalOpen(false);
       setMemberToRemove(null);
       
+      // Also clean up profile data and expanded state if needed
+      if (expandedMember === memberToRemove.id) {
+        setExpandedMember(null);
+      }
+      
+      // Remove profile data for this member
+      const newProfileData = {...profileData};
+      delete newProfileData[memberToRemove.id];
+      setProfileData(newProfileData);
+      
     } catch (err) {
       console.error("Error removing member:", err);
       alert("Failed to remove member. Please try again.");
@@ -102,9 +165,35 @@ function HomeUsersPage() {
   };
   
   // Show confirmation dialog for member removal
-  const confirmMemberRemoval = (member) => {
+  const confirmMemberRemoval = (member, event) => {
+    // Prevent the dropdown toggle from firing
+    if (event) {
+      event.stopPropagation();
+    }
+    
     setMemberToRemove(member);
     setIsDeleteModalOpen(true);
+  };
+  
+  // Format date string (YYYY-MM-DD to readable format)
+  const formatDate = (dateString) => {
+    if (!dateString) return "Not specified";
+    
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+  
+  // Format gender code to readable text
+  const formatGender = (genderCode) => {
+    if (!genderCode) return "Not specified";
+    
+    const genderMap = {
+      'M': 'Male',
+      'F': 'Female',
+      'O': 'Other'
+    };
+    
+    return genderMap[genderCode] || genderCode;
   };
   
   // Check if current user is the owner
@@ -141,21 +230,104 @@ function HomeUsersPage() {
               ) : (
                 <ul className="members-list">
                   {members.map(member => (
-                    <li key={member.id} className="member-item">
-                      <div className="member-info">
-                        <div className="member-icon">
-                          <i className="fa-solid fa-user"></i>
+                    <li 
+                      key={member.id} 
+                      className={`member-item ${expandedMember === member.id ? 'expanded' : ''}`}
+                      onClick={() => toggleMemberProfile(member.id)}
+                    >
+                      <div className="member-item-header">
+                        <div className="member-info">
+                          <div className="member-icon">
+                            <i className="fa-solid fa-user"></i>
+                          </div>
+                          <span className="member-name">{member.username}</span>
                         </div>
-                        <span className="member-name">{member.username}</span>
+                        
+                        <div className="member-actions">
+                          <span className="dropdown-indicator">
+                            <i className={`fa-solid ${expandedMember === member.id ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                          </span>
+                          
+                          {isOwner && (
+                            <button 
+                              className="remove-button"
+                              onClick={(e) => confirmMemberRemoval(member, e)}
+                            >
+                              <i className="fa-solid fa-user-minus"></i> Remove
+                            </button>
+                          )}
+                        </div>
                       </div>
                       
-                      {isOwner && (
-                        <button 
-                          className="remove-button"
-                          onClick={() => confirmMemberRemoval(member)}
-                        >
-                          <i className="fa-solid fa-user-minus"></i> Remove
-                        </button>
+                      {/* Profile Dropdown Content */}
+                      {expandedMember === member.id && (
+                        <div className="member-profile">
+                          {loadingProfiles[member.id] ? (
+                            <div className="profile-loading">
+                              <div className="loading-spinner-small"></div>
+                              <span>Loading profile...</span>
+                            </div>
+                          ) : profileData[member.id] ? (
+                            <div className="profile-details">
+                              <div className="profile-section">
+                                <h3>Personal Information</h3>
+                                <div className="profile-fields">
+                                  <div className="profile-field">
+                                    <span className="field-label">Email:</span>
+                                    <span className="field-value">{profileData[member.id].email || "Not provided"}</span>
+                                  </div>
+                                  <div className="profile-field">
+                                    <span className="field-label">Full Name:</span>
+                                    <span className="field-value">
+                                      {profileData[member.id].first_name || profileData[member.id].last_name 
+                                        ? `${profileData[member.id].first_name || ""} ${profileData[member.id].last_name || ""}`.trim()
+                                        : "Not provided"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="profile-section">
+                                <h3>Contact Information</h3>
+                                <div className="profile-fields">
+                                  <div className="profile-field">
+                                    <span className="field-label">Phone:</span>
+                                    <span className="field-value">
+                                      {profileData[member.id]?.profile?.phone_number || "Not provided"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="profile-section">
+                                <h3>Additional Details</h3>
+                                <div className="profile-fields">
+                                  <div className="profile-field">
+                                    <span className="field-label">Date of Birth:</span>
+                                    <span className="field-value">
+                                      {profileData[member.id]?.profile?.date_of_birth 
+                                        ? formatDate(profileData[member.id].profile.date_of_birth)
+                                        : "Not provided"}
+                                    </span>
+                                  </div>
+                                  <div className="profile-field">
+                                    <span className="field-label">Gender:</span>
+                                    <span className="field-value">
+                                      {profileData[member.id]?.profile?.gender 
+                                        ? formatGender(profileData[member.id].profile.gender)
+                                        : "Not provided"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="profile-error">
+                              <i className="fa-solid fa-triangle-exclamation"></i>
+                              <span>Could not load profile information</span>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </li>
                   ))}

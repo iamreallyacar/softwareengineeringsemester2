@@ -94,21 +94,61 @@ body {
   gap: 15px;
 }
 
-/* Fixed member item layout */
+/* Member item styling changes */
 .member-item {
-  background: beige;
+  background: #f0d9b5; /* Darker background instead of beige */
   border-radius: 10px;
   padding: 15px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 15px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .member-item:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.member-item.expanded {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Adjust layout for expanded state */
+.member-item.expanded .member-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Make username larger and bold when expanded */
+.member-item.expanded .member-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #5D252D;
+}
+
+/* Keep dropdown indicator at the right */
+.member-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: auto; /* Push to right */
+}
+
+/* Center profile content in expanded state */
+.member-item.expanded .member-profile {
+  max-height: 500px;
+  opacity: 1;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  text-align: center; /* Center content */
+}
+
+.member-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .member-info {
@@ -119,31 +159,115 @@ body {
   overflow: hidden;
 }
 
-.member-icon {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  background-color: #CB5A55;
-  border-radius: 50%;
+.dropdown-indicator {
+  color: #CB5A55;
+  font-size: 14px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
 
-.member-icon i {
-  color: white;
-  font-size: 18px;
+.member-item.expanded .dropdown-indicator i {
+  transform: rotate(180deg);
 }
 
-/* Fixed username display */
-.member-name {
-  font-weight: bold;
+/* Profile dropdown content */
+.member-profile {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+  margin-top: 0;
+}
+
+.member-item.expanded .member-profile {
+  max-height: 500px; /* Adjust based on your content */
+  opacity: 1;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  text-align: center; /* Center content */
+}
+
+.profile-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #5D252D;
+  gap: 10px;
+}
+
+.loading-spinner-small {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 3px solid #C14600;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+.profile-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  color: #c53030;
+  background: rgba(255, 200, 200, 0.2);
+  border-radius: 5px;
+  gap: 10px;
+}
+
+/* Center profile sections */
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 90%; /* Keep some margin on sides */
+  margin: 0 auto; /* Center the details container */
+}
+
+/* Make profile sections stand out more against the darker background */
+.profile-section {
+  background-color: rgba(255, 255, 255, 0.8); /* More opaque white */
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.profile-section h3 {
   color: #5D252D;
   font-size: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 5px;
+}
+
+/* Align fields in profile sections */
+.profile-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  text-align: left; /* Text left-aligned within sections */
+}
+
+.profile-field {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.field-label {
+  font-weight: bold;
+  color: #666;
+  min-width: 100px;
+}
+
+.field-value {
+  color: #333;
   word-break: break-word;
-  hyphens: auto;
 }
 
 .remove-button {
@@ -161,6 +285,7 @@ body {
   transition: background-color 0.2s;
   white-space: nowrap;
   justify-self: end;
+  z-index: 5; /* Ensure above other elements */
 }
 
 .remove-button:hover {
@@ -309,5 +434,43 @@ body {
   .remove-button {
     justify-self: flex-end;
     margin-top: 10px;
+  }
+}
+
+/* Responsive changes for the profile dropdown */
+@media (min-width: 768px) {
+  .profile-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .member-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .member-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .profile-field {
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .field-label {
+    min-width: 0;
+  }
+  
+  .profile-fields {
+    grid-template-columns: 1fr; /* Single column on mobile */
+  }
+  
+  .member-item.expanded .member-name {
+    font-size: 17px; /* Slightly smaller on mobile */
   }
 }
