@@ -86,7 +86,7 @@ function CreateAccount({ setIsAuthenticated }) {
             <LoadingElement /> // Show loader while fetching data
         ) : (
             <div className="login-page">
-                <Background />
+                <Background showLogo={true} />
                 <div className="login-container">
                     <div className="login-content">
                         <p className="login-title">Create Account</p>

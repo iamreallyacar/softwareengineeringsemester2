@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown, Home, Users, UserPlus } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
-import { ChevronLeft, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, User } from "lucide-react";
+import Background from "./Background.js";
 
 // Extract Header Component
 const DashboardHeader = () => {
@@ -163,67 +164,67 @@ const AvailableHomesList = ({
 
   return (
     <div className="smart-home-list available">
-      <div className={`list-container ${isJoinedExpanded ? "expanded" : ""}`}>
-        <button className="expand-button" onClick={() => setIsJoinedExpanded(!isJoinedExpanded)}>
-          <div className="button-content">
-            <div className="icon-container">
-              <Users className="list-icon" />
-            </div>
-            <span className="button-text">Available Smart Homes</span>
-          </div>
-          <ChevronDown className={`chevron-icon ${isJoinedExpanded ? "rotated" : ""}`} />
-        </button>
-        {isJoinedExpanded && (
-          <div className="homes-list">
-            {availableHomes.length === 0 ? (
-              <div className="no-homes-message">No available homes to join</div>
-            ) : (
-              availableHomes.map((home) => (
-                <div key={home.id} className="home-item">
-                  <button
-                    className="home-button"
-                    onClick={() => togglePasswordDropdown(home.id)}
-                  >
-                    {home.name}
-                  </button>
-                  
-                  {homeWithPasswordOpen === home.id && (
-                    <div className="password-dropdown">
-                      <p className="dropdown-prompt">Enter join password for "{home.name}"</p>
-                      
-                      <input
-                        type="password"
-                        value={joinPassword}
-                        onChange={(e) => setJoinPassword(e.target.value)}
-                        placeholder="Join Password"
-                        className="join-password-input"
-                      />
-                      
-                      {joinError && <p className="error-message">{joinError}</p>}
-                      
-                      <div className="dropdown-buttons">
-                        <button 
-                          onClick={() => handleJoinSubmit(home.id)}
-                          disabled={isJoining || !joinPassword}
-                          className="join-button"
-                        >
-                          {isJoining ? "Joining..." : "Join"}
-                        </button>
-                        <button 
-                          onClick={() => togglePasswordDropdown(home.id)}
-                          className="cancel-button"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  )}
+        <div className={`list-container ${isJoinedExpanded ? "expanded" : ""}`}>
+            <button className="expand-button" onClick={() => setIsJoinedExpanded(!isJoinedExpanded)}>
+            <div className="button-content">
+                <div className="icon-container">
+                <Users className="list-icon" />
                 </div>
-              ))
+                <span className="button-text">Available Smart Homes</span>
+            </div>
+            <ChevronDown className={`chevron-icon ${isJoinedExpanded ? "rotated" : ""}`} />
+            </button>
+            {isJoinedExpanded && (
+            <div className="homes-list">
+                {availableHomes.length === 0 ? (
+                <div className="no-homes-message">No available homes to join</div>
+                ) : (
+                availableHomes.map((home) => (
+                    <div key={home.id} className="home-item">
+                    <button
+                        className="home-button"
+                        onClick={() => togglePasswordDropdown(home.id)}
+                    >
+                        {home.name}
+                    </button>
+                    
+                    {homeWithPasswordOpen === home.id && (
+                        <div className="password-dropdown">
+                        <p className="dropdown-prompt">Enter join password for "{home.name}"</p>
+                        
+                        <input
+                            type="password"
+                            value={joinPassword}
+                            onChange={(e) => setJoinPassword(e.target.value)}
+                            placeholder="Join Password"
+                            className="join-password-input"
+                        />
+                        
+                        {joinError && <p className="error-message">{joinError}</p>}
+                        
+                        <div className="dropdown-buttons">
+                            <button 
+                            onClick={() => handleJoinSubmit(home.id)}
+                            disabled={isJoining || !joinPassword}
+                            className="join-button"
+                            >
+                            {isJoining ? "Joining..." : "Join"}
+                            </button>
+                            <button 
+                            onClick={() => togglePasswordDropdown(home.id)}
+                            className="cancel-button"
+                            >
+                            Cancel
+                            </button>
+                        </div>
+                        </div>
+                    )}
+                    </div>
+                ))
+                )}
+            </div>
             )}
-          </div>
-        )}
-      </div>
+        </div>
     </div>
   );
 };
@@ -310,39 +311,39 @@ function SmartHomeList() {
 
   return (
     <div className="dashboard-container">
-      <DashboardHeader />
-      <UserProfile />
-      <div className="dashboard-content">
-        {error && <p className="error">{error}</p>}
-        <CreateHomeForm
-          homeName={homeName}
-          setHomeName={setHomeName}
-          joinPassword={joinPassword}
-          setJoinPassword={setJoinPassword}
-          handleCreateSmartHome={handleCreateSmartHome}
-          isCreating={isCreating}
-        />
-        <OwnedHomesList
-          isOwnedExpanded={isOwnedExpanded}
-          setIsOwnedExpanded={setIsOwnedExpanded}
-          smartHomes={ownedHomes}
-        />
-        <JoinedHomesList
-          isJoinedHomesExpanded={isJoinedHomesExpanded}
-          setIsJoinedHomesExpanded={setIsJoinedHomesExpanded}
-          joinedHomes={joinedHomes}
-        />
-        <AvailableHomesList
-          isJoinedExpanded={isAvailableExpanded}
-          setIsJoinedExpanded={setIsAvailableExpanded}
-          availableHomes={availableHomes}
-          homeWithPasswordOpen={homeWithPasswordOpen}
-          setHomeWithPasswordOpen={setHomeWithPasswordOpen}
-          onJoinHome={handleJoinHomeWithPassword}
-        />
-        
-        {/* Remove the JoinPasswordModal */}
-      </div>
+        <DashboardHeader />
+        <UserProfile />
+        <div className="dashboard-content">
+            {error && <p className="error">{error}</p>}
+            <CreateHomeForm
+            homeName={homeName}
+            setHomeName={setHomeName}
+            joinPassword={joinPassword}
+            setJoinPassword={setJoinPassword}
+            handleCreateSmartHome={handleCreateSmartHome}
+            isCreating={isCreating}
+            />
+            <OwnedHomesList
+            isOwnedExpanded={isOwnedExpanded}
+            setIsOwnedExpanded={setIsOwnedExpanded}
+            smartHomes={ownedHomes}
+            />
+            <JoinedHomesList
+            isJoinedHomesExpanded={isJoinedHomesExpanded}
+            setIsJoinedHomesExpanded={setIsJoinedHomesExpanded}
+            joinedHomes={joinedHomes}
+            />
+            <AvailableHomesList
+            isJoinedExpanded={isAvailableExpanded}
+            setIsJoinedExpanded={setIsAvailableExpanded}
+            availableHomes={availableHomes}
+            homeWithPasswordOpen={homeWithPasswordOpen}
+            setHomeWithPasswordOpen={setHomeWithPasswordOpen}
+            onJoinHome={handleJoinHomeWithPassword}
+            />
+            
+            {/* Remove the JoinPasswordModal */}
+        </div>
     </div>
   );
 }

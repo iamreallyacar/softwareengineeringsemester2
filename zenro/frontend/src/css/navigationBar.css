@@ -12,6 +12,7 @@
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2), 0px 0px 20px rgba(255, 213, 200, 0.476);
   padding: 2vh 0;
   box-sizing: border-box;
+  z-index: 1000;
 }
 
 /* Profile section */
@@ -84,7 +85,7 @@
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 1100;
+  z-index: 90;
   cursor: pointer;
   font-size: 24px;
   color: white;

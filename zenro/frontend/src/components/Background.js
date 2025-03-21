@@ -22,14 +22,16 @@ const peaches = [
   { src: peach1, bottom: "25%", left: "50%", size: "5%", rotate: "20deg", blurClass: "", animationDelay: "3s"}
 ];
 
-const Background = () => {
+const Background = ({ showLogo = true }) => {
     return (
         <div className="peach-container">
+          {showLogo && (
             <img 
                 src={logo} 
                 alt="Logo"
                 className="background-logo"
             />
+          )}
         {peaches.map((peach, index) => (
           <img
                 key={index}

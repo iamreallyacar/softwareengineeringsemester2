@@ -13,7 +13,6 @@ import LandingPage from "./components/LandingPage";
 import NavigationBar from "./components/NavigationBar";
 import RecoveryPage from "./components/RecoveryPage";
 import Profile from "./components/Profile";
-import OverviewPage from "./components/OverviewPage";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(
@@ -46,7 +45,6 @@ function App() {
                 {isAuthenticated ? (
                     <>
                         <Route path="/smart-homes" element={<SmartHomeList />} />
-                        <Route path="/overview/:id" element={<OverviewPage />} />
                         <Route path="/smarthomepage/:id" element={<SmartHomePage />} />
                         <Route path="/room/:roomId/:smartHomeId" element={<RoomsPage />} />
                         <Route path="/home-users/:id" element={<HomeUsersPage />} />

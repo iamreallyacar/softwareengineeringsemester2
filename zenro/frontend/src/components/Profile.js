@@ -82,7 +82,7 @@ function ProfilePage() {
 
     return (
         <div className="login-page">
-            <Background />
+            <Background showLogo={false} />
             <div className="login-container">
                 <div className="login-content">
                     <p className="login-title">Profile</p>

@@ -8,7 +8,7 @@ import lightBulb from "../assets/images/light-bulb.png";
 import smartBlind from "../assets/images/smart-blind.png";
 import airCond from "../assets/images/aircond.png";
 import smartTV from "../assets/images/smart-tv.png";
-import Sidebar from "./Sidebar";
+import Navbar from "./NavigationBar";
 import "../css/rooms-page.css";
 
 function RoomsPage() {
@@ -845,7 +845,7 @@ function RoomsPage() {
 
     return (
         <div className="room-page">
-            <Sidebar />
+            <Navbar />
             {/* Page Header Section */}
             <div className="page-header">
                 <Link to={`/smarthomepage/${smartHomeId}`}>
