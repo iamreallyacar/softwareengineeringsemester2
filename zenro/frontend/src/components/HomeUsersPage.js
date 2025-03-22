@@ -214,16 +214,26 @@ function HomeUsersPage() {
   const isOwner = currentUser && owner && currentUser.id === owner.id;
   
   // Add this function inside the component
-  const fetchAvailableUsers = async () => {
+  const fetchAvailableUsers = async (forceRefresh = false) => {
     if (!isOwner) return;
     
     try {
+      setAddMemberError('');
+      
+      // If forceRefresh is true, get the latest smart home data first
+      let currentSmartHome = smartHome;
+      if (forceRefresh) {
+        const refreshedHomeResponse = await api.get(`/smarthomes/${smartHomeId}/`);
+        currentSmartHome = refreshedHomeResponse.data;
+        setSmartHome(currentSmartHome); // Update state with fresh data
+      }
+      
       // Get all users
       const usersResponse = await api.get('/users/');
       const allUsers = usersResponse.data;
       
-      // Filter out users who are already members or the owner
-      const currentMemberIds = [...(smartHome?.members || []), smartHome?.creator];
+      // Filter out users who are already members or the owner using the latest data
+      const currentMemberIds = [...(currentSmartHome?.members || []), currentSmartHome?.creator];
       
       const filteredUsers = allUsers.filter(user => 
         !currentMemberIds.includes(user.id)
@@ -232,7 +242,7 @@ function HomeUsersPage() {
       setAvailableUsers(filteredUsers);
     } catch (error) {
       console.error("Error fetching available users:", error);
-      setAddMemberError("Failed to load available users.");
+      setAddMemberError("Failed to load available users. Click to retry.");
     }
   };
 
@@ -277,6 +287,16 @@ function HomeUsersPage() {
     }
   };
 
+  // Update the dropdown button click handler to force a refresh
+  const toggleMemberDropdown = () => {
+    // If we're opening the dropdown, refresh the data first
+    if (!isAddMemberDropdownOpen) {
+      fetchAvailableUsers(true); // Pass true to force a refresh
+    }
+    
+    setIsAddMemberDropdownOpen(!isAddMemberDropdownOpen);
+  };
+
   return (
     <div className="home-users-page">
       <Navbar />
@@ -312,7 +332,7 @@ function HomeUsersPage() {
                 <div className="add-member-dropdown">
                   <button 
                     className="add-member-button"
-                    onClick={() => setIsAddMemberDropdownOpen(!isAddMemberDropdownOpen)}
+                    onClick={toggleMemberDropdown} // Use the new function
                   >
                     <UserPlus size={18} />
                     <span>Add Members</span>
@@ -324,12 +344,21 @@ function HomeUsersPage() {
                   
                   {isAddMemberDropdownOpen && (
                     <div className="member-dropdown-menu">
-                      {/* Dropdown content remains the same */}
-                      {addMemberError && <div className="add-member-error">{addMemberError}</div>}
+                      {addMemberError && (
+                        <div 
+                          className="add-member-error clickable" 
+                          onClick={() => fetchAvailableUsers(true)}
+                        >
+                          {addMemberError}
+                        </div>
+                      )}
                       
-                      {availableUsers.length === 0 ? (
+                      {availableUsers.length === 0 && !addMemberError ? (
                         <div className="no-available-users">
                           No users available to add
+                          <button className="refresh-button" onClick={() => fetchAvailableUsers(true)}>
+                            Refresh List
+                          </button>
                         </div>
                       ) : (
                         <>
@@ -462,7 +491,7 @@ function HomeUsersPage() {
               
               {!isOwner && members.length > 0 && (
                 <p className="owner-note">
-                  Note: Only the home owner can remove members.
+                  Note: Only the home owner can add or remove members.
                 </p>
               )}
             </div>

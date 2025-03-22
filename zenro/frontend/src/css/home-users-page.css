@@ -743,9 +743,40 @@ body {
   text-align: center;
 }
 
+/* Add styles for the clickable error and refresh button */
+.add-member-error.clickable {
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.add-member-error.clickable:hover {
+  background-color: rgba(229, 62, 62, 0.1);
+}
+
+.refresh-button {
+  display: block;
+  margin: 8px auto 0;
+  background: none;
+  border: none;
+  color: #C14600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 8px;
+}
+
+.refresh-button:hover {
+  color: #A53900;
+}
+
 .no-available-users {
   text-align: center;
   color: #666;
   padding: 8px 0;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
