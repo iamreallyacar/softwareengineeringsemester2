@@ -81,7 +81,7 @@ function CreateAccount({ setIsAuthenticated }) {
         return isValid;
     };
 
-    // handleSubmit posts new user details to create an account
+    // Update the handleSubmit function to better handle email uniqueness errors
     const handleSubmit = async (e) => {
         // Prevent the default form submission behavior
         e.preventDefault();
@@ -94,6 +94,24 @@ function CreateAccount({ setIsAuthenticated }) {
         setLoading(true);
 
         try {
+            // Check if email already exists before attempting to register
+            try {
+                // Use the users endpoint to check if email exists
+                const checkResponse = await api.get(`/users/?email=${encodeURIComponent(email)}`);
+                console.log("Email check response:", checkResponse);
+                
+                // If we get results back, it means the email already exists
+                if (Array.isArray(checkResponse.data) && checkResponse.data.length > 0) {
+                    setEmailError("This email is already registered. Please use a different email address.");
+                    setLoading(false);
+                    return;
+                }
+            } catch (checkErr) {
+                console.log("Email check error (continuing):", checkErr);
+                // Continue with registration attempt even if check fails
+                // Backend validation will catch duplicates
+            }
+            
             // Prepare profile data, only including non-empty fields
             const profileData = {};
             if (birthdate) profileData.date_of_birth = birthdate;
@@ -130,7 +148,7 @@ function CreateAccount({ setIsAuthenticated }) {
             localStorage.setItem("userId", loginResponse.data.userId);
             setIsAuthenticated(true);
             
-            // After a timeout of 2 seconds, navigate to smart homes page
+            // After a timeout of 3 seconds, navigate to smart homes page
             setTimeout(() => {
                 setLoading(false);
                 navigate("/smart-homes");
@@ -143,17 +161,24 @@ function CreateAccount({ setIsAuthenticated }) {
             if (error.response && error.response.data) {
                 console.log("Error data:", error.response.data);
                 
-                // Handle field-specific errors
+                // Improved handling for various error formats
                 if (error.response.data.username) {
                     setUsernameError(Array.isArray(error.response.data.username) 
                         ? error.response.data.username[0] 
                         : error.response.data.username);
                 }
                 
+                // Enhanced email error detection for multiple formats
                 if (error.response.data.email) {
                     setEmailError(Array.isArray(error.response.data.email) 
                         ? error.response.data.email[0] 
                         : error.response.data.email);
+                } else if (typeof error.response.data === 'object' && 
+                          Object.values(error.response.data).some(v => 
+                            (typeof v === 'string' && v.toLowerCase().includes('email')) || 
+                            (Array.isArray(v) && v.some(msg => typeof msg === 'string' && msg.toLowerCase().includes('email')))
+                          )) {
+                    setEmailError("This email address is already in use.");
                 }
                 
                 if (error.response.data.password) {
@@ -162,17 +187,18 @@ function CreateAccount({ setIsAuthenticated }) {
                         : error.response.data.password);
                 }
                 
-                // Handle profile field errors
-                if (error.response.data.profile) {
-                    const profileErrors = error.response.data.profile;
-                    // Handle profile errors if needed
+                // Handle non-field errors
+                if (error.response.data.non_field_errors) {
+                    setGeneralError(Array.isArray(error.response.data.non_field_errors)
+                        ? error.response.data.non_field_errors[0]
+                        : error.response.data.non_field_errors);
                 }
-                
-                // Set general error if no specific field errors
-                if (!error.response.data.username && 
-                    !error.response.data.email && 
-                    !error.response.data.password && 
-                    !error.response.data.profile) {
+                // Handle other error types
+                else if (!error.response.data.username && 
+                        !error.response.data.email && 
+                        !error.response.data.password && 
+                        !error.response.data.profile &&
+                        !error.response.data.non_field_errors) {
                     const errorMessage = error.response.data.detail ||
                         (typeof error.response.data === "string" 
                             ? error.response.data 
