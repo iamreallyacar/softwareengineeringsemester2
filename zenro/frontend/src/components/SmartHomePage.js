@@ -861,7 +861,7 @@ function SmartHomePage() {
           <div className="shp-rooms-list-container">
             <ul className="shp-rooms-list">
               {addedRooms.length === 0 ? (
-                <h4>No rooms added yet. {isOwner ? "Use the \"Add Room\" button to add a room." : "Only the home owner can add rooms."}</h4>
+                <h4>No rooms added yet. {isOwner ? "Use the \"Add Room\" button to add a room." : "Only the home owner can add or remove rooms."}</h4>
               ) : (
                 addedRooms.map((room) => (
                   <div

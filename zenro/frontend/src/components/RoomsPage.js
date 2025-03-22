@@ -1100,7 +1100,7 @@ function RoomsPage() {
                                 <p>Click "Add Device" to add available devices.</p>
                             )}
                             {!isOwner && (
-                                <p>Only the home owner can add devices to this room.</p>
+                                <p>Only the home owner can add or remove devices to this room.</p>
                             )}
                         </div>
                     )}

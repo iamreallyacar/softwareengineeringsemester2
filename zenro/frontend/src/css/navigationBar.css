@@ -198,3 +198,92 @@
     margin-left: 30vw; /* Add margin when sidebar is active */
   }
 }
+
+/* Logout confirmation dropdown */
+.logout-confirm {
+  position: absolute;
+  top: -20px;
+  left: 100%;
+  width: 200px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  z-index: 1100;
+  animation: fadeIn 0.2s ease;
+}
+
+.logout-confirm p {
+  color: #333;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.logout-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.logout-buttons button {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-yes {
+  background-color: #C14600;
+  color: white;
+}
+
+.logout-yes:hover {
+  background-color: #A53900;
+  transform: translateY(-2px);
+}
+
+.logout-no {
+  background-color: #ccc;
+  color: #333;
+}
+
+.logout-no:hover {
+  background-color: #ddd;
+  transform: translateY(-2px);
+}
+
+/* Position the logout button */
+.nav-item.logout-button {
+  position: relative;
+}
+
+/* Animation for the dropdown */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive adjustments for the logout confirmation */
+@media (max-width: 768px) {
+  .logout-confirm {
+    top: 0;
+    left: 105%;
+    width: 180px;
+  }
+}
+
+/* Make sure the buttons are fully visible on hover */
+.nav-item.logout-button:hover .logout-confirm {
+  display: block;
+}
