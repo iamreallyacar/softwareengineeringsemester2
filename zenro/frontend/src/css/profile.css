@@ -546,16 +546,7 @@
   padding-top: 30px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Changed from flex-start to center */
-  text-align: center; /* Center all text content */
-}
-
-.deletion-title {
-  color: #c62828;
-  font-size: 24px;
-  margin: 0 0 15px 0;
-  font-weight: bold;
-  text-align: center; /* Ensure centered text */
+  align-items: flex-start;
 }
 
 .danger-text {
@@ -563,14 +554,19 @@
   font-size: 15px;
   margin: 0 0 20px 0;
   line-height: 1.5;
-  text-align: center; /* Center paragraph text */
-  max-width: 600px; /* Limit width for better readability */
+}
+
+.deletion-title {
+  color: #c62828;
+  font-size: 24px;
+  margin: 0 0 15px 0;
+  font-weight: bold;
 }
 
 .deletion-button-container {
   width: 100%;
   display: flex;
-  justify-content: center; /* Changed from flex-start to center */
+  justify-content: flex-start;
 }
 
 .delete-account-button {
