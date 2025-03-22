@@ -268,17 +268,6 @@ function ProfilePage() {
                     <div className="profile-fields">
                         {/* Username Field */}
                         <div className="profile-field">
-                            <div className="field-header">
-                                <label>Username</label>
-                                <button 
-                                    className="edit-field-button"
-                                    onClick={() => handleEditClick('username')}
-                                    disabled={editingField === 'username'}
-                                >
-                                    <i className="fa-solid fa-pencil"></i>
-                                </button>
-                            </div>
-                            
                             {editingField === 'username' ? (
                                 <div className="field-edit">
                                     <input 
@@ -293,23 +282,24 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="field-value">{userData?.username || "-"}</div>
+                                <div className="field-row">
+                                    <div className="field-info">
+                                        <label>Username</label>
+                                        <div className="field-value">{userData?.username || "-"}</div>
+                                    </div>
+                                    <button 
+                                        className="edit-field-button"
+                                        onClick={() => handleEditClick('username')}
+                                        disabled={editingField === 'username'}
+                                    >
+                                        <i className="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
                             )}
                         </div>
                         
                         {/* Email Field */}
                         <div className="profile-field">
-                            <div className="field-header">
-                                <label>Email</label>
-                                <button 
-                                    className="edit-field-button"
-                                    onClick={() => handleEditClick('email')}
-                                    disabled={editingField === 'email'}
-                                >
-                                    <i className="fa-solid fa-pencil"></i>
-                                </button>
-                            </div>
-                            
                             {editingField === 'email' ? (
                                 <div className="field-edit">
                                     <input 
@@ -324,23 +314,24 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="field-value">{userData?.email || "-"}</div>
+                                <div className="field-row">
+                                    <div className="field-info">
+                                        <label>Email</label>
+                                        <div className="field-value">{userData?.email || "-"}</div>
+                                    </div>
+                                    <button 
+                                        className="edit-field-button"
+                                        onClick={() => handleEditClick('email')}
+                                        disabled={editingField === 'email'}
+                                    >
+                                        <i className="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
                             )}
                         </div>
                         
                         {/* First Name Field */}
                         <div className="profile-field">
-                            <div className="field-header">
-                                <label>First Name</label>
-                                <button 
-                                    className="edit-field-button"
-                                    onClick={() => handleEditClick('first_name')}
-                                    disabled={editingField === 'first_name'}
-                                >
-                                    <i className="fa-solid fa-pencil"></i>
-                                </button>
-                            </div>
-                            
                             {editingField === 'first_name' ? (
                                 <div className="field-edit">
                                     <input 
@@ -355,23 +346,24 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="field-value">{userData?.first_name || "-"}</div>
+                                <div className="field-row">
+                                    <div className="field-info">
+                                        <label>First Name</label>
+                                        <div className="field-value">{userData?.first_name || "-"}</div>
+                                    </div>
+                                    <button 
+                                        className="edit-field-button"
+                                        onClick={() => handleEditClick('first_name')}
+                                        disabled={editingField === 'first_name'}
+                                    >
+                                        <i className="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
                             )}
                         </div>
                         
                         {/* Last Name Field */}
                         <div className="profile-field">
-                            <div className="field-header">
-                                <label>Last Name</label>
-                                <button 
-                                    className="edit-field-button"
-                                    onClick={() => handleEditClick('last_name')}
-                                    disabled={editingField === 'last_name'}
-                                >
-                                    <i className="fa-solid fa-pencil"></i>
-                                </button>
-                            </div>
-                            
                             {editingField === 'last_name' ? (
                                 <div className="field-edit">
                                     <input 
@@ -386,23 +378,24 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="field-value">{userData?.last_name || "-"}</div>
+                                <div className="field-row">
+                                    <div className="field-info">
+                                        <label>Last Name</label>
+                                        <div className="field-value">{userData?.last_name || "-"}</div>
+                                    </div>
+                                    <button 
+                                        className="edit-field-button"
+                                        onClick={() => handleEditClick('last_name')}
+                                        disabled={editingField === 'last_name'}
+                                    >
+                                        <i className="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
                             )}
                         </div>
                         
                         {/* Phone Number Field */}
                         <div className="profile-field">
-                            <div className="field-header">
-                                <label>Phone Number</label>
-                                <button 
-                                    className="edit-field-button"
-                                    onClick={() => handleEditClick('phone_number')}
-                                    disabled={editingField === 'phone_number'}
-                                >
-                                    <i className="fa-solid fa-pencil"></i>
-                                </button>
-                            </div>
-                            
                             {editingField === 'phone_number' ? (
                                 <div className="field-edit">
                                     <input 
@@ -418,23 +411,24 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="field-value">{userData?.profile?.phone_number || "-"}</div>
+                                <div className="field-row">
+                                    <div className="field-info">
+                                        <label>Phone Number</label>
+                                        <div className="field-value">{userData?.profile?.phone_number || "-"}</div>
+                                    </div>
+                                    <button 
+                                        className="edit-field-button"
+                                        onClick={() => handleEditClick('phone_number')}
+                                        disabled={editingField === 'phone_number'}
+                                    >
+                                        <i className="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
                             )}
                         </div>
                         
                         {/* Date of Birth Field */}
                         <div className="profile-field">
-                            <div className="field-header">
-                                <label>Date of Birth</label>
-                                <button 
-                                    className="edit-field-button"
-                                    onClick={() => handleEditClick('date_of_birth')}
-                                    disabled={editingField === 'date_of_birth'}
-                                >
-                                    <i className="fa-solid fa-pencil"></i>
-                                </button>
-                            </div>
-                            
                             {editingField === 'date_of_birth' ? (
                                 <div className="field-edit">
                                     <input 
@@ -449,23 +443,24 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="field-value">{userData?.profile?.date_of_birth || "-"}</div>
+                                <div className="field-row">
+                                    <div className="field-info">
+                                        <label>Date of Birth</label>
+                                        <div className="field-value">{userData?.profile?.date_of_birth || "-"}</div>
+                                    </div>
+                                    <button 
+                                        className="edit-field-button"
+                                        onClick={() => handleEditClick('date_of_birth')}
+                                        disabled={editingField === 'date_of_birth'}
+                                    >
+                                        <i className="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
                             )}
                         </div>
                         
                         {/* Gender Field */}
                         <div className="profile-field">
-                            <div className="field-header">
-                                <label>Gender</label>
-                                <button 
-                                    className="edit-field-button"
-                                    onClick={() => handleEditClick('gender')}
-                                    disabled={editingField === 'gender'}
-                                >
-                                    <i className="fa-solid fa-pencil"></i>
-                                </button>
-                            </div>
-                            
                             {editingField === 'gender' ? (
                                 <div className="field-edit">
                                     <select 
@@ -484,7 +479,19 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="field-value">{userData?.profile?.gender ? formatGender(userData.profile.gender) : "-"}</div>
+                                <div className="field-row">
+                                    <div className="field-info">
+                                        <label>Gender</label>
+                                        <div className="field-value">{userData?.profile?.gender ? formatGender(userData.profile.gender) : "-"}</div>
+                                    </div>
+                                    <button 
+                                        className="edit-field-button"
+                                        onClick={() => handleEditClick('gender')}
+                                        disabled={editingField === 'gender'}
+                                    >
+                                        <i className="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>

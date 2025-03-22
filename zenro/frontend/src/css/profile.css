@@ -290,16 +290,29 @@
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-.field-header {
+/* New layout with field and button in one row */
+.field-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  width: 100%;
 }
 
-.field-header label {
+.field-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.field-info label {
   color: #5D252D;
   font-weight: bold;
+  font-size: 16px;
+}
+
+.field-value {
+  color: #333;
   font-size: 16px;
 }
 
@@ -310,9 +323,18 @@
   cursor: pointer;
   font-size: 16px;
   transition: transform 0.2s ease;
+  margin-left: 10px;
+  align-self: center;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .edit-field-button:hover {
+  background-color: rgba(193, 70, 0, 0.1);
   transform: translateY(-2px);
   color: #e05500;
 }
@@ -320,12 +342,6 @@
 .edit-field-button:disabled {
   color: #ccc;
   cursor: not-allowed;
-}
-
-.field-value {
-  color: #333;
-  font-size: 16px;
-  padding: 5px 0;
 }
 
 /* Edit mode styling */
