@@ -68,7 +68,6 @@ body {
     /* Add spacing between containers */
     padding: 30px;
     padding-top: 30px; /* Reduced from 50px */
-    background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
     /* Background gradient */
     width: calc(100% - 150px);
     /* Full width minus the sidebar width */

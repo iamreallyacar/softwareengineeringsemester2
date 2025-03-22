@@ -42,7 +42,7 @@ const Login = ({ setIsAuthenticated }) => {
             <LoadingElement /> // Show loader while fetching data
         ) : (
             <div className="login-page">
-                <Background showLogo={true} />
+                <Background showLogo={true} blurEffect={false}  />
                 <div className="login-container-circle">
                     <div className="login-content-circle">
                         <h1 className="login-title-circle">Login</h1>

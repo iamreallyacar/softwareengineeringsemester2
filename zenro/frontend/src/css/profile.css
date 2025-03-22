@@ -1,312 +1,5 @@
-/* Profile Page Container Styles */
-.profile-page-container {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.profile-content-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    padding: 2rem;
-    z-index: 2;
-}
-
-.profile-login-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 900px;
-}
-
-.profile-title-container {
-    display: flex;
-    align-items: center;  /* Aligns icon and text vertically */
-    gap: 0.5rem;  /* Adds space between icon and text */
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.5rem;
-}
-
-.profile-login-title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #FFFFFF;
-    text-shadow: 2px 2px #9ca3af;
-    width: fit-content;
-    display: inline-block;
-    transition: all 0.2s ease-in-out;
-    align-self: center;
-    text-align: center;
-}
-
-.title-icon {
-    width: 2rem; 
-    height: 2rem;
-    color: #FFFFFF;
-    filter: drop-shadow(2px 2px #9ca3af);
-}
-
-.profile-info {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    margin: 1rem 0;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: #FFFFFF;
-    width: 100%;
-}
-
-.profile-info p {
-    margin: 0.75rem 0;
-    font-size: 1.1rem;
-    text-shadow: 1.5px 1.5px rgba(0, 0, 0, 0.2);
-}
-
-.profile-info strong {
-    color: #FFF6E7;
-    display: inline-block;
-    min-width: 120px;
-}
-
-/* Owned Homes Section */
-.profile-owned-homes {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    width: 100%;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #FFFFFF;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-.section-icon {
-    color: #FFF6E7;
-}
-
-.homes-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-}
-
-.home-item {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(5px);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-    border: 1.5px solid rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.home-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.home-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.home-header strong {
-    text-align: left;
-    text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
-    font-size: 1.3rem;
-    color: #FFF6E7;
-}
-
-.view-home-link {
-    background-color: rgba(255, 246, 231, 0.3);
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    color: #FFFFFF;
-    text-decoration: none;
-    text-shadow: 1.5px 1.5px rgba(0, 0, 0, 0.2);
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.view-home-link:hover {
-    background-color: rgba(255, 246, 231, 0.60);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.home-id, .home-password {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-}
-
-/* Password update form */
-.password-update-form {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-}
-
-.password-input {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 0.75rem 1rem;
-    border: 1.5px solid #fed7aa;
-    border-radius: 1rem;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.8);
-    background-color: rgba(255, 246, 231, 65%);
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-}
-
-.password-input:focus {
-    outline: none;
-    color: #000000;
-    border-color: #ea580c;
-}
-
-.update-password-button {
-    width: 100%;
-    max-width: 300px;
-    background-color: rgba(255, 246, 231, 0.51);
-    border: 1.5px solid #fed7aa;
-    border-radius: 0.5rem;
-    color: #FFF6E7;
-    padding: 0.75rem 1.5rem;
-    text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin: 1.5rem auto 0;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.update-password-button:hover {
-    background-color: rgba(255, 246, 231, 0.60);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.profile-page-container .profile-success-message {
-    color: #fff5f5;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px #62cb00;
-    font-size: 1rem;
-    margin: 0.5rem 0;
-    text-align: center;
-}
-
-.profile-page-container .profile-error-message {
-    color: #fff5f5; 
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgb(255, 55, 0); 
-    font-size: 1rem;
-    margin: 0.5rem 0;
-    text-align: center;
-}
-
-.login-button {
-    color: white;
-    border: none;
-    padding: 0.75rem 2rem;
-    border-radius: 0.5rem;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    text-decoration: none;
-    margin-top: 1.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-shadow: 2px 2px rgba(156, 163, 175, 0.5);
-    text-align: center;
-}
-
-.login-button:hover {
-    background-color: rgba(255, 246, 231, 0.60);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Media queries for responsive design */
-@media (max-width: 1024px) {
-    .profile-content-wrapper {
-        padding: 1.5rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .profile-content-wrapper {
-        padding: 1rem;
-    }
-
-    .profile-info {
-        padding: 1.25rem;
-    }
-
-    .profile-info strong {
-        min-width: 110px;
-    }
-}
-
-@media (max-width: 576px) {
-    .profile-login-title {
-        font-size: 1.5rem;
-        align-self: center;
-    }
-
-    .profile-info {
-        padding: 1rem;
-    }
-
-    .profile-info strong {
-        min-width: 100px;
-        display: block;
-        margin-bottom: 0.25rem;
-    }
-
-    .profile-info p {
-        margin: 1rem 0;
-    }
-
-    .home-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .section-title {
-        font-size: 1.3rem;
-        justify-content: center;
-    }
-  }
-
-/* Profile Page - Updated Styling */
+/* Profile Page - Glassmorphism Style */
+/* Base Container Styles */
 .profile-container {
   display: flex;
   width: 100vw;
@@ -314,7 +7,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
   position: absolute;
   left: 0;
   top: 0;
@@ -331,51 +23,31 @@
 }
 
 .profile-title {
-  color: #5D252D;
-  font-size: 32px;
-  font-weight: bold;
-  margin: 0 0 30px 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+  width: fit-content;
+  display: inline-block;
+  transition: all 0.2s ease-in-out;
+  align-self: center;
   text-align: center;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem;
 }
 
-/* Success and error messages */
-.profile-success-message, .profile-error-message {
-  margin-bottom: 20px;
-  padding: 15px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: fadeIn 0.5s ease;
-}
-
-.profile-success-message {
-  background-color: rgba(76, 175, 80, 0.2);
-  color: #2e7d32;
-  border-left: 4px solid #2e7d32;
-}
-
-.profile-error-message {
-  background-color: rgba(244, 67, 54, 0.2);
-  color: #c62828;
-  border-left: 4px solid #c62828;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Profile card */
+/* Glassmorphism Card Styles */
 .profile-card {
-  background-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
+  color: #FFFFFF;
 }
 
 .profile-avatar {
@@ -385,10 +57,36 @@
 
 .profile-avatar i {
   font-size: 100px;
-  color: #C14600;
+  color: #FFF6E7;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
-/* Profile fields */
+/* Profile Info Section */
+.profile-info {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin: 1rem 0 2rem 0;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+}
+
+.profile-info p {
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info strong {
+  color: #FFF6E7;
+  display: inline-block;
+  min-width: 120px;
+}
+
+/* Profile Fields */
 .profile-fields {
   display: grid;
   grid-template-columns: 1fr;
@@ -397,19 +95,24 @@
 }
 
 .profile-field {
-  background-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
   padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 }
 
 .profile-field:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-/* New layout with field and button in one row */
+/* Field Layout */
 .field-row {
   display: flex;
   justify-content: space-between;
@@ -425,23 +128,23 @@
 }
 
 .field-info label {
-  color: #5D252D;
+  color: #FFF6E7;
   font-weight: bold;
   font-size: 16px;
 }
 
 .field-value {
-  color: #333;
+  color: #FFFFFF;
   font-size: 16px;
 }
 
 .edit-field-button {
-  background: none;
-  border: none;
-  color: #C14600;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFF6E7;
   cursor: pointer;
   font-size: 16px;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
   margin-left: 10px;
   align-self: center;
   width: 32px;
@@ -453,34 +156,38 @@
 }
 
 .edit-field-button:hover {
-  background-color: rgba(193, 70, 0, 0.1);
+  background: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
-  color: #e05500;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .edit-field-button:disabled {
-  color: #ccc;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Edit mode styling */
+/* Edit Mode Styling */
 .field-edit {
   display: flex;
   flex-direction: column;
 }
 
 .field-edit input, .field-edit select {
+  background: rgba(255, 255, 255, 0.2);
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 5px;
   font-size: 16px;
   margin-bottom: 10px;
+  color: #FFFFFF;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .field-edit input:focus, .field-edit select:focus {
   outline: none;
-  border-color: #C14600;
-  box-shadow: 0 0 0 2px rgba(193, 70, 0, 0.2);
+  border-color: #FFF6E7;
+  box-shadow: 0 0 0 3px rgba(255, 246, 231, 0.3);
 }
 
 .edit-actions {
@@ -494,31 +201,120 @@
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .edit-actions button:first-child {
-  background-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.3);
+  border: 1px solid rgba(76, 175, 80, 0.5);
   color: white;
 }
 
 .edit-actions button:first-child:hover {
-  background-color: #45a049;
+  background: rgba(76, 175, 80, 0.5);
+  transform: translateY(-2px);
 }
 
 .edit-actions button:last-child {
-  background-color: #f1f1f1;
-  color: #333;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFF6E7;
 }
 
 .edit-actions button:last-child:hover {
-  background-color: #e0e0e0;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
-/* Password section */
+/* Owned Homes Section */
+.profile-owned-homes {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.section-icon {
+  color: #FFF6E7;
+}
+
+.homes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-item {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.home-header strong {
+  font-size: 1.2rem;
+  color: #FFF6E7;
+}
+
+.view-home-link {
+  background: rgba(255, 246, 231, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(255, 246, 231, 0.3);
+  transition: all 0.3s ease;
+}
+
+.view-home-link:hover {
+  background: rgba(255, 246, 231, 0.3);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.home-id, .home-password {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+/* Password Update Section */
 .password-section {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   padding-top: 30px;
+  margin-top: 30px;
 }
 
 .section-header {
@@ -529,15 +325,18 @@
 }
 
 .section-header h2 {
-  color: #5D252D;
+  color: #FFF6E7;
   font-size: 22px;
   margin: 0;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .change-password-button {
-  background-color: #E5A34B;
+  background: rgba(229, 163, 75, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   color: white;
-  border: none;
+  border: 1px solid rgba(229, 163, 75, 0.5);
   border-radius: 20px;
   padding: 10px 20px;
   font-size: 14px;
@@ -546,47 +345,63 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .change-password-button:hover {
-  background-color: #D18223;
+  background: rgba(229, 163, 75, 0.5);
   transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.password-change-form {
-  background-color: rgba(255, 255, 255, 0.5);
+.password-update-form, .password-change-form {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.password-field {
+.password-field, .password-input {
   margin-bottom: 15px;
+  width: 100%;
 }
 
 .password-field label {
   display: block;
-  color: #5D252D;
+  color: #FFF6E7;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.password-field input {
+.password-field input, .password-input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 5px;
   font-size: 16px;
+  color: #FFFFFF;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-sizing: border-box;
+}
+
+.password-field input:focus, .password-input:focus {
+  outline: none;
+  border-color: #FFF6E7;
+  box-shadow: 0 0 0 3px rgba(255, 246, 231, 0.3);
 }
 
 .password-field input.error {
-  border-color: #c62828;
-  background-color: rgba(255, 0, 0, 0.05);
+  border-color: rgba(244, 67, 54, 0.7);
+  background: rgba(244, 67, 54, 0.1);
 }
 
 .field-error {
-  color: #c62828;
+  color: #ffcdd2;
   font-size: 14px;
   margin-top: 5px;
 }
@@ -597,71 +412,119 @@
   margin-top: 20px;
 }
 
-.save-password-button, .cancel-button {
+.save-password-button, .update-password-button, .cancel-button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-.save-password-button {
-  background-color: #4CAF50;
+.save-password-button, .update-password-button {
+  background: rgba(76, 175, 80, 0.3);
+  border: 1px solid rgba(76, 175, 80, 0.5);
   color: white;
   flex: 1;
 }
 
-.save-password-button:hover {
-  background-color: #45a049;
+.save-password-button:hover, .update-password-button:hover {
+  background: rgba(76, 175, 80, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.save-password-button:disabled {
-  background-color: #a5d6a7;
+.save-password-button:disabled, .update-password-button:disabled {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
   cursor: not-allowed;
 }
 
 .cancel-button {
-  background-color: #f1f1f1;
-  color: #333;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFF6E7;
 }
 
 .cancel-button:hover {
-  background-color: #e0e0e0;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Add warning note styling */
+/* Success and Error Messages */
+.success-message, .profile-success-message {
+  color: #bbf7d0;
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 4px solid rgba(76, 175, 80, 0.7);
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  text-align: center;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.error-message, .profile-error-message {
+  color: #fe9c67;
+  background: rgba(244, 67, 54, 0.1);
+  border-left: 4px solid rgba(244, 67, 54, 0.7);
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  text-align: center;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.profile-success-message, .profile-error-message {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeIn 0.5s ease;
+}
+
+/* Field Notes */
 .field-note {
   font-size: 13px;
-  color: #856404;
-  background-color: rgba(255, 193, 7, 0.1);
+  color: #fff3cd;
+  background: rgba(255, 193, 7, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   padding: 5px 10px;
   border-radius: 4px;
   margin: 5px 0 10px 0;
   display: flex;
   align-items: center;
   gap: 5px;
+  border-left: 3px solid rgba(255, 193, 7, 0.5);
 }
 
 .field-note i {
-  color: #856404;
+  color: #fff3cd;
 }
 
-/* Add a more distinct style for error notes */
 .field-note.error-note {
-  background-color: rgba(244, 67, 54, 0.1);
-  color: #c62828;
-  border-left: 3px solid #c62828;
+  background: rgba(244, 67, 54, 0.1);
+  color: #ffcdd2;
+  border-left: 3px solid rgba(244, 67, 54, 0.7);
 }
 
 .field-note.error-note i {
-  color: #c62828;
+  color: #ffcdd2;
 }
 
 /* Account Deletion Section */
 .account-deletion-section {
   margin-top: 30px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   padding-top: 30px;
   display: flex;
   flex-direction: column;
@@ -670,7 +533,7 @@
 }
 
 .deletion-title {
-  color: #c62828;
+  color: #ffcdd2;
   font-size: 24px;
   margin: 0 0 15px 0;
   font-weight: bold;
@@ -684,6 +547,7 @@
   line-height: 1.5;
   text-align: center; /* Center paragraph text */
   max-width: 600px; /* Limit width for better readability */
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .deletion-button-container {
@@ -693,9 +557,11 @@
 }
 
 .delete-account-button {
-  background-color: #f44336;
+  background: rgba(244, 67, 54, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   color: white;
-  border: none;
+  border: 1px solid rgba(244, 67, 54, 0.5);
   border-radius: 5px;
   padding: 12px 24px;
   font-size: 15px;
@@ -704,12 +570,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .delete-account-button:hover {
-  background-color: #d32f2f;
+  background: rgba(244, 67, 54, 0.5);
   transform: translateY(-2px);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
@@ -725,7 +591,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -734,12 +602,16 @@
 }
 
 .delete-confirm-modal {
-  background-color: white;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   animation: slideUp 0.3s ease;
+  color: #FFFFFF;
 }
 
 @keyframes fadeIn {
@@ -757,19 +629,20 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-header h3 {
-  color: #c62828;
+  color: #ffcdd2;
   margin: 0;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .close-modal-button {
   background: none;
   border: none;
   font-size: 20px;
-  color: #777;
+  color: #FFF6E7;
   cursor: pointer;
 }
 
@@ -778,7 +651,7 @@
 }
 
 .warning-text {
-  color: #c62828;
+  color: #ffcdd2;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -798,15 +671,19 @@
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #333;
+  color: #FFF6E7;
 }
 
 .confirm-password-field input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 5px;
   font-size: 16px;
+  color: #FFFFFF;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .modal-actions {
@@ -817,32 +694,44 @@
 }
 
 .cancel-delete-button {
-  background-color: #f1f1f1;
-  color: #333;
-  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFF6E7;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
   font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.cancel-delete-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
 .confirm-delete-button {
-  background-color: #f44336;
+  background: rgba(244, 67, 54, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(244, 67, 54, 0.5);
   color: white;
-  border: none;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .confirm-delete-button:hover {
-  background-color: #d32f2f;
+  background: rgba(244, 67, 54, 0.5);
+  transform: translateY(-2px);
 }
 
 .confirm-delete-button:disabled {
-  background-color: #ffcdd2;
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
   cursor: not-allowed;
 }
 
@@ -1187,7 +1076,7 @@
   }
 }
 
-/* Responsive styles */
+/* Responsive Styles */
 @media (min-width: 768px) {
   .profile-fields {
     grid-template-columns: 1fr 1fr;
@@ -1201,34 +1090,183 @@
     padding: 20px;
     padding-top: 60px;
   }
-  
+
   .profile-title {
-    font-size: 28px;
+    font-size: 1.8rem;
     margin-bottom: 20px;
   }
-  
+
   .profile-avatar i {
     font-size: 80px;
   }
-  
+
+  .profile-info strong {
+    min-width: 100px;
+  }
+
   .section-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
   }
-  
+
   .change-password-button {
     width: 100%;
     justify-content: center;
   }
-  
+
   .password-actions {
     flex-direction: column;
   }
-  
-  .save-password-button, .cancel-button {
+
+  .save-password-button, .update-password-button, .cancel-button {
     width: 100%;
   }
+  
+  .home-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .view-home-link {
+    align-self: flex-start;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Additional Mobile Optimizations */
+@media (max-width: 480px) {
+  .profile-card {
+    padding: 20px 15px;
+  }
+  
+  .profile-field {
+    padding: 12px;
+  }
+  
+  .field-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .edit-field-button {
+    margin-left: 0;
+    margin-top: 10px;
+    align-self: flex-end;
+  }
+  
+  .delete-confirm-modal {
+    width: 95%;
+  }
+}
+
+/* Update/add these styles */
+.recovery-codes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.recovery-codes-header:hover {
+  background-color: #f1f1f1;
+  border-color: #C14600;
+}
+
+.recovery-codes-toggle {
+  color: #C14600;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.recovery-codes-status {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.recovery-codes-status strong {
+  color: #C14600;
+  font-weight: bold;
+}
+
+.recovery-action-button {
+  background-color: #f8f9fa;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.recovery-action-button:hover {
+  background-color: #eaeaea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recovery-action-button:first-child {
+  background-color: #F8F0E5;
+  color: #C14600;
+}
+
+.recovery-action-button:first-child:hover {
+  background-color: #FEDAC0;
+}
+
+.recovery-codes-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .recovery-codes-actions {
+    flex-direction: row;
+  }
+  
+  .recovery-action-button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Add this style for the horizontal divider */
+.section-divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 30px 0;
+}
+
+/* Also update the recovery codes container styling */
+.profile-section-title {
+  color: #5D252D;
+  font-size: 22px;
+  margin: 0 0 15px 0;
+}
+
+.profile-section-description {
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 /* Update/add these styles */

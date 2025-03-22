@@ -291,7 +291,6 @@ input:checked+.slider:after {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
   overflow: hidden;
   width: 100vw;
 }

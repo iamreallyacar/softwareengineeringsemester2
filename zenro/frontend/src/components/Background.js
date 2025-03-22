@@ -22,9 +22,9 @@ const peaches = [
   { src: peach1, bottom: "25%", left: "50%", size: "5%", rotate: "20deg", blurClass: "", animationDelay: "3s"}
 ];
 
-const Background = ({ showLogo = true }) => {
+const Background = ({ showLogo = true, blurEffect = false }) => {
     return (
-        <div className="peach-container">
+        <div className={`peach-container ${blurEffect ? 'blur-effect' : ''}`}>
           {showLogo && (
             <img 
                 src={logo} 

@@ -190,7 +190,7 @@
 /* Media Queries for Responsive Design */
 @media screen and (max-width: 1200px) {
     .login-container-circle {
-        width: min(50vw, 500px);
+        width: min(50vw, 450px);
     }
 }
 

@@ -29,10 +29,12 @@
 .ca-login-form {
   display: grid;
   grid-template-columns: 1fr; /* Ensures it takes full width */
-  gap: 10px;
+  gap: clamp(10px, 2vh, 20px);
   align-items: center;
   margin: 0 auto; 
   width: 85%;
+  flex: 1;      
+  min-height: 0;
 }
 
 /* includes all input type */
@@ -159,7 +161,7 @@
 /* refers to:- Already have an account? */
 .ca-signup-prompt {
   font-size: clamp(0.8rem, 2vw, 1rem);
-  color: rgba(0, 0, 0, 30%);
+  color: rgba(0, 0, 0, 40%);
   width: 100%;
   text-align: center;
 }
@@ -319,6 +321,13 @@ input.input-error {
   text-align: right;
   width: 100%;
   padding-right: 5px;
+}
+
+@media (min-height: 800px) {
+  .ca-login-form {
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+  }
 }
 
 /* Recovery Codes Styling */

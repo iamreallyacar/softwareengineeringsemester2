@@ -526,6 +526,7 @@ function ProfilePage() {
 
     return (
         <div className="profile-container">
+            <Background showLogo={false} blurEffect={true}  />
             <Navbar />
             
             <div className="profile-content">
