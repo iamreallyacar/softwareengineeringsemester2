@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown, Home, Users, UserPlus, LogIn, Edit, Key, Trash } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
-import { ChevronLeft, ChevronRight, User } from "lucide-react";
+import { ChevronLeft, User } from "lucide-react";
 import Background from "./Background.js";
 
 // Extract Header Component
@@ -62,20 +62,28 @@ const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, 
     </div>
 );
 
-// Update the OwnedHomesList component to include dropdown management options
+// Update the OwnedHomesList component to include inline delete confirmation
 const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDeleteHome, onUpdateHome }) => {
     const [expandedHomeId, setExpandedHomeId] = useState(null);
     const [editName, setEditName] = useState('');
     const [editPassword, setEditPassword] = useState('');
-    const [editing, setEditing] = useState(null); // 'name' or 'password'
+    const [editing, setEditing] = useState(null); // 'name', 'password', or 'delete'
     const [isUpdating, setIsUpdating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState('');
+    const [deletePassword, setDeletePassword] = useState('');
     const navigate = useNavigate();
 
     const toggleHomeOptions = (homeId) => {
         setExpandedHomeId(expandedHomeId === homeId ? null : homeId);
+        resetEditState();
+    };
+
+    const resetEditState = () => {
         setEditing(null);
+        setEditName('');
+        setEditPassword('');
+        setDeletePassword('');
         setError('');
     };
 
@@ -89,13 +97,6 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
         setError('');
     };
 
-    const cancelEditing = () => {
-        setEditing(null);
-        setEditName('');
-        setEditPassword('');
-        setError('');
-    };
-
     const handleSaveChanges = async (homeId) => {
         setIsUpdating(true);
         setError('');
@@ -106,7 +107,7 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                 : { join_password: editPassword };
                 
             await onUpdateHome(homeId, updateData);
-            setEditing(null);
+            resetEditState();
         } catch (err) {
             setError(err.response?.data?.detail || 'Failed to update smart home');
         } finally {
@@ -114,17 +115,43 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
         }
     };
 
-    const handleDeleteHome = async (homeId) => {
-        if (window.confirm('Are you sure you want to delete this smart home? This action cannot be undone.')) {
-            setIsDeleting(true);
+    const handleDeleteWithPassword = async (homeId) => {
+        if (!deletePassword) {
+            setError("Please enter your password to confirm deletion");
+            return;
+        }
+        
+        setIsDeleting(true);
+        setError('');
+        
+        try {
+            const userId = localStorage.getItem("userId");
+            
+            // First verify the password
             try {
+                // Using the password change endpoint to verify (changing to same password)
+                await api.post(`/users/${userId}/change_password/`, {
+                    current_password: deletePassword,
+                    new_password: deletePassword // Same password to avoid actual change
+                });
+                
+                // If we get here, password is correct, proceed with deletion
                 await onDeleteHome(homeId);
                 setExpandedHomeId(null);
+                resetEditState();
             } catch (err) {
-                setError(err.response?.data?.detail || 'Failed to delete smart home');
-            } finally {
-                setIsDeleting(false);
+                // Password verification failed
+                if (err.response?.status === 400) {
+                    setError("Incorrect password. Please try again.");
+                } else {
+                    throw err; // Re-throw for the outer catch to handle
+                }
             }
+        } catch (err) {
+            console.error("Error deleting smart home:", err);
+            setError("Failed to delete smart home. Please try again.");
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -179,7 +206,7 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                                                         >
                                                             {isUpdating ? "Saving..." : "Save"}
                                                         </button>
-                                                        <button onClick={cancelEditing}>Cancel</button>
+                                                        <button onClick={resetEditState}>Cancel</button>
                                                     </div>
                                                 </div>
                                             ) : editing === 'password' ? (
@@ -197,7 +224,43 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                                                         >
                                                             {isUpdating ? "Saving..." : "Save"}
                                                         </button>
-                                                        <button onClick={cancelEditing}>Cancel</button>
+                                                        <button onClick={resetEditState}>Cancel</button>
+                                                    </div>
+                                                </div>
+                                            ) : editing === 'delete' ? (
+                                                <div className="delete-confirmation">
+                                                    <div className="delete-warning">
+                                                        <Trash className="warning-icon" />
+                                                        <p className="delete-warning-title">Delete "{home.name}"?</p>
+                                                        <p className="delete-warning-message">
+                                                            This will permanently delete this smart home and all its rooms and devices.
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <div className="delete-password-field">
+                                                        <label>Enter your account password to confirm:</label>
+                                                        <input
+                                                            type="password"
+                                                            value={deletePassword}
+                                                            onChange={(e) => setDeletePassword(e.target.value)}
+                                                            placeholder="Your account password"
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="delete-actions">
+                                                        <button 
+                                                            className="delete-cancel-btn"
+                                                            onClick={resetEditState}
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                        <button 
+                                                            className="delete-confirm-btn"
+                                                            onClick={() => handleDeleteWithPassword(home.id)}
+                                                            disabled={isDeleting || !deletePassword}
+                                                        >
+                                                            {isDeleting ? "Deleting..." : "Delete Smart Home"}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             ) : (
@@ -216,11 +279,10 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                                                     </button>
                                                     <button 
                                                         className="action-btn delete-btn" 
-                                                        onClick={() => handleDeleteHome(home.id)}
-                                                        disabled={isDeleting}
+                                                        onClick={() => startEditing('delete', home)}
                                                     >
                                                         <Trash className="action-icon" />
-                                                        <span>{isDeleting ? "Deleting..." : "Delete Smart Home"}</span>
+                                                        <span>Delete Smart Home</span>
                                                     </button>
                                                 </div>
                                             )}
@@ -509,8 +571,6 @@ function SmartHomeList() {
             setHomeWithPasswordOpen={setHomeWithPasswordOpen}
             onJoinHome={handleJoinHomeWithPassword}
             />
-            
-            {/* Remove the JoinPasswordModal */}
         </div>
     </div>
   );
