@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom"; // Add Link import
 import Navbar from "./NavigationBar";
 import api from "../api";
 import "../css/home-users-page.css";
-import { ChevronLeft } from "lucide-react"; // Import ChevronLeft icon
+import { ChevronLeft, UserPlus, ChevronDown } from "lucide-react"; // Import ChevronLeft, UserPlus, ChevronDown icons
 
 function HomeUsersPage() {
   const { id: smartHomeId } = useParams();
@@ -18,6 +18,11 @@ function HomeUsersPage() {
   const [expandedMember, setExpandedMember] = useState(null);
   const [profileData, setProfileData] = useState({});
   const [loadingProfiles, setLoadingProfiles] = useState({});
+  const [isAddMemberDropdownOpen, setIsAddMemberDropdownOpen] = useState(false);
+  const [availableUsers, setAvailableUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState('');
+  const [isAddingMember, setIsAddingMember] = useState(false);
+  const [addMemberError, setAddMemberError] = useState('');
   
   // Fetch current user info from localStorage token
   useEffect(() => {
@@ -31,6 +36,10 @@ function HomeUsersPage() {
           api.get(`/users/${tokenData.user_id}/`)
             .then(response => {
               setCurrentUser(response.data);
+              // Refetch available users if user changes and smart home data is loaded
+              if (smartHome && response.data.id === smartHome.creator) {
+                fetchAvailableUsers();
+              }
             })
             .catch(err => {
               console.error("Error fetching current user:", err);
@@ -40,7 +49,7 @@ function HomeUsersPage() {
         console.error("Error parsing token:", e);
       }
     }
-  }, []);
+  }, [smartHome]);
   
   // Fetch smart home data
   useEffect(() => {
@@ -69,6 +78,10 @@ function HomeUsersPage() {
         }
         
         setLoading(false);
+
+        if (homeData.creator === currentUser?.id) {
+          fetchAvailableUsers();
+        }
       } catch (err) {
         console.error("Error fetching smart home data:", err);
         setError("Failed to load home users. Please try again.");
@@ -200,6 +213,70 @@ function HomeUsersPage() {
   // Check if current user is the owner
   const isOwner = currentUser && owner && currentUser.id === owner.id;
   
+  // Add this function inside the component
+  const fetchAvailableUsers = async () => {
+    if (!isOwner) return;
+    
+    try {
+      // Get all users
+      const usersResponse = await api.get('/users/');
+      const allUsers = usersResponse.data;
+      
+      // Filter out users who are already members or the owner
+      const currentMemberIds = [...(smartHome?.members || []), smartHome?.creator];
+      
+      const filteredUsers = allUsers.filter(user => 
+        !currentMemberIds.includes(user.id)
+      );
+      
+      setAvailableUsers(filteredUsers);
+    } catch (error) {
+      console.error("Error fetching available users:", error);
+      setAddMemberError("Failed to load available users.");
+    }
+  };
+
+  // Add this function inside the component
+  const handleAddMember = async () => {
+    if (!selectedUser) return;
+    
+    setIsAddingMember(true);
+    setAddMemberError('');
+    
+    try {
+      // Get current members array
+      const currentMembers = [...(smartHome.members || [])];
+      
+      // Add the selected user to members array
+      const updatedMembers = [...currentMembers, parseInt(selectedUser)];
+      
+      // Update the smart home with new members list
+      await api.patch(`/smarthomes/${smartHomeId}/`, {
+        members: updatedMembers
+      });
+      
+      // Update local state
+      setSmartHome(prev => ({...prev, members: updatedMembers}));
+      
+      // Fetch the new member's details to add to members list
+      const newMemberResponse = await api.get(`/users/${selectedUser}/`);
+      setMembers(prev => [...prev, newMemberResponse.data]);
+      
+      // Reset dropdown state
+      setSelectedUser('');
+      setIsAddMemberDropdownOpen(false);
+      
+      // Refresh available users
+      fetchAvailableUsers();
+      
+    } catch (error) {
+      console.error("Error adding member:", error);
+      setAddMemberError("Failed to add member. Please try again.");
+    } finally {
+      setIsAddingMember(false);
+    }
+  };
+
   return (
     <div className="home-users-page">
       <Navbar />
@@ -223,10 +300,63 @@ function HomeUsersPage() {
         ) : (
           <>
             <div className="home-header">
-              <h1 className="home-name">{smartHome?.name}</h1>
-              <p className="home-owner">
-                Created and managed by <span>{owner?.username}</span>
-              </p>
+              <div className="title-row">
+                <h1 className="home-name">{smartHome?.name}</h1>
+                <p className="home-owner">
+                  Created and managed by <span>{owner?.username}</span>
+                </p>
+              </div>
+              
+              {/* Add Member Dropdown - Only visible to the owner */}
+              {isOwner && (
+                <div className="add-member-dropdown">
+                  <button 
+                    className="add-member-button"
+                    onClick={() => setIsAddMemberDropdownOpen(!isAddMemberDropdownOpen)}
+                  >
+                    <UserPlus size={18} />
+                    <span>Add Members</span>
+                    <ChevronDown 
+                      size={16} 
+                      className={`dropdown-arrow ${isAddMemberDropdownOpen ? 'open' : ''}`}
+                    />
+                  </button>
+                  
+                  {isAddMemberDropdownOpen && (
+                    <div className="member-dropdown-menu">
+                      {/* Dropdown content remains the same */}
+                      {addMemberError && <div className="add-member-error">{addMemberError}</div>}
+                      
+                      {availableUsers.length === 0 ? (
+                        <div className="no-available-users">
+                          No users available to add
+                        </div>
+                      ) : (
+                        <>
+                          <select
+                            value={selectedUser}
+                            onChange={(e) => setSelectedUser(e.target.value)}
+                            className="user-select"
+                          >
+                            <option value="">Select a user...</option>
+                            {availableUsers.map(user => (
+                              <option key={user.id} value={user.id}>{user.username}</option>
+                            ))}
+                          </select>
+                          
+                          <button 
+                            className="add-user-button"
+                            onClick={handleAddMember}
+                            disabled={!selectedUser || isAddingMember}
+                          >
+                            {isAddingMember ? "Adding..." : "Add User"}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             
             <div className="members-container">

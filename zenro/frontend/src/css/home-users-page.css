@@ -70,47 +70,70 @@ body {
   box-sizing: border-box;
 }
 
-/* Adjust the home header to better center the name with space for the back button */
+/* Update the home header to place name and owner info side by side */
 .home-header {
-  text-align: center !important;
-  margin-top: 50px !important; /* Add top margin to make room for back button */
-  margin-bottom: 30px !important;
+  margin-top: 50px !important;
+  margin-bottom: 40px !important; /* Increased space after header */
   position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
 }
 
+/* Add a new container for the title row */
+.title-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-bottom: 25px !important; /* Space between title row and dropdown */
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Update home name to be left-aligned */
 .home-name {
   color: #C14600 !important;
   font-size: 32px !important;
   font-weight: bold !important;
-  margin-bottom: 10px !important;
-  text-align: center !important; /* Ensure it's centered */
+  margin: 0 !important; /* Remove default margins */
+  text-align: left !important; /* Left align instead of center */
+  flex: 1 !important; /* Allow it to take available space */
 }
 
+/* Update home owner to be right-aligned */
 .home-owner {
-  color: #5D252D;
-  font-size: 18px;
-  margin: 5px 0 20px 0;
+  color: #5D252D !important;
+  font-size: 18px !important;
+  margin: 0 !important; /* Remove default margins */
+  text-align: right !important;
+  white-space: nowrap !important;
 }
 
 .home-owner span {
   font-weight: bold;
 }
 
-.members-container {
-  background: rgb(252, 199, 153);
-  border: 3px solid white;
-  border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 25px;
-  margin-bottom: 20px;
-  width: 100%;
-  box-sizing: border-box;
+/* Update Add Member Dropdown positioning */
+.add-member-dropdown {
+  position: relative !important;
+  margin: 0 auto 20px auto !important; /* Removed top margin, button will be positioned by the flex layout */
+  width: 220px !important;
+  z-index: 5 !important;
 }
 
-.members-container h2 {
-  color: rgb(237, 62, 62);
-  margin: 0 0 20px 0;
-  font-size: 22px;
+/* Add more space before the members container */
+.members-container {
+  background: rgb(252, 199, 153) !important;
+  border: 3px solid white !important;
+  border-radius: 20px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  padding: 25px !important;
+  margin-top: 10px !important; /* Adjusted spacing */
+  margin-bottom: 20px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .no-members-message {
@@ -523,6 +546,22 @@ body {
   .home-header {
     margin-top: 70px !important; /* More space on mobile */
   }
+
+  .title-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  .home-name {
+    text-align: center !important;
+    margin-bottom: 10px !important;
+    font-size: 28px !important;
+  }
+  
+  .home-owner {
+    text-align: center !important;
+  }
 }
 
 /* Responsive changes for the profile dropdown */
@@ -611,4 +650,102 @@ body {
   .profile-section.simplified .profile-fields {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* Add Member Dropdown Styles */
+.add-member-dropdown {
+  position: relative;
+  margin: 30px auto 20px auto; /* Increased top margin from 10px to 30px */
+  width: 220px;
+  z-index: 5;
+}
+
+.add-member-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #C14600;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  font-size: 14px;
+}
+
+.add-member-button:hover {
+  background-color: #A53900;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.member-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  margin-top: 8px;
+  z-index: 101;
+  animation: fadeIn 0.2s ease;
+}
+
+.user-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.add-user-button {
+  width: 100%;
+  padding: 8px 0;
+  background-color: #C14600;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-user-button:hover:not(:disabled) {
+  background-color: #A53900;
+}
+
+.add-user-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.add-member-error {
+  color: #e53e3e;
+  font-size: 12px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.no-available-users {
+  text-align: center;
+  color: #666;
+  padding: 8px 0;
+  font-size: 14px;
 }
