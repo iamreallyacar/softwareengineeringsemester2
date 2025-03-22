@@ -267,3 +267,57 @@
     font-size: 0.9rem;
   }
 }
+
+/* Add these new styles after the existing styles */
+
+/* Field error handling */
+.ca-input-field {
+  position: relative;
+  width: 100%;
+}
+
+.field-error {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  padding-left: 8px;
+}
+
+input.input-error {
+  border-color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.05);
+}
+
+.ca-error-message {
+  color: #ff6b6b;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  margin: 0 auto 15px auto;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 107, 107, 0.1);
+  width: 85%;
+  text-align: center;
+}
+
+.ca-success-message {
+  color: #66bb6a;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  margin: 0 auto 15px auto;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgba(102, 187, 106, 0.1);
+  width: 85%;
+  text-align: center;
+}
+
+.required-fields-notice {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
+  margin-top: 10px;
+  text-align: right;
+  width: 100%;
+  padding-right: 5px;
+}

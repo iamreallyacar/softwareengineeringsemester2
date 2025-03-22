@@ -5,46 +5,120 @@ import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
 import { useEffect } from "react";
 
-
 function CreateAccount({ setIsAuthenticated }) {
     // State variables to store user input and feedback messages
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
     const [first_name, setFirstName] = useState("");
     const [last_name, setLastName] = useState("");
     const [birthdate, setBirthdate] = useState("");
     const [gender, setGender] = useState("");
     const [phone_number, setPhoneNumber] = useState("");
     const [loading, setLoading] = useState(false);
+    
+    // Field-specific error states
+    const [usernameError, setUsernameError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [generalError, setGeneralError] = useState("");
+    const [success, setSuccess] = useState("");
+    
     const navigate = useNavigate();
 
+    // Clear field errors when user edits the field
+    const clearFieldError = (field) => {
+        switch(field) {
+            case 'username':
+                setUsernameError("");
+                break;
+            case 'email':
+                setEmailError("");
+                break;
+            case 'password':
+                setPasswordError("");
+                break;
+            default:
+                break;
+        }
+        setGeneralError("");
+    };
+
+    // Validate required fields
+    const validateForm = () => {
+        let isValid = true;
+        
+        // Clear previous errors
+        setUsernameError("");
+        setEmailError("");
+        setPasswordError("");
+        setGeneralError("");
+        
+        // Check username
+        if (!username.trim()) {
+            setUsernameError("Username is required");
+            isValid = false;
+        }
+        
+        // Check email
+        if (!email.trim()) {
+            setEmailError("Email is required");
+            isValid = false;
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            setEmailError("Please enter a valid email address");
+            isValid = false;
+        }
+        
+        // Check password
+        if (!password) {
+            setPasswordError("Password is required");
+            isValid = false;
+        } else if (password.length < 8) {
+            setPasswordError("Password must be at least 8 characters");
+            isValid = false;
+        }
+        
+        return isValid;
+    };
 
     // handleSubmit posts new user details to create an account
     const handleSubmit = async (e) => {
         // Prevent the default form submission behavior
         e.preventDefault();
-        // Clear any previous error messages
-        setError("");
+        
+        // Validate form before submission
+        if (!validateForm()) {
+            return;
+        }
+        
         setLoading(true);
 
         try {
-            // Send a POST request to the API to create a new account
-            const response = await api.post("/register/", {
+            // Prepare profile data, only including non-empty fields
+            const profileData = {};
+            if (birthdate) profileData.date_of_birth = birthdate;
+            if (gender) profileData.gender = gender;
+            if (phone_number) profileData.phone_number = phone_number;
+            
+            // Build request body with only filled fields
+            const requestData = {
                 username,
                 email,
                 password,
-                first_name,
-                last_name,
-                profile: {
-                    date_of_birth: birthdate,
-                    gender,
-                    phone_number,
-                }
-            });
+            };
+            
+            if (first_name) requestData.first_name = first_name;
+            if (last_name) requestData.last_name = last_name;
+            
+            // Only include profile if there are values
+            if (Object.keys(profileData).length > 0) {
+                requestData.profile = profileData;
+            }
+            
+            // Send a POST request to the API to create a new account
+            const response = await api.post("/register/", requestData);
             console.log("Account Created Successfully:", response.data);
+            
             // On success, set a success message to be displayed to the user
             setSuccess("Account created successfully!");
             
@@ -55,6 +129,7 @@ function CreateAccount({ setIsAuthenticated }) {
             localStorage.setItem("accessToken", loginResponse.data.access);
             localStorage.setItem("userId", loginResponse.data.userId);
             setIsAuthenticated(true);
+            
             // After a timeout of 2 seconds, navigate to smart homes page
             setTimeout(() => {
                 setLoading(false);
@@ -63,20 +138,50 @@ function CreateAccount({ setIsAuthenticated }) {
         } catch (error) {
             console.error("Account Creation Failed:", error);
             setLoading(false);
+            
             // Handle errors from the API response
             if (error.response && error.response.data) {
-                try {
-                    const errorMessage = error.response.data.detail ||
-                    Object.values(error.response.data)[0] ||
-                    (typeof error.response.data === "object" 
-                        ? Object.values(error.response.data)[0] 
-                        : "Error creating account. Please try again.");
-                    setError(errorMessage);
-                } catch {
-                    setError("Unexpected error occurred.");
+                console.log("Error data:", error.response.data);
+                
+                // Handle field-specific errors
+                if (error.response.data.username) {
+                    setUsernameError(Array.isArray(error.response.data.username) 
+                        ? error.response.data.username[0] 
+                        : error.response.data.username);
                 }
                 
-            } 
+                if (error.response.data.email) {
+                    setEmailError(Array.isArray(error.response.data.email) 
+                        ? error.response.data.email[0] 
+                        : error.response.data.email);
+                }
+                
+                if (error.response.data.password) {
+                    setPasswordError(Array.isArray(error.response.data.password) 
+                        ? error.response.data.password[0] 
+                        : error.response.data.password);
+                }
+                
+                // Handle profile field errors
+                if (error.response.data.profile) {
+                    const profileErrors = error.response.data.profile;
+                    // Handle profile errors if needed
+                }
+                
+                // Set general error if no specific field errors
+                if (!error.response.data.username && 
+                    !error.response.data.email && 
+                    !error.response.data.password && 
+                    !error.response.data.profile) {
+                    const errorMessage = error.response.data.detail ||
+                        (typeof error.response.data === "string" 
+                            ? error.response.data 
+                            : "Error creating account. Please try again.");
+                    setGeneralError(errorMessage);
+                }
+            } else {
+                setGeneralError("Network error. Please try again later.");
+            }
         }
     };
 
@@ -89,98 +194,116 @@ function CreateAccount({ setIsAuthenticated }) {
                 <div className="ca-login-container">
                     <div className="ca-login-content">
                         <p className="ca-login-title">Create Account</p>
+                        
                         {/* Display success message if account creation is successful */}
-                        {success && <p className="ca-error">{success}</p>}
+                        {success && <p className="ca-success-message">{success}</p>}
+                        {generalError && <p className="ca-error-message">{generalError}</p>}
+                        
                         <form className="ca-login-form" onSubmit={handleSubmit}>
-
-                            {/* Username */}
+                            {/* Username - Required */}
                             <div className="ca-input-group-long">
-                                <input
-                                    type="text"
-                                    placeholder="Username"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    required
-                                />
+                                <div className="ca-input-field">
+                                    <input
+                                        type="text"
+                                        placeholder="Username *"
+                                        value={username}
+                                        onChange={(e) => {
+                                            setUsername(e.target.value);
+                                            clearFieldError('username');
+                                        }}
+                                        className={usernameError ? "input-error" : ""}
+                                    />
+                                    {usernameError && <p className="field-error">{usernameError}</p>}
+                                </div>
                             </div>
 
-                            {/* First name and DOB */}
+                            {/* First name and DOB - Optional */}
                             <div className="ca-input-group-short">
                                 <input
                                     type="text"
                                     placeholder="First name"
                                     value={first_name}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    required
                                 />
                                 <input
                                     type="date"
                                     placeholder="Date of Birth"
                                     value={birthdate}
                                     onChange={(e) => setBirthdate(e.target.value)}
-                                    required
                                 />
                             </div>
 
-                            {/* Last name and gender */}
+                            {/* Last name and gender - Optional */}
                             <div className="ca-input-group-short">
                                 <input
                                     type="text"
                                     placeholder="Last name"
                                     value={last_name}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    required
                                 />
                                 <select 
                                     value={gender} 
-                                    onChange={(e) => setGender(e.target.value)} 
-                                    required
+                                    onChange={(e) => setGender(e.target.value)}
                                 >
                                     <option value="" disabled hidden>Gender</option>
                                     <option value="M">Male</option>
                                     <option value="F">Female</option>
                                     <option value="O">Rather not say</option>
                                 </select>
-                                </div>
+                            </div>
                                 
-                                {/* Email */}
-                                <div className="ca-input-group-long">
+                            {/* Email - Required */}
+                            <div className="ca-input-group-long">
+                                <div className="ca-input-field">
                                     <input
                                         type="email"
-                                        placeholder="Email"
+                                        placeholder="Email *"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                            clearFieldError('email');
+                                        }}
+                                        className={emailError ? "input-error" : ""}
                                     />
+                                    {emailError && <p className="field-error">{emailError}</p>}
+                                </div>
                             </div>
 
-                            {/* Phone number */}
-                            <div className="ca-input-group-long">
-                            <input
-                                type="tel"
-                                placeholder="Phone Number"
-                                value={phone_number}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                required
-                            />
-                            </div>
-
-                            {/* Password */}
+                            {/* Phone number - Optional */}
                             <div className="ca-input-group-long">
                                 <input
-                                    type="password"
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
+                                    type="tel"
+                                    placeholder="Phone Number"
+                                    value={phone_number}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
                                 />
+                            </div>
+
+                            {/* Password - Required */}
+                            <div className="ca-input-group-long">
+                                <div className="ca-input-field">
+                                    <input
+                                        type="password"
+                                        placeholder="Password *"
+                                        value={password}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            clearFieldError('password');
+                                        }}
+                                        className={passwordError ? "input-error" : ""}
+                                    />
+                                    {passwordError && <p className="field-error">{passwordError}</p>}
+                                </div>
+                            </div>
+                            
+                            {/* Required fields notice */}
+                            <div className="required-fields-notice">
+                                * Required fields
                             </div>
 
                             <button className="ca-login-button" type="submit">
                                 <span>Create Account</span>
                             </button>
-                            {/* Display error message if account creation fails */}
-                            {error && <p className="ca-error">{error}</p>}
 
                             <div className="ca-login-footer">
                                 <div className="ca-signup-prompt">
