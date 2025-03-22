@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown, Home, Users, UserPlus, LogIn, Edit, Key, Trash, LogOut } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
-import { ChevronLeft, User } from "lucide-react";
+import { ChevronLeft, User, UserRoundCog } from "lucide-react";
 import Background from "./Background.js";
 
 // Update DashboardHeader to remove the back button
@@ -733,43 +733,50 @@ const fetchAvailableHomes = async () => {
   };
 
   return (
-    <div className="dashboard-container">
-        <DashboardHeader />
-        <UserProfile username={currentUser?.username} />
-        <div className="dashboard-content">
-            {error && <p className="error">{error}</p>}
-            <CreateHomeForm
-            homeName={homeName}
-            setHomeName={setHomeName}
-            joinPassword={joinPassword}
-            setJoinPassword={setJoinPassword}
-            handleCreateSmartHome={handleCreateSmartHome}
-            isCreating={isCreating}
-            formError={formError}
-            />
-            <OwnedHomesList
-            isOwnedExpanded={isOwnedExpanded}
-            setIsOwnedExpanded={setIsOwnedExpanded}
-            smartHomes={ownedHomes}
-            onDeleteHome={handleDeleteHome}
-            onUpdateHome={handleUpdateHome}
-            />
-            <JoinedHomesList
-            isJoinedHomesExpanded={isJoinedHomesExpanded}
-            setIsJoinedHomesExpanded={setIsJoinedHomesExpanded}
-            joinedHomes={joinedHomes}
-            onRefreshHomes={refreshAllHomes}
-            />
-            <AvailableHomesList
-            isJoinedExpanded={isAvailableExpanded}
-            setIsJoinedExpanded={setIsAvailableExpanded}
-            availableHomes={availableHomes}
-            homeWithPasswordOpen={homeWithPasswordOpen}
-            setHomeWithPasswordOpen={setHomeWithPasswordOpen}
-            onJoinHome={handleJoinHomeWithPassword}
-            />
+    <>
+        <Background showLogo={false} blurEffect={true} />
+        <div className="shl-title-grouping">
+                    <UserRoundCog className="shl-title-icon" />
+                    <h1 className="shl-title">My Smart Homes</h1>
         </div>
-    </div>
+        <div className="dashboard-container">
+            <DashboardHeader />
+            <UserProfile username={currentUser?.username} />
+            <div className="dashboard-content">
+                {error && <p className="error">{error}</p>}
+                <CreateHomeForm
+                homeName={homeName}
+                setHomeName={setHomeName}
+                joinPassword={joinPassword}
+                setJoinPassword={setJoinPassword}
+                handleCreateSmartHome={handleCreateSmartHome}
+                isCreating={isCreating}
+                formError={formError}
+                />
+                <OwnedHomesList
+                isOwnedExpanded={isOwnedExpanded}
+                setIsOwnedExpanded={setIsOwnedExpanded}
+                smartHomes={ownedHomes}
+                onDeleteHome={handleDeleteHome}
+                onUpdateHome={handleUpdateHome}
+                />
+                <JoinedHomesList
+                isJoinedHomesExpanded={isJoinedHomesExpanded}
+                setIsJoinedHomesExpanded={setIsJoinedHomesExpanded}
+                joinedHomes={joinedHomes}
+                onRefreshHomes={refreshAllHomes}
+                />
+                <AvailableHomesList
+                isJoinedExpanded={isAvailableExpanded}
+                setIsJoinedExpanded={setIsAvailableExpanded}
+                availableHomes={availableHomes}
+                homeWithPasswordOpen={homeWithPasswordOpen}
+                setHomeWithPasswordOpen={setHomeWithPasswordOpen}
+                onJoinHome={handleJoinHomeWithPassword}
+                />
+            </div>
+        </div>
+    </>
   );
 }
 

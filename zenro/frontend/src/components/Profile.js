@@ -5,6 +5,8 @@ import Background from "./Background.js";
 import Navbar from "./NavigationBar";
 import "../css/profile.css";
 import { useNavigate } from "react-router-dom";
+import { UserRoundCog } from "lucide-react";
+
 
 function ProfilePage() {
     const [userData, setUserData] = useState(null);
@@ -530,7 +532,10 @@ function ProfilePage() {
             <Navbar />
             
             <div className="profile-content">
-                <h1 className="profile-title">My Profile</h1>
+                <div className="profile-title-grouping">
+                    <UserRoundCog className="profile-title-icon" />
+                    <h1 className="profile-title">My Profile</h1>
+                </div>
                 
                 {success && (
                     <div className="profile-success-message">

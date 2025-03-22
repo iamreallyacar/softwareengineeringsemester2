@@ -316,7 +316,7 @@ input.input-error {
 
 .required-fields-notice {
   color: rgba(0, 0, 0, 0.5);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin-top: 10px;
   text-align: right;
   width: 100%;

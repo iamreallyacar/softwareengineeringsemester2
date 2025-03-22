@@ -729,6 +729,7 @@ function SmartHomePage() {
 
   return (
     <div className="smart-home-page">
+      <Background showLogo={false} blurEffect={true} />
       <Navbar />
       <div className="shp-information">
         {/* Simple smart home name header - just text, no card */}

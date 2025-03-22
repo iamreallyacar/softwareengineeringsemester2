@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { Chart } from 'chart.js/auto';
 import api from "../api";
+import Background from "./Background.js";
 
 import lightBulb from "../assets/images/light-bulb.png";
 import smartBlind from "../assets/images/smart-blind.png";
@@ -894,6 +895,7 @@ function RoomsPage() {
 
     return (
         <div className="room-page">
+            <Background showLogo={false} blurEffect={true} />
             <Navbar />
             
             {/* Add this back button section */}
