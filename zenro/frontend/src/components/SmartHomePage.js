@@ -5,6 +5,7 @@ import Navbar from "./NavigationBar";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
 import { Chart } from 'chart.js/auto';
+import Background from "./Background.js";
 
 /**
  * SmartHomePage component displays the main dashboard for a smart home

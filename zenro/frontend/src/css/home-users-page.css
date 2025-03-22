@@ -8,7 +8,6 @@ html, body, #root, .App {
 }
 
 body {
-  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
   background-attachment: fixed;
 }
 
