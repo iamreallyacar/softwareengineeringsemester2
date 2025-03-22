@@ -25,13 +25,13 @@ const DashboardHeader = () => {
     );
 };
 
-// Extract Profile Component
-const UserProfile = () => (
+// Update the UserProfile component to accept and display the username
+const UserProfile = ({ username }) => (
     <div className="user-profile">
         <div className="avatar-container">
             <User className="avatar-icon" />
         </div>
-        <h1 className="welcome-text">Welcome, User</h1>
+        <h1 className="welcome-text">Welcome, {username || "User"}</h1>
         <p className="welcome-caption">Manage your smart homes and account settings.</p>
     </div>
 );
@@ -403,6 +403,7 @@ const AvailableHomesList = ({
   );
 };
 
+// Update the main SmartHomeList component
 function SmartHomeList() {
   const [ownedHomes, setOwnedHomes] = useState([]);
   const [joinedHomes, setJoinedHomes] = useState([]);
@@ -415,6 +416,7 @@ function SmartHomeList() {
   const [isAvailableExpanded, setIsAvailableExpanded] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [homeWithPasswordOpen, setHomeWithPasswordOpen] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
@@ -422,7 +424,20 @@ function SmartHomeList() {
   useEffect(() => {
     fetchSmartHomes();
     fetchAvailableHomes();
+    fetchCurrentUser();
   }, []);
+
+  // Add this function to fetch the current user's info
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await api.get("/user/current/");
+      setCurrentUser(response.data);
+      console.log("Current user:", response.data);
+    } catch (err) {
+      console.error("Failed to fetch current user:", err);
+      // Don't set an error message as this is not critical
+    }
+  };
 
   const fetchSmartHomes = async () => {
     try {
@@ -508,7 +523,7 @@ function SmartHomeList() {
   return (
     <div className="dashboard-container">
         <DashboardHeader />
-        <UserProfile />
+        <UserProfile username={currentUser?.username} />
         <div className="dashboard-content">
             {error && <p className="error">{error}</p>}
             <CreateHomeForm
