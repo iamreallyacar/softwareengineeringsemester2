@@ -6,12 +6,9 @@
   align-items: center;
 
   padding: min(1rem, 3vw);
-  width: min(45vw, 600px); /* Keep maximum width the same */
-  height: auto; /* Change from fixed height to auto */
-  min-height: min(85vh, 900px); /* Increase minimum height */
+  width: min(45vw, 600px); /* Limit maximum width */
+  height: min(80vh, 800px); /* Limit maximum height */
   margin: auto;
-  margin-top: 2rem; /* Add top margin for better positioning */
-  margin-bottom: 2rem; /* Add bottom margin */
 
   background: linear-gradient(to bottom, rgba(255, 255, 255, 10%) 0%, rgba(153, 153, 153, 10%));
   backdrop-filter: blur(20px);
@@ -20,10 +17,10 @@
 
 /* includes title and the login-form */
 .ca-login-content {
-  overflow-y: visible; /* Change from auto to visible */
+  overflow-y: auto;
   border-radius: 15%;
   width: 100%;
-  height: auto; /* Change from 100% to auto */
+  height: 100%;
   padding: 0.5rem;
 }
 
@@ -192,7 +189,7 @@
 @media (max-width: 1024px) {
   .ca-login-container {
     width: 60vw;
-    min-height: 90vh; /* Change height to min-height */
+    height: 60vh;
     padding: 1rem;
   }
 
@@ -217,7 +214,7 @@
 @media (max-width: 768px) {
   .ca-login-container {
     width: 75vw;
-    min-height: 95vh; /* Change height to min-height */
+    height: 70vh;
     border-radius: 10%;
   }
 
@@ -242,8 +239,7 @@
 @media (max-width: 480px) {
   .ca-login-container {
     width: 80vw;
-    min-height: auto; /* Let content determine height on mobile */
-    padding-bottom: 2rem; /* Add padding to ensure space at bottom */
+    height: 60vh;
   }
 
   .ca-login-content {
