@@ -303,20 +303,8 @@ const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, join
         setError('');
         
         try {
-            // Get current user ID
-            const userId = localStorage.getItem("userId");
-            
-            // Get current members and remove this user
-            const response = await api.get(`/smarthomes/${homeToLeave.id}/`);
-            const currentMembers = response.data.members || [];
-            
-            // Filter out current user from members array
-            const updatedMembers = currentMembers.filter(memberId => memberId != userId);
-            
-            // Update the smart home with new members list
-            await api.patch(`/smarthomes/${homeToLeave.id}/`, {
-                members: updatedMembers
-            });
+            // Use the dedicated leave endpoint instead of manually updating members
+            await api.post(`/smarthomes/${homeToLeave.id}/leave/`);
             
             // Reset UI state
             setShowLeaveConfirm(false);
