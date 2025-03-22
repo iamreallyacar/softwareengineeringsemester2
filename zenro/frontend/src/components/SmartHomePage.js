@@ -38,6 +38,10 @@ function SmartHomePage() {
 
   const [smartHome, setSmartHome] = useState(null);
 
+  // Add these state variables for owner checking
+  const [currentUser, setCurrentUser] = useState(null);
+  const [owner, setOwner] = useState(null);
+
   /**
    * Unlock a room in the smart home
    */
@@ -192,11 +196,44 @@ function SmartHomePage() {
     api.get(`/smarthomes/${smartHomeId}/`)
       .then((res) => {
         setSmartHome(res.data);
+        
+        // Get owner details
+        api.get(`/users/${res.data.creator}/`)
+          .then(ownerResponse => {
+            setOwner(ownerResponse.data);
+          })
+          .catch(err => {
+            console.error("Error fetching owner:", err);
+          });
       })
       .catch((error) => {
         console.error("Error fetching smart home details:", error);
       });
   }, [smartHomeId]);
+
+  // Add this useEffect to fetch the current user - Exact same approach as HomeUsersPage.js
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const tokenData = JSON.parse(atob(token.split('.')[1]));
+        if (tokenData.user_id) {
+          api.get(`/users/${tokenData.user_id}/`)
+            .then(response => {
+              setCurrentUser(response.data);
+            })
+            .catch(err => {
+              console.error("Error fetching current user:", err);
+            });
+        }
+      } catch (e) {
+        console.error("Error parsing token:", e);
+      }
+    }
+  }, []);
+
+  // Add this check exactly like in HomeUsersPage.js
+  const isOwner = currentUser && owner && currentUser.id === owner.id;
 
   /**
    * Update energy chart when data selection changes
@@ -824,7 +861,7 @@ function SmartHomePage() {
           <div className="shp-rooms-list-container">
             <ul className="shp-rooms-list">
               {addedRooms.length === 0 ? (
-                <h4>No rooms added yet. Use the "Add Room" button to add a room.</h4>
+                <h4>No rooms added yet. {isOwner ? "Use the \"Add Room\" button to add a room." : "Only the home owner can add rooms."}</h4>
               ) : (
                 addedRooms.map((room) => (
                   <div
@@ -848,15 +885,18 @@ function SmartHomePage() {
                         {room.name}
                       </Link>
                     </li>
-                    <button
-                      className="delete-room-button"
-                      onClick={() => {
-                        setRoomToDelete(room.id);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    >
-                      <i className="fa-solid fa-trash delete-icon"></i>
-                    </button>
+                    {/* Only render delete button for owners */}
+                    {isOwner && (
+                      <button
+                        className="delete-room-button"
+                        onClick={() => {
+                          setRoomToDelete(room.id);
+                          setIsDeleteModalOpen(true);
+                        }}
+                      >
+                        <i className="fa-solid fa-trash delete-icon"></i>
+                      </button>
+                    )}
                   </div>
                 ))
               )}
@@ -893,19 +933,21 @@ function SmartHomePage() {
             </div>
           )}
 
-          {/* Always show the Add Room button if there are locked rooms */}
-          <button
-            className="shp-add-room-button"
-            onClick={() => {
-              if (lockedRooms.length > 0) {
-                setIsModalOpen(true);
-              } else {
-                alert("All rooms have already been added to the Home. Consider expanding your Home to include more rooms?");
-              }
-            }}
-          >
-            + Add Room
-          </button>
+          {/* Only render Add Room button for owners */}
+          {isOwner && (
+            <button
+              className="shp-add-room-button"
+              onClick={() => {
+                if (lockedRooms.length > 0) {
+                  setIsModalOpen(true);
+                } else {
+                  alert("All rooms have already been added to the Home. Consider expanding your Home to include more rooms?");
+                }
+              }}
+            >
+              + Add Room
+            </button>
+          )}
         </div>
 
         {/* Add Room Modal */}

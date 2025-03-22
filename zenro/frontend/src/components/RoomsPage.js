@@ -844,6 +844,54 @@ function RoomsPage() {
         fetchEnergyData();
     }, [selectedPeriod, selectedEnergyDevice, selectedDate, selectedMonth, selectedYear, unlockedDevices]);
 
+    // Add these owner-check related state variables
+    const [currentUser, setCurrentUser] = useState(null);
+    const [owner, setOwner] = useState(null);
+    const [smartHome, setSmartHome] = useState(null);
+
+    // Add useEffect to fetch current user - same as in HomeUsersPage.js
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+            try {
+                const tokenData = JSON.parse(atob(token.split('.')[1]));
+                if (tokenData.user_id) {
+                    api.get(`/users/${tokenData.user_id}/`)
+                        .then(response => {
+                            setCurrentUser(response.data);
+                        })
+                        .catch(err => {
+                            console.error("Error fetching current user:", err);
+                        });
+                }
+            } catch (e) {
+                console.error("Error parsing token:", e);
+            }
+        }
+    }, []);
+    
+    // Add smart home owner fetch to the existing useEffect or create a new one
+    useEffect(() => {
+        const fetchSmartHomeData = async () => {
+            try {
+                // Get smart home data to determine ownership
+                const response = await api.get(`/smarthomes/${smartHomeId}/`);
+                setSmartHome(response.data);
+                
+                // Get owner details
+                const ownerResponse = await api.get(`/users/${response.data.creator}/`);
+                setOwner(ownerResponse.data);
+            } catch (error) {
+                console.error("Error fetching smart home data:", error);
+            }
+        };
+        
+        fetchSmartHomeData();
+    }, [smartHomeId]);
+    
+    // Add owner check using the same logic as HomeUsersPage.js
+    const isOwner = currentUser && owner && currentUser.id === owner.id;
+
     return (
         <div className="room-page">
             <Navbar />
@@ -971,7 +1019,7 @@ function RoomsPage() {
                 {/* Right column: Device management */}
                 <div className="column2">
                     {/* Add Device Button */}
-                    {lockedDevices.length > 0 && (
+                    {isOwner && lockedDevices.length > 0 && (
                         <button 
                             className="add-device-button"
                             onClick={() => setIsAddDeviceModalOpen(true)}
@@ -992,17 +1040,19 @@ function RoomsPage() {
                                 <div className="energy-consumption" key={device.id}>
                                     {/* Rest of the device rendering remains the same */}
                                     {/* Add device removal button */}
-                                    <button
-                                        className="delete-device-button"
-                                        onClick={() => {
-                                            setDeviceToDelete(device.id);
-                                            setIsDeleteDeviceModalOpen(true);
-                                        }}
-                                        disabled={isUpdating}
-                                        title="Remove Device"
-                                    >
-                                        <i className="fa-solid fa-trash delete-icon"></i>
-                                    </button>
+                                    {isOwner && (
+                                        <button
+                                            className="delete-device-button"
+                                            onClick={() => {
+                                                setDeviceToDelete(device.id);
+                                                setIsDeleteDeviceModalOpen(true);
+                                            }}
+                                            disabled={isUpdating}
+                                            title="Remove Device"
+                                        >
+                                            <i className="fa-solid fa-trash delete-icon"></i>
+                                        </button>
+                                    )}
                                     
                                     {/* Show toggle for all devices */}
                                     <label className={`switch ${device.isUpdating ? 'updating' : ''}`}>
@@ -1046,8 +1096,11 @@ function RoomsPage() {
                         // Empty state message
                         <div className="no-devices-message" style={{ textAlign: 'center', color: '#666' }}>
                             <p>No devices have been added to this room yet.</p>
-                            {lockedDevices.length > 0 && (
+                            {isOwner && lockedDevices.length > 0 && (
                                 <p>Click "Add Device" to add available devices.</p>
+                            )}
+                            {!isOwner && (
+                                <p>Only the home owner can add devices to this room.</p>
                             )}
                         </div>
                     )}

@@ -154,6 +154,7 @@ body {
     /* Optional: Background color for the container */
     border-radius: 10px;
     /* Optional: Rounded corners */
+    margin-bottom: 20px; /* Add space at the bottom of the list even when there's no button */
 }
 
 .shp-rooms-list {
@@ -760,4 +761,16 @@ body {
     padding: 10px 20px;
     font-size: 14px;
   }
+}
+
+/* Add styles for the owner note */
+.owner-note {
+  text-align: center;
+  color: #5D252D;
+  font-style: italic;
+  margin-top: 20px;
+  font-size: 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
 }

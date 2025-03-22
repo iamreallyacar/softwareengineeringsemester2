@@ -801,3 +801,29 @@ input:checked+.slider:after {
     margin-top: 70px;
   }
 }
+
+/* Add owner note styling - matches the one in home-users-page.css */
+.owner-note {
+  text-align: center;
+  color: #5D252D;
+  font-style: italic;
+  margin-top: 20px;
+  font-size: 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+/* Style the no-devices-message to match other empty states */
+.no-devices-message {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.no-devices-message p {
+  margin: 10px 0;
+  color: #5D252D;
+}
