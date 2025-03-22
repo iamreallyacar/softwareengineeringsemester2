@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Home, Users, UserPlus } from "lucide-react";
+import { ChevronDown, Home, Users, UserPlus, LogIn, Edit, Key, Trash } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import { ChevronLeft, ChevronRight, User } from "lucide-react";
@@ -203,20 +203,24 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                                             ) : (
                                                 <div className="action-buttons">
                                                     <button className="action-btn enter-btn" onClick={() => enterSmartHome(home.id)}>
-                                                        Enter
+                                                        <LogIn className="action-icon" />
+                                                        <span>Enter</span>
                                                     </button>
                                                     <button className="action-btn edit-name-btn" onClick={() => startEditing('name', home)}>
-                                                        Change Smart Home Name
+                                                        <Edit className="action-icon" />
+                                                        <span>Change Smart Home Name</span>
                                                     </button>
                                                     <button className="action-btn edit-password-btn" onClick={() => startEditing('password', home)}>
-                                                        Change Join Password
+                                                        <Key className="action-icon" />
+                                                        <span>Change Join Password</span>
                                                     </button>
                                                     <button 
                                                         className="action-btn delete-btn" 
                                                         onClick={() => handleDeleteHome(home.id)}
                                                         disabled={isDeleting}
                                                     >
-                                                        {isDeleting ? "Deleting..." : "Delete Smart Home"}
+                                                        <Trash className="action-icon" />
+                                                        <span>{isDeleting ? "Deleting..." : "Delete Smart Home"}</span>
                                                     </button>
                                                 </div>
                                             )}

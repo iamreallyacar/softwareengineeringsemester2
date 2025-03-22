@@ -551,22 +551,30 @@ body,
 }
 
 .home-options {
-  background-color: rgba(254, 215, 170, 0.2);
-  padding: 1rem;
-  border-top: 1px solid rgba(234, 88, 12, 0.1);
+  background-color: rgba(255, 250, 245, 0.98); /* Even lighter, more defined background */
+  padding: 1.2rem;
+  border-top: 1px solid rgba(234, 88, 12, 0.25);
+  border-left: 4px solid #ea580c; /* Thicker orange left border */
+  box-shadow: inset 0 2px 4px rgba(234, 88, 12, 0.12), 0 2px 4px rgba(0, 0, 0, 0.04);
+  margin-top: 2px;
   animation: slideDown 0.2s ease-out;
+  border-radius: 0 0 0.6rem 0.6rem;
 }
 
 .action-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.7rem;
   width: 100%;
+  padding: 0.3rem 0;
 }
 
 .action-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-align: left;
-  padding: 0.6rem 1rem;
+  padding: 0.75rem 1rem;
   border: none;
   border-radius: 0.5rem;
   font-size: 0.9rem;
@@ -574,27 +582,46 @@ body,
   cursor: pointer;
   transition: all 0.2s ease;
   color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .action-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.05);
 }
 
+.action-icon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2px;
+}
+
+/* Different colors for each action */
 .enter-btn {
-  background-color: #0ea5e9; /* Blue */
+  background-color: #22c55e; /* Green */
+  color: white;
 }
 
 .edit-name-btn {
-  background-color: #10b981; /* Green */
+  background-color: #f97316; /* Medium orange */
+  color: white;
 }
 
 .edit-password-btn {
-  background-color: #f97316; /* Orange */
+  background-color: #ea580c; /* Dark orange */
+  color: white;
 }
 
 .delete-btn {
   background-color: #ef4444; /* Red */
+  color: white;
+}
+
+/* Improve text weight for better visibility */
+.action-btn span {
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .edit-field {
@@ -626,13 +653,14 @@ body,
 }
 
 .edit-actions button:first-child {
-  background-color: #10b981; /* Green */
+  background-color: #f97316; /* Orange instead of green */
   color: white;
 }
 
 .edit-actions button:last-child {
-  background-color: #d1d5db; /* Light gray */
-  color: #1f2937;
+  background-color: #f1f5f9; /* Light gray with slight contrast */
+  color: #ea580c; /* Orange text to match theme */
+  border: 1px solid rgba(234, 88, 12, 0.3); /* Subtle border */
 }
 
 .edit-actions button:disabled {
