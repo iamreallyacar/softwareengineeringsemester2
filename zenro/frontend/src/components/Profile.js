@@ -4,6 +4,7 @@ import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
 import Navbar from "./NavigationBar";
 import "../css/profile.css";
+import { useNavigate } from "react-router-dom";
 
 function ProfilePage() {
     const [userData, setUserData] = useState(null);
@@ -19,6 +20,10 @@ function ProfilePage() {
         confirm_password: ""
     });
     const [passwordErrors, setPasswordErrors] = useState({});
+    const navigate = useNavigate();
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deletePassword, setDeletePassword] = useState("");
+    const [deleteError, setDeleteError] = useState("");
 
     useEffect(() => {
         fetchProfile();
@@ -312,6 +317,51 @@ function ProfilePage() {
                     setError("");
                 }, 3000);
             }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Update the handleDeleteAccount function to redirect to create account page
+    const handleDeleteAccount = async () => {
+        if (!deletePassword) {
+            setDeleteError("Please enter your password to confirm account deletion");
+            return;
+        }
+        
+        try {
+            setLoading(true);
+            
+            // First authenticate the password
+            try {
+                await api.post(`/users/${userData.id}/change_password/`, {
+                    current_password: deletePassword,
+                    new_password: deletePassword // Using same password - just verifying it's correct
+                });
+                
+                // If we get here, password is correct, proceed with deletion
+                await api.delete(`/users/${userData.id}/`);
+                
+                // On successful deletion, log out and redirect to create account page
+                localStorage.removeItem("token");
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("user");
+                
+                // Redirect to the root path which shows create account for non-authenticated users
+                navigate("/");
+                window.location.reload(); // Force reload to update authentication state
+            } catch (err) {
+                // Password verification failed
+                if (err.response?.status === 400) {
+                    setDeleteError("Incorrect password. Please try again.");
+                } else {
+                    throw err; // Re-throw for the outer catch to handle
+                }
+            }
+        } catch (error) {
+            console.error("Error deleting account:", error);
+            setDeleteError("Failed to delete your account. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -687,6 +737,85 @@ function ProfilePage() {
                             </div>
                         )}
                     </div>
+
+                    {/* Account Deletion Section - Updated Layout */}
+                    <div className="account-deletion-section">
+                        <h2 className="deletion-title">Delete Account</h2>
+                        
+                        <p className="danger-text">
+                            Deleting your account is permanent and will remove all your data, including smart homes, rooms, and devices.
+                        </p>
+                        
+                        <div className="deletion-button-container">
+                            <button 
+                                className="delete-account-button"
+                                onClick={() => setShowDeleteConfirm(true)}
+                            >
+                                <i className="fa-solid fa-trash"></i> Delete My Account
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Delete Account Confirmation Modal */}
+                    {showDeleteConfirm && (
+                        <div className="modal-overlay">
+                            <div className="delete-confirm-modal">
+                                <div className="modal-header">
+                                    <h3>Confirm Account Deletion</h3>
+                                    <button 
+                                        className="close-modal-button"
+                                        onClick={() => {
+                                            setShowDeleteConfirm(false);
+                                            setDeletePassword("");
+                                            setDeleteError("");
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <div className="modal-content">
+                                    <p className="warning-text">
+                                        <i className="fa-solid fa-exclamation-triangle"></i>
+                                        This action cannot be undone. All your data will be permanently deleted.
+                                    </p>
+                                    
+                                    <div className="confirm-password-field">
+                                        <label>Enter your password to confirm:</label>
+                                        <input
+                                            type="password"
+                                            value={deletePassword}
+                                            onChange={(e) => setDeletePassword(e.target.value)}
+                                            placeholder="Your current password"
+                                        />
+                                        {deleteError && (
+                                            <div className="field-error">{deleteError}</div>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="modal-actions">
+                                        <button 
+                                            className="cancel-delete-button"
+                                            onClick={() => {
+                                                setShowDeleteConfirm(false);
+                                                setDeletePassword("");
+                                                setDeleteError("");
+                                            }}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            className="confirm-delete-button"
+                                            onClick={handleDeleteAccount}
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Deleting..." : "Permanently Delete Account"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
