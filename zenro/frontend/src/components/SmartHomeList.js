@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Home, Users, UserPlus, LogIn, Edit, Key, Trash } from "lucide-react";
+import { ChevronDown, Home, Users, UserPlus, LogIn, Edit, Key, Trash, LogOut } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import { ChevronLeft, User } from "lucide-react";
@@ -266,37 +266,160 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
     );
 };
 
-// Update JoinedHomesList to display owner's username
-const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, joinedHomes }) => (
-    <div className="smart-home-list joined">
-        <div className={`list-container ${isJoinedHomesExpanded ? "expanded" : ""}`}>
-            <button className="expand-button" onClick={() => setIsJoinedHomesExpanded(!isJoinedHomesExpanded)}>
-                <div className="button-content">
-                    <div className="icon-container">
-                        <UserPlus className="list-icon" />
+// Update JoinedHomesList to include dropdown and leave functionality
+const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, joinedHomes, onRefreshHomes }) => {
+    const [expandedHomeId, setExpandedHomeId] = useState(null);
+    const [isLeaving, setIsLeaving] = useState(false);
+    const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+    const [homeToLeave, setHomeToLeave] = useState(null);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const toggleHomeOptions = (homeId, e) => {
+        e.preventDefault(); // Prevent navigation
+        setExpandedHomeId(expandedHomeId === homeId ? null : homeId);
+        setError('');
+    };
+
+    const enterSmartHome = (homeId) => {
+        navigate(`/smarthomepage/${homeId}`);
+    };
+
+    const initiateLeaveHome = (home) => {
+        setHomeToLeave(home);
+        setShowLeaveConfirm(true);
+    };
+
+    const cancelLeaveHome = () => {
+        setShowLeaveConfirm(false);
+        setHomeToLeave(null);
+        setError('');
+    };
+
+    const confirmLeaveHome = async () => {
+        if (!homeToLeave) return;
+        
+        setIsLeaving(true);
+        setError('');
+        
+        try {
+            // Get current user ID
+            const userId = localStorage.getItem("userId");
+            
+            // Get current members and remove this user
+            const response = await api.get(`/smarthomes/${homeToLeave.id}/`);
+            const currentMembers = response.data.members || [];
+            
+            // Filter out current user from members array
+            const updatedMembers = currentMembers.filter(memberId => memberId != userId);
+            
+            // Update the smart home with new members list
+            await api.patch(`/smarthomes/${homeToLeave.id}/`, {
+                members: updatedMembers
+            });
+            
+            // Reset UI state
+            setShowLeaveConfirm(false);
+            setHomeToLeave(null);
+            setExpandedHomeId(null);
+            
+            // Refresh the homes lists
+            onRefreshHomes();
+            
+        } catch (err) {
+            console.error("Error leaving smart home:", err);
+            setError("Failed to leave smart home. Please try again.");
+        } finally {
+            setIsLeaving(false);
+        }
+    };
+
+    return (
+        <div className="smart-home-list joined">
+            <div className={`list-container ${isJoinedHomesExpanded ? "expanded" : ""}`}>
+                <button className="expand-button" onClick={() => setIsJoinedHomesExpanded(!isJoinedHomesExpanded)}>
+                    <div className="button-content">
+                        <div className="icon-container">
+                            <UserPlus className="list-icon" />
+                        </div>
+                        <span className="button-text">Smart Homes You Joined</span>
                     </div>
-                    <span className="button-text">Smart Homes You Joined</span>
-                </div>
-                <ChevronDown className={`chevron-icon ${isJoinedHomesExpanded ? "rotated" : ""}`} />
-            </button>
-            {isJoinedHomesExpanded && (
-                <div className="homes-list">
-                    {joinedHomes.length === 0 ? (
-                        <div className="no-homes-message">You haven't joined any smart homes yet</div>
-                    ) : (
-                        joinedHomes.map((home) => (
-                            <Link to={`/smarthomepage/${home.id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={home.id}>
-                                <button className="home-button">
-                                    {home.name} <span className="owner-tag">(Owner: {home.creator_username})</span>
-                                </button>
-                            </Link>
-                        ))
-                    )}
-                </div>
-            )}
+                    <ChevronDown className={`chevron-icon ${isJoinedHomesExpanded ? "rotated" : ""}`} />
+                </button>
+                {isJoinedHomesExpanded && (
+                    <div className="homes-list">
+                        {joinedHomes.length === 0 ? (
+                            <div className="no-homes-message">You haven't joined any smart homes yet</div>
+                        ) : (
+                            joinedHomes.map((home) => (
+                                <div key={home.id} className="joined-home-item">
+                                    <button 
+                                        className="home-button joined-home-button"
+                                        onClick={(e) => toggleHomeOptions(home.id, e)}
+                                    >
+                                        <span>{home.name}</span>
+                                        <div className="home-button-right">
+                                            <span className="owner-tag">(Owner: {home.creator_username})</span>
+                                            <ChevronDown className={`home-chevron ${expandedHomeId === home.id ? "rotated" : ""}`} />
+                                        </div>
+                                    </button>
+                                    
+                                    {expandedHomeId === home.id && (
+                                        <div className="home-options">
+                                            {error && <div className="error-message">{error}</div>}
+                                            
+                                            {showLeaveConfirm && homeToLeave?.id === home.id ? (
+                                                <div className="leave-confirmation">
+                                                    <div className="leave-warning">
+                                                        <LogOut className="warning-icon" />
+                                                        <p className="leave-warning-title">Leave "{home.name}"?</p>
+                                                        <p className="leave-warning-message">
+                                                            You will no longer have access to this smart home and will need to rejoin with the password if you want to access it again.
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <div className="leave-actions">
+                                                        <button 
+                                                            className="leave-cancel-btn"
+                                                            onClick={cancelLeaveHome}
+                                                        >
+                                                            No, Cancel
+                                                        </button>
+                                                        <button 
+                                                            className="leave-confirm-btn"
+                                                            onClick={confirmLeaveHome}
+                                                            disabled={isLeaving}
+                                                        >
+                                                            {isLeaving ? "Leaving..." : "Yes, Leave Smart Home"}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="action-buttons">
+                                                    <button className="action-btn enter-btn" onClick={() => enterSmartHome(home.id)}>
+                                                        <LogIn className="action-icon" />
+                                                        <span>Enter</span>
+                                                    </button>
+                                                    <button 
+                                                        className="action-btn leave-btn" 
+                                                        onClick={() => initiateLeaveHome(home)}
+                                                    >
+                                                        <LogOut className="action-icon" />
+                                                        <span>Leave Smart Home</span>
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 // Update AvailableHomesList to display owner's username
 const AvailableHomesList = ({ 
@@ -584,6 +707,12 @@ const fetchAvailableHomes = async () => {
     }
   };
 
+  // Add a function to refresh all homes lists
+  const refreshAllHomes = async () => {
+    await fetchSmartHomes();
+    await fetchAvailableHomes();
+  };
+
   return (
     <div className="dashboard-container">
         <DashboardHeader />
@@ -609,6 +738,7 @@ const fetchAvailableHomes = async () => {
             isJoinedHomesExpanded={isJoinedHomesExpanded}
             setIsJoinedHomesExpanded={setIsJoinedHomesExpanded}
             joinedHomes={joinedHomes}
+            onRefreshHomes={refreshAllHomes}
             />
             <AvailableHomesList
             isJoinedExpanded={isAvailableExpanded}

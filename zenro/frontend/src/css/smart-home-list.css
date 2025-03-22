@@ -930,3 +930,108 @@ body,
   margin-left: auto; /* Push to the right */
   white-space: nowrap; /* Prevent line breaks */
 }
+
+/* Add styles for joined homes dropdown */
+.joined-home-item {
+  width: 100%;
+}
+
+.joined-home-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-button-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Leave button styling */
+.leave-btn {
+  background-color: #ef4444; /* Red color for leave */
+  color: white;
+}
+
+/* Leave confirmation styling */
+.leave-confirmation {
+  background-color: rgba(254, 226, 226, 0.5); /* Light red background */
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 8px;
+  border-left: 4px solid #ef4444; /* Red border */
+  animation: slideDown 0.3s ease-out;
+}
+
+.leave-warning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.leave-warning .warning-icon {
+  color: #ef4444; /* Red icon */
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+}
+
+.leave-warning-title {
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 4px 0;
+}
+
+.leave-warning-message {
+  color: #951d1d; /* Dark red */
+  font-size: 0.85rem;
+  margin: 4px 0 0 0;
+}
+
+.leave-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.leave-cancel-btn, .leave-confirm-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.leave-cancel-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.leave-cancel-btn:hover {
+  background-color: #e5e7eb;
+}
+
+.leave-confirm-btn {
+  background-color: #ef4444;
+  color: white;
+}
+
+.leave-confirm-btn:hover:not(:disabled) {
+  background-color: #e54646;
+}
+
+.leave-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Make the owner tag display properly in dropdown mode */
+.joined-home-button .owner-tag {
+  margin-right: 8px;
+}
