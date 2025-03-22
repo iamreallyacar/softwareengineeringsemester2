@@ -72,12 +72,6 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    
-    // New states for password verification modal
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [homeToDelete, setHomeToDelete] = useState(null);
-    const [deletePassword, setDeletePassword] = useState("");
-    const [deleteError, setDeleteError] = useState("");
 
     const toggleHomeOptions = (homeId) => {
         setExpandedHomeId(expandedHomeId === homeId ? null : homeId);
@@ -120,54 +114,17 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
         }
     };
 
-    // New function to initiate deletion confirmation
-    const initiateDeleteHome = (home) => {
-        setHomeToDelete(home);
-        setShowDeleteConfirm(true);
-        setDeletePassword("");
-        setDeleteError("");
-    };
-    
-    // Updated handleDeleteHome with password verification
-    const handleDeleteHome = async () => {
-        if (!homeToDelete) return;
-        
-        if (!deletePassword) {
-            setDeleteError("Please enter your password to confirm deletion");
-            return;
-        }
-        
-        setIsDeleting(true);
-        setDeleteError("");
-        
-        try {
-            const userId = localStorage.getItem("userId");
-            
-            // First verify the password
+    const handleDeleteHome = async (homeId) => {
+        if (window.confirm('Are you sure you want to delete this smart home? This action cannot be undone.')) {
+            setIsDeleting(true);
             try {
-                // Using the password change endpoint to verify (changing to same password)
-                await api.post(`/users/${userId}/change_password/`, {
-                    current_password: deletePassword,
-                    new_password: deletePassword // Same password to avoid actual change
-                });
-                
-                // If we get here, password is correct, proceed with deletion
-                await onDeleteHome(homeToDelete.id);
-                setShowDeleteConfirm(false);
+                await onDeleteHome(homeId);
                 setExpandedHomeId(null);
             } catch (err) {
-                // Password verification failed
-                if (err.response?.status === 400) {
-                    setDeleteError("Incorrect password. Please try again.");
-                } else {
-                    throw err; // Re-throw for the outer catch to handle
-                }
+                setError(err.response?.data?.detail || 'Failed to delete smart home');
+            } finally {
+                setIsDeleting(false);
             }
-        } catch (err) {
-            console.error("Error deleting smart home:", err);
-            setDeleteError("Failed to delete smart home. Please try again.");
-        } finally {
-            setIsDeleting(false);
         }
     };
 
@@ -259,10 +216,11 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                                                     </button>
                                                     <button 
                                                         className="action-btn delete-btn" 
-                                                        onClick={() => initiateDeleteHome(home)}
+                                                        onClick={() => handleDeleteHome(home.id)}
+                                                        disabled={isDeleting}
                                                     >
                                                         <Trash className="action-icon" />
-                                                        <span>Delete Smart Home</span>
+                                                        <span>{isDeleting ? "Deleting..." : "Delete Smart Home"}</span>
                                                     </button>
                                                 </div>
                                             )}
@@ -274,67 +232,6 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                     </div>
                 )}
             </div>
-            
-            {/* Delete Smart Home Confirmation Modal */}
-            {showDeleteConfirm && homeToDelete && (
-                <div className="modal-overlay">
-                    <div className="delete-confirm-modal">
-                        <div className="modal-header">
-                            <h3>Confirm Smart Home Deletion</h3>
-                            <button 
-                                className="close-modal-button"
-                                onClick={() => {
-                                    setShowDeleteConfirm(false);
-                                    setDeletePassword("");
-                                    setDeleteError("");
-                                }}
-                            >
-                                <i className="fa-solid fa-times"></i>
-                            </button>
-                        </div>
-                        
-                        <div className="modal-content">
-                            <p className="warning-text">
-                                <i className="fa-solid fa-exclamation-triangle"></i>
-                                This action cannot be undone. "{homeToDelete.name}" and all its rooms and devices will be permanently deleted.
-                            </p>
-                            
-                            <div className="confirm-password-field">
-                                <label>Enter your account password to confirm:</label>
-                                <input
-                                    type="password"
-                                    value={deletePassword}
-                                    onChange={(e) => setDeletePassword(e.target.value)}
-                                    placeholder="Your account password"
-                                />
-                                {deleteError && (
-                                    <div className="field-error">{deleteError}</div>
-                                )}
-                            </div>
-                            
-                            <div className="modal-actions">
-                                <button 
-                                    className="cancel-delete-button"
-                                    onClick={() => {
-                                        setShowDeleteConfirm(false);
-                                        setDeletePassword("");
-                                        setDeleteError("");
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                                <button 
-                                    className="confirm-delete-button"
-                                    onClick={handleDeleteHome}
-                                    disabled={isDeleting}
-                                >
-                                    {isDeleting ? "Deleting..." : "Permanently Delete Smart Home"}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
