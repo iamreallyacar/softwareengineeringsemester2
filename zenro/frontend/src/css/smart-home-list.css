@@ -284,6 +284,7 @@ body,
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Push items to edges */
   width: 100%;
   text-align: left;
   padding: 0.75rem 2rem;
@@ -922,9 +923,10 @@ body,
 /* Owner username tag styling */
 .owner-tag {
   display: inline-block;
-  font-size: 0.8rem;
-  color: #6b7280;
+  font-size: 0.65rem;
+  color: #5a5757; /* Much darker color, almost black */
   font-style: italic;
-  font-weight: normal;
-  margin-left: 6px;
+  font-weight: 500; /* Slightly bolder */
+  margin-left: auto; /* Push to the right */
+  white-space: nowrap; /* Prevent line breaks */
 }
