@@ -31,7 +31,7 @@
   flex-direction: column;
   justify-content: center;
   flex-grow: 1; /* Takes up remaining space */
-  gap: 2.5rem; /* Responsive spacing */
+  gap: 2rem; /* Slightly reduced spacing to fit all 5 items */
 }
 
 /* Logo at the bottom */
@@ -62,6 +62,7 @@
   position: relative;
   padding: 1vh;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 /* Navigation Icons */

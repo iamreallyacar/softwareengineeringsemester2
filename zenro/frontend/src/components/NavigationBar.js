@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Add useNavigate
 import { useState, useEffect } from "react";
 import user from "../assets/images/user.svg";
 import notification from "../assets/images/notification.svg";
@@ -6,14 +6,25 @@ import overview from "../assets/images/overview.svg";
 import security from "../assets/images/security.svg";
 import temperature from "../assets/images/Temperature.svg";
 import logo from "../assets/images/logo.svg";
+import logOut from "../assets/images/logout.svg"; // You'll need to add this SVG file
 
 const Sidebar = () => {
+    // Add navigate for logout functionality
+    const navigate = useNavigate();
+    
     // State to manage sidebar visibility
     const [isOpen, setIsOpen] = useState(false);
 
     // Toggle function for sidebar
     const toggleSidebar = () => {
       setIsOpen(!isOpen);
+    };
+
+    // Handle logout functionality
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
+        navigate("/login");
     };
 
     useEffect(() => {
@@ -67,6 +78,11 @@ const Sidebar = () => {
             <img src={notification} alt="Notifications" className="nav-icon" />
             <span className="nav-text">Notifications</span>
           </Link>
+          {/* Add logout button */}
+          <div className="nav-item" onClick={handleLogout}>
+            <img src={logOut} alt="Logout" className="nav-icon" />
+            <span className="nav-text">Logout</span>
+          </div>
         </div>
 
         {/* Logo at the bottom */}

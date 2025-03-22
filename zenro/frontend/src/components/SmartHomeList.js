@@ -5,22 +5,11 @@ import api from "../api";
 import { ChevronLeft, User } from "lucide-react";
 import Background from "./Background.js";
 
-// Extract Header Component
+// Update DashboardHeader to remove the back button
 const DashboardHeader = () => {
-    const navigate = useNavigate();
-
-    const handleBack = () => {
-        localStorage.removeItem("accessToken"); // Clear the access token
-        localStorage.removeItem("userId"); // Clear the user ID
-        navigate("/"); // Navigate to the root (login) page
-    };
-
     return (
         <div className="dashboard-header">
-            <button className="back-button" onClick={handleBack}>
-                <ChevronLeft className="back-icon" />
-                <span>Back</span>
-            </button>
+            {/* Back button removed */}
         </div>
     );
 };
