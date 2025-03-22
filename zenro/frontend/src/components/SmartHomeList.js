@@ -62,35 +62,175 @@ const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, 
     </div>
 );
 
-// Extract Owned Homes List - modified to only show owned homes
-const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes }) => (
-    <div className="smart-home-list owned">
-        <div className={`list-container ${isOwnedExpanded ? "expanded" : ""}`}>
-            <button className="expand-button" onClick={() => setIsOwnedExpanded(!isOwnedExpanded)}>
-                <div className="button-content">
-                    <div className="icon-container">
-                        <Home className="list-icon" />
+// Update the OwnedHomesList component to include dropdown management options
+const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDeleteHome, onUpdateHome }) => {
+    const [expandedHomeId, setExpandedHomeId] = useState(null);
+    const [editName, setEditName] = useState('');
+    const [editPassword, setEditPassword] = useState('');
+    const [editing, setEditing] = useState(null); // 'name' or 'password'
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const toggleHomeOptions = (homeId) => {
+        setExpandedHomeId(expandedHomeId === homeId ? null : homeId);
+        setEditing(null);
+        setError('');
+    };
+
+    const startEditing = (type, home) => {
+        setEditing(type);
+        if (type === 'name') {
+            setEditName(home.name);
+        } else if (type === 'password') {
+            setEditPassword(home.join_password || '');
+        }
+        setError('');
+    };
+
+    const cancelEditing = () => {
+        setEditing(null);
+        setEditName('');
+        setEditPassword('');
+        setError('');
+    };
+
+    const handleSaveChanges = async (homeId) => {
+        setIsUpdating(true);
+        setError('');
+        
+        try {
+            const updateData = editing === 'name' 
+                ? { name: editName } 
+                : { join_password: editPassword };
+                
+            await onUpdateHome(homeId, updateData);
+            setEditing(null);
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to update smart home');
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const handleDeleteHome = async (homeId) => {
+        if (window.confirm('Are you sure you want to delete this smart home? This action cannot be undone.')) {
+            setIsDeleting(true);
+            try {
+                await onDeleteHome(homeId);
+                setExpandedHomeId(null);
+            } catch (err) {
+                setError(err.response?.data?.detail || 'Failed to delete smart home');
+            } finally {
+                setIsDeleting(false);
+            }
+        }
+    };
+
+    const enterSmartHome = (homeId) => {
+        navigate(`/smarthomepage/${homeId}`);
+    };
+
+    return (
+        <div className="smart-home-list owned">
+            <div className={`list-container ${isOwnedExpanded ? "expanded" : ""}`}>
+                <button className="expand-button" onClick={() => setIsOwnedExpanded(!isOwnedExpanded)}>
+                    <div className="button-content">
+                        <div className="icon-container">
+                            <Home className="list-icon" />
+                        </div>
+                        <span className="button-text">Smart Homes You Own</span>
                     </div>
-                    <span className="button-text">Smart Homes You Own</span>
-                </div>
-                <ChevronDown className={`chevron-icon ${isOwnedExpanded ? "rotated" : ""}`} />
-            </button>
-            {isOwnedExpanded && (
-                <div className="homes-list">
-                    {smartHomes.length === 0 ? (
-                        <div className="no-homes-message">You don't own any smart homes yet</div>
-                    ) : (
-                        smartHomes.map((home) => (
-                            <Link to={`/smarthomepage/${home.id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={home.id}>
-                                <button className="home-button">{home.name}</button>
-                            </Link>
-                        ))
-                    )}
-                </div>
-            )}
+                    <ChevronDown className={`chevron-icon ${isOwnedExpanded ? "rotated" : ""}`} />
+                </button>
+                
+                {isOwnedExpanded && (
+                    <div className="homes-list">
+                        {smartHomes.length === 0 ? (
+                            <div className="no-homes-message">You don't own any smart homes yet</div>
+                        ) : (
+                            smartHomes.map((home) => (
+                                <div key={home.id} className="owned-home-item">
+                                    <button 
+                                        className="home-button home-owner-button"
+                                        onClick={() => toggleHomeOptions(home.id)}
+                                    >
+                                        <span>{home.name}</span>
+                                        <ChevronDown className={`home-chevron ${expandedHomeId === home.id ? "rotated" : ""}`} />
+                                    </button>
+                                    
+                                    {expandedHomeId === home.id && (
+                                        <div className="home-options">
+                                            {error && <div className="error-message">{error}</div>}
+                                            
+                                            {editing === 'name' ? (
+                                                <div className="edit-field">
+                                                    <input 
+                                                        type="text" 
+                                                        value={editName} 
+                                                        onChange={(e) => setEditName(e.target.value)}
+                                                        placeholder="Enter new name"
+                                                    />
+                                                    <div className="edit-actions">
+                                                        <button 
+                                                            onClick={() => handleSaveChanges(home.id)}
+                                                            disabled={isUpdating || !editName.trim()}
+                                                        >
+                                                            {isUpdating ? "Saving..." : "Save"}
+                                                        </button>
+                                                        <button onClick={cancelEditing}>Cancel</button>
+                                                    </div>
+                                                </div>
+                                            ) : editing === 'password' ? (
+                                                <div className="edit-field">
+                                                    <input 
+                                                        type="password" 
+                                                        value={editPassword} 
+                                                        onChange={(e) => setEditPassword(e.target.value)}
+                                                        placeholder="Enter new join password"
+                                                    />
+                                                    <div className="edit-actions">
+                                                        <button 
+                                                            onClick={() => handleSaveChanges(home.id)}
+                                                            disabled={isUpdating}
+                                                        >
+                                                            {isUpdating ? "Saving..." : "Save"}
+                                                        </button>
+                                                        <button onClick={cancelEditing}>Cancel</button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="action-buttons">
+                                                    <button className="action-btn enter-btn" onClick={() => enterSmartHome(home.id)}>
+                                                        Enter
+                                                    </button>
+                                                    <button className="action-btn edit-name-btn" onClick={() => startEditing('name', home)}>
+                                                        Change Smart Home Name
+                                                    </button>
+                                                    <button className="action-btn edit-password-btn" onClick={() => startEditing('password', home)}>
+                                                        Change Join Password
+                                                    </button>
+                                                    <button 
+                                                        className="action-btn delete-btn" 
+                                                        onClick={() => handleDeleteHome(home.id)}
+                                                        disabled={isDeleting}
+                                                    >
+                                                        {isDeleting ? "Deleting..." : "Delete Smart Home"}
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 // New Component: Joined Homes List
 const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, joinedHomes }) => (
@@ -309,6 +449,28 @@ function SmartHomeList() {
     }
   };
 
+  const handleDeleteHome = async (homeId) => {
+    try {
+      await api.delete(`/smarthomes/${homeId}/`);
+      await fetchSmartHomes(); // Refresh the list
+      return true;
+    } catch (err) {
+      console.error("Error deleting smart home:", err);
+      throw err;
+    }
+  };
+
+  const handleUpdateHome = async (homeId, updateData) => {
+    try {
+      await api.patch(`/smarthomes/${homeId}/`, updateData);
+      await fetchSmartHomes(); // Refresh the list
+      return true;
+    } catch (err) {
+      console.error("Error updating smart home:", err);
+      throw err;
+    }
+  };
+
   return (
     <div className="dashboard-container">
         <DashboardHeader />
@@ -327,6 +489,8 @@ function SmartHomeList() {
             isOwnedExpanded={isOwnedExpanded}
             setIsOwnedExpanded={setIsOwnedExpanded}
             smartHomes={ownedHomes}
+            onDeleteHome={handleDeleteHome}
+            onUpdateHome={handleUpdateHome}
             />
             <JoinedHomesList
             isJoinedHomesExpanded={isJoinedHomesExpanded}

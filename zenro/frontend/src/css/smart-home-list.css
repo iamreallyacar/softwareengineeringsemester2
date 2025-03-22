@@ -527,3 +527,115 @@ body,
   display: block;
   height: 30px; /* Extra padding at bottom of container */
 }
+
+/* Home owner options styling */
+.owned-home-item {
+  width: 100%;
+}
+
+.home-owner-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-chevron {
+  width: 1rem;
+  height: 1rem;
+  color: #ea580c;
+  transition: transform 0.2s ease;
+}
+
+.home-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.home-options {
+  background-color: rgba(254, 215, 170, 0.2);
+  padding: 1rem;
+  border-top: 1px solid rgba(234, 88, 12, 0.1);
+  animation: slideDown 0.2s ease-out;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.action-btn {
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.enter-btn {
+  background-color: #0ea5e9; /* Blue */
+}
+
+.edit-name-btn {
+  background-color: #10b981; /* Green */
+}
+
+.edit-password-btn {
+  background-color: #f97316; /* Orange */
+}
+
+.delete-btn {
+  background-color: #ef4444; /* Red */
+}
+
+.edit-field {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-field input {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--input);
+  width: 100%;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-actions button {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.edit-actions button:first-child {
+  background-color: #10b981; /* Green */
+  color: white;
+}
+
+.edit-actions button:last-child {
+  background-color: #d1d5db; /* Light gray */
+  color: #1f2937;
+}
+
+.edit-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
