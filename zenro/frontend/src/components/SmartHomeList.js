@@ -32,21 +32,25 @@ const UserProfile = ({ username }) => (
             <User className="avatar-icon" />
         </div>
         <h1 className="welcome-text">Welcome, {username || "User"}</h1>
-        <p className="welcome-caption">Manage your smart homes and account settings.</p>
+        <p className="welcome-caption">Manage your smart homes here</p>
     </div>
 );
 
-// Extract Smart Home Creation Form - Now with join password field
-const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, handleCreateSmartHome, isCreating }) => (
+// Update CreateHomeForm to display field-specific errors
+const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, handleCreateSmartHome, isCreating, formError }) => (
     <div className="create-home">
         <form onSubmit={handleCreateSmartHome}>
-            <input
-                type="text"
-                value={homeName}
-                onChange={(e) => setHomeName(e.target.value)}
-                placeholder="Home Name"
-                required
-            />
+            <div className="form-field">
+                <input
+                    type="text"
+                    value={homeName}
+                    onChange={(e) => setHomeName(e.target.value)}
+                    placeholder="Home Name"
+                    required
+                    className={formError ? "input-error" : ""}
+                />
+                {formError && <div className="form-error-message">{formError}</div>}
+            </div>
             <input
                 type="password" 
                 value={joinPassword}
@@ -531,6 +535,9 @@ function SmartHomeList() {
   const [homeWithPasswordOpen, setHomeWithPasswordOpen] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   
+  // Add a new state variable for form-specific errors
+  const [formError, setFormError] = useState("");
+  
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
@@ -640,18 +647,53 @@ const fetchAvailableHomes = async () => {
 
   const handleCreateSmartHome = async (event) => {
     event.preventDefault();
+    
+    // Clear any previous errors
+    setFormError("");
+    setError("");
+    
+    // Check if the name is empty (though HTML required should prevent this)
+    if (!homeName.trim()) {
+      setFormError("Home name cannot be empty");
+      return;
+    }
+    
+    // Check if the current user already has a home with the same name
+    const hasDuplicateName = ownedHomes.some(
+      home => home.name.toLowerCase() === homeName.toLowerCase()
+    );
+    
+    if (hasDuplicateName) {
+      setFormError(`You already have a smart home named "${homeName}"`);
+      return;
+    }
+    
     setIsCreating(true);
     try {
       await api.post("/smarthomes/", {
         name: homeName,
         join_password: joinPassword
       });
+      
+      // Reset form fields after successful creation
       setHomeName("");
       setJoinPassword("");
       fetchSmartHomes();
     } catch (err) {
       console.error("Error creating smart home:", err);
-      setError("Error creating new smart home");
+      
+      // Check for specific error codes from the API
+      if (err.response && err.response.data) {
+        if (err.response.data.name) {
+          // If the API returns a validation error for the name field
+          setFormError(err.response.data.name[0]);
+        } else {
+          // General error
+          setError("Error creating new smart home");
+        }
+      } else {
+        setError("Error connecting to the server");
+      }
     } finally {
       setIsCreating(false);
     }
@@ -714,6 +756,7 @@ const fetchAvailableHomes = async () => {
             setJoinPassword={setJoinPassword}
             handleCreateSmartHome={handleCreateSmartHome}
             isCreating={isCreating}
+            formError={formError}
             />
             <OwnedHomesList
             isOwnedExpanded={isOwnedExpanded}

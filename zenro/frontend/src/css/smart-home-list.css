@@ -312,9 +312,11 @@ body,
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  width: 100%;
 }
 
 .create-home input {
+  width: 100%;
   padding: 0.75rem;
   border-radius: 0.5rem;
   border: 1px solid var(--input);
@@ -1034,4 +1036,24 @@ body,
 /* Make the owner tag display properly in dropdown mode */
 .joined-home-button .owner-tag {
   margin-right: 8px;
+}
+
+/* Add these styles for form validation */
+.form-field {
+  position: relative;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444 !important;
+}
+
+.form-error-message {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  margin-left: 2px;
+  font-weight: 500;
 }
