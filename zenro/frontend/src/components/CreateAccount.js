@@ -81,12 +81,12 @@ function CreateAccount({ setIsAuthenticated }) {
         return isValid;
     };
 
-    // Update the handleSubmit function to better handle email uniqueness errors
+    // Update the handleSubmit function with proper validation
     const handleSubmit = async (e) => {
         // Prevent the default form submission behavior
         e.preventDefault();
         
-        // Validate form before submission
+        // Basic form validation (required fields, etc.)
         if (!validateForm()) {
             return;
         }
@@ -94,24 +94,48 @@ function CreateAccount({ setIsAuthenticated }) {
         setLoading(true);
 
         try {
-            // Check if email already exists before attempting to register
+            // First check both username and email uniqueness in one step
+            let hasUniqueError = false;
+            
+            // Check username uniqueness
             try {
-                // Use the users endpoint to check if email exists
-                const checkResponse = await api.get(`/users/?email=${encodeURIComponent(email)}`);
-                console.log("Email check response:", checkResponse);
+                const usernameCheckResponse = await api.get(`/users/?username=${encodeURIComponent(username)}`);
+                console.log("Username check response:", usernameCheckResponse);
                 
-                // If we get results back, it means the email already exists
-                if (Array.isArray(checkResponse.data) && checkResponse.data.length > 0) {
-                    setEmailError("This email is already registered. Please use a different email address.");
-                    setLoading(false);
-                    return;
+                // If the exact username exists, show error
+                if (Array.isArray(usernameCheckResponse.data) && 
+                    usernameCheckResponse.data.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+                    setUsernameError("This username is already taken. Please choose another.");
+                    hasUniqueError = true;
                 }
-            } catch (checkErr) {
-                console.log("Email check error (continuing):", checkErr);
-                // Continue with registration attempt even if check fails
-                // Backend validation will catch duplicates
+            } catch (usernameErr) {
+                console.log("Username check error:", usernameErr);
+                // Continue anyway - if there's an issue, backend validation will catch it
             }
             
+            // Check email uniqueness (separate from username check)
+            try {
+                const emailCheckResponse = await api.get(`/users/?email=${encodeURIComponent(email)}`);
+                console.log("Email check response:", emailCheckResponse);
+                
+                // If the exact email exists, show error - check case insensitive
+                if (Array.isArray(emailCheckResponse.data) && 
+                    emailCheckResponse.data.some(user => user.email.toLowerCase() === email.toLowerCase())) {
+                    setEmailError("This email is already registered. Please use a different email address.");
+                    hasUniqueError = true;
+                }
+            } catch (emailErr) {
+                console.log("Email check error:", emailErr);
+                // Continue anyway - if there's an issue, backend validation will catch it
+            }
+            
+            // If either username or email is already in use, stop submission
+            if (hasUniqueError) {
+                setLoading(false);
+                return;
+            }
+            
+            // If we got here, both username and email are unique
             // Prepare profile data, only including non-empty fields
             const profileData = {};
             if (birthdate) profileData.date_of_birth = birthdate;
@@ -161,24 +185,17 @@ function CreateAccount({ setIsAuthenticated }) {
             if (error.response && error.response.data) {
                 console.log("Error data:", error.response.data);
                 
-                // Improved handling for various error formats
+                // Handle field-specific errors from backend
                 if (error.response.data.username) {
                     setUsernameError(Array.isArray(error.response.data.username) 
                         ? error.response.data.username[0] 
                         : error.response.data.username);
                 }
                 
-                // Enhanced email error detection for multiple formats
                 if (error.response.data.email) {
                     setEmailError(Array.isArray(error.response.data.email) 
                         ? error.response.data.email[0] 
                         : error.response.data.email);
-                } else if (typeof error.response.data === 'object' && 
-                          Object.values(error.response.data).some(v => 
-                            (typeof v === 'string' && v.toLowerCase().includes('email')) || 
-                            (Array.isArray(v) && v.some(msg => typeof msg === 'string' && msg.toLowerCase().includes('email')))
-                          )) {
-                    setEmailError("This email address is already in use.");
                 }
                 
                 if (error.response.data.password) {
@@ -196,8 +213,7 @@ function CreateAccount({ setIsAuthenticated }) {
                 // Handle other error types
                 else if (!error.response.data.username && 
                         !error.response.data.email && 
-                        !error.response.data.password && 
-                        !error.response.data.profile &&
+                        !error.response.data.password &&
                         !error.response.data.non_field_errors) {
                     const errorMessage = error.response.data.detail ||
                         (typeof error.response.data === "string" 
