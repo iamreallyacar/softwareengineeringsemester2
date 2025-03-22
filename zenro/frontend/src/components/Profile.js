@@ -99,6 +99,7 @@ function ProfilePage() {
         }
     };
 
+    // Update the saveField function to check phone number uniqueness
     const saveField = async () => {
         if (!userData) return;
         
@@ -182,7 +183,42 @@ function ProfilePage() {
                 }
             } else if (['phone_number', 'date_of_birth', 'gender'].includes(fieldName)) {
                 try {
-                    // Profile update - fix the feedback issue
+                    // For phone_number, check uniqueness only if it's not empty
+                    if (fieldName === 'phone_number' && newValue && newValue.trim() !== '') {
+                        try {
+                            console.log("Checking phone number uniqueness for:", newValue);
+        
+                            // Make a direct request to check if the phone number exists
+                            const profilesResponse = await api.get('/user-profiles/');
+                            const allProfiles = profilesResponse.data;
+        
+                            // Find any profile with this phone number that doesn't belong to current user
+                            const duplicateProfile = allProfiles.find(profile => 
+                                profile.phone_number === newValue && profile.user !== userData.id
+                            );
+        
+                            console.log("Duplicate profile check:", duplicateProfile);
+        
+                            if (duplicateProfile) {
+                                setError("This phone number is already registered with another account.");
+                                setTimeout(() => {
+                                    setError("");
+                                }, 3000);
+                                setLoading(false);
+                                return; // Stop the save process
+                            }
+                        } catch (checkErr) {
+                            console.error("Error checking phone number uniqueness:", checkErr);
+                            setError("Could not verify phone number uniqueness. Try again later.");
+                            setTimeout(() => {
+                                setError("");
+                            }, 3000);
+                            setLoading(false);
+                            return; // Don't proceed if we can't verify uniqueness
+                        }
+                    }
+                    
+                    // Update profile as before
                     if (userData.profile) {
                         // Update existing profile
                         await api.patch(`/user-profiles/${userData.profile.id}/`, {
@@ -216,7 +252,16 @@ function ProfilePage() {
                     setEditingField(null);
                 } catch (err) {
                     console.error("Profile update error:", err);
-                    setError(`Failed to update ${fieldName.replace('_', ' ')}. Please try again.`);
+                    
+                    // Check for phone number uniqueness error from backend
+                    if (fieldName === 'phone_number' && 
+                        (err.response?.data?.phone_number || 
+                        (typeof err.response?.data === 'object' && err.response?.data?.detail?.includes("phone")))) {
+                        setError("This phone number is already registered. Please use a different one.");
+                    } else {
+                        setError(`Failed to update ${fieldName.replace('_', ' ')}. Please try again.`);
+                    }
+                    
                     // Add timeout to clear error
                     setTimeout(() => {
                         setError("");
@@ -508,8 +553,15 @@ function ProfilePage() {
                                         onChange={handleInputChange}
                                         placeholder={userData?.profile?.phone_number || ""}
                                     />
+                                    {error && (error.includes("phone") || error.includes("Phone")) && (
+                                        <div className="field-note error-note">
+                                            <i className="fa-solid fa-exclamation-circle"></i> {error}
+                                        </div>
+                                    )}
                                     <div className="edit-actions">
-                                        <button onClick={saveField} disabled={loading}>Save</button>
+                                        <button onClick={saveField} disabled={loading}>
+                                            {loading ? 'Saving...' : 'Save'}
+                                        </button>
                                         <button onClick={handleCancelEdit}>Cancel</button>
                                     </div>
                                 </div>
