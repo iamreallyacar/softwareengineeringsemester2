@@ -110,7 +110,32 @@ function ProfilePage() {
             // Different handling based on field type
             if (['username', 'email', 'first_name', 'last_name'].includes(fieldName)) {
                 try {
-                    // Update user basic information
+                    // For email field, check uniqueness first
+                    if (fieldName === 'email' && newValue) {
+                        // Check if email already exists
+                        try {
+                            const checkResponse = await api.get(`/users/?email=${newValue}`);
+                            // If response contains users with this email (excluding current user)
+                            const existingUsers = checkResponse.data.filter(user => 
+                                user.email === newValue && user.id !== userData.id
+                            );
+                            
+                            if (existingUsers.length > 0) {
+                                setError("This email is already registered. Please use a different one.");
+                                // Add timeout to clear error
+                                setTimeout(() => {
+                                    setError("");
+                                }, 3000);
+                                setLoading(false);
+                                return; // Stop the process here
+                            }
+                        } catch (checkErr) {
+                            console.error("Error checking email uniqueness:", checkErr);
+                            // Continue with update and let the backend handle any issues
+                        }
+                    }
+                    
+                    // Update user information
                     await api.patch(`/users/${userData.id}/`, {
                         [fieldName]: newValue
                     });
@@ -124,44 +149,79 @@ function ProfilePage() {
                     setSuccess(`${fieldName.replace('_', ' ')} updated successfully!`);
                     setEditingField(null);
                 } catch (err) {
-                    // Handle specific error for username uniqueness
-                    if (fieldName === 'username' && err.response?.data?.username) {
-                        setError("This username is already taken. Please choose a different one.");
-                    } else if (fieldName === 'email' && err.response?.data?.email) {
-                        setError("This email is already registered. Please use a different one.");
-                    } else {
-                        throw err; // Re-throw for the outer catch to handle other errors
+                    console.error("API error details:", err.response?.data);
+                    
+                    // Handle all possible error formats from Django REST Framework
+                    if (fieldName === 'username') {
+                        if (err.response?.data?.username || 
+                            (typeof err.response?.data === 'object' && err.response?.data?.detail?.includes("username"))) {
+                            setError("This username is already taken. Please choose a different one.");
+                            // Add timeout to clear error
+                            setTimeout(() => {
+                                setError("");
+                            }, 3000);
+                            return;
+                        }
+                    } 
+                    else if (fieldName === 'email') {
+                        // Check all possible error response formats
+                        if (err.response?.data?.email || 
+                            (typeof err.response?.data === 'object' && err.response?.data?.detail?.includes("email")) ||
+                            (err.response?.status === 400 && err.response?.data?.non_field_errors)) {
+                            setError("This email is already registered. Please use a different one.");
+                            // Add timeout to clear error
+                            setTimeout(() => {
+                                setError("");
+                            }, 3000);
+                            return;
+                        }
                     }
+                    
+                    // For other errors
+                    throw err;
                 }
             } else if (['phone_number', 'date_of_birth', 'gender'].includes(fieldName)) {
-                // Update user profile information
-                if (userData.profile) {
-                    // Update existing profile
-                    await api.patch(`/user-profiles/${userData.profile.id}/`, {
-                        [fieldName]: newValue || null
-                    });
-                } else {
-                    // Create new profile
-                    const profileResponse = await api.post('/user-profiles/', {
-                        user: userData.id,
-                        [fieldName]: newValue || null
-                    });
+                try {
+                    // Profile update - fix the feedback issue
+                    if (userData.profile) {
+                        // Update existing profile
+                        await api.patch(`/user-profiles/${userData.profile.id}/`, {
+                            [fieldName]: newValue || null
+                        });
+                    } else {
+                        // Create new profile
+                        const profileResponse = await api.post('/user-profiles/', {
+                            user: userData.id,
+                            [fieldName]: newValue || null
+                        });
+                        
+                        // Update local state with new profile
+                        setUserData(prev => ({
+                            ...prev,
+                            profile: profileResponse.data
+                        }));
+                    }
                     
-                    // Update local state with new profile
+                    // Update local state for profile fields
                     setUserData(prev => ({
                         ...prev,
-                        profile: profileResponse.data
+                        profile: {
+                            ...prev.profile,
+                            [fieldName]: newValue
+                        }
                     }));
+                    
+                    // Exit edit mode and show success message for profile fields
+                    setSuccess(`${fieldName.replace('_', ' ')} updated successfully!`);
+                    setEditingField(null);
+                } catch (err) {
+                    console.error("Profile update error:", err);
+                    setError(`Failed to update ${fieldName.replace('_', ' ')}. Please try again.`);
+                    // Add timeout to clear error
+                    setTimeout(() => {
+                        setError("");
+                    }, 3000);
                 }
-                
-                // Update local state for profile fields
-                setUserData(prev => ({
-                    ...prev,
-                    profile: {
-                        ...prev.profile,
-                        [fieldName]: newValue
-                    }
-                }));
             }
             
             // Clear success message after 3 seconds
@@ -170,7 +230,12 @@ function ProfilePage() {
             }, 3000);
         } catch (error) {
             console.error("Error updating field:", error);
+            console.error("Response data:", error.response?.data);
             setError(error.response?.data?.detail || `Failed to update ${editingField}`);
+            // Add timeout to clear error
+            setTimeout(() => {
+                setError("");
+            }, 3000);
         } finally {
             setLoading(false);
         }
@@ -233,9 +298,17 @@ function ProfilePage() {
                     });
                 } else {
                     setError("Failed to change password. Please try again.");
+                    // Add timeout to clear error
+                    setTimeout(() => {
+                        setError("");
+                    }, 3000);
                 }
             } else {
                 setError("An error occurred. Please try again.");
+                // Add timeout to clear error
+                setTimeout(() => {
+                    setError("");
+                }, 3000);
             }
         } finally {
             setLoading(false);
@@ -320,7 +393,7 @@ function ProfilePage() {
                             )}
                         </div>
                         
-                        {/* Email Field */}
+                        {/* Email Field - add clear error feedback */}
                         <div className="profile-field">
                             {editingField === 'email' ? (
                                 <div className="field-edit">
@@ -331,6 +404,11 @@ function ProfilePage() {
                                         onChange={handleInputChange}
                                         placeholder={userData?.email || ""}
                                     />
+                                    {error && error.includes("email") && (
+                                        <div className="field-note">
+                                            <i className="fa-solid fa-info-circle"></i> {error}
+                                        </div>
+                                    )}
                                     <div className="edit-actions">
                                         <button onClick={saveField} disabled={loading}>Save</button>
                                         <button onClick={handleCancelEdit}>Cancel</button>
@@ -353,7 +431,7 @@ function ProfilePage() {
                             )}
                         </div>
                         
-                        {/* First Name Field */}
+                        {/* First Name Field - fix className typo */}
                         <div className="profile-field">
                             {editingField === 'first_name' ? (
                                 <div className="field-edit">
@@ -371,7 +449,7 @@ function ProfilePage() {
                                 </div>
                             ) : (
                                 <div className="field-row">
-                                    <div classname="field-info">
+                                    <div className="field-info">
                                         <label>First Name</label>
                                         <div className="field-value">{userData?.first_name || "-"}</div>
                                     </div>
