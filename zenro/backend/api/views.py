@@ -28,6 +28,7 @@ from .serializers import (
 from .home_io.home_io_services import HomeIOService
 from django_filters import rest_framework as filters
 from rest_framework import viewsets, status, permissions, filters as drf_filters
+from django.contrib.auth.hashers import check_password
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -62,6 +63,38 @@ class UserViewSet(viewsets.ModelViewSet):
                 {"detail": "Profile not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+    @action(detail=True, methods=['post'])
+    def change_password(self, request, pk=None):
+        user = self.get_object()
+        
+        # Check if the current user is the same as the requested user
+        if request.user.id != user.id:
+            return Response(
+                {"detail": "You don't have permission to change this password."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Check if current password is correct
+        current_password = request.data.get('current_password')
+        if not check_password(current_password, user.password):
+            return Response(
+                {"current_password": ["Current password is incorrect."]},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Set new password
+        new_password = request.data.get('new_password')
+        if not new_password:
+            return Response(
+                {"new_password": ["New password is required."]},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        user.set_password(new_password)
+        user.save()
+        
+        return Response({"detail": "Password changed successfully."})
 
 class SmartHomeViewSet(viewsets.ModelViewSet):
     """
