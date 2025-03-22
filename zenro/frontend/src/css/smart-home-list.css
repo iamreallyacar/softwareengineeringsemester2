@@ -387,10 +387,15 @@ body,
 }
 
 .error-message {
-  color: var(--destructive) !important;
-  font-size: 0.875rem;
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
+  color: #ff4d4f;
+  font-size: 0.8rem;
+  margin: 3px 0 0 0;
+  padding: 0;
+  text-align: left;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .modal-buttons {
@@ -443,18 +448,20 @@ body,
 
 .password-dropdown {
   background-color: rgba(254, 215, 170, 0.2);
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   border-top: 1px solid rgba(234, 88, 12, 0.1);
   animation: slideDown 0.2s ease-out;
   position: relative; /* Ensure proper stacking */
   z-index: 10; /* Keep above other elements */
+  display: flex;
+  flex-direction: column;
 }
 
 .dropdown-prompt {
   font-size: 0.9rem;
   color: var(--muted-foreground);
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .password-dropdown input {
@@ -462,19 +469,31 @@ body,
   padding: 0.75rem;
   border-radius: 0.5rem;
   border: 1px solid var(--input);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.25rem; /* Reduced to make error closer to input */
   font-size: 0.9rem;
 }
 
-.password-dropdown input:focus {
-  outline: none;
-  border-color: var(--ring);
-  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.1);
+.password-dropdown .error-message {
+  color: #ff4d4f;
+  font-size: 0.8rem;
+  margin: 3px 0 5px 2px;
+  padding: 0;
+  display: block;
+  text-align: left;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+}
+
+.password-dropdown input.has-error {
+  border-color: #ff4d4f;
+  border-width: 1px;
 }
 
 .dropdown-buttons {
   display: flex;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .dropdown-buttons button {
@@ -500,12 +519,6 @@ body,
 .dropdown-buttons .cancel-button {
   background-color: var(--secondary);
   color: var(--secondary-foreground);
-}
-
-.error-message {
-  color: var(--destructive);
-  font-size: 0.85rem;
-  margin: 0.5rem 0;
 }
 
 /* Add padding after the last element to ensure scrolling works properly */

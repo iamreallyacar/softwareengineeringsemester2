@@ -190,33 +190,33 @@ const AvailableHomesList = ({
                     
                     {homeWithPasswordOpen === home.id && (
                         <div className="password-dropdown">
-                        <p className="dropdown-prompt">Enter join password for "{home.name}"</p>
-                        
-                        <input
-                            type="password"
-                            value={joinPassword}
-                            onChange={(e) => setJoinPassword(e.target.value)}
-                            placeholder="Join Password"
-                            className="join-password-input"
-                        />
-                        
-                        {joinError && <p className="error-message">{joinError}</p>}
-                        
-                        <div className="dropdown-buttons">
-                            <button 
-                            onClick={() => handleJoinSubmit(home.id)}
-                            disabled={isJoining || !joinPassword}
-                            className="join-button"
-                            >
-                            {isJoining ? "Joining..." : "Join"}
-                            </button>
-                            <button 
-                            onClick={() => togglePasswordDropdown(home.id)}
-                            className="cancel-button"
-                            >
-                            Cancel
-                            </button>
-                        </div>
+                            <p className="dropdown-prompt">Enter join password for "{home.name}"</p>
+                            
+                            <input
+                                type="password"
+                                value={joinPassword}
+                                onChange={(e) => setJoinPassword(e.target.value)}
+                                placeholder="Join Password"
+                                className={`join-password-input ${joinError ? 'has-error' : ''}`}
+                            />
+                            
+                            {joinError && <div className="error-message">{joinError}</div>}
+                            
+                            <div className="dropdown-buttons">
+                                <button 
+                                    onClick={() => handleJoinSubmit(home.id)}
+                                    disabled={isJoining || !joinPassword}
+                                    className="join-button"
+                                >
+                                    {isJoining ? "Joining..." : "Join"}
+                                </button>
+                                <button 
+                                    onClick={() => togglePasswordDropdown(home.id)}
+                                    className="cancel-button"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     )}
                     </div>
