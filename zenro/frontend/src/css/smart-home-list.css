@@ -292,6 +292,7 @@ body,
   color: #CB5A55;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.9rem; /* Ensure consistent font size */
 }
 
 .home-button:hover {
@@ -911,4 +912,19 @@ body,
   font-weight: 500;
   display: block;
   width: 100%;
+}
+
+/* Add styles for home name and owner display */
+.home-name, .home-owner {
+  /* Remove these classes to prevent font size issues */
+}
+
+/* Owner username tag styling */
+.owner-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-style: italic;
+  font-weight: normal;
+  margin-left: 6px;
 }

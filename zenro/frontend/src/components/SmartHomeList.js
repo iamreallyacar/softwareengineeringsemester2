@@ -266,7 +266,7 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
     );
 };
 
-// New Component: Joined Homes List
+// Update JoinedHomesList to display owner's username
 const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, joinedHomes }) => (
     <div className="smart-home-list joined">
         <div className={`list-container ${isJoinedHomesExpanded ? "expanded" : ""}`}>
@@ -286,7 +286,9 @@ const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, join
                     ) : (
                         joinedHomes.map((home) => (
                             <Link to={`/smarthomepage/${home.id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={home.id}>
-                                <button className="home-button">{home.name}</button>
+                                <button className="home-button">
+                                    {home.name} <span className="owner-tag">(Owner: {home.creator_username})</span>
+                                </button>
                             </Link>
                         ))
                     )}
@@ -296,7 +298,7 @@ const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, join
     </div>
 );
 
-// Modify Available Homes List to include inline password entry
+// Update AvailableHomesList to display owner's username
 const AvailableHomesList = ({ 
   isJoinedExpanded, 
   setIsJoinedExpanded, 
@@ -359,7 +361,7 @@ const AvailableHomesList = ({
                         className="home-button"
                         onClick={() => togglePasswordDropdown(home.id)}
                     >
-                        {home.name}
+                        {home.name} <span className="owner-tag">(Owner: {home.creator_username})</span>
                     </button>
                     
                     {homeWithPasswordOpen === home.id && (
@@ -439,29 +441,91 @@ function SmartHomeList() {
     }
   };
 
-  const fetchSmartHomes = async () => {
-    try {
-      const response = await api.get("/smarthomes/");
+  // Update the data fetching to properly get creator usernames
+const fetchSmartHomes = async () => {
+  try {
+    const response = await api.get("/smarthomes/");
+    console.log("Smart homes data:", response.data);
+    
+    // We need to fetch usernames for any homes that only have creator IDs
+    const homesWithCreatorPromises = response.data.map(async home => {
+      // If creator_username already exists, use it
+      if (home.creator_username) {
+        return home;
+      }
       
-      // Split homes into owned and joined
-      const owned = response.data.filter(home => home.is_creator === true);
-      const joined = response.data.filter(home => home.is_creator === false);
+      // If creator is an object with username, extract it
+      if (home.creator && typeof home.creator === 'object' && home.creator.username) {
+        return { ...home, creator_username: home.creator.username };
+      }
       
-      setOwnedHomes(owned);
-      setJoinedHomes(joined);
-    } catch (err) {
-      setError("Failed to load smart homes");
-    }
-  };
+      // If creator is just an ID, fetch the username
+      if (home.creator && (typeof home.creator === 'number' || typeof home.creator === 'string')) {
+        try {
+          const creatorId = home.creator;
+          const userResponse = await api.get(`/users/${creatorId}/`);
+          return { ...home, creator_username: userResponse.data.username };
+        } catch (err) {
+          console.error(`Failed to fetch username for creator ID ${home.creator}:`, err);
+          return { ...home, creator_username: `Unknown (${home.creator})` };
+        }
+      }
+      
+      // Fallback
+      return { ...home, creator_username: "Unknown" };
+    });
+    
+    // Wait for all username fetches to complete
+    const processedHomes = await Promise.all(homesWithCreatorPromises);
+    
+    // Split homes into owned and joined
+    const owned = processedHomes.filter(home => home.is_creator === true);
+    const joined = processedHomes.filter(home => home.is_creator === false);
+    
+    setOwnedHomes(owned);
+    setJoinedHomes(joined);
+  } catch (err) {
+    console.error("Failed to load smart homes:", err);
+    setError("Failed to load smart homes");
+  }
+};
 
-  const fetchAvailableHomes = async () => {
-    try {
-      const response = await api.get("/smarthomes/available/");
-      setAvailableHomes(response.data);
-    } catch (err) {
-      setError("Failed to load available homes");
-    }
-  };
+const fetchAvailableHomes = async () => {
+  try {
+    const response = await api.get("/smarthomes/available/");
+    console.log("Available homes data:", response.data);
+    
+    // Same approach for available homes
+    const homesWithCreatorPromises = response.data.map(async home => {
+      if (home.creator_username) {
+        return home;
+      }
+      
+      if (home.creator && typeof home.creator === 'object' && home.creator.username) {
+        return { ...home, creator_username: home.creator.username };
+      }
+      
+      if (home.creator && (typeof home.creator === 'number' || typeof home.creator === 'string')) {
+        try {
+          const creatorId = home.creator;
+          const userResponse = await api.get(`/users/${creatorId}/`);
+          return { ...home, creator_username: userResponse.data.username };
+        } catch (err) {
+          console.error(`Failed to fetch username for creator ID ${home.creator}:`, err);
+          return { ...home, creator_username: `Unknown (${home.creator})` };
+        }
+      }
+      
+      return { ...home, creator_username: "Unknown" };
+    });
+    
+    const processedHomes = await Promise.all(homesWithCreatorPromises);
+    setAvailableHomes(processedHomes);
+  } catch (err) {
+    console.error("Failed to load available homes:", err);
+    setError("Failed to load available homes");
+  }
+};
 
   const handleCreateSmartHome = async (event) => {
     event.preventDefault();
