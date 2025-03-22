@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom"; // Add Link import
 import Navbar from "./NavigationBar";
 import api from "../api";
 import "../css/home-users-page.css";
+import { ChevronLeft } from "lucide-react"; // Import ChevronLeft icon
 
 function HomeUsersPage() {
   const { id: smartHomeId } = useParams();
@@ -202,6 +203,14 @@ function HomeUsersPage() {
   return (
     <div className="home-users-page">
       <Navbar />
+      
+      {/* Move back button here, outside the content div */}
+      <div className="back-to-overview">
+        <Link to={`/smarthomepage/${smartHomeId}`} className="back-button">
+          <span>Overview</span>
+          <ChevronLeft />
+        </Link>
+      </div>
       
       <div className="home-users-content">
         {loading ? (

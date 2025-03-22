@@ -10,6 +10,7 @@ import airCond from "../assets/images/aircond.png";
 import smartTV from "../assets/images/smart-tv.png";
 import Navbar from "./NavigationBar";
 import "../css/rooms-page.css";
+import { ChevronLeft } from "lucide-react"; // Add this import
 
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
@@ -846,11 +847,17 @@ function RoomsPage() {
     return (
         <div className="room-page">
             <Navbar />
-            {/* Page Header Section */}
-            <div className="page-header">
-                <Link to={`/smarthomepage/${smartHomeId}`}>
-                    <h1><i className="fas fa-arrow-left"></i> Overview</h1>
+            
+            {/* Add this back button section */}
+            <div className="back-to-overview">
+                <Link to={`/smarthomepage/${smartHomeId}`} className="back-button">
+                    <span>Overview</span>
+                    <ChevronLeft />
                 </Link>
+            </div>
+            
+            {/* Keep page header for room name */}
+            <div className="page-header">
                 {roomData && <h1>{roomData.name}</h1>}
             </div>
 
