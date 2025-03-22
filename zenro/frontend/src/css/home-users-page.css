@@ -547,3 +547,21 @@ body {
   position: relative;
   z-index: 2;
 }
+
+/* Add these styles for the simplified profile display */
+.profile-section.simplified {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-section.simplified .profile-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .profile-section.simplified .profile-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}

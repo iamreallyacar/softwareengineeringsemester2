@@ -269,8 +269,7 @@ function HomeUsersPage() {
                             </div>
                           ) : profileData[member.id] ? (
                             <div className="profile-details">
-                              <div className="profile-section">
-                                <h3>Personal Information</h3>
+                              <div className="profile-section simplified">
                                 <div className="profile-fields">
                                   <div className="profile-field">
                                     <span className="field-label">Email:</span>
@@ -284,24 +283,12 @@ function HomeUsersPage() {
                                         : "-"}
                                     </span>
                                   </div>
-                                </div>
-                              </div>
-                              
-                              <div className="profile-section">
-                                <h3>Contact Information</h3>
-                                <div className="profile-fields">
                                   <div className="profile-field">
                                     <span className="field-label">Phone:</span>
                                     <span className="field-value">
                                       {profileData[member.id]?.profile?.phone_number || "-"}
                                     </span>
                                   </div>
-                                </div>
-                              </div>
-                              
-                              <div className="profile-section">
-                                <h3>Additional Details</h3>
-                                <div className="profile-fields">
                                   <div className="profile-field date-of-birth-field">
                                     <span className="field-label">Date of Birth:</span>
                                     <span className="field-value">
