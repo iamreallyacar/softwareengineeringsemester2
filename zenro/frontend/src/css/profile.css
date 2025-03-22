@@ -511,6 +511,23 @@
   background-color: #e0e0e0;
 }
 
+/* Add warning note styling */
+.field-note {
+  font-size: 13px;
+  color: #856404;
+  background-color: rgba(255, 193, 7, 0.1);
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin: 5px 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.field-note i {
+  color: #856404;
+}
+
 /* Responsive styles */
 @media (min-width: 768px) {
   .profile-fields {

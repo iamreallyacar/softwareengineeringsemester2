@@ -49,6 +49,11 @@ function ProfilePage() {
 
     const handleEditClick = (field) => {
         setEditingField(field);
+        // Set empty value for the field being edited
+        setEditValues(prev => ({
+            ...prev,
+            [field]: ""
+        }));
         // Reset any previous errors/success messages
         setError("");
         setSuccess("");
@@ -104,16 +109,30 @@ function ProfilePage() {
             
             // Different handling based on field type
             if (['username', 'email', 'first_name', 'last_name'].includes(fieldName)) {
-                // Update user basic information
-                await api.patch(`/users/${userData.id}/`, {
-                    [fieldName]: newValue
-                });
-                
-                // Update local state
-                setUserData(prev => ({
-                    ...prev,
-                    [fieldName]: newValue
-                }));
+                try {
+                    // Update user basic information
+                    await api.patch(`/users/${userData.id}/`, {
+                        [fieldName]: newValue
+                    });
+                    
+                    // Update local state
+                    setUserData(prev => ({
+                        ...prev,
+                        [fieldName]: newValue
+                    }));
+                    
+                    setSuccess(`${fieldName.replace('_', ' ')} updated successfully!`);
+                    setEditingField(null);
+                } catch (err) {
+                    // Handle specific error for username uniqueness
+                    if (fieldName === 'username' && err.response?.data?.username) {
+                        setError("This username is already taken. Please choose a different one.");
+                    } else if (fieldName === 'email' && err.response?.data?.email) {
+                        setError("This email is already registered. Please use a different one.");
+                    } else {
+                        throw err; // Re-throw for the outer catch to handle other errors
+                    }
+                }
             } else if (['phone_number', 'date_of_birth', 'gender'].includes(fieldName)) {
                 // Update user profile information
                 if (userData.profile) {
@@ -145,16 +164,13 @@ function ProfilePage() {
                 }));
             }
             
-            setSuccess(`${fieldName.replace('_', ' ')} updated successfully!`);
-            setEditingField(null);
-            
             // Clear success message after 3 seconds
             setTimeout(() => {
                 setSuccess("");
             }, 3000);
         } catch (error) {
             console.error("Error updating field:", error);
-            setError(error.response?.data?.message || `Failed to update ${editingField}`);
+            setError(error.response?.data?.detail || `Failed to update ${editingField}`);
         } finally {
             setLoading(false);
         }
@@ -275,7 +291,13 @@ function ProfilePage() {
                                         name="username" 
                                         value={editValues.username} 
                                         onChange={handleInputChange}
+                                        placeholder={userData?.username || ""}
                                     />
+                                    {error && error.includes("username") && (
+                                        <div className="field-note">
+                                            <i className="fa-solid fa-info-circle"></i> {error}
+                                        </div>
+                                    )}
                                     <div className="edit-actions">
                                         <button onClick={saveField} disabled={loading}>Save</button>
                                         <button onClick={handleCancelEdit}>Cancel</button>
@@ -307,6 +329,7 @@ function ProfilePage() {
                                         name="email" 
                                         value={editValues.email} 
                                         onChange={handleInputChange}
+                                        placeholder={userData?.email || ""}
                                     />
                                     <div className="edit-actions">
                                         <button onClick={saveField} disabled={loading}>Save</button>
@@ -339,6 +362,7 @@ function ProfilePage() {
                                         name="first_name" 
                                         value={editValues.first_name} 
                                         onChange={handleInputChange}
+                                        placeholder={userData?.first_name || ""}
                                     />
                                     <div className="edit-actions">
                                         <button onClick={saveField} disabled={loading}>Save</button>
@@ -347,7 +371,7 @@ function ProfilePage() {
                                 </div>
                             ) : (
                                 <div className="field-row">
-                                    <div className="field-info">
+                                    <div classname="field-info">
                                         <label>First Name</label>
                                         <div className="field-value">{userData?.first_name || "-"}</div>
                                     </div>
@@ -371,6 +395,7 @@ function ProfilePage() {
                                         name="last_name" 
                                         value={editValues.last_name} 
                                         onChange={handleInputChange}
+                                        placeholder={userData?.last_name || ""}
                                     />
                                     <div className="edit-actions">
                                         <button onClick={saveField} disabled={loading}>Save</button>
@@ -403,7 +428,7 @@ function ProfilePage() {
                                         name="phone_number" 
                                         value={editValues.phone_number} 
                                         onChange={handleInputChange}
-                                        placeholder="e.g. +1234567890"
+                                        placeholder={userData?.profile?.phone_number || ""}
                                     />
                                     <div className="edit-actions">
                                         <button onClick={saveField} disabled={loading}>Save</button>
@@ -436,6 +461,7 @@ function ProfilePage() {
                                         name="date_of_birth" 
                                         value={editValues.date_of_birth} 
                                         onChange={handleInputChange}
+                                        placeholder={userData?.profile?.date_of_birth || ""}
                                     />
                                     <div className="edit-actions">
                                         <button onClick={saveField} disabled={loading}>Save</button>
