@@ -863,32 +863,6 @@ body,
   margin: 4px 0 0 0;
 }
 
-.delete-password-field {
-  margin-bottom: 16px;
-}
-
-.delete-password-field label {
-  display: block;
-  font-size: 0.9rem;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #374151;
-}
-
-.delete-password-field input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.delete-password-field input:focus {
-  outline: none;
-  border-color: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
-}
-
 .delete-actions {
   display: flex;
   gap: 8px;
@@ -926,4 +900,15 @@ body,
 .delete-confirm-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Make password error more noticeable */
+.delete-confirmation .error-message {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin: 6px 0 12px 0;
+  text-align: center;
+  font-weight: 500;
+  display: block;
+  width: 100%;
 }

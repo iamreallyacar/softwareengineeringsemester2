@@ -62,7 +62,7 @@ const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, 
     </div>
 );
 
-// Update the OwnedHomesList component to include inline delete confirmation
+// Remove password verification remnants from OwnedHomesList component
 const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDeleteHome, onUpdateHome }) => {
     const [expandedHomeId, setExpandedHomeId] = useState(null);
     const [editName, setEditName] = useState('');
@@ -71,7 +71,7 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
     const [isUpdating, setIsUpdating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState('');
-    const [deletePassword, setDeletePassword] = useState('');
+    // Removed deletePassword state
     const navigate = useNavigate();
 
     const toggleHomeOptions = (homeId) => {
@@ -83,7 +83,7 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
         setEditing(null);
         setEditName('');
         setEditPassword('');
-        setDeletePassword('');
+        // Removed deletePassword reference
         setError('');
     };
 
@@ -115,38 +115,15 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
         }
     };
 
-    const handleDeleteWithPassword = async (homeId) => {
-        if (!deletePassword) {
-            setError("Please enter your password to confirm deletion");
-            return;
-        }
-        
+    // Rename to simply handleDelete since we're no longer verifying with password
+    const handleDelete = async (homeId) => {
         setIsDeleting(true);
         setError('');
         
         try {
-            const userId = localStorage.getItem("userId");
-            
-            // First verify the password
-            try {
-                // Using the password change endpoint to verify (changing to same password)
-                await api.post(`/users/${userId}/change_password/`, {
-                    current_password: deletePassword,
-                    new_password: deletePassword // Same password to avoid actual change
-                });
-                
-                // If we get here, password is correct, proceed with deletion
-                await onDeleteHome(homeId);
-                setExpandedHomeId(null);
-                resetEditState();
-            } catch (err) {
-                // Password verification failed
-                if (err.response?.status === 400) {
-                    setError("Incorrect password. Please try again.");
-                } else {
-                    throw err; // Re-throw for the outer catch to handle
-                }
-            }
+            await onDeleteHome(homeId);
+            setExpandedHomeId(null);
+            resetEditState();
         } catch (err) {
             console.error("Error deleting smart home:", err);
             setError("Failed to delete smart home. Please try again.");
@@ -234,17 +211,8 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                                                         <p className="delete-warning-title">Delete "{home.name}"?</p>
                                                         <p className="delete-warning-message">
                                                             This will permanently delete this smart home and all its rooms and devices.
+                                                            This action cannot be undone.
                                                         </p>
-                                                    </div>
-                                                    
-                                                    <div className="delete-password-field">
-                                                        <label>Enter your account password to confirm:</label>
-                                                        <input
-                                                            type="password"
-                                                            value={deletePassword}
-                                                            onChange={(e) => setDeletePassword(e.target.value)}
-                                                            placeholder="Your account password"
-                                                        />
                                                     </div>
                                                     
                                                     <div className="delete-actions">
@@ -252,14 +220,14 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
                                                             className="delete-cancel-btn"
                                                             onClick={resetEditState}
                                                         >
-                                                            Cancel
+                                                            No, Cancel
                                                         </button>
                                                         <button 
                                                             className="delete-confirm-btn"
-                                                            onClick={() => handleDeleteWithPassword(home.id)}
-                                                            disabled={isDeleting || !deletePassword}
+                                                            onClick={() => handleDelete(home.id)}
+                                                            disabled={isDeleting}
                                                         >
-                                                            {isDeleting ? "Deleting..." : "Delete Smart Home"}
+                                                            {isDeleting ? "Deleting..." : "Yes, Delete Smart Home"}
                                                         </button>
                                                     </div>
                                                 </div>
