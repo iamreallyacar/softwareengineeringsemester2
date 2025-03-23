@@ -10,13 +10,13 @@
   
   .recovery-container {
     width: min(95%, 500px);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.85); /* Much more opaque for better readability */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 15px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    color: white;
+    color: #222222; /* Changed from white to dark gray */
     overflow: hidden;
   }
   
@@ -26,26 +26,28 @@
   
   .recovery-title {
     font-size: 2rem;
-    color: #FFFFFF;
-    text-shadow: 2px 2px #9ca3af;
+    color: #222222; /* Changed from white to dark gray */
+    text-shadow: none; /* Removed text shadow */
     margin-bottom: 1.5rem;
     text-align: center;
   }
   
   .recovery-step-indicator {
     font-size: 0.9rem;
-    color: #FFF6E7;
+    color: #FFFFFF; /* Keep this white because of dark background */
     text-align: center;
     margin-bottom: 1rem;
-    background-color: rgba(193, 70, 0, 0.7);
+    background-color: rgba(193, 70, 0, 0.9); /* Made darker */
     padding: 8px;
     border-radius: 5px;
+    font-weight: bold;
   }
   
   .recovery-description {
     margin-bottom: 1.5rem;
     text-align: center;
-    color: rgba(255, 255, 255, 0.8);
+    color: #333333; /* Changed from light white to dark gray */
+    font-weight: 500;
   }
   
   .recovery-input-group {
@@ -55,28 +57,34 @@
   .recovery-input-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: white;
+    color: #222222; /* Changed from white to dark gray */
+    font-weight: 600;
   }
   
   .recovery-input-group input {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1.5px solid #fed7aa;
+    border: 1.5px solid #C14600; /* Darker border */
     border-radius: 0.5rem;
-    background-color: rgba(255, 246, 231, 0.51);
+    background-color: rgba(255, 246, 231, 0.8); /* More opaque */
     font-size: 1rem;
     transition: border-color 0.3s ease;
+    color: #333333; /* Ensure text is dark */
   }
   
   .recovery-input-group input:focus {
     outline: none;
     border-color: #ea580c;
   }
+
+  .recovery-input-group input::placeholder {
+    color: #999999; /* Darker placeholder text */
+  }
   
   .recovery-input-hint {
     display: block;
     font-size: 0.8rem;
-    color: #f3f3f3;
+    color: #444444; /* Changed from light to dark gray */
     margin-top: 0.3rem;
   }
   
@@ -90,21 +98,22 @@
   .recovery-button {
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background-color: rgba(255, 246, 231, 0.51);
-    border: none;
+    background-color: rgba(255, 246, 231, 0.8); /* More opaque */
+    border: 1.5px solid #C14600;
     border-radius: 0.5rem;
-    color: #FFFFFF;
+    color: #222222; /* Changed from white to dark gray */
     font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-shadow: 2px 2px rgba(156, 163, 175, 0.5);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 213, 200, 0.5);
-    font-weight: 600;
+    text-shadow: none; /* Removed text shadow */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
   
   .recovery-button:hover:not(:disabled) {
     transform: translateY(-3px);
-    text-shadow: 0px 0px 10px #FFF6E7;
+    background-color: rgba(255, 246, 231, 0.9);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   }
   
   .recovery-button:disabled {
@@ -113,82 +122,91 @@
   }
   
   .recovery-secondary-button {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #C14600;
+    color: #222222; /* Changed from white to dark gray */
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
+    font-weight: 500;
   }
   
   .recovery-secondary-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.3);
   }
   
   .recovery-error {
-    background-color: rgba(220, 38, 38, 0.2);
-    color: #fecaca;
+    background-color: rgba(220, 38, 38, 0.1);
+    color: #b91c1c; /* Darker red */
     padding: 1rem;
     border-radius: 0.5rem;
     margin-bottom: 1.5rem;
     text-align: center;
     border-left: 4px solid #ef4444;
+    font-weight: 500;
   }
   
   .recovery-success {
-    background-color: rgba(22, 163, 74, 0.2);
-    color: #dcfce7;
+    background-color: rgba(22, 163, 74, 0.1);
+    color: #15803d; /* Darker green */
     padding: 1rem;
     border-radius: 0.5rem;
     margin-bottom: 1.5rem;
     text-align: center;
     border-left: 4px solid #22c55e;
+    font-weight: 500;
   }
   
   /* Recovery Codes Styling */
   .recovery-codes-info {
-    background-color: rgba(255, 246, 231, 0.2);
+    background-color: rgba(255, 246, 231, 0.5); /* More opaque */
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 20px;
+    border: 1px solid #C14600;
   }
   
   .recovery-codes-message {
-    color: #f3f3f3;
+    color: #333333; /* Changed from light white to dark gray */
     margin-bottom: 10px;
     font-size: 0.9rem;
+    font-weight: 500;
   }
   
   .recovery-codes-message strong {
-    color: #fed7aa;
+    color: #A53900; /* Darker orange */
+    font-weight: 700;
   }
   
   .recovery-codes-list {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.3); /* More opaque */
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 20px;
     max-height: 200px;
     overflow-y: auto;
-    border: 1px solid rgba(255, 246, 231, 0.3);
+    border: 1px solid #C14600;
   }
   
   .recovery-code-item {
     font-family: monospace;
     padding: 8px;
     margin-bottom: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.5); /* More opaque */
     border-radius: 4px;
     font-size: 1rem;
-    color: #f3f3f3;
+    color: #000000; /* Black text for codes */
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
   }
   
   .recovery-code-item span {
-    color: #fed7aa;
+    color: #A53900; /* Darker orange */
     font-weight: bold;
-    margin-right: 5px;
+    margin-right: 10px; /* Increased spacing */
     display: inline-block;
     width: 20px;
     text-align: right;
