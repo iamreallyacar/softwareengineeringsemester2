@@ -727,6 +727,190 @@
   cursor: not-allowed;
 }
 
+/* Recovery Codes Section - Enhanced Styling */
+.recovery-codes-container {
+  margin-bottom: 20px;
+}
+
+.recovery-codes-status {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 16px;
+}
+
+.recovery-codes-status strong {
+  color: #C14600;
+}
+
+.recovery-codes-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.recovery-action-button {
+  background-color: #f8f9fa;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.recovery-action-button:hover {
+  background-color: #eaeaea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recovery-action-button:first-child {
+  background-color: #F8F0E5;
+  color: #C14600;
+}
+
+.recovery-action-button:first-child:hover {
+  background-color: #FEDAC0;
+}
+
+.recovery-action-button i {
+  font-size: 16px;
+}
+
+.recovery-codes-list {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.recovery-code-item {
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.recovery-code-item:hover {
+  border-color: #C14600;
+  box-shadow: 0 2px 5px rgba(193, 70, 0, 0.1);
+}
+
+.recovery-code-item.expanded {
+  border-color: #C14600;
+  box-shadow: 0 3px 8px rgba(193, 70, 0, 0.15);
+}
+
+.code-header {
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Courier New', monospace;
+}
+
+.code-number {
+  color: #C14600;
+  font-weight: bold;
+  margin-right: 10px;
+  min-width: 25px;
+  flex-shrink: 0;
+}
+
+.code-preview {
+  flex-grow: 1;
+  color: #333;
+  font-weight: 500;
+}
+
+.code-header i {
+  color: #999;
+  margin-left: 10px;
+  transition: transform 0.2s ease;
+}
+
+.expanded .code-header i {
+  transform: rotate(180deg);
+  color: #C14600;
+}
+
+.code-full {
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #e0e0e0;
+}
+
+.code-text {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.5px;
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+}
+
+.profile-primary-button {
+  background-color: #C14600;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 5px rgba(193, 70, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.profile-primary-button:hover:not(:disabled) {
+  background-color: #A53900;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(193, 70, 0, 0.3);
+}
+
+.profile-primary-button:disabled {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .recovery-codes-actions {
+    flex-direction: row;
+  }
+  
+  .recovery-action-button {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .code-text {
+    font-size: 14px;
+  }
+}
+
 /* Recovery Codes Section */
 .recovery-codes-container {
   margin-bottom: 20px;
@@ -752,29 +936,46 @@
   background-color: #f8f9fa;
   border-radius: 8px;
   padding: 15px;
-  max-height: 200px;
+  max-height: 250px; /* Increased height for better visibility */
   overflow-y: auto;
   margin-bottom: 20px;
   border: 1px solid #e0e0e0;
 }
 
 .recovery-code-item {
+  display: flex;
+  align-items: center;
   font-family: monospace;
-  padding: 6px 10px;
-  margin-bottom: 5px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
   background-color: white;
   border-radius: 4px;
   border: 1px solid #e0e0e0;
-  font-size: 14px;
+  font-size: 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.recovery-code-item span {
-  color: #C14600;
+.recovery-code-item .code-number {
+  color: #444; /* Darker, more visible color */
   font-weight: bold;
-  margin-right: 5px;
+  margin-right: 15px;
   display: inline-block;
-  width: 20px;
+  min-width: 25px;
   text-align: right;
+  flex-shrink: 0; /* Prevent the number from shrinking */
+}
+
+.recovery-code-item .code-text {
+  flex-grow: 1;  /* Take up remaining space */
+  color: #333;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px; /* Better readability for code */
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .no-recovery-codes {
@@ -909,4 +1110,111 @@
   .save-password-button, .cancel-button {
     width: 100%;
   }
+}
+
+/* Update/add these styles */
+.recovery-codes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.recovery-codes-header:hover {
+  background-color: #f1f1f1;
+  border-color: #C14600;
+}
+
+.recovery-codes-toggle {
+  color: #C14600;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.recovery-codes-status {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.recovery-codes-status strong {
+  color: #C14600;
+  font-weight: bold;
+}
+
+.recovery-action-button {
+  background-color: #f8f9fa;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.recovery-action-button:hover {
+  background-color: #eaeaea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recovery-action-button:first-child {
+  background-color: #F8F0E5;
+  color: #C14600;
+}
+
+.recovery-action-button:first-child:hover {
+  background-color: #FEDAC0;
+}
+
+.recovery-codes-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .recovery-codes-actions {
+    flex-direction: row;
+  }
+  
+  .recovery-action-button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Add this style for the horizontal divider */
+.section-divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 30px 0;
+}
+
+/* Also update the recovery codes container styling */
+.profile-section-title {
+  color: #5D252D;
+  font-size: 22px;
+  margin: 0 0 15px 0;
+}
+
+.profile-section-description {
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }

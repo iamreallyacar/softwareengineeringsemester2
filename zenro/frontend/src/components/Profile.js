@@ -31,6 +31,7 @@ function ProfilePage() {
     const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false);
     const [regenerateLoading, setRegenerateLoading] = useState(false);
     const [recoveryCodesError, setRecoveryCodesError] = useState("");
+    const [expandedCodeIndex, setExpandedCodeIndex] = useState(null);
 
     useEffect(() => {
         fetchProfile();
@@ -66,13 +67,22 @@ function ProfilePage() {
         
         try {
           const response = await api.get('/recovery-codes/list/');
-          setRecoveryCodes(response.data.codes || []);
-          if (response.data.codes && response.data.codes.length > 0) {
-            setShowRecoveryCodes(true);
+          console.log('Recovery codes response:', response.data); // Debug log
+          
+          // Make sure we're extracting the codes array correctly
+          if (response.data && response.data.codes) {
+            // This is the important line - we need to make sure we're getting the actual code strings
+            setRecoveryCodes(response.data.codes);
+            // DO NOT set showRecoveryCodes to true here
+          } else {
+            console.error('Unexpected response format:', response.data);
+            setRecoveryCodesError('Unable to read recovery codes from server response');
+            setRecoveryCodes([]);
           }
         } catch (error) {
           console.error('Error fetching recovery codes:', error);
           setRecoveryCodesError('Unable to fetch recovery codes. Please try again.');
+          setRecoveryCodes([]);
         } finally {
           setLoadingCodes(false);
         }
@@ -870,6 +880,8 @@ function ProfilePage() {
                         )}
                     </div>
 
+                    <div className="section-divider"></div>
+
                     {/* RECOVERY CODES SECTION */}
                     <div className="profile-card">
                         <h2 className="profile-section-title">Account Recovery Codes</h2>
@@ -890,43 +902,44 @@ function ProfilePage() {
                             <div className="profile-loading">Loading recovery codes...</div>
                             ) : (
                             <>
-                                {showRecoveryCodes && recoveryCodes.length > 0 ? (
+                                {recoveryCodes.length > 0 ? (
                                 <div className="recovery-codes-container">
-                                    <p className="recovery-codes-status">
-                                    You have <strong>{recoveryCodes.length}</strong> recovery {recoveryCodes.length === 1 ? 'code' : 'codes'} remaining.
-                                    </p>
-                                    
-                                    <div className="recovery-codes-actions">
-                                    <button 
-                                        className="profile-secondary-button"
-                                        onClick={() => setShowRecoveryCodes(!showRecoveryCodes)}
-                                    >
-                                        {showRecoveryCodes ? 'Hide Codes' : 'Show Codes'}
-                                    </button>
-                                    
-                                    <button 
-                                        className="profile-secondary-button"
-                                        onClick={handleCopyRecoveryCodes}
-                                    >
-                                        Copy Codes
-                                    </button>
-                                    
-                                    <button 
-                                        className="profile-secondary-button"
-                                        onClick={handlePrintRecoveryCodes}
-                                    >
-                                        Print Codes
-                                    </button>
+                                    <div className="recovery-codes-header" onClick={() => setShowRecoveryCodes(!showRecoveryCodes)}>
+                                        <div className="recovery-codes-status">
+                                            <strong>{recoveryCodes.length}</strong> recovery {recoveryCodes.length === 1 ? 'code' : 'codes'} remaining
+                                        </div>
+                                        <div className="recovery-codes-toggle">
+                                            <i className={`fa-solid ${showRecoveryCodes ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                                        </div>
                                     </div>
                                     
                                     {showRecoveryCodes && (
-                                    <div className="recovery-codes-list">
-                                        {recoveryCodes.map((code, index) => (
-                                        <div key={index} className="recovery-code-item">
-                                            <span>{index + 1}.</span> {code}
+                                    <>
+                                        <div className="recovery-codes-actions">
+                                            <button 
+                                                className="recovery-action-button"
+                                                onClick={handleCopyRecoveryCodes}
+                                            >
+                                                <i className="fa-solid fa-copy"></i> Copy Codes
+                                            </button>
+                                            
+                                            <button 
+                                                className="recovery-action-button"
+                                                onClick={handlePrintRecoveryCodes}
+                                            >
+                                                <i className="fa-solid fa-print"></i> Print Codes
+                                            </button>
                                         </div>
-                                        ))}
-                                    </div>
+                                        
+                                        <div className="recovery-codes-list">
+                                            {recoveryCodes.map((code, index) => (
+                                                <div key={index} className="recovery-code-item">
+                                                    <span className="code-number">{index + 1}.</span>
+                                                    <code className="code-text">{code}</code>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
                                     )}
                                 </div>
                                 ) : (
