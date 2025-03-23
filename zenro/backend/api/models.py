@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
+import random
+import string
 
 # Model representing a smart home
 # SmartHome stores home info, creator, members, timestamps
@@ -225,3 +227,42 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return f"Profile for {self.user.username}"
+
+class RecoveryCode(models.Model):
+    """
+    One-time use recovery codes for account recovery.
+    Each user can have multiple recovery codes (up to 10).
+    Format example: "1e1n5-b522d"
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recovery_codes')
+    code = models.CharField(max_length=12, unique=True)  # Format: xxxxx-xxxxx
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Recovery code for {self.user.username}"
+    
+    @classmethod
+    def generate_code(cls):
+        """Generate a random recovery code in the format xxxxx-xxxxx"""
+        chars = string.ascii_lowercase + string.digits
+        part1 = ''.join(random.choices(chars, k=5))
+        part2 = ''.join(random.choices(chars, k=5))
+        return f"{part1}-{part2}"
+    
+    @classmethod
+    def create_for_user(cls, user, count=10):
+        """Create a set of recovery codes for a user"""
+        # First, invalidate any existing unused codes
+        cls.objects.filter(user=user).delete()
+        
+        # Generate new codes
+        new_codes = []
+        for _ in range(count):
+            code = cls.generate_code()
+            while cls.objects.filter(code=code).exists():
+                code = cls.generate_code()  # Ensure uniqueness
+                
+            new_code = cls.objects.create(user=user, code=code)
+            new_codes.append(new_code)
+            
+        return new_codes

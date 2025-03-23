@@ -727,6 +727,146 @@
   cursor: not-allowed;
 }
 
+/* Recovery Codes Section */
+.recovery-codes-container {
+  margin-bottom: 20px;
+}
+
+.recovery-codes-status {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.recovery-codes-status strong {
+  color: #C14600;
+}
+
+.recovery-codes-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.recovery-codes-list {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.recovery-code-item {
+  font-family: monospace;
+  padding: 6px 10px;
+  margin-bottom: 5px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+.recovery-code-item span {
+  color: #C14600;
+  font-weight: bold;
+  margin-right: 5px;
+  display: inline-block;
+  width: 20px;
+  text-align: right;
+}
+
+.no-recovery-codes {
+  color: #6c757d;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.regenerate-confirm {
+  background-color: #fff8e1;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-left: 4px solid #ffc107;
+}
+
+.warning-message {
+  margin-bottom: 15px;
+}
+
+.warning-message strong {
+  color: #C14600;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.profile-secondary-button {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.profile-secondary-button:hover {
+  background-color: #e9ecef;
+}
+
+.profile-cancel-button {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.profile-danger-button {
+  background-color: #C14600;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.profile-danger-button:hover {
+  background-color: #A53900;
+}
+
+.profile-danger-button:disabled,
+.profile-cancel-button:disabled,
+.profile-secondary-button:disabled,
+.profile-primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .recovery-codes-actions {
+    flex-direction: column;
+  }
+  
+  .confirm-buttons {
+    flex-direction: column;
+  }
+  
+  .recovery-code-item {
+    font-size: 12px;
+  }
+}
+
 /* Responsive styles */
 @media (min-width: 768px) {
   .profile-fields {

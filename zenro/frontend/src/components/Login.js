@@ -66,7 +66,7 @@ const Login = ({ setIsAuthenticated }) => {
                                     required
                                 />
                             </div>
-                            <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
+                            <Link to="/recovery-page" className="forgot-password">Forgot Password?</Link>
                             <button className="login-button" type="submit">
                                 <span>Login</span>
                             </button>

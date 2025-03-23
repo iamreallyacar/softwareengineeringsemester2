@@ -25,8 +25,16 @@ function ProfilePage() {
     const [deletePassword, setDeletePassword] = useState("");
     const [deleteError, setDeleteError] = useState("");
 
+    const [recoveryCodes, setRecoveryCodes] = useState([]);
+    const [loadingCodes, setLoadingCodes] = useState(false);
+    const [showRecoveryCodes, setShowRecoveryCodes] = useState(false);
+    const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false);
+    const [regenerateLoading, setRegenerateLoading] = useState(false);
+    const [recoveryCodesError, setRecoveryCodesError] = useState("");
+
     useEffect(() => {
         fetchProfile();
+        fetchRecoveryCodes();
     }, []);
 
     const fetchProfile = async () => {
@@ -49,6 +57,24 @@ function ProfilePage() {
             setError("Failed to load profile information.");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchRecoveryCodes = async () => {
+        setLoadingCodes(true);
+        setRecoveryCodesError('');
+        
+        try {
+          const response = await api.get('/recovery-codes/list/');
+          setRecoveryCodes(response.data.codes || []);
+          if (response.data.codes && response.data.codes.length > 0) {
+            setShowRecoveryCodes(true);
+          }
+        } catch (error) {
+          console.error('Error fetching recovery codes:', error);
+          setRecoveryCodesError('Unable to fetch recovery codes. Please try again.');
+        } finally {
+          setLoadingCodes(false);
         }
     };
 
@@ -365,6 +391,112 @@ function ProfilePage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleRegenerateCodes = async () => {
+        // If there are existing codes, show confirmation first
+        if (recoveryCodes.length > 0 && !showRegenerateConfirm) {
+          setShowRegenerateConfirm(true);
+          return;
+        }
+        
+        setRegenerateLoading(true);
+        setRecoveryCodesError('');
+        
+        try {
+          const response = await api.post('/recovery-codes/generate/');
+          setRecoveryCodes(response.data.codes || []);
+          setShowRecoveryCodes(true);
+          setShowRegenerateConfirm(false);
+        } catch (error) {
+          console.error('Error regenerating recovery codes:', error);
+          setRecoveryCodesError('Failed to generate new recovery codes. Please try again.');
+        } finally {
+          setRegenerateLoading(false);
+        }
+    };
+
+    const handleCopyRecoveryCodes = () => {
+        const codesText = recoveryCodes.join('\n');
+        navigator.clipboard.writeText(codesText)
+          .then(() => {
+            alert('Recovery codes copied to clipboard!');
+          })
+          .catch(err => {
+            console.error('Failed to copy codes:', err);
+            alert('Failed to copy. Please select and copy the codes manually.');
+          });
+    };
+
+    const handlePrintRecoveryCodes = () => {
+        const printWindow = window.open('', '_blank');
+        
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Your Recovery Codes - Peaches Smart Home</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                h1 { color: #C14600; margin-bottom: 20px; }
+                h2 { color: #333; margin-top: 30px; }
+                .code-list { margin: 20px 0; }
+                .code-item { 
+                  font-family: monospace; 
+                  padding: 8px 15px;
+                  margin: 5px 0;
+                  background-color: #f5f5f5;
+                  border-radius: 4px;
+                  display: inline-block;
+                  margin-right: 10px;
+                  font-size: 16px;
+                }
+                .warning {
+                  background-color: #fff8e1;
+                  border-left: 4px solid #ffc107;
+                  padding: 15px;
+                  margin: 20px 0;
+                }
+                .footer {
+                  margin-top: 40px;
+                  border-top: 1px solid #eee;
+                  padding-top: 20px;
+                  font-size: 12px;
+                  color: #666;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>Your Recovery Codes - Peaches Smart Home</h1>
+              
+              <div class="warning">
+                <strong>IMPORTANT:</strong> Keep these codes in a safe place. They are the only way to recover your account 
+                if you forget your password. Each code can only be used once.
+              </div>
+              
+              <h2>Your Recovery Codes:</h2>
+              <div class="code-list">
+                ${recoveryCodes.map(code => `<div class="code-item">${code}</div>`).join('\n')}
+              </div>
+              
+              <div class="warning">
+                <strong>Remember:</strong>
+                <ul>
+                  <li>Keep these codes private and secure</li>
+                  <li>Each code can be used only once</li>
+                  <li>Store these somewhere safe like a password manager</li>
+                </ul>
+              </div>
+              
+              <div class="footer">
+                <p>Generated on ${new Date().toLocaleString()}</p>
+                <p>Peaches Smart Home - Account Recovery</p>
+              </div>
+            </body>
+          </html>
+        `);
+        
+        printWindow.document.close();
+        printWindow.print();
     };
 
     // Format gender for display
@@ -736,6 +868,108 @@ function ProfilePage() {
                                 </div>
                             </div>
                         )}
+                    </div>
+
+                    {/* RECOVERY CODES SECTION */}
+                    <div className="profile-card">
+                        <h2 className="profile-section-title">Account Recovery Codes</h2>
+                        
+                        <div className="profile-section-content">
+                            <p className="profile-section-description">
+                                Recovery codes allow you to regain access to your account if you forget your password.
+                                Each code can be used only once for account recovery.
+                            </p>
+                            
+                            {recoveryCodesError && (
+                            <div className="profile-error-message">
+                                {recoveryCodesError}
+                            </div>
+                            )}
+                            
+                            {loadingCodes ? (
+                            <div className="profile-loading">Loading recovery codes...</div>
+                            ) : (
+                            <>
+                                {showRecoveryCodes && recoveryCodes.length > 0 ? (
+                                <div className="recovery-codes-container">
+                                    <p className="recovery-codes-status">
+                                    You have <strong>{recoveryCodes.length}</strong> recovery {recoveryCodes.length === 1 ? 'code' : 'codes'} remaining.
+                                    </p>
+                                    
+                                    <div className="recovery-codes-actions">
+                                    <button 
+                                        className="profile-secondary-button"
+                                        onClick={() => setShowRecoveryCodes(!showRecoveryCodes)}
+                                    >
+                                        {showRecoveryCodes ? 'Hide Codes' : 'Show Codes'}
+                                    </button>
+                                    
+                                    <button 
+                                        className="profile-secondary-button"
+                                        onClick={handleCopyRecoveryCodes}
+                                    >
+                                        Copy Codes
+                                    </button>
+                                    
+                                    <button 
+                                        className="profile-secondary-button"
+                                        onClick={handlePrintRecoveryCodes}
+                                    >
+                                        Print Codes
+                                    </button>
+                                    </div>
+                                    
+                                    {showRecoveryCodes && (
+                                    <div className="recovery-codes-list">
+                                        {recoveryCodes.map((code, index) => (
+                                        <div key={index} className="recovery-code-item">
+                                            <span>{index + 1}.</span> {code}
+                                        </div>
+                                        ))}
+                                    </div>
+                                    )}
+                                </div>
+                                ) : (
+                                <p className="no-recovery-codes">
+                                    You don't have any recovery codes. Generate some to ensure you can recover your account if needed.
+                                </p>
+                                )}
+                                
+                                {showRegenerateConfirm ? (
+                                <div className="regenerate-confirm">
+                                    <p className="warning-message">
+                                    <strong>Warning:</strong> Generating new recovery codes will invalidate all existing ones. 
+                                    Are you sure you want to continue?
+                                    </p>
+                                    <div className="confirm-buttons">
+                                    <button 
+                                        className="profile-danger-button"
+                                        onClick={handleRegenerateCodes}
+                                        disabled={regenerateLoading}
+                                    >
+                                        {regenerateLoading ? 'Generating...' : 'Yes, Generate New Codes'}
+                                    </button>
+                                    <button 
+                                        className="profile-cancel-button"
+                                        onClick={() => setShowRegenerateConfirm(false)}
+                                        disabled={regenerateLoading}
+                                    >
+                                        Cancel
+                                    </button>
+                                    </div>
+                                </div>
+                                ) : (
+                                <button 
+                                    className="profile-primary-button" 
+                                    onClick={handleRegenerateCodes}
+                                    disabled={regenerateLoading}
+                                >
+                                    {regenerateLoading ? 'Generating...' : recoveryCodes.length > 0 ? 'Regenerate Recovery Codes' : 'Generate Recovery Codes'}
+                                </button>
+                                )}
+                            </>
+                            )}
+                        </div>
                     </div>
 
                     {/* Account Deletion Section - Updated Layout */}

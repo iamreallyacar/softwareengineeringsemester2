@@ -14,7 +14,7 @@ from .models import (
     DeviceLogDaily, DeviceLogMonthly, RoomLogDaily, 
     RoomLogMonthly, Room, HomeIORoom, RoomLog1Min, DeviceLog1Min,
     EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly,
-    UserProfile
+    UserProfile, RecoveryCode
 )
 from .serializers import (
     DeviceLogMonthlySerializer, UserSerializer, SmartHomeSerializer, SupportedDeviceSerializer, 
@@ -1010,3 +1010,84 @@ def join_smart_home(request, pk):
             {"error": str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def generate_recovery_codes(request):
+    """
+    Generate a new set of 10 recovery codes for the authenticated user.
+    Deletes any existing unused codes first.
+    """
+    user = request.user
+    
+    # Use the model method to generate codes - much cleaner!
+    new_codes = RecoveryCode.create_for_user(user, count=10)
+    
+    # Extract just the code strings for the response
+    code_strings = [code.code for code in new_codes]
+    
+    return Response({
+        'message': 'Recovery codes generated successfully',
+        'codes': code_strings
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_recovery_codes(request):
+    """
+    List all current recovery codes for the authenticated user.
+    """
+    user = request.user
+    codes = RecoveryCode.objects.filter(user=user).values_list('code', flat=True)
+    
+    if not codes:
+        return Response({
+            'message': 'You have no recovery codes. Generate some for account recovery.',
+            'codes': []
+        })
+    
+    return Response({
+        'message': f'You have {len(codes)} recovery codes. Keep them in a safe place.',
+        'codes': list(codes)
+    })
+
+@api_view(['POST'])
+@permission_classes([AllowAny])  # No auth required for password reset
+def reset_password_with_code(request):
+    """
+    Reset user password using a recovery code.
+    Recovery code is deleted after successful use.
+    """
+    recovery_code = request.data.get('recovery_code')
+    new_password = request.data.get('new_password')
+    
+    if not recovery_code or not new_password:
+        return Response({
+            'error': 'Both recovery code and new password are required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Validate password length
+    if len(new_password) < 8:
+        return Response({
+            'error': 'Password must be at least 8 characters long'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Find the recovery code
+        code_obj = RecoveryCode.objects.get(code=recovery_code)
+        user = code_obj.user
+        
+        # Reset the password
+        user.set_password(new_password)
+        user.save()
+        
+        # Delete the used code
+        code_obj.delete()
+        
+        return Response({
+            'message': 'Password reset successful. You can now log in with your new password.'
+        })
+    except RecoveryCode.DoesNotExist:
+        return Response({
+            'error': 'Invalid recovery code'
+        }, status=status.HTTP_400_BAD_REQUEST)

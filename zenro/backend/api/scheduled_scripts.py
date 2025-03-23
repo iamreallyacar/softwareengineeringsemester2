@@ -7,7 +7,7 @@ from .models import Room, RoomLog1Min, RoomLogDaily, RoomLogMonthly, Device, Dev
 
 def is_first_day_of_month(date):
     """Check if given date is the first day of the month."""
-    return date.day == 1
+    return date.day == 24
 
 """
 # Legacy aggregation code kept as reference

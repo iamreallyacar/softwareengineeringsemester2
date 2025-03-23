@@ -1,3 +1,4 @@
+import re
 from rest_framework import serializers
 from django.db import models
 from django.utils import timezone
@@ -6,7 +7,7 @@ from .models import (
     User, SmartHome, SupportedDevice, Device, Room, DeviceLog1Min, 
     DeviceLogDaily, DeviceLogMonthly, RoomLog1Min, RoomLogDaily, 
     RoomLogMonthly, HomeIORoom, EnergyGeneration1Min, EnergyGenerationDaily, 
-    EnergyGenerationMonthly, UserProfile
+    EnergyGenerationMonthly, UserProfile, RecoveryCode  # Add RecoveryCode here
 )
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -257,3 +258,45 @@ class SmartHomeListSerializer(SmartHomeSerializer):
         extra_kwargs = {
             'join_password': {'write_only': True}
         }
+
+# Add RecoveryCodeSerializer and PasswordResetWithCodeSerializer
+
+class RecoveryCodeSerializer(serializers.ModelSerializer):
+    """Serializer for the RecoveryCode model"""
+    class Meta:
+        model = RecoveryCode
+        fields = ['code', 'created_at']
+        read_only_fields = ['code', 'created_at']
+
+class PasswordResetWithCodeSerializer(serializers.Serializer):
+    """Serializer for resetting password with a recovery code"""
+    recovery_code = serializers.CharField(required=True)
+    new_password = serializers.CharField(
+        required=True, 
+        min_length=8,
+        write_only=True
+    )
+    
+    def validate_recovery_code(self, value):
+        """Validate that the recovery code format is correct"""
+        # Clean the code format
+        value = value.strip()
+        
+        # Check if it matches the expected format (xxxxx-xxxxx)
+        if not re.match(r'^[a-z0-9]{5}-[a-z0-9]{5}$', value):
+            raise serializers.ValidationError(
+                "Invalid recovery code format. Expected format: xxxxx-xxxxx"
+            )
+        
+        # Code format is valid
+        return value
+        
+    def validate_new_password(self, value):
+        """Validate that the new password meets security requirements"""
+        # Check for minimum complexity - add your own rules here
+        if value.isdigit():
+            raise serializers.ValidationError(
+                "Password cannot be entirely numeric."
+            )
+            
+        return value

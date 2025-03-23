@@ -319,3 +319,109 @@ input.input-error {
   width: 100%;
   padding-right: 5px;
 }
+
+/* Recovery Codes Styling */
+.recovery-codes-container {
+  max-height: 90vh; /* Allow extra height for the codes */
+  overflow-y: auto;
+}
+
+.recovery-codes-info {
+  background-color: rgba(255, 246, 231, 0.7);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.recovery-codes-message {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.recovery-codes-message strong {
+  color: #C14600;
+}
+
+.recovery-codes-list {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #fed7aa;
+}
+
+.recovery-code-item {
+  font-family: monospace;
+  padding: 8px;
+  margin-bottom: 5px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.recovery-code-item span {
+  color: #C14600;
+  font-weight: bold;
+  margin-right: 5px;
+  display: inline-block;
+  width: 20px;
+  text-align: right;
+}
+
+.recovery-codes-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.recovery-codes-action-button {
+  flex: 1;
+  background-color: rgba(255, 246, 231, 0.7);
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.recovery-codes-action-button:hover {
+  background-color: rgba(255, 246, 231, 0.9);
+  transform: translateY(-2px);
+}
+
+.recovery-codes-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.skip-recovery-codes-button {
+  background: none;
+  border: none;
+  color: #999;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.skip-recovery-codes-button:hover {
+  color: #C14600;
+}
+
+@media (max-width: 768px) {
+  .recovery-codes-actions {
+    flex-direction: column;
+  }
+  
+  .recovery-code-item {
+    font-size: 0.85rem;
+  }
+}

@@ -6,7 +6,7 @@ from .models import (
     SmartHome, HomeIORoom, SupportedDevice, Room, Device,
     DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly,
     RoomLog1Min, RoomLogDaily, RoomLogMonthly, EnergyGenerationDaily, EnergyGenerationMonthly, EnergyGeneration1Min,
-    UserProfile
+    UserProfile, RecoveryCode
 )
 
 # Create a custom form for Device
@@ -43,3 +43,4 @@ admin.site.register(EnergyGeneration1Min)
 admin.site.register(EnergyGenerationDaily)
 admin.site.register(EnergyGenerationMonthly)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(RecoveryCode)
