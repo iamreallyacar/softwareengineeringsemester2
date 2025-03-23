@@ -108,12 +108,6 @@ function CreateAccount({ setIsAuthenticated }) {
         navigate("/smart-homes");
     };
 
-    // Handle skipping recovery codes (not recommended)
-    const handleSkip = () => {
-        setShowingRecoveryCodes(false);
-        navigate("/smart-homes");
-    };
-
     // Handle recovery code copy to clipboard
     const handleCopyRecoveryCodes = () => {
         const codesText = recoveryCodes.join('\n');
@@ -359,11 +353,11 @@ function CreateAccount({ setIsAuthenticated }) {
                             <p className="ca-login-title">Account Recovery Codes</p>
                             
                             <div className="recovery-codes-info">
-                                <p className="recovery-codes-message">
+                                <p className="recovery-codes-message-dark">
                                     <strong>Important:</strong> These are your account recovery codes. Save these codes in a secure location - 
                                     they're the only way to access your account if you forget your password.
                                 </p>
-                                <p className="recovery-codes-message">
+                                <p className="recovery-codes-message-dark">
                                     Each code can only be used once. Once you've used a code to recover your account, 
                                     it will be invalidated.
                                 </p>
@@ -398,13 +392,6 @@ function CreateAccount({ setIsAuthenticated }) {
                                     onClick={handleContinue}
                                 >
                                     I've Saved My Codes, Continue
-                                </button>
-                                
-                                <button 
-                                    className="skip-recovery-codes-button" 
-                                    onClick={handleSkip}
-                                >
-                                    Skip (Not Recommended)
                                 </button>
                             </div>
                         </div>

@@ -22,6 +22,7 @@
   width: 100%;
   height: 100%;
   padding: 0.5rem;
+  padding-bottom: 20px; /* Additional bottom padding */
 }
 
 /* refers to the whole form from the first input to the footer */
@@ -324,13 +325,15 @@ input.input-error {
 .recovery-codes-container {
   max-height: 90vh; /* Allow extra height for the codes */
   overflow-y: auto;
+  padding-bottom: 20px; /* Added padding at the bottom */
 }
 
 .recovery-codes-info {
-  background-color: rgba(255, 246, 231, 0.7);
+  background-color: rgba(255, 246, 231, 0.8); /* Slightly more opaque */
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 20px;
+  border: 1px solid #fed7aa;
 }
 
 .recovery-codes-message {
@@ -355,18 +358,22 @@ input.input-error {
 
 .recovery-code-item {
   font-family: monospace;
-  padding: 8px;
-  margin-bottom: 5px;
+  padding: 6px 8px; /* Smaller padding */
+  margin-bottom: 4px; /* Reduced margin */
   background-color: #f8f9fa;
   border-radius: 4px;
-  font-size: 1rem;
-  color: #333;
+  font-size: 0.95rem; /* Slightly smaller font */
+  color: #000; /* Darker text */
+  border: 1px solid #e0e0e0;
+  font-weight: 600; /* Made slightly bolder */
+  display: flex; /* Added to improve alignment */
+  align-items: center;
 }
 
 .recovery-code-item span {
-  color: #C14600;
+  color: #A53900; /* Darker orange */
   font-weight: bold;
-  margin-right: 5px;
+  margin-right: 10px; /* Increased from 5px for better separation */
   display: inline-block;
   width: 20px;
   text-align: right;
@@ -381,17 +388,19 @@ input.input-error {
 
 .recovery-codes-action-button {
   flex: 1;
-  background-color: rgba(255, 246, 231, 0.7);
-  border: 1px solid #fed7aa;
+  background-color: #F8F0E5; /* Solid color instead of transparent */
+  border: 1px solid #C14600;
   border-radius: 8px;
-  padding: 10px;
+  padding: 10px; /* Reduced from 12px */
   cursor: pointer;
   font-weight: bold;
   transition: all 0.2s;
+  color: #333; /* Darker text */
+  font-size: 0.9rem; /* Smaller font */
 }
 
 .recovery-codes-action-button:hover {
-  background-color: rgba(255, 246, 231, 0.9);
+  background-color: #FEDAC0;
   transform: translateY(-2px);
 }
 
@@ -402,20 +411,6 @@ input.input-error {
   margin-top: 20px;
 }
 
-.skip-recovery-codes-button {
-  background: none;
-  border: none;
-  color: #999;
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: 0.8rem;
-  margin-top: 5px;
-}
-
-.skip-recovery-codes-button:hover {
-  color: #C14600;
-}
-
 @media (max-width: 768px) {
   .recovery-codes-actions {
     flex-direction: column;
@@ -424,4 +419,32 @@ input.input-error {
   .recovery-code-item {
     font-size: 0.85rem;
   }
+}
+
+/* Add a darker version of the recovery message */
+.recovery-codes-message-dark {
+  color: #222; /* Much darker, almost black for better readability */
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 500; /* Slightly bolder */
+}
+
+.recovery-codes-message-dark strong {
+  color: #A53900; /* Darker orange */
+  font-weight: 700;
+}
+
+/* Since we removed the skip button, let's make the continue button more prominent */
+.recovery-codes-footer .ca-login-button {
+  width: 80%; /* Changed from 100% to 80% */
+  max-width: 300px; /* Added back some constraint */
+  margin: 15px auto 0; /* Center the button */
+  padding: 10px; /* Reduced from 12px to 10px */
+  font-size: 0.95rem; /* Slightly smaller font */
+  color: #000000; /* Changed from #FFFFFF to #000000 */
+  font-weight: 600; /* Added to make text more visible */
+  text-shadow: none; /* Removed text shadow for better readability */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #FFF6E7; /* Lighter background for better contrast with black text */
+  border: 1px solid #C14600;
 }
