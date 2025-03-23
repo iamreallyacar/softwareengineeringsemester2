@@ -733,11 +733,11 @@ const fetchAvailableHomes = async () => {
   };
 
   return (
-    <>
+    <div className="sml-main-content">
         <Background showLogo={false} blurEffect={true} />
         <div className="shl-title-grouping">
-                    <UserRoundCog className="shl-title-icon" />
-                    <h1 className="shl-title">My Smart Homes</h1>
+            <UserRoundCog className="shl-title-icon" />
+            <h1 className="shl-title">My Smart Homes</h1>
         </div>
         <div className="dashboard-container">
             <DashboardHeader />
@@ -776,7 +776,7 @@ const fetchAvailableHomes = async () => {
                 />
             </div>
         </div>
-    </>
+    </div>
   );
 }
 

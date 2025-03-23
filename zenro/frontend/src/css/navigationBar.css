@@ -133,7 +133,7 @@
 
   .sidebar {
     left: -100%;
-    width: 30vw;
+    width: 20vw;
     transition: left 0.3s ease-in-out;
   }
 
@@ -187,15 +187,20 @@
   margin-left: 10vw; /* Match sidebar width */
   min-height: 100vh;
   transition: margin-left 0.3s ease;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  width: calc(100% - 10vw); /* Use remaining width */
 }
 
 @media (max-width: 768px) {
   .main-content {
-    margin-left: 0; /* No margin when sidebar is hidden */
+    width: 100%;
+    margin-left: 0;
   }
   
   .sidebar.active + .main-content {
-    margin-left: 30vw; /* Add margin when sidebar is active */
+    width: calc(100% - 20vw);
+    margin-left: 20vw;
   }
 }
 

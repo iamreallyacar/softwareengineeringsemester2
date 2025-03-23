@@ -83,7 +83,6 @@
 .ca-login-form input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5) opacity(0.8); /* Makes the calendar icon darker */
   position: relative;
-  
 }
 
 .ca-login-form input:focus, .ca-login-form select:focus {

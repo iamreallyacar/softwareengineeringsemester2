@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import api from "../api";
 import LoadingElement from "./LoadingElement.js";
 import Background from "./Background.js";
-import Navbar from "./NavigationBar";
 import "../css/profile.css";
 import { useNavigate } from "react-router-dom";
 import { UserRoundCog } from "lucide-react";
@@ -203,7 +202,7 @@ function ProfilePage() {
                             // Add timeout to clear error
                             setTimeout(() => {
                                 setError("");
-                            }, 3000);
+                            }, 10000);
                             return;
                         }
                     } 
@@ -216,7 +215,7 @@ function ProfilePage() {
                             // Add timeout to clear error
                             setTimeout(() => {
                                 setError("");
-                            }, 3000);
+                            }, 10000);
                             return;
                         }
                     }
@@ -527,9 +526,69 @@ function ProfilePage() {
     if (loading && !userData) return <LoadingElement />;
 
     return (
-        <div className="profile-container">
+        <div className="main-content">
+            <div className="profile-container">
             <Background showLogo={false} blurEffect={true}  />
-            <Navbar />
+            {/* Delete Account Confirmation Modal */}
+            {showDeleteConfirm && (
+                        <div className="profile-modal-overlay">
+                            <div className="delete-confirm-modal">
+                                <div className="modal-header">
+                                    <h3>Confirm Account Deletion</h3>
+                                    <button 
+                                        className="close-modal-button"
+                                        onClick={() => {
+                                            setShowDeleteConfirm(false);
+                                            setDeletePassword("");
+                                            setDeleteError("");
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <div className="modal-content">
+                                    <p className="warning-text">
+                                        <i className="fa-solid fa-exclamation-triangle"></i>
+                                        This action cannot be undone. All your data will be permanently deleted.
+                                    </p>
+                                    
+                                    <div className="confirm-password-field">
+                                        <label>Enter your password to confirm:</label>
+                                        <input
+                                            type="password"
+                                            value={deletePassword}
+                                            onChange={(e) => setDeletePassword(e.target.value)}
+                                            placeholder="Your current password"
+                                        />
+                                        {deleteError && (
+                                            <div className="profile-field-error">{deleteError}</div>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="modal-actions">
+                                        <button 
+                                            className="profile-cancel-delete-button"
+                                            onClick={() => {
+                                                setShowDeleteConfirm(false);
+                                                setDeletePassword("");
+                                                setDeleteError("");
+                                            }}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            className="profile-confirm-delete-button"
+                                            onClick={handleDeleteAccount}
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Deleting..." : "Permanently Delete Account"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
             
             <div className="profile-content">
                 <div className="profile-title-grouping">
@@ -543,11 +602,11 @@ function ProfilePage() {
                     </div>
                 )}
                 
-                {error && (
+               {/*  {error && (
                     <div className="profile-error-message">
                         <i className="fa-solid fa-exclamation-circle"></i> {error}
                     </div>
-                )}
+                )} */}
 
                 <div className="profile-card">
                     <div className="profile-avatar">
@@ -567,7 +626,7 @@ function ProfilePage() {
                                         placeholder={userData?.username || ""}
                                     />
                                     {error && error.includes("username") && (
-                                        <div className="field-note">
+                                        <div className="profile-error-message">
                                             <i className="fa-solid fa-info-circle"></i> {error}
                                         </div>
                                     )}
@@ -605,7 +664,7 @@ function ProfilePage() {
                                         placeholder={userData?.email || ""}
                                     />
                                     {error && error.includes("email") && (
-                                        <div className="field-note">
+                                        <div className="profile-error-message">
                                             <i className="fa-solid fa-info-circle"></i> {error}
                                         </div>
                                     )}
@@ -827,7 +886,7 @@ function ProfilePage() {
                                         className={passwordErrors.current_password ? "error" : ""}
                                     />
                                     {passwordErrors.current_password && (
-                                        <div className="field-error">{passwordErrors.current_password}</div>
+                                        <div className="profile-field-error">{passwordErrors.current_password}</div>
                                     )}
                                 </div>
                                 
@@ -841,7 +900,7 @@ function ProfilePage() {
                                         className={passwordErrors.new_password ? "error" : ""}
                                     />
                                     {passwordErrors.new_password && (
-                                        <div className="field-error">{passwordErrors.new_password}</div>
+                                        <div className="profile-field-error">{passwordErrors.new_password}</div>
                                     )}
                                 </div>
                                 
@@ -855,7 +914,7 @@ function ProfilePage() {
                                         className={passwordErrors.confirm_password ? "error" : ""}
                                     />
                                     {passwordErrors.confirm_password && (
-                                        <div className="field-error">{passwordErrors.confirm_password}</div>
+                                        <div className="profile-field-error">{passwordErrors.confirm_password}</div>
                                     )}
                                 </div>
                                 
@@ -993,85 +1052,26 @@ function ProfilePage() {
 
                     {/* Account Deletion Section - Updated Layout */}
                     <div className="account-deletion-section">
-                        <h2 className="deletion-title">Delete Account</h2>
+                        <div className="deletion-section-header">
+                            <h2 className="deletion-section-title">Delete Account</h2>
+                            <div className="button-container">
+                                <button 
+                                    className="delete-account-button"
+                                    onClick={() => setShowDeleteConfirm(true)}
+                                >
+                                    <i className="fa-solid fa-trash"></i> Delete My Account
+                                </button>
+                            </div>
+                        </div>
                         
                         <p className="danger-text">
                             Deleting your account is permanent and will remove all your data, including smart homes, rooms, and devices.
                         </p>
-                        
-                        <div className="deletion-button-container">
-                            <button 
-                                className="delete-account-button"
-                                onClick={() => setShowDeleteConfirm(true)}
-                            >
-                                <i className="fa-solid fa-trash"></i> Delete My Account
-                            </button>
-                        </div>
                     </div>
-
-                    {/* Delete Account Confirmation Modal */}
-                    {showDeleteConfirm && (
-                        <div className="modal-overlay">
-                            <div className="delete-confirm-modal">
-                                <div className="modal-header">
-                                    <h3>Confirm Account Deletion</h3>
-                                    <button 
-                                        className="close-modal-button"
-                                        onClick={() => {
-                                            setShowDeleteConfirm(false);
-                                            setDeletePassword("");
-                                            setDeleteError("");
-                                        }}
-                                    >
-                                        <i className="fa-solid fa-times"></i>
-                                    </button>
-                                </div>
-                                
-                                <div className="modal-content">
-                                    <p className="warning-text">
-                                        <i className="fa-solid fa-exclamation-triangle"></i>
-                                        This action cannot be undone. All your data will be permanently deleted.
-                                    </p>
-                                    
-                                    <div className="confirm-password-field">
-                                        <label>Enter your password to confirm:</label>
-                                        <input
-                                            type="password"
-                                            value={deletePassword}
-                                            onChange={(e) => setDeletePassword(e.target.value)}
-                                            placeholder="Your current password"
-                                        />
-                                        {deleteError && (
-                                            <div className="field-error">{deleteError}</div>
-                                        )}
-                                    </div>
-                                    
-                                    <div className="modal-actions">
-                                        <button 
-                                            className="cancel-delete-button"
-                                            onClick={() => {
-                                                setShowDeleteConfirm(false);
-                                                setDeletePassword("");
-                                                setDeleteError("");
-                                            }}
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button 
-                                            className="confirm-delete-button"
-                                            onClick={handleDeleteAccount}
-                                            disabled={loading}
-                                        >
-                                            {loading ? "Deleting..." : "Permanently Delete Account"}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
         </div>
+    </div>
     );
 }
 
