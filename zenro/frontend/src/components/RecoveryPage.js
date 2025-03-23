@@ -73,12 +73,23 @@ function RecoveryPage() {
     setError("");
     
     try {
-      // We're not verifying the code here - just moving to password reset step
-      // The actual verification happens during password reset
+      // Verify the recovery code is valid for this user before proceeding
+      // make a special validation request that doesn't consume the code
+      const validationResponse = await api.post('/validate-recovery-code/', {
+        username: username,
+        recovery_code: formattedCode
+      });
+      
+      // If we get here, the code is valid for this user
       setStep(3);
     } catch (err) {
-      console.error("Error:", err);
-      setError("An error occurred. Please try again.");
+      console.error("Error validating recovery code:", err);
+      // Handle specific error responses from the API
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
+      } else {
+        setError("Invalid or already used recovery code. Please try another code.");
+      }
     } finally {
       setLoading(false);
     }

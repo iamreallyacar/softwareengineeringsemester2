@@ -1091,3 +1091,39 @@ def reset_password_with_code(request):
         return Response({
             'error': 'Invalid recovery code'
         }, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def validate_recovery_code(request):
+    """
+    Validate a recovery code belongs to the specified user without using it.
+    """
+    username = request.data.get('username')
+    recovery_code = request.data.get('recovery_code')
+    
+    if not username or not recovery_code:
+        return Response({
+            'error': 'Both username and recovery code are required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # First find the user
+        user = User.objects.get(username=username)
+        
+        # Then check if the recovery code exists for this user
+        if RecoveryCode.objects.filter(user=user, code=recovery_code).exists():
+            return Response({
+                'valid': True,
+                'message': 'Recovery code is valid for this user'
+            })
+        else:
+            return Response({
+                'error': 'Invalid recovery code for this user'
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+    except User.DoesNotExist:
+        # For security reasons, give the same error as invalid code
+        # This prevents username enumeration
+        return Response({
+            'error': 'Invalid recovery code for this user'
+        }, status=status.HTTP_400_BAD_REQUEST)

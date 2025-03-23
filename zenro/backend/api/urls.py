@@ -12,7 +12,8 @@ from .views import (
     DeviceLogMonthlyViewSet, RoomLogMonthlyViewSet, HomeIORoomViewSet, DeviceControlView,
     EnergyGeneration1MinViewSet, EnergyGenerationDailyViewSet, EnergyGenerationMonthlyViewSet,
     energy_summary, UserProfileViewSet, current_user_info, join_smart_home,
-    generate_recovery_codes, list_recovery_codes, reset_password_with_code
+    generate_recovery_codes, list_recovery_codes, reset_password_with_code,
+    validate_recovery_code
 )
 
 # Create a router and register our viewsets with it
@@ -77,4 +78,5 @@ urlpatterns = [
     path('recovery-codes/generate/', generate_recovery_codes, name='generate-recovery-codes'),
     path('recovery-codes/list/', list_recovery_codes, name='list-recovery-codes'),
     path('reset-password-with-code/', reset_password_with_code, name='reset-password-with-code'),
+    path('validate-recovery-code/', validate_recovery_code, name='validate-recovery-code'),
 ]
