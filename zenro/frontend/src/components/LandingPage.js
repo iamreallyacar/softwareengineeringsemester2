@@ -41,7 +41,7 @@ function Navbar() {
       <div className="container">
         <div className="content-container navbar-content">
           <Link to="/landing-page" className="logo">
-            PeachesOS
+            Peaches Smart Home
           </Link>
 
           <div className="menu-toggle">
@@ -81,8 +81,8 @@ function Hero() {
       <div className="hero-overlay"></div>
       <div className="container">
         <div className="content-container hero-content">
-          <h1>Welcome to Our Modern Website</h1>
-          <p>A clean, responsive design built with React</p>
+          <h1>Welcome to Peaches Smart Home System</h1>
+          <p>Your affordable solution to Control and Monitor your home.</p>
           <button
             onClick={scrollToAbout}
             className="btn-primary"
@@ -114,7 +114,7 @@ function About() {
             <div className="about-text">
               <h3>Our Story</h3>
               <p>
-                PeachesOS is a smart monitoring solution designed to optimize energy usage, track resource consumption, and enhance sustainability in net-zero homes and care facilities.
+                Peaches Smart Home is a smart monitoring solution designed to optimize energy usage, track resource consumption, and enhance sustainability in net-zero homes and care facilities.
               </p>
               <p>
                 By integrating IoT sensors, AI-driven analytics, and real-time data visualization, the system enables homeowners and facility managers to monitor solar energy generation, water usage, indoor air quality, and overall energy efficiency.
@@ -199,7 +199,7 @@ function Contact() {
                   <MapPin className="icon" />
                   <div>
                     <h4>Our Location</h4>
-                    <p>123 Business Street, Suite 100, City, State 12345</p>
+                    <p>1, Jalan Venna P5/2, Precinct 5, 62200 Putrajaya, Wilayah Persekutuan Putrajaya</p>
                   </div>
                 </div>
 
@@ -215,7 +215,7 @@ function Contact() {
                   <Mail className="icon" />
                   <div>
                     <h4>Email Address</h4>
-                    <p>info@yourcompany.com</p>
+                    <p>support@peaches.com</p>
                   </div>
                 </div>
               </div>
@@ -303,8 +303,8 @@ function Footer() {
       <div className="container">
         <div className="content-container footer-content">
           <div className="footer-section">
-            <h3>ModernSite</h3>
-            <p>A modern website template built with React, providing a clean and responsive design.</p>
+            <h3>Modern Smart Home</h3>
+            <p>Your affordable solution to Control and Monitor your home.</p>
             <div className="social-links">
               <a href="#" onClick={handleSocialClick} className="social-link" aria-label="Facebook">
                 <Facebook size={20} />
@@ -356,7 +356,7 @@ function Footer() {
         </div>
 
         <div className="content-container footer-bottom">
-          <p>&copy; {currentYear} ModernSite. All rights reserved.</p>
+          <p>&copy; {currentYear} Peaches Smart Home. All rights reserved.</p>
         </div>
       </div>
     </footer>
