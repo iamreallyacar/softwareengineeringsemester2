@@ -193,12 +193,17 @@
 }
 
 @media (max-width: 768px) {
-  .main-content {
+  .main-content, .sml-main-content {
     width: 100%;
     margin-left: 0;
   }
   
   .sidebar.active + .main-content {
+    width: calc(100% - 20vw);
+    margin-left: 20vw;
+  }
+
+  .sidebar.active + .sml-main-content {
     width: calc(100% - 20vw);
     margin-left: 20vw;
   }

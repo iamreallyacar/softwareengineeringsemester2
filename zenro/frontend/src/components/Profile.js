@@ -1054,7 +1054,7 @@ function ProfilePage() {
                     <div className="account-deletion-section">
                         <div className="deletion-section-header">
                             <h2 className="deletion-section-title">Delete Account</h2>
-                            <div className="button-container">
+                            <div className="deletion-button-container">
                                 <button 
                                     className="delete-account-button"
                                     onClick={() => setShowDeleteConfirm(true)}

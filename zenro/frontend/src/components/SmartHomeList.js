@@ -28,6 +28,7 @@ const UserProfile = ({ username }) => (
 // Update CreateHomeForm to display field-specific errors
 const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, handleCreateSmartHome, isCreating, formError }) => (
     <div className="create-home">
+        <h2 className="create-home-title">Create Smart Homes</h2>
         <form onSubmit={handleCreateSmartHome}>
             <div className="form-field">
                 <input
