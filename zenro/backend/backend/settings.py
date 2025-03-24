@@ -186,4 +186,4 @@ SWAGGER_SETTINGS = {
 }
 
 # HomeIO Integration settings
-HOME_IO_API_URL = 'http://192.168.1.112:9797'  # Your Windows machine IP
+HOME_IO_API_URL = 'http://10.101.186.87:9797'  # Your Windows machine IP

@@ -10,7 +10,7 @@ class HomeIOService:
     """
     def __init__(self):
         # Get base URL from settings or use default
-        self.base_url = getattr(settings, 'HOME_IO_API_URL', 'http://192.168.1.112:9797')
+        self.base_url = getattr(settings, 'HOME_IO_API_URL', 'http://10.101.186.87:9797')
     
     def _get_device_details(self, device):
         """Helper method to extract common device details"""
