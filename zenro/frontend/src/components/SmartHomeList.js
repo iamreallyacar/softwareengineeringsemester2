@@ -461,7 +461,7 @@ const AvailableHomesList = ({
                 <div className="no-homes-message">No available homes to join</div>
                 ) : (
                 availableHomes.map((home) => (
-                    <div key={home.id} className="home-item">
+                    <div key={home.id} className="shl-home-item">
                     <button
                         className="home-button"
                         onClick={() => togglePasswordDropdown(home.id)}
@@ -734,7 +734,7 @@ const fetchAvailableHomes = async () => {
   };
 
   return (
-    <div className="sml-main-content">
+    <div className="shl-main-content">
         <Background showLogo={false} blurEffect={true} />
         <div className="shl-title-grouping">
             <UserRoundCog className="shl-title-icon" />

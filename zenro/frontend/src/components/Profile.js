@@ -202,7 +202,7 @@ function ProfilePage() {
                             // Add timeout to clear error
                             setTimeout(() => {
                                 setError("");
-                            }, 10000);
+                            }, 3000);
                             return;
                         }
                     } 
@@ -215,7 +215,7 @@ function ProfilePage() {
                             // Add timeout to clear error
                             setTimeout(() => {
                                 setError("");
-                            }, 10000);
+                            }, 3000);
                             return;
                         }
                     }
