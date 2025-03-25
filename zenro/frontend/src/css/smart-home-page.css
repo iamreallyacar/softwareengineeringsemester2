@@ -6,154 +6,132 @@ body {
     overflow: hidden;
 }
 
-/* Responsive styles for smaller screens */
-@media (max-width: 768px) {
-    .smart-home-page {
-        flex-direction: column;
-        /* Stack sidebar and main content vertically */
-        align-items: stretch;
-        /* Ensure full width for all elements */
-    }
-
-    .shp-information {
-        margin-left: 0 !important;
-        /* Force removal of the left margin */
-        width: 100% !important;
-        /* Force full width */
-        height: auto;
-        /* Allow height to adjust based on content */
-        box-sizing: border-box;
-        /* Ensure padding is included in width/height */
-    }
-}
-
 .smart-home-page {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    /* padding: 20px; */
-    /* background: linear-gradient(to bottom, #DD946A, #BF5E40); */
+    width: 100%;
+    max-width: 100%;
     overflow: hidden;
-    width: 100vw;
+    position: relative;
+    transition: width 0.3s ease;
 }
 
-/* Simple smart home name title at top of page */
+.shp-main-content {
+    margin-left: 10vw; 
+    min-height: 100vh;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    display: flex;
+    justify-content: center; 
+    width: calc(100% - 10vw); 
+}
+
 .smart-home-title {
-  width: 100%;
-  text-align: center;
-  color: #C14600;
-  font-size: 32px;
-  font-weight: bold;
-  margin: 0 0 10px 0; /* Reduced from 20px bottom margin */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* Responsive styling */
-@media (max-width: 768px) {
-  .smart-home-title {
-    font-size: 26px;
-    margin-bottom: 15px;
-  }
+    width: 100%;
+    text-align: center;
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    padding: 15px 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: inline-block;
 }
 
 .shp-information {
-    display: flex;
+    display: block;
     flex-wrap: wrap;
-    /* Allow wrapping to create rows */
     justify-content: space-between;
-    /* Add spacing between items */
-    gap: 15px; /* Reduced from 20px */
-    /* Add spacing between containers */
+    gap: 15px;
     padding: 30px;
-    padding-top: 30px; /* Reduced from 50px */
-    /* Background gradient */
-    width: calc(100% - 150px);
-    /* Full width minus the sidebar width */
-    height: 100vh;
-    /* Full height of the viewport */
-    margin-left: 150px;
-    /* Match the width of the sidebar */
+    padding-top: 30px;
+    width: 90%;
+    height: auto;
+    max-width: 1400px;
+    margin: 0 auto;
     box-sizing: border-box;
-    /* Include padding in width/height calculations */
     overflow-y: auto;
-    /* Allow scrolling for overflowing content */
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+    transition: width 0.3s ease, margin 0.3s ease;
+}
+
+.shp-information::-webkit-scrollbar {
+    width: 6px;
+}
+
+.shp-information::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.shp-information::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
 }
 
 /* Individual containers inside shp-information */
-.shp-information>div {
-    flex: 1 1 calc(50% - 20px);
-    /* Take 50% width minus the gap */
+.shp-information > div {
+    flex: 1 1 calc(50% - 15px);
     box-sizing: border-box;
-    /* Include padding and border in width */
+    min-width: 300px;
 }
 
-/* Ensure responsiveness */
-@media (max-width: 768px) {
-    .shp-information>div {
-        flex: 1 1 100%;
-        /* Full width for smaller screens */
-    }
-}
-
-/* room container */
 .shp-rooms {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     width: 100%;
-    /* Full width of the parent container */
     height: auto;
-    /* Adjust height based on content */
-    padding: 15px; /* Reduced from 20px */
-    background: peachpuff;
-    border: 3px solid white;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    margin-bottom: 15px; /* Reduced from 20px */
-    /* Add spacing between containers */
+    margin-bottom: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 .shp-rooms h1 {
-    color: rgb(237, 62, 62);
     text-align: left;
     align-self: flex-start;
+    color: #FFF6E7;
+    font-size: 24px;
     margin: 0;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 }
 
 .shp-rooms-divider {
     width: 100%;
     height: 2px;
-    background: white;
+    background: rgba(255, 255, 255, 0.3);
     border: none;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
+    margin: 10px 0;
 }
 
 .shp-rooms-list-container {
     width: 100%;
-    /* Full width of the container */
-    max-height: 250px; /* Reduced from 300px */
-    /* Set a static maximum height */
+    max-height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     overflow-y: auto;
-    /* Enable vertical scrolling */
     overflow-x: hidden;
-    /* Prevent horizontal scrolling */
-    padding: 5px; /* Reduced from 10px */
-    /* Add padding for spacing */
+    padding: 5px;
     box-sizing: border-box;
-    /* Include padding in width/height calculations */
-    background-color: peachpuff;
-    /* Optional: Background color for the container */
     border-radius: 10px;
-    /* Optional: Rounded corners */
-    margin-bottom: 20px; /* Add space at the bottom of the list even when there's no button */
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .shp-rooms-list {
@@ -164,26 +142,17 @@ body {
     list-style-type: none;
     padding: 5px;
     padding-top: 20px;
-
     text-align: left;
-    overflow-x: hidden;
     overflow-y: auto;
 }
 
-.shp-rooms ul::-webkit-scrollbar-button {
-    display: none;
-}
-
 .shp-rooms ul::-webkit-scrollbar {
-    width: 10px;
-    border: 3px solid transparent;
-    border-radius: 10px;
+    width: 6px;
 }
 
 .shp-rooms ul::-webkit-scrollbar-thumb {
-    background: white;
-    border: 3px solid white;
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
 }
 
 .shp-rooms ul::-webkit-scrollbar-track {
@@ -193,179 +162,161 @@ body {
 
 .shp-rooms ul li {
     display: flex;
-    /* Use Flexbox for alignment */
     align-items: center;
-    /* Vertically center the icon and text */
     padding-left: 10px;
-    /* Adjust padding for spacing */
     width: 95%;
-    height: 40px; /* Reduced from 50px */
-    /* Set a fixed height for consistency */
+    min-width: 300px;
+    height: 40px;
     font-weight: bold;
-    color: #5D252D;
+    color: #ffffff;
     border-radius: 20px;
     position: relative;
-    transition: background-color 0.2s ease;
-    background-color: peachpuff;
-    /* Optional: Background color */
-    margin-bottom: 3px; /* Reduced from 5px */
-    /* Add spacing between list items */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow */
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .shp-rooms ul li:after {
     content: ">";
-    bottom: 10px;
     position: absolute;
-    right: 15px;
+    right: 20px;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .shp-rooms ul li:hover {
-    background-color: white;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1);
+    box-shadow: 0 0 9px rgba(255, 255, 255, 0.3);
 }
 
 /* Style for the delete button */
 .delete-room-button {
-    width: 40px;
-    /* Fixed width for the button */
-    height: 40px;
-    /* Fixed height for the button */
-    background-color: rgb(245, 54, 54);
-    /* Red background */
-    border: none;
-    /* Remove border */
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    flex-shrink: 0;
+    background: rgba(245, 54, 54, 0.8);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    /* Make it circular */
     display: flex;
-    /* Use Flexbox for alignment */
     justify-content: center;
-    /* Center the icon horizontally */
     align-items: center;
-    /* Center the icon vertically */
     cursor: pointer;
-    /* Pointer cursor on hover */
-    transition: background-color 0.3s ease;
-    /* Smooth hover effect */
+    transition: all 0.3s ease;
     margin-left: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Style for the delete icon inside the button */
 .delete-room-button .delete-icon {
     color: white;
-    /* White icon color */
-    font-size: 18px;
-    /* Adjust icon size */
+    font-size: 16px;
 }
 
-/* Hover effect for the delete button */
 .delete-room-button:hover {
-    background-color: darkred;
-    /* Darker red on hover */
+    background: rgba(220, 20, 20, 0.9);
+    transform: rotate(90deg);
 }
 
-/* Add spacing between the icon and the text */
 .shp-room-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    /* Fixed width for the icon container */
-    height: 40px;
-    /* Fixed height for the icon container */
-    background-color: #CB5A55;
-    /* Background color for the icon */
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    /* Make it a circle */
     margin-right: 10px;
-    /* Add spacing between the icon and the text */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Style for the icon inside the circle */
 .shp-room-icon i {
     color: white;
-    /* White icon color */
-    font-size: 18px;
-    /* Adjust icon size */
+    font-size: 16px;
 }
 
-/* Style for the room link text */
 .shp-rooms-list-links {
     text-decoration: none;
-    /* Remove underline */
-    color: #5D252D;
-    /* Text color */
-    font-size: 16px;
-    /* Adjust font size */
+    color: #FD6F2F;
     font-weight: bold;
-    /* Make the text bold */
     white-space: nowrap;
-    /* Prevent text wrapping */
     overflow: hidden;
-    /* Hide overflowing text */
     text-overflow: ellipsis;
-    /* Add ellipsis for long text */
     flex: 1;
-    /* Allow the text to take up remaining space */
+    font-family: -apple-system, BlinkMacSystemFont, Georgia, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    max-width: calc(100% - 60px); 
+    display: inline-block;
+    padding: 1.25rem;
 }
 
 .shp-add-room-button {
-    background-color: #CB5A55;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     width: auto;
-    /* Adjust width to fit the text content */
     height: auto;
-    /* Adjust height to fit the text content */
-    margin-top: 15px; /* Reduced from 30px */
+    margin-top: 15px;
     padding: 10px 20px;
-    /* Add padding for a standard button size */
-    border: 0px;
-    border-radius: 10px;
-    /* Slightly rounded corners */
-    box-shadow: 0px 3px 3px black;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     color: white;
     font-size: 16px;
-    /* Standard font size */
     font-weight: bold;
-    text-shadow: 0px 3px 3px black;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    /* Add pointer cursor for better UX */
-    transition: background-color 0.2s ease, transform 0.2s ease;
-
+    transition: all 0.3s ease;
     align-self: flex-end;
-    /* Align the button to the right in a flex container */
 }
 
 .shp-add-room-button:hover {
-    background-color: #BD3F3F;
-    transform: scale(1.05);
-    /* Slightly enlarge on hover */
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Energy info container */
 .energy-info {
-    background: #fbdba7;
-    padding: 15px; /* Reduced from 20px */
-    border: 3px solid white;
+    background: rgba(254, 209, 171, 80%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 15px; /* Reduced from 20px */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
     position: relative;
-    transition: transform 0.6s ease, background-color 0.6s ease;
+    transition: all 0.6s ease;
     transform-style: preserve-3d;
 }
 
 .energy-info.generation-view {
-    background: #e0f2e0; /* Lighter green background for generation view */
-    border-color: #4CAF50;
+    background:rgba(239, 244, 221, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.energy-info.consumption-view {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(243, 212, 208, 0.6);    
+    border: 1px solid rgba(191, 82, 75, 0.3);
 }
 
 .energy-info-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px; /* Reduced from 20px */
+    margin-bottom: 15px;
     flex-wrap: wrap;
     gap: 15px;
 }
@@ -379,23 +330,43 @@ body {
 .period-buttons {
     display: flex;
     gap: 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding: 5px;
+}
+
+.period-buttons::-webkit-scrollbar {
+    display: none;
 }
 
 .period-button {
-    background-color: beige;
-    color: black;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     font-weight: bold;
     padding: 8px 16px;
     border-radius: 20px;
-    border: 0px;
-    box-shadow: 0px 3px 3px black;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.3);
 }
 
-.period-button:hover, .period-button.active {
-    background-color: rgb(241, 241, 188);
-    transform: scale(1.05);
+.period-button:hover {
+    background: rgb(250, 226, 196);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.period-button.active {
+    border: 1px solid rgba(255, 255, 255, 50%);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background-color: rgba(253, 111, 47, 70%); 
+    color: #f8f8f8;
 }
 
 .time-selector {
@@ -403,19 +374,22 @@ body {
 }
 
 .date-selector, .month-selector, .year-selector, .room-selector {
-    background-color: beige;
-    color: black;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba(255, 234, 209, 90%);
+    color: #515739;
     font-weight: bold;
     padding: 8px 16px;
-    border-radius: 20px;
-    border: 0px;
-    box-shadow: 0px 3px 3px black;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     width: 100%;
+    transition: all 0.3s ease;
 }
 
 .date-selector:hover, .month-selector:hover, .year-selector:hover, .room-selector:hover {
-    background-color: rgb(241, 241, 188);
+    background: rgba(250, 226, 196, 70%);
 }
 
 .date-selector:disabled, .month-selector:disabled, .year-selector:disabled, .room-selector:disabled {
@@ -424,9 +398,15 @@ body {
 }
 
 .chart-container {
-    height: 250px; /* Reduced from 300px */
+    height: 250px;
     width: 100%;
     position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 12px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .no-data-message {
@@ -434,21 +414,24 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 80%;
     max-width: 300px;
     z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .no-data-message p {
     margin: 0;
     font-size: 14px;
-    color: #555;
-    word-wrap: break-word; /* Ensures long text wraps properly */
+    color: #333;
+    word-wrap: break-word;
 }
 
 .generation-chart {
@@ -456,96 +439,117 @@ body {
     min-height: 300px;
 }
 
-/* Modal Container */
+/* Modal Container with glassmorphism */
 .modal {
-    background-color: beige;
-    /* White background */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     padding: 30px;
-    border-radius: 15px;
-    /* Rounded corners */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-    /* Subtle shadow */
+    border-radius: 20px;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     width: 400px;
     max-width: 90%;
-    /* Responsive width */
     text-align: center;
-    animation: fadeIn 0.3s ease-in-out;
-    /* Smooth fade-in animation */
+    animation: fadeIn 0.4s ease-in-out;
 }
 
 /* Modal Title */
 .modal h2 {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #333333;
-    /* Dark text color */
+    color: white;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Modal Input */
 .modal input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 20px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
     font-size: 16px;
     box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: white;
+}
+
+.modal input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.modal input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 /* Modal Buttons Container */
 .modal-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     padding-top: 20px;
 }
 
 /* Add Room Button */
 .modal-buttons button:first-child {
-    background-color: #4caf50;
-    /* Green for Add Room */
+    background: rgba(76, 175, 80, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 24px;
+    border-radius: 20px;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .modal-buttons button:first-child:hover {
-    background-color: #45a049;
-    /* Darker green on hover */
+    background: rgba(76, 175, 80, 0.9);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Cancel Button */
 .modal-buttons button:last-child {
-    background-color: #f44336;
-    /* Red for Cancel */
+    background: rgba(244, 67, 54, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 24px;
+    border-radius: 20px;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .modal-buttons button:last-child:hover {
-    background-color: #d32f2f;
-    /* Darker red on hover */
+    background: rgba(244, 67, 54, 0.9);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Fade-in Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(0.9) translateY(-20px);
     }
-
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateY(0);
     }
 }
 
@@ -595,166 +599,275 @@ body {
     /* Dark text color */
 }
 
-/* Energy info styles for the card flip effect */
-.energy-info {
-    position: relative;
-    transition: transform 0.6s ease, background-color 0.6s ease;
-    transform-style: preserve-3d;
-}
-
-.energy-info.generation-view {
-    background: #e0f2e0; /* Lighter green background for generation view */
-    border-color: #4CAF50;
-}
-
+/* View toggle button with glassmorphism */
 .view-toggle-button {
-    padding: 8px 16px;
+    padding: 10px 20px;
     border-radius: 20px;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .view-toggle-button.generation {
-    background-color: #4CAF50; /* Green for "View Home Energy Generation" */
+    background: rgba(76, 175, 80, 0.7);
     color: white;
 }
 
 .view-toggle-button.consumption {
-    background-color: #F44336; /* Red for "View Room Energy Consumption" */
+    background: rgba(244, 67, 54, 0.7);
     color: white;
 }
 
 .view-toggle-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.chart-container.generation-chart {
-    position: relative;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .consumption-chart, .generation-chart {
     width: 100%;
     position: relative;
-    height: 280px; /* Reduced from 330px */
+    height: 280px;
 }
-
-/* Add these styles to fix the chart sizing */
 
 /* Adjust consumption chart to account for room selector */
 .consumption-chart {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 280px; /* Reduced from 330px */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 280px;
+}
+
+.consumption-chart canvas, .generation-chart canvas {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .consumption-chart canvas {
-  margin-top: 10px;
-  height: calc(100% - 50px) !important; /* Subtract room selector height */
-  width: 100% !important;
+    margin-top: 10px;
+    height: calc(100% - 50px) !important;
+    width: 100% !important;
 }
 
 /* Adjust generation chart which doesn't have a selector */
 .generation-chart {
-  position: relative;
-  height: 280px; /* Reduced from 330px */
+    position: relative;
+    height: 280px;
 }
 
 .generation-chart canvas {
-  height: 100% !important;
-  width: 100% !important;
+    height: 100% !important;
+    width: 100% !important;
 }
 
 /* Ensure the room selector doesn't take too much space */
 .room-selector {
-  margin-bottom: 10px;
-  align-self: flex-start;
-  max-width: 300px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+    max-width: 300px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center; 
+    padding-right: 3rem;
+    margin-right: 0.5rem;
 }
-
-/* Improve visibility for active period buttons */
-.period-button.active {
-  background-color: #C14600;
-  color: #ffffff; /* Brighter white */
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5); /* Add text shadow */
-  font-weight: bold;
-  transform: scale(1.05);
-  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3), /* Stronger shadow */
-              inset 0px 0px 0px 2px rgba(255, 255, 255, 0.3); /* Inner glow */
-  border: 0px;
-}
-
-/* Add slightly different hover effect for active buttons */
-.period-button.active:hover {
-  background-color: #A53900; /* Slightly darker on hover */
-  transform: scale(1.08);
-}
-
-/* Add this at the end of the file */
 
 /* View Home Users button container */
 .view-home-users-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: -5px; /* Changed from 10px to a negative value to overlap space */
-  margin-bottom: 10px; /* Reduced from 20px */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: -5px;
+    margin-bottom: 10px;
 }
 
-/* View Home Users button */
+/* View Home Users button with glassmorphism */
 .view-home-users-button {
-  background-color: #5B9BD5; /* Changed to a light blue color */
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+    background: rgba(91, 155, 213, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    margin-top: 1rem;
 }
 
 .view-home-users-button:hover {
-  background-color: #3A7CBD; /* Darker blue on hover */
-  transform: translateY(-2px);
-  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+    background: rgba(91, 155, 213, 0.8);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .view-home-users-button i {
-  font-size: 18px;
+    font-size: 18px;
 }
 
-/* Responsive adjustment */
-@media (max-width: 768px) {
-  .view-home-users-container {
-    margin-top: 20px;
-    margin-bottom: 30px;
-  }
-  
-  .view-home-users-button {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-}
-
-/* Add styles for the owner note */
+/* Owner note with subtle glassmorphism */
 .owner-note {
-  text-align: center;
-  color: #5D252D;
-  font-style: italic;
-  margin-top: 20px;
-  font-size: 14px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-style: italic;
+    margin-top: 20px;
+    font-size: 14px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Add responsive styles for various device sizes */
+@media (max-width: 1200px) {
+    .shp-information {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .shp-information > div {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .smart-home-title {
+        font-size: 24px;
+    }
+    
+    .shp-rooms h1, .energy-info h2 {
+        font-size: 20px;
+    }
+    
+    .shp-information {
+        padding: 15px;
+        gap: 10px;
+        height: auto;
+    }
+    
+    .modal {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .smart-home-title {
+        font-size: 20px;
+        padding: 10px 0;
+    }
+    
+    .shp-rooms, .energy-info {
+        padding: 15px;
+    }
+    
+    .shp-rooms h1, .energy-info h2, .modal h2 {
+        font-size: 18px;
+    }
+    
+    .shp-rooms-list-links, .period-button, .view-home-users-button {
+        font-size: 14px;
+    }
+    
+    .shp-rooms ul li {
+        height: 36px;
+    }
+    
+    .shp-add-room-button, .modal-buttons button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Mobile styles with sidebar handling */
+@media (max-width: 768px) {
+    .shp-main-content {
+        width: 100%;
+        margin-left: 0;
+        transition: margin-left 0.3s ease, width 0.3s ease;
+    }
+    
+    /* When sidebar is active on mobile */
+    .shp-main-content.sidebar-active {
+        width: calc(100% - 20vw);
+        margin-left: 20vw;
+    }
+    
+    .smart-home-page {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        height: auto;
+        overflow-y: auto;
+        width: 100%;
+    }
+    
+    .shp-information {
+        height: auto;
+        gap: 10px;
+        padding: 15px;
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+/* Specifically handle overflow issues */
+@media (max-width: 480px) {
+    .smart-home-page {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .shp-information {
+        width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+/* Responsive sidebar-active states */
+@media (min-width: 769px) {
+    .sidebar.active + .shp-main-content {
+        margin-left: 10vw;
+        width: calc(100% - 10vw);
+    }
+}
+
+/* Fix for the sidebar active state on mobile */
+@media (max-width: 768px) {
+    .shp-main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    /* When sidebar is active */
+    .sidebar.active + .shp-main-content {
+        margin-left: 20vw;
+        width: calc(100% - 20vw);
+    }
+    
+    .sidebar:not(.active) + .shp-main-content {
+        width: 100%;
+        margin-left: 0;
+    }
 }

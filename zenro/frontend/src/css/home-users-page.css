@@ -3,41 +3,46 @@ html, body, #root, .App {
   margin: 0;
   padding: 0;
   width: 100%;
-  /* min-height: 100vh; */
   overflow-x: hidden;
 }
 
-body {
-  background-attachment: fixed;
+/* Glassmorphism Variables */
+:root {
+  --glass-background: rgba(255, 255, 255, 0.15);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(12px);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Add back button styling at the top of the file */
+/* Add back button styling with glassmorphism */
 .back-to-overview {
-  position: fixed !important; /* Changed from absolute to fixed */
+  position: fixed !important;
   top: 30px !important;
-  left: 170px !important; /* Move it to the right of navbar */
-  z-index: 999 !important; /* Very high z-index to ensure visibility */
+  left: 170px !important;
+  z-index: 999 !important;
 }
 
 .back-button {
   display: flex !important;
   align-items: center !important;
-  flex-direction: row-reverse !important; /* Reverse to put icon on the left */
+  flex-direction: row-reverse !important;
   gap: 5px !important;
-  background-color: white !important;
+  background-color: var(--glass-background) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
   color: #C14600 !important;
-  border: none !important;
+  border: var(--glass-border) !important;
   border-radius: 20px !important;
   padding: 8px 15px !important;
   font-weight: bold !important;
   text-decoration: none !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: var(--glass-shadow) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .back-button:hover {
   transform: translateY(-2px) !important;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
 .back-button svg {
@@ -53,7 +58,6 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background: linear-gradient(to bottom, #FFD7B1, #DD946A, #BF5E40);
   position: absolute;
   left: 0;
   top: 0;
@@ -69,15 +73,22 @@ body {
   box-sizing: border-box;
 }
 
-/* Update the home header to place name and owner info side by side */
+/* Update the home header with glassmorphism */
 .home-header {
   margin-top: 50px !important;
-  margin-bottom: 40px !important; /* Increased space after header */
+  margin-bottom: 40px !important;
   position: relative !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   width: 100% !important;
+  padding: 20px !important;
+  background: var(--glass-background) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border-radius: 15px !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
 }
 
 /* Add a new container for the title row */
@@ -86,7 +97,7 @@ body {
   justify-content: space-between !important;
   align-items: center !important;
   width: 100% !important;
-  margin-bottom: 25px !important; /* Space between title row and dropdown */
+  margin-bottom: 25px !important;
   padding: 0 20px !important;
   box-sizing: border-box !important;
 }
@@ -96,16 +107,17 @@ body {
   color: #C14600 !important;
   font-size: 32px !important;
   font-weight: bold !important;
-  margin: 0 !important; /* Remove default margins */
-  text-align: left !important; /* Left align instead of center */
-  flex: 1 !important; /* Allow it to take available space */
+  margin: 0 !important;
+  text-align: left !important;
+  flex: 1 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Update home owner to be right-aligned */
 .home-owner {
   color: #5D252D !important;
   font-size: 18px !important;
-  margin: 0 !important; /* Remove default margins */
+  margin: 0 !important;
   text-align: right !important;
   white-space: nowrap !important;
 }
@@ -114,22 +126,24 @@ body {
   font-weight: bold;
 }
 
-/* Update Add Member Dropdown positioning */
+/* Update Add Member Dropdown with glassmorphism */
 .add-member-dropdown {
   position: relative !important;
-  margin: 0 auto 20px auto !important; /* Removed top margin, button will be positioned by the flex layout */
+  margin: 0 auto 20px auto !important;
   width: 220px !important;
   z-index: 5 !important;
 }
 
-/* Add more space before the members container */
+/* Glassmorphism for members container */
 .members-container {
-  background: rgb(252, 199, 153) !important;
-  border: 3px solid white !important;
+  background: var(--glass-background) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: var(--glass-border) !important;
   border-radius: 20px !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  box-shadow: var(--glass-shadow) !important;
   padding: 25px !important;
-  margin-top: 10px !important; /* Adjusted spacing */
+  margin-top: 10px !important;
   margin-bottom: 20px !important;
   width: 100% !important;
   box-sizing: border-box !important;
@@ -141,7 +155,10 @@ body {
   font-style: italic;
   margin: 30px 0;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
   border-radius: 10px;
 }
 
@@ -154,12 +171,15 @@ body {
   gap: 15px;
 }
 
-/* Member item styling changes */
+/* Member item styling with glassmorphism */
 .member-item {
-  background: #f9eacb; /* Darker background instead of beige */
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
   border-radius: 10px;
   padding: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               box-shadow 0.3s ease,
               background-color 0.3s ease;
@@ -170,13 +190,13 @@ body {
 
 .member-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  background-color: #fdf3dd;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .member-item.expanded {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  background-color: #fdf3dd;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.35);
 }
 
 /* Adjust layout for expanded state */
@@ -198,7 +218,7 @@ body {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-left: auto; /* Push to right */
+  margin-left: auto;
 }
 
 /* Center profile content in expanded state */
@@ -207,8 +227,8 @@ body {
   opacity: 1;
   margin-top: 15px;
   padding-top: 15px;
-  border-top: 1px solid rgba(0,0,0,0.1);
-  text-align: center; /* Center content */
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
 }
 
 .member-item-header {
@@ -257,13 +277,13 @@ body {
 }
 
 .member-item.expanded .member-profile {
-  max-height: 800px; /* Higher value to accommodate all content */
+  max-height: 800px;
   opacity: 1;
   transform: translateY(0);
   margin-top: 15px;
   padding-top: 15px;
-  border-top: 1px solid rgba(0,0,0,0.1);
-  text-align: center; /* Center content */
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
   visibility: visible;
 }
 
@@ -292,6 +312,8 @@ body {
   padding: 15px;
   color: #c53030;
   background: rgba(255, 200, 200, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 5px;
   gap: 10px;
 }
@@ -301,16 +323,19 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 90%; /* Keep some margin on sides */
-  margin: 0 auto; /* Center the details container */
+  max-width: 90%;
+  margin: 0 auto;
 }
 
-/* Make profile sections stand out more against the darker background */
+/* Make profile sections stand out with glassmorphism */
 .profile-section {
-  background-color: rgba(255, 255, 255, 0.8); /* More opaque white */
+  background-color: rgba(255, 255, 255, 0.25);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
   border-radius: 8px;
   padding: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, opacity 0.3s ease;
   transform-origin: top center;
   animation: scaleIn 0.4s ease forwards;
@@ -345,7 +370,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
-  text-align: left; /* Text left-aligned within sections */
+  text-align: left;
 }
 
 .profile-field {
@@ -357,7 +382,7 @@ body {
 
 .field-label {
   font-weight: bold;
-  color: #666;
+  color: #5D252D;
   min-width: 100px;
 }
 
@@ -366,10 +391,13 @@ body {
   word-break: break-word;
 }
 
+/* Remove button with glassmorphism */
 .remove-button {
-  background-color: #e94242;
+  background-color: rgba(233, 66, 66, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   padding: 8px 15px;
   font-size: 14px;
@@ -378,14 +406,15 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
   white-space: nowrap;
   justify-self: end;
-  z-index: 5; /* Ensure above other elements */
+  z-index: 5;
 }
 
 .remove-button:hover {
-  background-color: #c53030;
+  background-color: rgba(197, 48, 48, 0.9);
+  transform: translateY(-2px);
 }
 
 .owner-note {
@@ -395,10 +424,14 @@ body {
   margin-top: 20px;
   font-size: 14px;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
   border-radius: 10px;
 }
 
+/* Loading container with glassmorphism */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -407,8 +440,12 @@ body {
   height: 300px;
   margin: 50px 0;
   padding: 30px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
   border-radius: 15px;
+  box-shadow: var(--glass-shadow);
 }
 
 .loading-spinner {
@@ -432,25 +469,32 @@ body {
   font-weight: bold;
 }
 
+/* Error message with glassmorphism */
 .error-message {
   text-align: center;
   margin: 50px 0;
   padding: 30px;
   font-size: 18px;
   color: #c53030;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
   border-radius: 15px;
-  border-left: 5px solid #c53030;
+  border-left: 5px solid rgba(197, 48, 48, 0.7);
+  box-shadow: var(--glass-shadow);
 }
 
-/* Modal Styling */
+/* Modal Styling with glassmorphism */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -458,10 +502,13 @@ body {
 }
 
 .modal {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.25);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: var(--glass-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 500px;
 }
@@ -475,7 +522,7 @@ body {
 .modal p {
   margin-bottom: 25px;
   line-height: 1.5;
-  color: #333;
+  color: #ffffff;
 }
 
 .modal-buttons {
@@ -490,38 +537,218 @@ body {
   border: none;
   cursor: pointer;
   font-weight: bold;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
 .remove-confirm-btn {
-  background-color: #e94242;
+  background-color: rgba(233, 66, 66, 0.85);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .remove-confirm-btn:hover {
-  background-color: #c53030;
+  background-color: rgba(197, 48, 48, 0.9);
+  transform: translateY(-2px);
 }
 
 .cancel-btn {
-  background-color: #eee;
+  background-color: rgba(238, 238, 238, 0.6);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   color: #333;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .cancel-btn:hover {
-  background-color: #ddd;
+  background-color: rgba(221, 221, 221, 0.8);
+  transform: translateY(-2px);
 }
 
 /* Add extra spacing for the Date of Birth field */
 .date-of-birth-field {
-  gap: 20px !important; /* Increase from 8px to 20px */
+  gap: 20px !important;
 }
 
-/* Responsive styles */
+/* Add Member Dropdown Styles with glassmorphism */
+.add-member-dropdown {
+  position: relative;
+  margin: 30px auto 20px auto;
+  width: 220px;
+  z-index: 5;
+}
+
+.add-member-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: rgba(193, 70, 0, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-member-button:hover {
+  background-color: rgba(165, 57, 0, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.member-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.25);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: 8px;
+  box-shadow: var(--glass-shadow);
+  padding: 12px;
+  margin-top: 8px;
+  z-index: 101;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.user-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.add-user-button {
+  width: 100%;
+  padding: 8px 0;
+  background-color: rgba(193, 70, 0, 0.85);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.add-user-button:hover:not(:disabled) {
+  background-color: rgba(165, 57, 0, 0.9);
+  transform: translateY(-2px);
+}
+
+.add-user-button:disabled {
+  background-color: rgba(204, 204, 204, 0.5);
+  cursor: not-allowed;
+}
+
+.add-member-error {
+  color: #e53e3e;
+  font-size: 12px;
+  margin-bottom: 8px;
+  text-align: center;
+  padding: 6px;
+  background: rgba(255, 200, 200, 0.15);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 4px;
+}
+
+/* Add styles for the clickable error and refresh button */
+.add-member-error.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-member-error.clickable:hover {
+  background-color: rgba(229, 62, 62, 0.2);
+}
+
+.refresh-button {
+  display: block;
+  margin: 8px auto 0;
+  background: none;
+  border: none;
+  color: #C14600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.refresh-button:hover {
+  color: #A53900;
+}
+
+.no-available-users {
+  text-align: center;
+  color: #5D252D;
+  padding: 8px 0;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Enhanced responsive styles */
+@media (max-width: 1200px) {
+  :root {
+    --glass-blur: blur(8px); /* Slightly reduced blur on smaller screens */
+  }
+  
+  .home-users-content {
+    width: calc(100% - 120px);
+    margin-left: 120px;
+  }
+}
+
+@media (max-width: 992px) {
+  .home-users-content {
+    width: calc(100% - 100px);
+    margin-left: 100px;
+    padding: 25px;
+  }
+  
+  .profile-section {
+    padding: 12px;
+  }
+}
+
 @media (max-width: 768px) {
+  :root {
+    --glass-blur: blur(6px); /* Further reduced blur on mobile */
+  }
+  
   .home-users-content {
     width: 100%;
     margin-left: 0;
     padding: 20px;
-    padding-top: 60px;
+    padding-top: 70px;
   }
   
   .home-name {
@@ -539,39 +766,48 @@ body {
 
   .back-to-overview {
     top: 20px !important;
-    left: 20px !important; /* On mobile, place it at the left */
+    left: 20px !important;
   }
   
   .home-header {
-    margin-top: 70px !important; /* More space on mobile */
+    margin-top: 70px !important;
+    padding: 15px !important;
   }
 
   .title-row {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
+    gap: 10px !important;
   }
   
   .home-name {
     text-align: center !important;
     margin-bottom: 10px !important;
-    font-size: 28px !important;
+    font-size: 26px !important;
   }
   
   .home-owner {
     text-align: center !important;
+    font-size: 16px !important;
   }
-}
-
-/* Responsive changes for the profile dropdown */
-@media (min-width: 768px) {
+  
   .profile-fields {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+  }
+  
+  .modal {
+    padding: 20px;
+    max-width: 90%;
   }
 }
 
 /* Mobile adjustments */
-@media (max-width: 767px) {
+@media (max-width: 576px) {
+  .members-container {
+    padding: 15px !important;
+  }
+  
   .member-item-header {
     flex-direction: column;
     align-items: flex-start;
@@ -592,12 +828,8 @@ body {
     min-width: 0;
   }
   
-  .profile-fields {
-    grid-template-columns: 1fr; /* Single column on mobile */
-  }
-  
   .member-item.expanded .member-name {
-    font-size: 17px; /* Slightly smaller on mobile */
+    font-size: 17px;
   }
   
   .date-of-birth-field {
@@ -607,24 +839,35 @@ body {
   .date-of-birth-field .field-label {
     margin-bottom: 5px;
   }
+  
+  .home-name {
+    font-size: 24px !important;
+  }
+  
+  .back-button {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
 }
 
-/* Animated hover effect for each member item */
-.member-item::after {
+/* Enhanced hover effect for member items */
+.member-item::before {
   content: '';
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 0;
-  background: linear-gradient(to top, rgba(203, 90, 85, 0.05), transparent);
-  transition: height 0.3s ease;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
   z-index: 1;
   pointer-events: none;
+  border-radius: 10px;
 }
 
-.member-item:hover::after {
-  height: 100%;
+.member-item:hover::before {
+  opacity: 1;
 }
 
 /* Make content sit above the hover effect */
@@ -636,7 +879,9 @@ body {
 /* Add these styles for the simplified profile display */
 .profile-section.simplified {
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .profile-section.simplified .profile-fields {
@@ -651,131 +896,23 @@ body {
   }
 }
 
-/* Add Member Dropdown Styles */
-.add-member-dropdown {
-  position: relative;
-  margin: 30px auto 20px auto; /* Increased top margin from 10px to 30px */
-  width: 220px;
-  z-index: 5;
+/* Custom scrollbar for glass effect */
+::-webkit-scrollbar {
+  width: 10px;
 }
 
-.add-member-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background-color: #C14600;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-  font-size: 14px;
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
-.add-member-button:hover {
-  background-color: #A53900;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+::-webkit-scrollbar-thumb {
+  background: rgba(193, 70, 0, 0.5);
+  backdrop-filter: var(--glass-blur);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.dropdown-arrow {
-  transition: transform 0.3s ease;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.member-dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 12px;
-  margin-top: 8px;
-  z-index: 101;
-  animation: fadeIn 0.2s ease;
-}
-
-.user-select {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: #333;
-}
-
-.add-user-button {
-  width: 100%;
-  padding: 8px 0;
-  background-color: #C14600;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.add-user-button:hover:not(:disabled) {
-  background-color: #A53900;
-}
-
-.add-user-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.add-member-error {
-  color: #e53e3e;
-  font-size: 12px;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-/* Add styles for the clickable error and refresh button */
-.add-member-error.clickable {
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.add-member-error.clickable:hover {
-  background-color: rgba(229, 62, 62, 0.1);
-}
-
-.refresh-button {
-  display: block;
-  margin: 8px auto 0;
-  background: none;
-  border: none;
-  color: #C14600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 4px 8px;
-}
-
-.refresh-button:hover {
-  color: #A53900;
-}
-
-.no-available-users {
-  text-align: center;
-  color: #666;
-  padding: 8px 0;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(193, 70, 0, 0.7);
 }

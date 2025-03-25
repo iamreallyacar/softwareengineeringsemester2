@@ -728,276 +728,277 @@ function SmartHomePage() {
   const yearOptions = generateYearOptions();
 
   return (
-    <div className="smart-home-page">
-      <Background showLogo={false} blurEffect={true} />
-      <Navbar />
-      <div className="shp-information">
-        {/* Simple smart home name header - just text, no card */}
-        {smartHome && (
-          <h1 className="smart-home-title">{smartHome.name}</h1>
-        )}
-
-        {/* Energy Information Section */}
-        <div className={`energy-info ${showGenerationView ? 'generation-view' : 'consumption-view'}`}>
-          <div className="energy-info-header">
-            <div className="period-selector">
-              <div className="period-buttons">
-                {['day', 'month', 'year'].map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => setSelectedPeriod(period)}
-                    className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
-                  >
-                    {period.charAt(0).toUpperCase() + period.slice(1)}
-                  </button>
-                ))}
-              </div>
-              
-              <div className="time-selector">
-                {selectedPeriod === 'day' && (
-                  <select
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="date-selector"
-                  >
-                    {dateOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                
-                {selectedPeriod === 'month' && (
-                  <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                    className="month-selector"
-                  >
-                    {monthOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                
-                {selectedPeriod === 'year' && (
-                  <select
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                    className="year-selector"
-                  >
-                    {yearOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-            </div>
-            
-            {/* Toggle button that changes based on current view */}
-            <button 
-              onClick={toggleEnergyView} 
-              className={`view-toggle-button ${showGenerationView ? 'consumption' : 'generation'}`}
-            >
-              {showGenerationView 
-                ? "View Room Energy Consumption" 
-                : "View Home Energy Generation"}
-            </button>
-          </div>
-
-          {/* Consumption view */}
-          {!showGenerationView && (
-            <div className="chart-container consumption-chart">
-              <select
-                value={selectedEnergyRoom}
-                onChange={(e) => setSelectedEnergyRoom(e.target.value)}
-                className="room-selector"
-                disabled={unlockedRooms.length === 0}
-              >
-                {unlockedRooms.length === 0 ? (
-                  <option value="">No unlocked rooms</option>
-                ) : (
-                  unlockedRooms.map((room) => (
-                    <option key={room.id} value={room.id}>
-                      {room.name}
-                    </option>
-                  ))
-                )}
-              </select>
-              <canvas ref={energyChartRef}></canvas>
-              {isConsumptionDataEmpty && (
-                <div className="no-data-message">
-                  <p>No energy data available for this {selectedPeriod} for this room</p>
-                </div>
-              )}
-              {unlockedRooms.length === 0 && (
-                <div className="no-data-message">
-                  <p>No unlocked rooms available. Please unlock rooms to view energy data.</p>
-                </div>
-              )}
-            </div>
+    <div className="shp-main-content">
+        <div className="smart-home-page">
+        <Background showLogo={false} blurEffect={true} />
+        <Navbar />
+        <div className="shp-information">
+          {/* Simple smart home name header - just text, no card */}
+          {smartHome && (
+            <h1 className="smart-home-title">{smartHome.name}</h1>
           )}
-          
-          {/* Generation view */}
-          {showGenerationView && (
-            <div className="chart-container generation-chart">
-              <canvas ref={energyGenerationChartRef}></canvas>
-              {isGenerationDataEmpty && (
-                <div className="no-data-message">
-                  <p>No energy generation data available for this {selectedPeriod}</p>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Rooms Container */}
-        <div className="shp-rooms">
-          <h1>Rooms</h1>
-          <hr className="shp-rooms-divider" />
-
-          <div className="shp-rooms-list-container">
-            <ul className="shp-rooms-list">
-              {addedRooms.length === 0 ? (
-                <h4>No rooms added yet. {isOwner ? "Use the \"Add Room\" button to add a room." : "Only the home owner can add or remove rooms."}</h4>
-              ) : (
-                addedRooms.map((room) => (
-                  <div
-                    key={room.id}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <li style={{ listStyle: "none", flex: 1, display: "flex", alignItems: "center" }}>
-                      <div className="shp-room-icon" style={{ marginRight: "10px" }}>
-                        <i className="fa-solid fa-couch"></i>
-                      </div>
-                      <Link
-                        to={`/room/${room.id}/${smartHomeId}`}
-                        className="shp-rooms-list-links"
-                        style={{ textDecoration: "none", color: "#333", fontWeight: "bold" }}
-                      >
-                        {room.name}
-                      </Link>
-                    </li>
-                    {/* Only render delete button for owners */}
-                    {isOwner && (
-                      <button
-                        className="delete-room-button"
-                        onClick={() => {
-                          setRoomToDelete(room.id);
-                          setIsDeleteModalOpen(true);
-                        }}
-                      >
-                        <i className="fa-solid fa-trash delete-icon"></i>
-                      </button>
-                    )}
-                  </div>
-                ))
-              )}
-            </ul>
-          </div>
 
           {/* Delete Room Confirmation Modal */}
           {isDeleteModalOpen && (
+              <div className="modal-overlay">
+                <div className="modal">
+                  <h2>Delete Room</h2>
+                  <p>
+                    Are you sure you want to delete this room?
+                    This will remove the room and all its devices from your home.
+                  </p>
+                  <div className="modal-buttons">
+                    <button
+                      onClick={() => {
+                        handleDeleteRoom(roomToDelete);
+                        setIsDeleteModalOpen(false);
+                      }}
+                    >
+                      Yes, Delete Room
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsDeleteModalOpen(false);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+          {/* Energy Information Section */}
+          <div className={`energy-info ${showGenerationView ? 'generation-view' : 'consumption-view'}`}>
+            <div className="energy-info-header">
+              <div className="period-selector">
+                <div className="period-buttons">
+                  {['day', 'month', 'year'].map((period) => (
+                    <button
+                      key={period}
+                      onClick={() => setSelectedPeriod(period)}
+                      className={`period-button ${selectedPeriod === period ? 'active' : ''}`}
+                    >
+                      {period.charAt(0).toUpperCase() + period.slice(1)}
+                    </button>
+                  ))}
+                </div>
+                
+                <div className="time-selector">
+                  {selectedPeriod === 'day' && (
+                    <select
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      className="date-selector"
+                    >
+                      {dateOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  
+                  {selectedPeriod === 'month' && (
+                    <select
+                      value={selectedMonth}
+                      onChange={(e) => setSelectedMonth(e.target.value)}
+                      className="month-selector"
+                    >
+                      {monthOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  
+                  {selectedPeriod === 'year' && (
+                    <select
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                      className="year-selector"
+                    >
+                      {yearOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              </div>
+              
+              {/* Toggle button that changes based on current view */}
+              <button 
+                onClick={toggleEnergyView} 
+                className={`view-toggle-button ${showGenerationView ? 'consumption' : 'generation'}`}
+              >
+                {showGenerationView 
+                  ? "View Room Energy Consumption" 
+                  : "View Home Energy Generation"}
+              </button>
+            </div>
+
+            {/* Consumption view */}
+            {!showGenerationView && (
+              <div className="chart-container consumption-chart">
+                <select
+                  value={selectedEnergyRoom}
+                  onChange={(e) => setSelectedEnergyRoom(e.target.value)}
+                  className="room-selector"
+                  disabled={unlockedRooms.length === 0}
+                >
+                  {unlockedRooms.length === 0 ? (
+                    <option value="">No unlocked rooms</option>
+                  ) : (
+                    unlockedRooms.map((room) => (
+                      <option key={room.id} value={room.id}>
+                        {room.name}
+                      </option>
+                    ))
+                  )}
+                </select>
+                <canvas ref={energyChartRef}></canvas>
+                {isConsumptionDataEmpty && (
+                  <div className="no-data-message">
+                    <p>No energy data available for this {selectedPeriod} for this room</p>
+                  </div>
+                )}
+                {unlockedRooms.length === 0 && (
+                  <div className="no-data-message">
+                    <p>No unlocked rooms available. Please unlock rooms to view energy data.</p>
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {/* Generation view */}
+            {showGenerationView && (
+              <div className="chart-container generation-chart">
+                <canvas ref={energyGenerationChartRef}></canvas>
+                {isGenerationDataEmpty && (
+                  <div className="no-data-message">
+                    <p>No energy generation data available for this {selectedPeriod}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Rooms Container */}
+          <div className="shp-rooms">
+            <h1>Rooms</h1>
+            <hr className="shp-rooms-divider" />
+
+            <div className="shp-rooms-list-container">
+              <ul className="shp-rooms-list">
+                {addedRooms.length === 0 ? (
+                  <h4 style={{ color: "#515739", fontSize: "0.9rem" }}>No rooms added yet. {isOwner ? "Use the \"Add Room\" button to add a room." : "Only the home owner can add or remove rooms."}</h4>
+                ) : (
+                  addedRooms.map((room) => (
+                    <div
+                      key={room.id}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <li >
+                        <div className="shp-room-icon" style={{ marginRight: "10px" }}>
+                          <i className="fa-solid fa-couch"></i>
+                        </div>
+                        <Link
+                          to={`/room/${room.id}/${smartHomeId}`}
+                          className="shp-rooms-list-links"
+                        >
+                          {room.name}
+                        </Link>
+                      </li>
+                      {/* Only render delete button for owners */}
+                      {isOwner && (
+                        <button
+                          className="delete-room-button"
+                          onClick={() => {
+                            setRoomToDelete(room.id);
+                            setIsDeleteModalOpen(true);
+                          }}
+                        >
+                          <i className="fa-solid fa-trash delete-icon"></i>
+                        </button>
+                      )}
+                    </div>
+                  ))
+                )}
+              </ul>
+            </div>
+
+            {/* Only render Add Room button for owners */}
+            {isOwner && (
+              <button
+                className="shp-add-room-button"
+                onClick={() => {
+                  if (lockedRooms.length > 0) {
+                    setIsModalOpen(true);
+                  } else {
+                    alert("All rooms have already been added to the Home. Consider expanding your Home to include more rooms?");
+                  }
+                }}
+              >
+                + Add Room
+              </button>
+            )}
+          </div>
+
+          {/* Add Room Modal */}
+          {isModalOpen && (
             <div className="modal-overlay">
               <div className="modal">
-                <h2>Delete Room</h2>
-                <p style={{ fontSize: "17px", color: "#666", marginTop: "10px" }}>
-                  Are you sure you want to delete this room?
-                  This will remove the room and all its devices from your home.
-                </p>
-                <div className="modal-buttons">
-                  <button
-                    onClick={() => {
-                      handleDeleteRoom(roomToDelete);
-                      setIsDeleteModalOpen(false);
-                    }}
-                  >
-                    Yes, Delete Room
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsDeleteModalOpen(false);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                <h2>Add a Room</h2>
+                {lockedRooms.length > 0 ? (
+                  <>
+                    <select
+                      value={selectedRoomToUnlock}
+                      onChange={(e) => setSelectedRoomToUnlock(e.target.value)}
+                      className="room-dropdown"
+                    >
+                      <option value="">Select a Room to Add</option>
+                      {lockedRooms.map((room) => (
+                        <option key={room.id} value={room.id}>
+                          {room.name || room.home_io_room_name}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="modal-buttons" style={{ marginTop: "20px" }}>
+                      <button onClick={handleUnlockRoom}>Add Room</button>
+                      <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p style={{ margin: "20px 0", color: "#666" }}>
+                      All rooms have already been unlocked in this Home. Consider expanding your Home to include more rooms?
+                    </p>
+                    <div className="modal-buttons">
+                      <button onClick={() => setIsModalOpen(false)}>Close</button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}
 
-          {/* Only render Add Room button for owners */}
-          {isOwner && (
-            <button
-              className="shp-add-room-button"
-              onClick={() => {
-                if (lockedRooms.length > 0) {
-                  setIsModalOpen(true);
-                } else {
-                  alert("All rooms have already been added to the Home. Consider expanding your Home to include more rooms?");
-                }
-              }}
+          {/* View Home Users Button - add this before the closing div */}
+          <div className="view-home-users-container">
+            <Link 
+              to={`/home-users/${smartHomeId}`} 
+              className="view-home-users-button"
             >
-              + Add Room
-            </button>
-          )}
-        </div>
-
-        {/* Add Room Modal */}
-        {isModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h2>Add a Room</h2>
-              {lockedRooms.length > 0 ? (
-                <>
-                  <select
-                    value={selectedRoomToUnlock}
-                    onChange={(e) => setSelectedRoomToUnlock(e.target.value)}
-                    className="room-dropdown"
-                  >
-                    <option value="">Select a Room to Add</option>
-                    {lockedRooms.map((room) => (
-                      <option key={room.id} value={room.id}>
-                        {room.name || room.home_io_room_name}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="modal-buttons" style={{ marginTop: "20px" }}>
-                    <button onClick={handleUnlockRoom}>Add Room</button>
-                    <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p style={{ margin: "20px 0", color: "#666" }}>
-                    All rooms have already been unlocked in this Home. Consider expanding your Home to include more rooms?
-                  </p>
-                  <div className="modal-buttons">
-                    <button onClick={() => setIsModalOpen(false)}>Close</button>
-                  </div>
-                </>
-              )}
-            </div>
+              <i className="fa-solid fa-users"></i> View Home Users
+            </Link>
           </div>
-        )}
-
-        {/* View Home Users Button - add this before the closing div */}
-        <div className="view-home-users-container">
-          <Link 
-            to={`/home-users/${smartHomeId}`} 
-            className="view-home-users-button"
-          >
-            <i className="fa-solid fa-users"></i> View Home Users
-          </Link>
         </div>
       </div>
     </div>

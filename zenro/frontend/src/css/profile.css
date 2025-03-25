@@ -117,15 +117,11 @@
 }
 
 .profile-field {
-  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
   padding: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
-
   background: rgba(255, 255, 255, 0.2);
   border: 1.5px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -1025,6 +1021,7 @@
 
 .warning-message {
   margin-bottom: 15px;
+  color: #C14600;
 }
 
 .warning-message strong {
@@ -1052,6 +1049,7 @@
 }
 
 .profile-cancel-button {
+  font-weight: bold;
   background-color: #f8f9fa;
   color: #495057;
   border: 1px solid #ced4da;

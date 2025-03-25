@@ -4,6 +4,7 @@ import Navbar from "./NavigationBar";
 import api from "../api";
 import "../css/home-users-page.css";
 import { ChevronLeft, UserPlus, ChevronDown } from "lucide-react"; // Import ChevronLeft, UserPlus, ChevronDown icons
+import Background from "./Background.js";
 
 function HomeUsersPage() {
   const { id: smartHomeId } = useParams();
@@ -298,227 +299,230 @@ function HomeUsersPage() {
   };
 
   return (
-    <div className="home-users-page">
-      <Navbar />
-      
-      {/* Move back button here, outside the content div */}
-      <div className="back-to-overview">
-        <Link to={`/smarthomepage/${smartHomeId}`} className="back-button">
-          <span>Overview</span>
-          <ChevronLeft />
-        </Link>
-      </div>
-      
-      <div className="home-users-content">
-        {loading ? (
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading home details...</p>
-          </div>
-        ) : error ? (
-          <div className="error-message">{error}</div>
-        ) : (
-          <>
-            <div className="home-header">
-              <div className="title-row">
-                <h1 className="home-name">{smartHome?.name}</h1>
-                <p className="home-owner">
-                  Created and managed by <span>{owner?.username}</span>
-                </p>
+    <div className="main-content">
+      <div className="home-users-page">
+        <Background showLogo={false} blurEffect={true} />
+        <Navbar />
+        
+        {/* Move back button here, outside the content div */}
+        <div className="back-to-overview">
+          <Link to={`/smarthomepage/${smartHomeId}`} className="back-button">
+            <span>Overview</span>
+            <ChevronLeft />
+          </Link>
+        </div>
+        
+        <div className="home-users-content">
+          {loading ? (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>Loading home details...</p>
+            </div>
+          ) : error ? (
+            <div className="error-message">{error}</div>
+          ) : (
+            <>
+              <div className="home-header">
+                <div className="title-row">
+                  <h1 className="home-name">{smartHome?.name}</h1>
+                  <p className="home-owner">
+                    Created and managed by <span>{owner?.username}</span>
+                  </p>
+                </div>
+                
+                {/* Add Member Dropdown - Only visible to the owner */}
+                {isOwner && (
+                  <div className="add-member-dropdown">
+                    <button 
+                      className="add-member-button"
+                      onClick={toggleMemberDropdown} // Use the new function
+                    >
+                      <UserPlus size={18} />
+                      <span>Add Members</span>
+                      <ChevronDown 
+                        size={16} 
+                        className={`dropdown-arrow ${isAddMemberDropdownOpen ? 'open' : ''}`}
+                      />
+                    </button>
+                    
+                    {isAddMemberDropdownOpen && (
+                      <div className="member-dropdown-menu">
+                        {addMemberError && (
+                          <div 
+                            className="add-member-error clickable" 
+                            onClick={() => fetchAvailableUsers(true)}
+                          >
+                            {addMemberError}
+                          </div>
+                        )}
+                        
+                        {availableUsers.length === 0 && !addMemberError ? (
+                          <div className="no-available-users">
+                            No users available to add
+                            <button className="refresh-button" onClick={() => fetchAvailableUsers(true)}>
+                              Refresh List
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <select
+                              value={selectedUser}
+                              onChange={(e) => setSelectedUser(e.target.value)}
+                              className="user-select"
+                            >
+                              <option value="">Select a user...</option>
+                              {availableUsers.map(user => (
+                                <option key={user.id} value={user.id}>{user.username}</option>
+                              ))}
+                            </select>
+                            
+                            <button 
+                              className="add-user-button"
+                              onClick={handleAddMember}
+                              disabled={!selectedUser || isAddingMember}
+                            >
+                              {isAddingMember ? "Adding..." : "Add User"}
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               
-              {/* Add Member Dropdown - Only visible to the owner */}
-              {isOwner && (
-                <div className="add-member-dropdown">
-                  <button 
-                    className="add-member-button"
-                    onClick={toggleMemberDropdown} // Use the new function
-                  >
-                    <UserPlus size={18} />
-                    <span>Add Members</span>
-                    <ChevronDown 
-                      size={16} 
-                      className={`dropdown-arrow ${isAddMemberDropdownOpen ? 'open' : ''}`}
-                    />
-                  </button>
-                  
-                  {isAddMemberDropdownOpen && (
-                    <div className="member-dropdown-menu">
-                      {addMemberError && (
-                        <div 
-                          className="add-member-error clickable" 
-                          onClick={() => fetchAvailableUsers(true)}
-                        >
-                          {addMemberError}
-                        </div>
-                      )}
-                      
-                      {availableUsers.length === 0 && !addMemberError ? (
-                        <div className="no-available-users">
-                          No users available to add
-                          <button className="refresh-button" onClick={() => fetchAvailableUsers(true)}>
-                            Refresh List
-                          </button>
-                        </div>
-                      ) : (
-                        <>
-                          <select
-                            value={selectedUser}
-                            onChange={(e) => setSelectedUser(e.target.value)}
-                            className="user-select"
-                          >
-                            <option value="">Select a user...</option>
-                            {availableUsers.map(user => (
-                              <option key={user.id} value={user.id}>{user.username}</option>
-                            ))}
-                          </select>
-                          
-                          <button 
-                            className="add-user-button"
-                            onClick={handleAddMember}
-                            disabled={!selectedUser || isAddingMember}
-                          >
-                            {isAddingMember ? "Adding..." : "Add User"}
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-            
-            <div className="members-container">
-              <h2>Home Members</h2>
-              
-              {members.length === 0 ? (
-                <p className="no-members-message">
-                  This home currently has no additional members besides the owner.
-                </p>
-              ) : (
-                <ul className="members-list">
-                  {members.map(member => (
-                    <li 
-                      key={member.id} 
-                      className={`member-item ${expandedMember === member.id ? 'expanded' : ''}`}
-                      onClick={() => toggleMemberProfile(member.id)}
-                    >
-                      <div className="member-item-header">
-                        <div className="member-info">
-                          <div className="member-icon">
-                            <i className="fa-solid fa-user"></i>
+              <div className="members-container">
+                <h2 style={{ color: "#C14600", fontSize: "1.5 rem" }}>Home Members</h2>
+                
+                {members.length === 0 ? (
+                  <p className="no-members-message">
+                    This home currently has no additional members besides the owner.
+                  </p>
+                ) : (
+                  <ul className="members-list">
+                    {members.map(member => (
+                      <li 
+                        key={member.id} 
+                        className={`member-item ${expandedMember === member.id ? 'expanded' : ''}`}
+                        onClick={() => toggleMemberProfile(member.id)}
+                      >
+                        <div className="member-item-header">
+                          <div className="member-info">
+                            <div className="member-icon">
+                              <i className="fa-solid fa-user"></i>
+                            </div >
+                            <span className="member-name">{member.username}</span>
                           </div>
-                          <span className="member-name">{member.username}</span>
+                          
+                          <div className="member-actions">
+                            <span className="dropdown-indicator">
+                              <i className={`fa-solid ${expandedMember === member.id ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                            </span>
+                            
+                            {isOwner && (
+                              <button 
+                                className="remove-button"
+                                onClick={(e) => confirmMemberRemoval(member, e)}
+                              >
+                                <i className="fa-solid fa-user-minus"></i> Remove
+                              </button>
+                            )}
+                          </div>
                         </div>
                         
-                        <div className="member-actions">
-                          <span className="dropdown-indicator">
-                            <i className={`fa-solid ${expandedMember === member.id ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
-                          </span>
-                          
-                          {isOwner && (
-                            <button 
-                              className="remove-button"
-                              onClick={(e) => confirmMemberRemoval(member, e)}
-                            >
-                              <i className="fa-solid fa-user-minus"></i> Remove
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                      
-                      {/* Profile Dropdown Content */}
-                      {expandedMember === member.id && (
-                        <div className="member-profile">
-                          {loadingProfiles[member.id] ? (
-                            <div className="profile-loading">
-                              <div className="loading-spinner-small"></div>
-                              <span>Loading profile...</span>
-                            </div>
-                          ) : profileData[member.id] ? (
-                            <div className="profile-details">
-                              <div className="profile-section simplified">
-                                <div className="profile-fields">
-                                  <div className="profile-field">
-                                    <span className="field-label">Email:</span>
-                                    <span className="field-value">{profileData[member.id].email || "-"}</span>
-                                  </div>
-                                  <div className="profile-field">
-                                    <span className="field-label">Full Name:</span>
-                                    <span className="field-value">
-                                      {profileData[member.id].first_name || profileData[member.id].last_name 
-                                        ? `${profileData[member.id].first_name || ""} ${profileData[member.id].last_name || ""}`.trim()
-                                        : "-"}
-                                    </span>
-                                  </div>
-                                  <div className="profile-field">
-                                    <span className="field-label">Phone:</span>
-                                    <span className="field-value">
-                                      {profileData[member.id]?.profile?.phone_number || "-"}
-                                    </span>
-                                  </div>
-                                  <div className="profile-field date-of-birth-field">
-                                    <span className="field-label">Date of Birth:</span>
-                                    <span className="field-value">
-                                      {profileData[member.id]?.profile?.date_of_birth 
-                                        ? formatDate(profileData[member.id].profile.date_of_birth)
-                                        : "-"}
-                                    </span>
-                                  </div>
-                                  <div className="profile-field">
-                                    <span className="field-label">Gender:</span>
-                                    <span className="field-value">
-                                      {profileData[member.id]?.profile?.gender 
-                                        ? formatGender(profileData[member.id].profile.gender)
-                                        : "-"}
-                                    </span>
+                        {/* Profile Dropdown Content */}
+                        {expandedMember === member.id && (
+                          <div className="member-profile">
+                            {loadingProfiles[member.id] ? (
+                              <div className="profile-loading">
+                                <div className="loading-spinner-small"></div>
+                                <span>Loading profile...</span>
+                              </div>
+                            ) : profileData[member.id] ? (
+                              <div className="profile-details">
+                                <div className="profile-section simplified">
+                                  <div className="profile-fields">
+                                    <div className="profile-field">
+                                      <span className="field-label">Email:</span>
+                                      <span className="field-value">{profileData[member.id].email || "-"}</span>
+                                    </div>
+                                    <div className="profile-field">
+                                      <span className="field-label">Full Name:</span>
+                                      <span className="field-value">
+                                        {profileData[member.id].first_name || profileData[member.id].last_name 
+                                          ? `${profileData[member.id].first_name || ""} ${profileData[member.id].last_name || ""}`.trim()
+                                          : "-"}
+                                      </span>
+                                    </div>
+                                    <div className="profile-field">
+                                      <span className="field-label">Phone:</span>
+                                      <span className="field-value">
+                                        {profileData[member.id]?.profile?.phone_number || "-"}
+                                      </span>
+                                    </div>
+                                    <div className="profile-field date-of-birth-field">
+                                      <span className="field-label">Date of Birth:</span>
+                                      <span className="field-value">
+                                        {profileData[member.id]?.profile?.date_of_birth 
+                                          ? formatDate(profileData[member.id].profile.date_of_birth)
+                                          : "-"}
+                                      </span>
+                                    </div>
+                                    <div className="profile-field">
+                                      <span className="field-label">Gender:</span>
+                                      <span className="field-value">
+                                        {profileData[member.id]?.profile?.gender 
+                                          ? formatGender(profileData[member.id].profile.gender)
+                                          : "-"}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="profile-error">
-                              <i className="fa-solid fa-triangle-exclamation"></i>
-                              <span>Could not load profile information</span>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
-              
-              {!isOwner && members.length > 0 && (
-                <p className="owner-note">
-                  Note: Only the home owner can add or remove members.
+                            ) : (
+                              <div className="profile-error">
+                                <i className="fa-solid fa-triangle-exclamation"></i>
+                                <span>Could not load profile information</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                
+                {!isOwner && members.length > 0 && (
+                  <p className="owner-note">
+                    Note: Only the home owner can add or remove members.
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+          
+          {/* Delete Confirmation Modal */}
+          {isDeleteModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h2>Remove Member</h2>
+                <p>
+                  Are you sure you want to remove <strong>{memberToRemove?.username}</strong> from this home?
+                  <br /><br />
+                  They will lose access to all devices and rooms in this smart home.
                 </p>
-              )}
-            </div>
-          </>
-        )}
-        
-        {/* Delete Confirmation Modal */}
-        {isDeleteModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h2>Remove Member</h2>
-              <p>
-                Are you sure you want to remove <strong>{memberToRemove?.username}</strong> from this home?
-                <br /><br />
-                They will lose access to all devices and rooms in this smart home.
-              </p>
-              <div className="modal-buttons">
-                <button onClick={handleRemoveMember} className="remove-confirm-btn">
-                  Yes, Remove
-                </button>
-                <button onClick={() => setIsDeleteModalOpen(false)} className="cancel-btn">
-                  Cancel
-                </button>
+                <div className="modal-buttons">
+                  <button onClick={handleRemoveMember} className="remove-confirm-btn">
+                    Yes, Remove
+                  </button>
+                  <button onClick={() => setIsDeleteModalOpen(false)} className="cancel-btn">
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

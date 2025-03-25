@@ -1,53 +1,337 @@
+/* Glassmorphism Variables */
+:root {
+  --glass-background: rgba(255, 255, 255, 0.5);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(20px);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --primary-color: #C14600;
+  --accent-color: #A53900;
+  --text-color: #333333;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
 .recovery-page {
-    min-height: 100vh;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, Georgia, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-  
-  .recovery-container {
-    width: min(95%, 500px);
-    background: rgba(255, 255, 255, 0.85); /* Much more opaque for better readability */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    color: #222222; /* Changed from white to dark gray */
-    overflow: hidden;
-  }
-  
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.recovery-container {
+  width: min(95%, 500px);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  box-shadow: var(--glass-shadow);
+  color: var(--text-color);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recovery-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.recovery-content {
+  padding: 2.5rem;
+}
+
+.recovery-title {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.recovery-step-indicator {
+  font-size: 0.9rem;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  background-color: rgba(193, 70, 0, 0.8);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recovery-description {
+  margin-bottom: 1.8rem;
+  text-align: center;
+  color: var(--text-color);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.recovery-input-group {
+  margin-bottom: 1.8rem;
+}
+
+.recovery-input-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.recovery-input-group input {
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  border: 1.5px solid rgba(193, 70, 0, 0.4);
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.recovery-input-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.recovery-input-group input::placeholder {
+  color: rgba(51, 51, 51, 0.6);
+}
+
+.recovery-input-hint {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--accent-color);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.recovery-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.recovery-button {
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background-color: rgba(193, 70, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.recovery-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  background-color: rgba(193, 70, 0, 0.95);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.recovery-button:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.recovery-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.recovery-secondary-button {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(193, 70, 0, 0.4);
+  color: var(--primary-color);
+  padding: 0.9rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.recovery-secondary-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.recovery-error {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+  padding: 1.2rem;
+  border-radius: 10px;
+  margin-bottom: 1.8rem;
+  text-align: center;
+  border-left: 4px solid #ef4444;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.recovery-success {
+  background-color: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  padding: 1.2rem;
+  border-radius: 10px;
+  margin-bottom: 1.8rem;
+  text-align: center;
+  border-left: 4px solid #22c55e;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.recovery-codes-info {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 24px;
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.recovery-codes-message {
+  color: var(--text-color);
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.recovery-codes-message strong {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.recovery-codes-list {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 24px;
+  max-height: 210px;
+  overflow-y: auto;
+  border: var(--glass-border);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.recovery-codes-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+.recovery-code-item {
+  font-family: monospace;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background-color: rgba(255, 255, 255, 0.25);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #000000;
+  border: var(--glass-border);
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.recovery-code-item:hover {
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+.recovery-code-item span {
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-right: 15px;
+  display: inline-block;
+  width: 20px;
+  text-align: right;
+}
+
+.recovery-codes-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .recovery-content {
-    padding: 2rem;
+    padding: 1.8rem;
   }
   
   .recovery-title {
-    font-size: 2rem;
-    color: #222222; /* Changed from white to dark gray */
-    text-shadow: none; /* Removed text shadow */
-    margin-bottom: 1.5rem;
-    text-align: center;
+    font-size: 1.8rem;
   }
   
   .recovery-step-indicator {
-    font-size: 0.9rem;
-    color: #FFFFFF; /* Keep this white because of dark background */
-    text-align: center;
-    margin-bottom: 1rem;
-    background-color: rgba(193, 70, 0, 0.9); /* Made darker */
     padding: 8px;
-    border-radius: 5px;
-    font-weight: bold;
+    margin-bottom: 1.2rem;
+  }
+  
+  .recovery-codes-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --glass-blur: blur(8px); /* Reduce blur on mobile for better performance */
+  }
+  
+  .recovery-content {
+    padding: 1.2rem;
+  }
+  
+  .recovery-title {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .recovery-step-indicator {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
   }
   
   .recovery-description {
+    font-size: 0.95rem;
     margin-bottom: 1.5rem;
-    text-align: center;
-    color: #333333; /* Changed from light white to dark gray */
-    font-weight: 500;
   }
   
   .recovery-input-group {
@@ -55,196 +339,37 @@
   }
   
   .recovery-input-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #222222; /* Changed from white to dark gray */
-    font-weight: 600;
+    font-size: 0.95rem;
   }
   
   .recovery-input-group input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1.5px solid #C14600; /* Darker border */
-    border-radius: 0.5rem;
-    background-color: rgba(255, 246, 231, 0.8); /* More opaque */
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-    color: #333333; /* Ensure text is dark */
+    padding: 0.7rem 1rem;
   }
   
-  .recovery-input-group input:focus {
-    outline: none;
-    border-color: #ea580c;
-  }
-
-  .recovery-input-group input::placeholder {
-    color: #999999; /* Darker placeholder text */
-  }
-  
-  .recovery-input-hint {
-    display: block;
-    font-size: 0.8rem;
-    color: #444444; /* Changed from light to dark gray */
-    margin-top: 0.3rem;
-  }
-  
-  .recovery-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  
-  .recovery-button {
-    width: 100%;
-    padding: 0.75rem 1.5rem;
-    background-color: rgba(255, 246, 231, 0.8); /* More opaque */
-    border: 1.5px solid #C14600;
-    border-radius: 0.5rem;
-    color: #222222; /* Changed from white to dark gray */
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-shadow: none; /* Removed text shadow */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .recovery-button:hover:not(:disabled) {
-    transform: translateY(-3px);
-    background-color: rgba(255, 246, 231, 0.9);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  .recovery-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-  
+  .recovery-button,
   .recovery-secondary-button {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid #C14600;
-    color: #222222; /* Changed from white to dark gray */
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    font-weight: 500;
-  }
-  
-  .recovery-secondary-button:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-  }
-  
-  .recovery-error {
-    background-color: rgba(220, 38, 38, 0.1);
-    color: #b91c1c; /* Darker red */
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    border-left: 4px solid #ef4444;
-    font-weight: 500;
-  }
-  
-  .recovery-success {
-    background-color: rgba(22, 163, 74, 0.1);
-    color: #15803d; /* Darker green */
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    border-left: 4px solid #22c55e;
-    font-weight: 500;
-  }
-  
-  /* Recovery Codes Styling */
-  .recovery-codes-info {
-    background-color: rgba(255, 246, 231, 0.5); /* More opaque */
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid #C14600;
-  }
-  
-  .recovery-codes-message {
-    color: #333333; /* Changed from light white to dark gray */
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-  
-  .recovery-codes-message strong {
-    color: #A53900; /* Darker orange */
-    font-weight: 700;
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
   }
   
   .recovery-codes-list {
-    background-color: rgba(255, 255, 255, 0.3); /* More opaque */
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    max-height: 200px;
-    overflow-y: auto;
-    border: 1px solid #C14600;
+    max-height: 180px;
   }
   
   .recovery-code-item {
-    font-family: monospace;
-    padding: 8px;
-    margin-bottom: 5px;
-    background-color: rgba(255, 255, 255, 0.5); /* More opaque */
-    border-radius: 4px;
-    font-size: 1rem;
-    color: #000000; /* Black text for codes */
-    border: 1px solid #e0e0e0;
-    display: flex;
-    align-items: center;
+    padding: 8px 10px;
+    font-size: 0.9rem;
   }
-  
-  .recovery-code-item span {
-    color: #A53900; /* Darker orange */
-    font-weight: bold;
-    margin-right: 10px; /* Increased spacing */
-    display: inline-block;
-    width: 20px;
-    text-align: right;
+}
+
+/* Animation for container entrance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .recovery-codes-actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 20px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .recovery-content {
-      padding: 1.5rem;
-    }
-    
-    .recovery-title {
-      font-size: 1.8rem;
-    }
-    
-    .recovery-codes-actions {
-      flex-direction: column;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .recovery-content {
-      padding: 1rem;
-    }
-    
-    .recovery-title {
-      font-size: 1.5rem;
-    }
-    
-    .recovery-button,
-    .recovery-secondary-button {
-      padding: 0.6rem 1rem;
-    }
-  }
+}

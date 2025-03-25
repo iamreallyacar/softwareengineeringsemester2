@@ -215,7 +215,7 @@
   top: -20px;
   left: 100%;
   width: 200px;
-  background: white;
+  background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 15px;
@@ -224,8 +224,8 @@
 }
 
 .logout-confirm p {
-  color: #333;
-  font-size: 14px;
+  color: #515739;
+  font-size: 0.9rem;
   text-align: center;
   margin-bottom: 15px;
   font-weight: bold;

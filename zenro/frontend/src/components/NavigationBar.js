@@ -6,7 +6,7 @@ import overview from "../assets/images/overview.svg";
 import security from "../assets/images/security.svg";
 import temperature from "../assets/images/Temperature.svg";
 import logo from "../assets/images/logo.svg";
-import logOut from "../assets/images/logout.svg";
+import logOut from "../assets/images/log-out.png";
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -89,18 +89,6 @@ const Sidebar = () => {
               <Link to="/smart-homes" className="nav-item">
                 <img src={overview} alt="Homes" className="nav-icon" />
                 <span className="nav-text">Home</span>
-              </Link>
-              <Link to="/smarthomepage/:id" className="nav-item">
-                <img src={temperature} alt="Temperature" className="nav-icon" />
-                <span className="nav-text">Temperature</span>
-              </Link>
-              <Link to="/room/:roomId/:smartHomeId" className="nav-item">
-                <img src={security} alt="Security" className="nav-icon" />
-                <span className="nav-text">Security</span>
-              </Link>
-              <Link to="/landing-page" className="nav-item">
-                <img src={notification} alt="Notifications" className="nav-icon" />
-                <span className="nav-text">Notifications</span>
               </Link>
               
               {/* Updated logout button with ref and class */}
