@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Menu, Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import "../css/landing-page.css";
+import groupPhoto from "../assets/images/Group-Photo.jpg";
 
 // Utility function for consistent scrolling behavior
 const scrollToElement = (elementId) => {
@@ -109,7 +110,7 @@ function About() {
 
           <div className="about-content">
             <div className="about-image">
-              <img src="/images/placeholder.jpg" alt="About Us" />
+              <img src={groupPhoto} alt="About Us" />
             </div>
             <div className="about-text">
               <h3>Our Story</h3>

@@ -11,7 +11,7 @@ import airCond from "../assets/images/aircond.png";
 import smartTV from "../assets/images/smart-tv.png";
 import Navbar from "./NavigationBar";
 import "../css/rooms-page.css";
-import { ChevronLeft } from "lucide-react"; // Add this import
+import { ChevronLeft } from "lucide-react";
 
 function RoomsPage() {
     const { roomId, smartHomeId } = useParams();
@@ -24,13 +24,13 @@ function RoomsPage() {
     const [selectedDeviceToUnlock, setSelectedDeviceToUnlock] = useState(null);
     const [deviceTypes, setDeviceTypes] = useState({});
     
-    // New state for analog controls
+    // State for analog controls
     const [sliderValues, setSliderValues] = useState({});
     const [updatingDevices, setUpdatingDevices] = useState({});
     const [isDeleteDeviceModalOpen, setIsDeleteDeviceModalOpen] = useState(false);
     const [deviceToDelete, setDeviceToDelete] = useState(null);
 
-    // Add these right after other state variables
+    // Energy monitoring state
     const energyChartRef = useRef(null);
     const [selectedPeriod, setSelectedPeriod] = useState('day');
     const [selectedEnergyDevice, setSelectedEnergyDevice] = useState(null);
@@ -39,7 +39,7 @@ function RoomsPage() {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
     const [isDataEmpty, setIsDataEmpty] = useState(false);
 
-    // New useEffect to fetch room and device data
+    // useEffect to fetch room and device data
     useEffect(() => {
         const fetchRoomAndDevices = async () => {
             try {
@@ -739,8 +739,8 @@ function RoomsPage() {
                         datasets: [{
                             label: 'Energy Usage (kWh)',
                             data: dataPoints,
-                            backgroundColor: 'rgba(237, 62, 62, 0.2)',  // Match SmartHomePage red color
-                            borderColor: 'rgb(237, 62, 62)',            // Match SmartHomePage red color
+                            backgroundColor: 'rgba(237, 62, 62, 0.2)',  
+                            borderColor: 'rgb(237, 62, 62)',            
                             borderWidth: 2
                         }]
                     },
@@ -845,12 +845,12 @@ function RoomsPage() {
         fetchEnergyData();
     }, [selectedPeriod, selectedEnergyDevice, selectedDate, selectedMonth, selectedYear, unlockedDevices]);
 
-    // Add these owner-check related state variables
+    // Owner-check related state variables
     const [currentUser, setCurrentUser] = useState(null);
     const [owner, setOwner] = useState(null);
     const [smartHome, setSmartHome] = useState(null);
 
-    // Add useEffect to fetch current user - same as in HomeUsersPage.js
+    // useEffect to fetch current user - same as in HomeUsersPage.js
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
         if (token) {
@@ -890,7 +890,7 @@ function RoomsPage() {
         fetchSmartHomeData();
     }, [smartHomeId]);
     
-    // Add owner check using the same logic as HomeUsersPage.js
+    // Owner checks
     const isOwner = currentUser && owner && currentUser.id === owner.id;
 
     return (
@@ -898,7 +898,7 @@ function RoomsPage() {
             <Background showLogo={false} blurEffect={true} />
             <Navbar />
             
-            {/* Add this back button section */}
+            {/* Back button section */}
             <div className="back-to-overview">
                 <Link to={`/smarthomepage/${smartHomeId}`} className="back-button">
                     <span>Overview</span>
@@ -1031,7 +1031,7 @@ function RoomsPage() {
                         </button>
                     )}
 
-                    {/* Unlocked Devices - keep this part the same */}
+                    {/* Unlocked Devices */}
                     {sortedUnlockedDevices.length > 0 ? (
                         sortedUnlockedDevices.map(device => {
                             const deviceType = deviceTypes[device.supported_device]?.type?.toLowerCase();
@@ -1041,7 +1041,7 @@ function RoomsPage() {
                             return (
                                 <div className="energy-consumption" key={device.id}>
                                     {/* Rest of the device rendering remains the same */}
-                                    {/* Add device removal button */}
+                                    {/* Device removal button */}
                                     {isOwner && (
                                         <button
                                             className="delete-device-button"

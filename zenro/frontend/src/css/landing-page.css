@@ -556,3 +556,8 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.about .section-header h2,
+.contact .section-header h2 {
+  color: #000000 !important; 
+}

@@ -225,9 +225,9 @@ input:checked+.slider:after {
   appearance: none;
   height: 8px;
   border-radius: 5px;
-  background: #e0b080; /* Darker, more visible track */
+  background: #e0b080; 
   outline: none;
-  border: 1px solid #c14600; /* Add border to make track visible */
+  border: 1px solid #c14600; /* Border to make track visible */
   margin-bottom: 10px;
 }
 
@@ -295,7 +295,6 @@ input:checked+.slider:after {
   width: 100vw;
 }
 
-/* Fix the Overview button layout and position */
 .page-header {
   width: calc(100% - 150px);
   display: flex;
@@ -366,9 +365,9 @@ input:checked+.slider:after {
   appearance: none;
   height: 8px;
   border-radius: 5px;
-  background: #e0b080; /* Darker, more visible track */
+  background: #e0b080; 
   outline: none;
-  border: 1px solid #c14600; /* Add border to make track visible */
+  border: 1px solid #c14600; /* Border to make track visible */
   margin-bottom: 10px;
 }
 
@@ -441,7 +440,7 @@ input:checked+.slider:after {
   font-size: 12px;
   font-weight: bold;
   color: white;
-  background: #C14600; /* Changed to orange background */
+  background: #C14600; 
   padding: 3px 8px;
   border-radius: 10px;
   transform: translateX(-50%);
@@ -449,8 +448,6 @@ input:checked+.slider:after {
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   z-index: 2;
 }
-
-/* Add to rooms-page.css */
 
 /* Style for the device delete button (similar to room delete button) */
 .delete-device-button {

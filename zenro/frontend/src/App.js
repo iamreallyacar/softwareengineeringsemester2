@@ -35,7 +35,7 @@ function App() {
             <Routes>
             <Route 
                 path="/" 
-                element={isAuthenticated ? <Navigate to="/smart-homes" /> : <CreateAccount setIsAuthenticated={setIsAuthenticated} />} 
+                element={isAuthenticated ? <Navigate to="/smart-homes" /> : <LandingPage />} 
             />
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/create-account" element={<CreateAccount setIsAuthenticated={setIsAuthenticated} />} />
@@ -48,7 +48,6 @@ function App() {
                         <Route path="/smarthomepage/:id" element={<SmartHomePage />} />
                         <Route path="/room/:roomId/:smartHomeId" element={<RoomsPage />} />
                         <Route path="/home-users/:id" element={<HomeUsersPage />} />
-                        <Route path="/landing-page" element={<LandingPage />} />
                         <Route path="/profile" element={<Profile />} />
                     </>
                 ) : (
