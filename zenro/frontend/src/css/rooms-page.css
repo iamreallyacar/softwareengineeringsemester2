@@ -124,7 +124,7 @@
 
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15),
     0px 0px 15px rgba(0, 0, 0, 0.2);
-  padding-top: 45px; /* Increased to make room for buttons */
+  padding-top: 45px;
   padding-bottom: 20px !important;
   min-height: auto !important;
 }
@@ -784,6 +784,137 @@ input:checked+.slider:after {
   .page-header {
     margin-top: 70px;
   }
+
+  .columns {
+    flex-direction: column;
+    width: 100%;
+    margin-left: 0;
+    padding: 15px;
+    height: auto;
+    overflow-y: visible;
+    margin-top: 60px;
+  }
+  
+  .column1, .column2 {
+    flex: none;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: none;
+  }
+  
+  /* Move the back button to center */
+  .back-to-overview {
+    top: 15px !important;
+    left: 50% !important; /* Center horizontally */
+    transform: translateX(-50%) !important; /* Perfect centering */
+    z-index: 1001 !important;
+    width: auto !important;
+    text-align: center !important;
+  }
+  
+  /* Make back button more visible with background */
+  .back-button {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    padding: 8px 18px !important;
+  }
+  
+  /* Make the chart taller for mobile */
+  .chart-wrapper {
+    min-height: 300px !important;
+    height: 50vh !important; /* Use viewport height */
+  }
+  
+  /* Ensure chart container expands properly */
+  .energy-consumption > div[style*="height"] {
+    height: 50vh !important; /* Use viewport height units */
+    margin-bottom: 30px !important;
+    margin-top: 25px !important;
+  }
+  
+  canvas {
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+  
+  .page-header {
+    margin-top: 70px !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Spacing in energy-consumption container */
+  .energy-consumption {
+    padding: 20px !important;
+    margin-bottom: 15px !important;
+  }
+  
+  /* Make period buttons more compact but easier to tap */
+  .period-buttons {
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .period-button {
+    min-width: 60px;
+    height: 40px;
+  }
+  
+  /* Adjust chart controls spacing */
+  .energy-info-header {
+    margin-bottom: 15px;
+  }
+  
+  /* Ensure canvas fills its container */
+  .energy-consumption canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+  }
+  
+  /* Improve spacing at bottom of chart for labels */
+  .chart-wrapper {
+    padding-bottom: 70px !important;
+  }
+}
+
+/* Additional fine-tuning for very small screens */
+@media (max-width: 480px) {
+  .back-button {
+    font-size: 14px !important;
+  }
+  
+  .chart-wrapper {
+    min-height: 250px !important;
+    height: 40vh !important;
+    padding-bottom: 50px !important;
+  }
+  
+  .period-button {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+  .back-to-overview {
+    width: 100% !important;
+  }
+  
+  .back-button {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
+  
+  .period-buttons {
+    gap: 5px;
+  }
+  
+  .period-button {
+    min-width: 50px;
+    padding: 5px 8px;
+    font-size: 12px;
+  }
 }
 
 .owner-note {
@@ -808,4 +939,149 @@ input:checked+.slider:after {
 .no-devices-message p {
   margin: 10px 0;
   color: #5D252D;
+}
+
+@media (max-width: 768px) {
+  /* Main columns layout - switch to vertical */
+  .columns {
+    flex-direction: column;
+    width: 100%;
+    margin-left: 0;
+    padding: 15px;
+    height: auto;
+    overflow-y: visible;
+    margin-top: 60px;
+  }
+
+  .column1, .column2 {
+    flex: none;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: none;
+  }
+
+  /* Ensure energy chart is visible */
+  .chart-wrapper {
+    min-height: 250px;
+    height: auto;
+  }
+
+  .energy-consumption {
+    padding: 15px !important;
+  }
+
+  .page-header {
+    width: 100%;
+    margin-left: 0;
+    padding: 10px;
+    margin-top: 60px;
+  }
+
+  .back-to-overview {
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 1001 !important;
+  }
+
+  .period-buttons {
+    flex-wrap: wrap;
+  }
+
+  .selectors-container {
+    flex-direction: column;
+  }
+
+  /* Time and device selectors should be full width */
+  .time-selector,
+  .device-selector {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* Prevent device image container from taking too much space */
+  .room-appliances-img-container {
+    width: 40px;
+    height: 40px;
+    flex: none;
+  }
+
+  .room-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .slider-container {
+    width: 100%;
+  }
+
+  /* Ensure navigation bar doesn't overlap content */
+  .room-page {
+    padding-top: 50px;
+    height: auto;
+  }
+
+  /* Ensure navbar doesn't hide content */
+  body .room-page > div:first-child {
+    height: auto !important;
+  }
+
+  .energy-consumption > div {
+    width: 100% !important;
+  }
+
+  .energy-info-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Adjust for very small screens */
+@media (max-width: 480px) {
+  .period-buttons {
+    gap: 5px;
+  }
+
+  .period-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .page-header h1 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .room-page .back-to-overview {
+    position: absolute !important;
+    top: 65px !important; /* Position below the navbar */
+    left: 0 !important; 
+    right: 0 !important;
+    margin: 0 auto !important;
+    width: 120px !important; /* Set fixed width */
+    z-index: 1001 !important;
+    text-align: center !important;
+    transform: none !important;
+  }
+
+  /* Make the button more visible */
+  .room-page .back-button {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    padding: 8px 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important; /* Center the button inside its container */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .room-page .page-header {
+    margin-top: 110px !important;
+  }
+  
+  /* Ensure columns start below the button */
+  .room-page .columns {
+    margin-top: 20px !important;
+  }
 }

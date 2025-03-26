@@ -795,6 +795,34 @@ html, body, #root, .App {
     padding: 20px;
     max-width: 90%;
   }
+  
+  /* position button below navbar and center it */
+  .home-users-page .back-to-overview {
+    position: absolute !important;
+    top: 65px !important; /* Position below the navbar */
+    left: 0 !important; 
+    right: 0 !important;
+    margin: 0 auto !important;
+    width: 120px !important; /* Set fixed width */
+    z-index: 1001 !important;
+    text-align: center !important;
+    transform: none !important;
+  }
+
+  .home-users-page .back-button {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    padding: 8px 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important; /* Center the button inside its container */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* Make room for centered button */
+  .home-header {
+    margin-top: 110px !important; /* Increased to make room for the centered button */
+  }
 }
 
 /* Mobile adjustments */

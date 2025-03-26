@@ -761,7 +761,7 @@ function RoomsPage() {
                                 font: { size: 16, weight: 'bold' }
                             },
                             legend: {
-                                display: false
+                                display: false,
                             }
                         },
                         scales: {
@@ -771,7 +771,8 @@ function RoomsPage() {
                                     color: 'rgba(200, 200, 200, 0.3)'
                                 },
                                 ticks: {
-                                    padding: 10
+                                    padding: 10,
+                                    maxTicksLimit: window.innerWidth < 768 ? 5 : 10,
                                 },
                                 title: {
                                     display: true,
@@ -784,7 +785,12 @@ function RoomsPage() {
                                     display: false
                                 },
                                 ticks: {
-                                    padding: 10
+                                    padding: 10,
+                                    maxRotation: window.innerWidth < 768 ? 45 : 0,
+                                    minRotation: window.innerWidth < 768 ? 45 : 0,
+                                    autoSkip: true,
+                                    autoSkipPadding: 10,
+                                    maxTicksLimit: window.innerWidth < 768 ? 7 : undefined,
                                 }
                             }
                         },
