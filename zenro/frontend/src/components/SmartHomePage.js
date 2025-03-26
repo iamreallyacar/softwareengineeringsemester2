@@ -39,7 +39,7 @@ function SmartHomePage() {
 
   const [smartHome, setSmartHome] = useState(null);
 
-  // Add these state variables for owner checking
+  // Owner checking state
   const [currentUser, setCurrentUser] = useState(null);
   const [owner, setOwner] = useState(null);
 
@@ -990,7 +990,7 @@ function SmartHomePage() {
             </div>
           )}
 
-          {/* View Home Users Button - add this before the closing div */}
+          {/* View Home Users Button */}
           <div className="view-home-users-container">
             <Link 
               to={`/home-users/${smartHomeId}`} 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom"; // Add Link import
+import { useParams, Link } from "react-router-dom";
 import Navbar from "./NavigationBar";
 import api from "../api";
 import "../css/home-users-page.css";
-import { ChevronLeft, UserPlus, ChevronDown } from "lucide-react"; // Import ChevronLeft, UserPlus, ChevronDown icons
+import { ChevronLeft, UserPlus, ChevronDown } from "lucide-react";
 import Background from "./Background.js";
 
 function HomeUsersPage() {
@@ -335,7 +335,7 @@ function HomeUsersPage() {
                   <div className="add-member-dropdown">
                     <button 
                       className="add-member-button"
-                      onClick={toggleMemberDropdown} // Use the new function
+                      onClick={toggleMemberDropdown} 
                     >
                       <UserPlus size={18} />
                       <span>Add Members</span>

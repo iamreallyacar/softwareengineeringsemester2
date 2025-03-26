@@ -104,7 +104,6 @@ body {
   width: 100%;
   padding: 16px 0;
   position: fixed;
-  /* Change to fixed */
   top: 0;
   left: 0;
   z-index: 1000;

@@ -5,14 +5,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 import random
 import string
 
-# Model representing a smart home
-# SmartHome stores home info, creator, members, timestamps
-# name - Name of the smart home
-# creator - Reference to the user who created the smart home
-# member - Users who are members of the smart home
-# created_at - Timestamp when the smart home was created
-# updated_at - Timestamp when the smart home was last updated
 class SmartHome(models.Model):
+    """
+    A smart home in our system that users can create and join.
+    
+    Think of this as the virtual representation of a physical house, connecting
+    all the rooms, devices, and users together. Each home has an owner (creator) 
+    and can have multiple members who can access and control the home's features.
+    
+    The join_password allows other users to join this home by providing the password.
+    """
     name = models.CharField(max_length=255)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_homes')
     members = models.ManyToManyField(User, related_name='joined_homes', blank=True)
@@ -20,15 +22,17 @@ class SmartHome(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     join_password = models.CharField(max_length=50, default="", blank=True) 
 
-# Questions
-# 1. Should we add a field for privileged users?
-# - Es ist für später, wenn wir Admins hinzufügen wollen.
-# 2. Should we instead make a separate table for member list and add a field for privilege?
-
-# Model representing a room in a smart home
-# name - Name of the room
-# smart_home - Reference to the smart home the room belongs to
 class Room(models.Model):
+    """
+    A room within a smart home where devices can be placed.
+    
+    Rooms are mapped to physical locations in the HomeIO simulation. They serve
+    as organizational units for grouping related devices (like a real bedroom
+    or kitchen would contain specific appliances).
+    
+    The is_unlocked field determines if users can access and control this room,
+    implementing our progressive unlocking feature.
+    """
     name = models.CharField(max_length=255)
     smart_home = models.ForeignKey(SmartHome, on_delete=models.CASCADE, related_name='rooms')
     home_io_room = models.ForeignKey('HomeIORoom', on_delete=models.CASCADE)
@@ -42,10 +46,16 @@ class Room(models.Model):
     def __str__(self):
         return f"{self.name} (Home: {self.smart_home.name})"
 
-# Model representing a supported device model that can be added to a smart home
-# model_name - Model name of the supported device
-# type - Type/category of the device (e.g., 'light', 'thermostat')
 class SupportedDevice(models.Model):
+    """
+    The definition of a device type that can be installed in our system.
+    
+    This is like a "template" or "blueprint" for actual devices. It defines
+    what kinds of devices our system supports and how they connect to HomeIO.
+    
+    The technical fields (address, data_type, memory_type) define how our system
+    communicates with the HomeIO simulation for this type of device.
+    """
     DEVICE_MEMORY_TYPE_CHOICES = [
         ('input', 'Input'),
         ('output', 'Output'),
@@ -76,18 +86,20 @@ class SupportedDevice(models.Model):
     def __str__(self):
         return f"{self.model_name} ({self.memory_type}, addr={self.address}, {self.data_type})"
 
-# Questions
-# 1. Should we make a table to keep track of all the legal types and then reference them here?
-
-# Model representing a device instance added to a smart home
-# Device associates a named device with a SmartHome and SupportedDevice
-# device - Name of the device instance
-# status - Current status of the device (e.g., on/off)
-# room - Reference to the room the device belongs to
-# supported_device - Reference to the supported device model
-# created_at - Timestamp when the device instance was created
-# updated_at - Timestamp when the device instance was last updated
 class Device(models.Model):
+    """
+    An actual device instance installed in a room of a smart home.
+    
+    While SupportedDevice defines what kinds of devices exist,
+    this model represents a specific device that's been placed in a room
+    and can be controlled by users.
+    
+    For example, "Living Room Light" would be a Device instance of a
+    "Light Switch" SupportedDevice type.
+    
+    Devices track their current status (on/off), analog value (0-10 for dimmable
+    devices), and when they were created or last updated.
+    """
     name = models.CharField(max_length=100)                             
     status = models.BooleanField(default=False)                     
     analogue_value = models.IntegerField(
@@ -112,85 +124,93 @@ class Device(models.Model):
     def __str__(self):
         return f"{self.name} in {self.room.name}"
 
-# Question
-# 1. Should we use MAC address to identify devices?
-
-# Model representing energy usage logs for a device at 1-minute intervals
-# Previously named DeviceLog5Sec but now records data every minute
-# device - Reference to the device instance
-# status - Status of the device at the time of the log
-# energy_usage - Energy usage of the device at the time of the log
-# created_at - Timestamp when the log was created
 class DeviceLog1Min(models.Model):
+    """
+    Records the energy usage of a device at one-minute intervals.
+    
+    This gives us high-resolution data about device energy consumption,
+    allowing us to create detailed usage reports and visualizations.
+    We track both the status (on/off) and the actual energy used.
+    """
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     status = models.BooleanField()
     energy_usage = models.FloatField()
     created_at = models.DateTimeField(default=timezone.now)
 
-# Model representing energy generation for a device
-# DeviceLogDaily stores daily energy usage summaries
-# device - Reference to the device instance
-# date - Date of the log entry
-# total_energy_usage - Total energy usage of the device for the day
-# status_usage_details Usage details for the day
 class DeviceLogDaily(models.Model):
+    """
+    Aggregated daily energy usage for a device.
+    
+    Instead of storing every minute's data forever, we aggregate it into
+    daily summaries to save space while still providing useful historical data.
+    
+    The status_usage_details field can store additional information like
+    how long the device was on vs. off during the day.
+    """
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     date = models.DateField()
     total_energy_usage = models.FloatField(default=0.0)
     status_usage_details = models.JSONField(default=dict)  # For storing on/off intervals if needed
 
-# 1. rename date to created_at for consistency?
-
-# Model representing energy generation for a device
-# device - Reference to the device instance
-# month - Month of the log entry
-# year - Year of the log entry
-# total_energy_usage - Total energy usage of the device for the month
-# daily_summaries - Usage details for the month
 class DeviceLogMonthly(models.Model):
+    """
+    Aggregated monthly energy usage for a device.
+    
+    This provides an even higher level of aggregation for long-term
+    analysis and reporting. Month and year are stored as separate fields
+    to make querying by month or year more efficient.
+    """
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     month = models.IntegerField()
     year = models.IntegerField()
     total_energy_usage = models.FloatField(default=0.0)
     daily_summaries = models.JSONField(default=dict)
 
-# 1. Can't we just store month and year as created_at and then use it to figure out the month or year when we need it?
-
-# Model representing energy usage logs for a room at 1-minute intervals
-# Previously named RoomLog5Sec but now records data every minute
-# room - Reference to the room instance
-# energy_usage - Energy usage of the room at the time of the log
-# created_at - Timestamp when the log was created
 class RoomLog1Min(models.Model):
+    """
+    Records the energy usage of an entire room at one-minute intervals.
+    
+    This aggregates the energy usage of all devices in a room, giving us
+    a picture of which rooms are using the most energy at any given time.
+    """
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     energy_usage = models.FloatField()
     created_at = models.DateTimeField(default=timezone.now)
 
-# Model representing daily energy generation for a room
-# RoomLogDaily stores daily energy usage summaries
-# room - Reference to the room instance
-# date - Date of the log entry
-# total_energy_usage - Total energy usage of the room for the day
 class RoomLogDaily(models.Model):
+    """
+    Aggregated daily energy usage for a room.
+    
+    Similar to device logs, we aggregate room energy usage into daily
+    summaries for easier analysis of room-level consumption patterns.
+    """
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     date = models.DateField()
     total_energy_usage = models.FloatField(default=0.0)
 
-# Model representing monthly energy generation for a room
-# RoomLogMonthly stores monthly energy usage summaries
-# room - Reference to the room instance
-# month - Month of the log entry
-# year - Year of the log entry
-# total_energy_usage - Total energy usage of the room for the month
 class RoomLogMonthly(models.Model):
+    """
+    Aggregated monthly energy usage for a room.
+    
+    This provides a long-term view of which rooms use the most energy
+    across different months of the year.
+    """
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     month = models.IntegerField()
     year = models.IntegerField()
     total_energy_usage = models.FloatField(default=0.0)
 
-# Model representing a fixed room layout in Home I/O
-# name - Name of the room in Home I/O
 class HomeIORoom(models.Model):
+    """
+    Represents rooms defined in the HomeIO simulation.
+    
+    These are the fixed rooms that exist in the simulation environment.
+    Our system's Room objects reference these to map virtual rooms to 
+    the corresponding simulation rooms.
+    
+    The unlock_order field helps us implement the progressive unlocking feature,
+    controlling which rooms become available to users in what order.
+    """
     name = models.CharField(max_length=100, unique=True)
     zone = models.CharField(max_length=5, default=None, null=True)
     unlock_order = models.PositiveIntegerField(null=True)  # Enforce fixed order
@@ -199,22 +219,48 @@ class HomeIORoom(models.Model):
         return f"{self.name} (order {self.unlock_order})"
 
 class EnergyGeneration1Min(models.Model): 
+    """
+    Records the energy generated by a smart home at one-minute intervals.
+    
+    This tracks how much energy the home's solar panels (or other generation sources)
+    are producing, allowing us to compare generation against consumption.
+    """
     home = models.ForeignKey(SmartHome, on_delete=models.CASCADE)
     energy_generation = models.FloatField()
     created_at = models.DateTimeField(default=timezone.now)
 
 class EnergyGenerationDaily(models.Model):
+    """
+    Aggregated daily energy generation for a smart home.
+    
+    This gives us a day-by-day view of how much energy the home produced,
+    which we can compare against the home's total consumption.
+    """
     home = models.ForeignKey(SmartHome, on_delete=models.CASCADE)
     date = models.DateField()
     total_energy_generation = models.FloatField(default=0.0)
 
 class EnergyGenerationMonthly(models.Model):
+    """
+    Aggregated monthly energy generation for a smart home.
+    
+    This provides a long-term view of the home's energy production patterns,
+    useful for seasonal analysis (e.g., summer vs winter generation).
+    """
     home = models.ForeignKey(SmartHome, on_delete=models.CASCADE)
     month = models.IntegerField()
     year = models.IntegerField()
     total_energy_generation = models.FloatField(default=0.0)
 
 class UserProfile(models.Model):
+    """
+    Extends the built-in User model with additional profile information.
+    
+    This gives us a place to store user details that aren't covered by
+    Django's default User model, like date of birth and contact information.
+    
+    The one-to-one relationship ensures each user has exactly one profile.
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     date_of_birth = models.DateField(null=True, default=None)
     gender = models.CharField(
@@ -230,9 +276,14 @@ class UserProfile(models.Model):
 
 class RecoveryCode(models.Model):
     """
-    One-time use recovery codes for account recovery.
-    Each user can have multiple recovery codes (up to 10).
-    Format example: "1e1n5-b522d"
+    One-time use codes that let users recover their account if they forget their password.
+    
+    Each user can have up to 10 recovery codes. When a user uses a code to reset their
+    password, that code is deleted so it can't be used again. The codes follow a specific
+    format (xxxxx-xxxxx) to make them easy to read and enter.
+    
+    Recovery codes are a security best practice, providing an alternative to email-based
+    password reset which may not always be accessible.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recovery_codes')
     code = models.CharField(max_length=12, unique=True)  # Format: xxxxx-xxxxx
@@ -243,7 +294,12 @@ class RecoveryCode(models.Model):
     
     @classmethod
     def generate_code(cls):
-        """Generate a random recovery code in the format xxxxx-xxxxx"""
+        """
+        Creates a new random recovery code in the format xxxxx-xxxxx.
+        
+        We use a mix of lowercase letters and digits to make codes
+        that are secure but still readable.
+        """
         chars = string.ascii_lowercase + string.digits
         part1 = ''.join(random.choices(chars, k=5))
         part2 = ''.join(random.choices(chars, k=5))
@@ -251,7 +307,14 @@ class RecoveryCode(models.Model):
     
     @classmethod
     def create_for_user(cls, user, count=10):
-        """Create a set of recovery codes for a user"""
+        """
+        Creates a fresh set of recovery codes for a user.
+        
+        This removes any existing codes the user has (for security),
+        then generates a new set of unique codes. By default, we create
+        10 codes, giving users plenty of recovery options while keeping
+        the number manageable.
+        """
         # First, invalidate any existing unused codes
         cls.objects.filter(user=user).delete()
         

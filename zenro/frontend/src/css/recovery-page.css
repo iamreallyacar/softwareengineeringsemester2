@@ -312,7 +312,7 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --glass-blur: blur(8px); /* Reduce blur on mobile for better performance */
+    --glass-blur: blur(8px); 
   }
   
   .recovery-content {

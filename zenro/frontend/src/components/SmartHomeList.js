@@ -5,7 +5,6 @@ import api from "../api";
 import { ChevronLeft, User, UserRoundCog } from "lucide-react";
 import Background from "./Background.js";
 
-// Update DashboardHeader to remove the back button
 const DashboardHeader = () => {
     return (
         <div className="dashboard-header">
@@ -14,7 +13,6 @@ const DashboardHeader = () => {
     );
 };
 
-// Update the UserProfile component to accept and display the username
 const UserProfile = ({ username }) => (
     <div className="user-profile">
         <div className="avatar-container">
@@ -25,7 +23,6 @@ const UserProfile = ({ username }) => (
     </div>
 );
 
-// Update CreateHomeForm to display field-specific errors
 const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, handleCreateSmartHome, isCreating, formError }) => (
     <div className="create-home">
         <h2 className="create-home-title">Create Smart Homes</h2>
@@ -56,16 +53,14 @@ const CreateHomeForm = ({ homeName, setHomeName, joinPassword, setJoinPassword, 
     </div>
 );
 
-// Remove password verification remnants from OwnedHomesList component
 const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDeleteHome, onUpdateHome }) => {
     const [expandedHomeId, setExpandedHomeId] = useState(null);
     const [editName, setEditName] = useState('');
     const [editPassword, setEditPassword] = useState('');
-    const [editing, setEditing] = useState(null); // 'name', 'password', or 'delete'
+    const [editing, setEditing] = useState(null); 
     const [isUpdating, setIsUpdating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState('');
-    // Removed deletePassword state
     const navigate = useNavigate();
 
     const toggleHomeOptions = (homeId) => {
@@ -77,7 +72,6 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
         setEditing(null);
         setEditName('');
         setEditPassword('');
-        // Removed deletePassword reference
         setError('');
     };
 
@@ -109,7 +103,6 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
         }
     };
 
-    // Rename to simply handleDelete since we're no longer verifying with password
     const handleDelete = async (homeId) => {
         setIsDeleting(true);
         setError('');
@@ -260,7 +253,6 @@ const OwnedHomesList = ({ isOwnedExpanded, setIsOwnedExpanded, smartHomes, onDel
     );
 };
 
-// Update JoinedHomesList to include dropdown and leave functionality
 const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, joinedHomes, onRefreshHomes }) => {
     const [expandedHomeId, setExpandedHomeId] = useState(null);
     const [isLeaving, setIsLeaving] = useState(false);
@@ -403,7 +395,7 @@ const JoinedHomesList = ({ isJoinedHomesExpanded, setIsJoinedHomesExpanded, join
     );
 };
 
-// Update AvailableHomesList to display owner's username
+// AvailableHomesList to display owner's username
 const AvailableHomesList = ({ 
   isJoinedExpanded, 
   setIsJoinedExpanded, 
@@ -510,7 +502,6 @@ const AvailableHomesList = ({
   );
 };
 
-// Update the main SmartHomeList component
 function SmartHomeList() {
   const [ownedHomes, setOwnedHomes] = useState([]);
   const [joinedHomes, setJoinedHomes] = useState([]);
@@ -525,7 +516,7 @@ function SmartHomeList() {
   const [homeWithPasswordOpen, setHomeWithPasswordOpen] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   
-  // Add a new state variable for form-specific errors
+  // New state variable for form-specific errors
   const [formError, setFormError] = useState("");
   
   const userId = localStorage.getItem("userId");
@@ -537,7 +528,7 @@ function SmartHomeList() {
     fetchCurrentUser();
   }, []);
 
-  // Add this function to fetch the current user's info
+  // Function to fetch the current user's info
   const fetchCurrentUser = async () => {
     try {
       const response = await api.get("/user/current/");
@@ -545,17 +536,15 @@ function SmartHomeList() {
       console.log("Current user:", response.data);
     } catch (err) {
       console.error("Failed to fetch current user:", err);
-      // Don't set an error message as this is not critical
     }
   };
 
-  // Update the data fetching to properly get creator usernames
+  // Data fetching to properly get creator usernames
 const fetchSmartHomes = async () => {
   try {
     const response = await api.get("/smarthomes/");
     console.log("Smart homes data:", response.data);
     
-    // We need to fetch usernames for any homes that only have creator IDs
     const homesWithCreatorPromises = response.data.map(async home => {
       // If creator_username already exists, use it
       if (home.creator_username) {
@@ -727,7 +716,7 @@ const fetchAvailableHomes = async () => {
     }
   };
 
-  // Add a function to refresh all homes lists
+  // Function to refresh all homes lists
   const refreshAllHomes = async () => {
     await fetchSmartHomes();
     await fetchAvailableHomes();

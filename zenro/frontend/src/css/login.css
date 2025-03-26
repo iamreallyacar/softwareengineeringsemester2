@@ -13,9 +13,9 @@
 
 .login-container-circle {
     border-radius: 20%;
-    width: min(35vw, 450px); /* Limit max width */
-    height: auto; /* Remove fixed height ratio */
-    aspect-ratio: 1 / 1; /* Maintain circle shape while allowing content to determine height */
+    width: min(35vw, 450px); 
+    height: auto; 
+    aspect-ratio: 1 / 1; 
     
     display: flex;
     flex-direction: column;
@@ -252,7 +252,7 @@
     }
 }
 
-/* Fix for very small screens */
+/* For very small screens */
 @media screen and (max-width: 350px) {
     .login-container-circle {
         width: 95vw;

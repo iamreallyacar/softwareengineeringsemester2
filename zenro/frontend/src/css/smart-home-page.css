@@ -634,7 +634,6 @@ body {
     height: 280px;
 }
 
-/* Adjust consumption chart to account for room selector */
 .consumption-chart {
     position: relative;
     display: flex;
@@ -853,7 +852,6 @@ body {
     }
 }
 
-/* Fix for the sidebar active state on mobile */
 @media (max-width: 768px) {
     .shp-main-content {
         margin-left: 0;

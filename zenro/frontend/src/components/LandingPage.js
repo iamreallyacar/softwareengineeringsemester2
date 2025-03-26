@@ -158,7 +158,6 @@ function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      // Here you would typically send the form data to your backend
       console.log("Form submitted:", formData);
       setSuccess("Thank you for your message! We'll get back to you soon.");
 

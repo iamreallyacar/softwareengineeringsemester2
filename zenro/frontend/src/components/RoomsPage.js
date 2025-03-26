@@ -1114,7 +1114,7 @@ function RoomsPage() {
                 <div className="modal-overlay">
                     <div className="modal">
                         <h2>Delete Device</h2>
-                        <p style={{ fontSize: "17px", color: "#666", marginTop: "10px" }}>
+                        <p style={{ fontSize: "17px", color: "rgb(227 223 224)", marginTop: "10px" }}>
                             Are you sure you want to remove this device?
                             It will no longer appear in this room until you add it again.
                         </p>

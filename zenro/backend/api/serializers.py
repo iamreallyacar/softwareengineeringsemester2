@@ -7,7 +7,7 @@ from .models import (
     User, SmartHome, SupportedDevice, Device, Room, DeviceLog1Min, 
     DeviceLogDaily, DeviceLogMonthly, RoomLog1Min, RoomLogDaily, 
     RoomLogMonthly, HomeIORoom, EnergyGeneration1Min, EnergyGenerationDaily, 
-    EnergyGenerationMonthly, UserProfile, RecoveryCode  # Add RecoveryCode here
+    EnergyGenerationMonthly, UserProfile, RecoveryCode 
 )
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -140,7 +140,7 @@ class SupportedDeviceSerializer(serializers.ModelSerializer):
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
-        fields = '__all__'  # Include all fields from the Device model
+        fields = '__all__'  
 
 # Replace DeviceLog5SecSerializer with DeviceLog1MinSerializer
 class DeviceLog1MinSerializer(serializers.ModelSerializer):
@@ -173,7 +173,7 @@ class RoomSerializer(serializers.ModelSerializer):
     devices = DeviceSerializer(many=True, read_only=True)
     daily_usage = serializers.SerializerMethodField()
     home_io_room_name = serializers.CharField(source='home_io_room.name', read_only=True)
-    smart_home_name = serializers.CharField(source='smart_home.name', read_only=True)  # Add this line
+    smart_home_name = serializers.CharField(source='smart_home.name', read_only=True)
 
     class Meta:
         model = Room
@@ -186,7 +186,6 @@ class RoomSerializer(serializers.ModelSerializer):
         total_usage = logs.aggregate(models.Sum('energy_usage'))['energy_usage__sum'] or 0
         return total_usage
 
-# Add RoomLog1MinSerializer which was missing
 class RoomLog1MinSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoomLog1Min
@@ -215,7 +214,6 @@ class AddDeviceSerializer(serializers.Serializer):
     room_id = serializers.IntegerField()
     supported_device_id = serializers.IntegerField()
 
-# Add EnergyGeneration serializers
 class EnergyGeneration1MinSerializer(serializers.ModelSerializer):
     class Meta:
         model = EnergyGeneration1Min
@@ -231,7 +229,6 @@ class EnergyGenerationMonthlySerializer(serializers.ModelSerializer):
         model = EnergyGenerationMonthly
         fields = '__all__'
 
-# Add specific serializer for device control
 class DeviceControlSerializer(serializers.Serializer):
     status = serializers.BooleanField(required=False)
     analogue_value = serializers.IntegerField(
@@ -258,8 +255,6 @@ class SmartHomeListSerializer(SmartHomeSerializer):
         extra_kwargs = {
             'join_password': {'write_only': True}
         }
-
-# Add RecoveryCodeSerializer and PasswordResetWithCodeSerializer
 
 class RecoveryCodeSerializer(serializers.ModelSerializer):
     """Serializer for the RecoveryCode model"""
@@ -293,7 +288,7 @@ class PasswordResetWithCodeSerializer(serializers.Serializer):
         
     def validate_new_password(self, value):
         """Validate that the new password meets security requirements"""
-        # Check for minimum complexity - add your own rules here
+        # Check for minimum complexity
         if value.isdigit():
             raise serializers.ValidationError(
                 "Password cannot be entirely numeric."

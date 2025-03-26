@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django_crontab',
     # Our own apps
     'api.apps.ApiConfig',  # Required for signals
-    # Add drf-yasg for API documentation
+    # For API documentation
     'drf_yasg',
 ]
 

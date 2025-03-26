@@ -28,7 +28,6 @@ api.interceptors.response.use(
     }
 );
 
-// Add handling for 401 responses
 api.interceptors.response.use(
   (response) => response,
   async (error) => {

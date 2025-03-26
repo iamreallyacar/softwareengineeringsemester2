@@ -1,26 +1,13 @@
 import random
-import time  # Add this import for time.sleep()
+import time 
 from django.db import models, transaction
 from django.utils import timezone
-from datetime import timedelta  # Remove 'time' from this import
+from datetime import timedelta
 from .models import Room, RoomLog1Min, RoomLogDaily, RoomLogMonthly, Device, DeviceLog1Min, DeviceLogDaily, DeviceLogMonthly, SmartHome, EnergyGeneration1Min, EnergyGenerationDaily, EnergyGenerationMonthly
 
 def is_first_day_of_month(date):
     """Check if given date is the first day of the month."""
     return date.day == 1
-
-"""
-# Legacy aggregation code kept as reference
-def aggregate_room_logs():
-    aggregate_logs(RoomLog1Min, RoomLogDaily, "created_at", "energy_usage", "total_energy_usage")
-    aggregate_monthly_logs(RoomLogDaily, RoomLogMonthly, "date", "total_energy_usage", "total_energy_usage")
-
-def aggregate_device_logs():
-    aggregate_logs(DeviceLog1Min, DeviceLogDaily, "created_at", "energy_usage", "total_energy_usage")
-    aggregate_monthly_logs(DeviceLogDaily, DeviceLogMonthly, "date", "total_energy_usage", "total_energy_usage")
-
-# ...existing code...
-"""
 
 def generate_minute_data():
     """
@@ -275,8 +262,6 @@ def calculate_monthly_metrics(daily_logs):
     Returns:
         Dictionary with daily summaries and monthly totals/averages
     """
-    # No changes needed here as this function works with daily logs
-    # ...existing code...
     total_days = daily_logs.count()
     if total_days == 0:
         return {}

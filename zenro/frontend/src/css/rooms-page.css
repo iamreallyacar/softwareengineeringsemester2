@@ -522,7 +522,6 @@ input:checked+.slider:after {
   border: 1px solid #ddd;
 }
 
-/* Fix for device selector dropdown overflow */
 .device-selector {
   flex: 1;
   min-width: 150px;
@@ -554,7 +553,6 @@ input:checked+.slider:after {
   background-size: 12px;
 }
 
-/* Make selectors container more responsive */
 .selectors-container {
   display: flex;
   flex-wrap: wrap;
@@ -563,7 +561,6 @@ input:checked+.slider:after {
   width: 100%;
 }
 
-/* Fix dropdown option text */
 .device-selector select option {
   white-space: normal; /* Allow wrapping in dropdown options */
   padding: 8px;
@@ -575,7 +572,6 @@ input:checked+.slider:after {
   min-width: 150px;
 }
 
-/* Adjust the chart container height and padding */
 .energy-consumption > div[style*="height: 300px"],
 .energy-consumption > div[style*="height: 400px"] {
   height: auto !important;
@@ -586,12 +582,10 @@ input:checked+.slider:after {
   position: relative; /* Ensure proper positioning */
 }
 
-/* Fix for chart padding */
 .chart-container {
   padding-bottom: 50px !important;
 }
 
-/* Fix for chart container - add these rules */
 .chart-wrapper {
   position: relative;
   width: 100%;
@@ -600,7 +594,6 @@ input:checked+.slider:after {
   margin: 20px 0;
 }
 
-/* Adjust the energy-consumption container */
 .column1 .energy-consumption {
   padding: 30px !important;
   display: flex;
@@ -612,7 +605,6 @@ input:checked+.slider:after {
   margin-bottom: 15px;
 }
 
-/* New styles for consistent chart appearance with SmartHomePage */
 .energy-consumption {
   background: #fbdba7;
   padding: 20px;
@@ -716,26 +708,23 @@ input:checked+.slider:after {
   word-wrap: break-word;
 }
 
-/* Improve visibility for active period buttons */
 .period-button.active {
   background-color: #C14600;
-  color: #ffffff; /* Brighter white */
-  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.7); /* Stronger text shadow */
+  color: #ffffff; 
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.7); 
   font-weight: bold;
-  letter-spacing: 0.5px; /* Slightly spread out text */
+  letter-spacing: 0.5px; 
   transform: scale(1.05);
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3),
-              inset 0px 0px 0px 2px rgba(255, 255, 255, 0.4); /* Stronger inner glow */
+              inset 0px 0px 0px 2px rgba(255, 255, 255, 0.4); 
   border: 0px;
 }
 
-/* Add slightly different hover effect for active buttons */
 .period-button.active:hover {
-  background-color: #A53900; /* Slightly darker on hover */
+  background-color: #A53900; 
   transform: scale(1.08);
 }
 
-/* Add back button styling to match HomeUsersPage */
 .back-to-overview {
   position: fixed !important;
   top: 30px !important;
@@ -769,7 +758,6 @@ input:checked+.slider:after {
   height: 18px !important;
 }
 
-/* Update page header to properly center room name */
 .page-header {
   width: calc(100% - 150px);
   display: flex;
@@ -801,7 +789,6 @@ input:checked+.slider:after {
   }
 }
 
-/* Add owner note styling - matches the one in home-users-page.css */
 .owner-note {
   text-align: center;
   color: #5D252D;
@@ -813,7 +800,6 @@ input:checked+.slider:after {
   border-radius: 10px;
 }
 
-/* Style the no-devices-message to match other empty states */
 .no-devices-message {
   background: rgba(255, 255, 255, 0.3);
   border-radius: 10px;

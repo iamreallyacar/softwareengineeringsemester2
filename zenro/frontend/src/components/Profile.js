@@ -72,7 +72,7 @@ function ProfilePage() {
           
           // Make sure we're extracting the codes array correctly
           if (response.data && response.data.codes) {
-            // This is the important line - we need to make sure we're getting the actual code strings
+            // This is the important line, we need to make sure we're getting the actual code strings
             setRecoveryCodes(response.data.codes);
             // DO NOT set showRecoveryCodes to true here
           } else {
@@ -690,7 +690,7 @@ function ProfilePage() {
                             )}
                         </div>
                         
-                        {/* First Name Field - fix className typo */}
+                        {/* First Name Field */}
                         <div className="profile-field">
                             {editingField === 'first_name' ? (
                                 <div className="field-edit">
@@ -756,7 +756,7 @@ function ProfilePage() {
                             )}
                         </div>
                         
-                        {/* Phone Number Field - simplified without uniqueness checks */}
+                        {/* Phone Number Field */}
                         <div className="profile-field">
                             {editingField === 'phone_number' ? (
                                 <div className="field-edit">
@@ -1050,7 +1050,7 @@ function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Account Deletion Section - Updated Layout */}
+                    {/* Account Deletion Section */}
                     <div className="account-deletion-section">
                         <div className="deletion-section-header">
                             <h2 className="deletion-section-title">Delete Account</h2>

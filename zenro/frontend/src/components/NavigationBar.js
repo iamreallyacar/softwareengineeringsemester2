@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react"; // Add useRef
+import { useState, useEffect, useRef } from "react";
 import user from "../assets/images/user.svg";
 import notification from "../assets/images/notification.svg";
 import overview from "../assets/images/overview.svg";
@@ -12,7 +12,7 @@ const Sidebar = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     
-    // Add state for logout confirmation
+    // Logout confirmation state
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     
     // Ref for the logout button to position the dropdown
@@ -22,7 +22,6 @@ const Sidebar = () => {
       setIsOpen(!isOpen);
     };
 
-    // Update logout functionality to show confirmation first
     const initiateLogout = (e) => {
       e.stopPropagation(); // Prevent clicks from bubbling up
       setShowLogoutConfirm(true);

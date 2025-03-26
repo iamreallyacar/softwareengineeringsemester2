@@ -14,7 +14,6 @@ html, body, #root, .App {
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Add back button styling with glassmorphism */
 .back-to-overview {
   position: fixed !important;
   top: 30px !important;
@@ -73,7 +72,6 @@ html, body, #root, .App {
   box-sizing: border-box;
 }
 
-/* Update the home header with glassmorphism */
 .home-header {
   margin-top: 50px !important;
   margin-bottom: 40px !important;
@@ -91,7 +89,6 @@ html, body, #root, .App {
   box-shadow: var(--glass-shadow) !important;
 }
 
-/* Add a new container for the title row */
 .title-row {
   display: flex !important;
   justify-content: space-between !important;
@@ -102,7 +99,7 @@ html, body, #root, .App {
   box-sizing: border-box !important;
 }
 
-/* Update home name to be left-aligned */
+/* Home name to be left-aligned */
 .home-name {
   color: #C14600 !important;
   font-size: 32px !important;
@@ -113,7 +110,7 @@ html, body, #root, .App {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Update home owner to be right-aligned */
+/* Hhome owner to be right-aligned */
 .home-owner {
   color: #5D252D !important;
   font-size: 18px !important;
@@ -126,7 +123,7 @@ html, body, #root, .App {
   font-weight: bold;
 }
 
-/* Update Add Member Dropdown with glassmorphism */
+/* Add Member Dropdown with glassmorphism */
 .add-member-dropdown {
   position: relative !important;
   margin: 0 auto 20px auto !important;
@@ -199,7 +196,6 @@ html, body, #root, .App {
   background-color: rgba(255, 255, 255, 0.35);
 }
 
-/* Adjust layout for expanded state */
 .member-item.expanded .member-item-header {
   display: flex;
   justify-content: space-between;
@@ -245,7 +241,6 @@ html, body, #root, .App {
   overflow: hidden;
 }
 
-/* Fix dropdown indicator animation */
 .dropdown-indicator {
   color: #CB5A55;
   display: flex;
@@ -564,12 +559,12 @@ html, body, #root, .App {
   transform: translateY(-2px);
 }
 
-/* Add extra spacing for the Date of Birth field */
+/* Extra spacing for the Date of Birth field */
 .date-of-birth-field {
   gap: 20px !important;
 }
 
-/* Add Member Dropdown Styles with glassmorphism */
+/* Member Dropdown Styles with glassmorphism */
 .add-member-dropdown {
   position: relative;
   margin: 30px auto 20px auto;
@@ -678,7 +673,7 @@ html, body, #root, .App {
   border-radius: 4px;
 }
 
-/* Add styles for the clickable error and refresh button */
+/* Styles for the clickable error and refresh button */
 .add-member-error.clickable {
   cursor: pointer;
   transition: background-color 0.2s;
@@ -876,7 +871,6 @@ html, body, #root, .App {
   z-index: 2;
 }
 
-/* Add these styles for the simplified profile display */
 .profile-section.simplified {
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.2);

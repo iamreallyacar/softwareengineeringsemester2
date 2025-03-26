@@ -91,7 +91,7 @@
 
 .nav-item:hover .nav-text {
   opacity: 1;
-  text-shadow: 0px 0px 10px rgb(239, 185, 141); /*0 0 10px rgba(255, 140, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.6), 0 0 30px rgba(255, 0, 0, 0.4);*/
+  text-shadow: 0px 0px 10px rgb(239, 185, 141); 
 }
 
 .navbar-burger-menu {
@@ -284,7 +284,6 @@
   }
 }
 
-/* Responsive adjustments for the logout confirmation */
 @media (max-width: 768px) {
   .logout-confirm {
     top: 0;

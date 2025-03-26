@@ -31,7 +31,7 @@ def create_home_layout(sender, instance, created, **kwargs):
                     is_unlocked=False          # Initially locked
                 )
 
-# Add signal to create UserProfile automatically when a User is created
+# Signal to create UserProfile automatically when a User is created
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """

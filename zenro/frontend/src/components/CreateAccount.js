@@ -287,7 +287,7 @@ function CreateAccount({ setIsAuthenticated }) {
             // Generate recovery codes after successful account creation and login
             await generateRecoveryCodes();
             
-            // Don't navigate automatically - wait for user to view recovery codes
+            // Don't navigate automatically, wait for user to view recovery codes
             setLoading(false);
             
         } catch (error) {

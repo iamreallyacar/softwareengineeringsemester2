@@ -128,10 +128,6 @@ function RecoveryPage() {
       setSuccess(response.data.message || "Password reset successful!");
       
       // Check if this was the last code - response would indicate this
-      // Not implemented in backend yet, so we're simulating this logic
-      
-      // For this example, let's assume we have a way to know this was the last code
-      // and we need to generate new ones
       const isLastCode = response.data.was_last_code;
       
       if (isLastCode) {
