@@ -20,3 +20,10 @@ brew upgrade
 
 # Install Node.js
 brew install node
+
+# Install npm
+brew install npm
+
+sudo apt install python3
+
+apt install python3-django python3-djangorestframework python3-djangorestframework-simplejwt python3-django-cors-headers python3-pythonnet python3-django-crontab python3-drf_yasg
