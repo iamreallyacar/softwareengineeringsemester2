@@ -10,10 +10,13 @@ sudo apt install curl -y
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Set Homebrew path
-echo >> /home/ubuntu/.bashrc
+echo >> /home/{your username here}/.bashrc
 echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/{your username here}/.bashrc
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 sudo apt-get install build-essential
 
 brew update
 brew upgrade
+
+# Install Node.js
+brew install node
