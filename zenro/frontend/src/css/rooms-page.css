@@ -319,7 +319,6 @@ input:checked+.slider:after {
   font-weight: bold;
 }
 
-/* Fix the arrow position in the overview button */
 .page-header a {
   display: flex;
   flex-direction: row; /* Ensure horizontal layout */
