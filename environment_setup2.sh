@@ -24,4 +24,10 @@ brew install node
 # Install npm
 brew install npm
 
-sudo apt install python3 python3-django python3-djangorestframework python3-djangorestframework-simplejwt python3-django-cors-headers python3-pythonnet python3-django-crontab python3-drf_yasg
+# Install django and additional dependencies
+sudo apt install python3 python3-django python3-djangorestframework python3-djangorestframework-simplejwt python3-django-cors-headers
+
+pip install django-crontab pythonnet drf-yasg
+
+# Install frontend dependencies
+cd zenro/frontend/ && npm install && cd ../..
