@@ -3,35 +3,31 @@
 set -e  # Exit immediately if a command exits with a non-zero status
 set -o pipefail  # Return the exit status of the last command in the pipe that failed
 
-# Update Homebrew
-echo "Updating Homebrew..."
+# Install Curl
+sudo apt install curl -y
+
+# Install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Set Homebrew path
+echo >> /home/{your username here}/.bashrc
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/{your username here}/.bashrc
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+sudo apt-get install build-essential
+
 brew update
 brew upgrade
 
 # Install Node.js
-echo "Installing Node.js..."
-if ! command -v node &> /dev/null
-then
-    brew install node
-else
-    echo "Node.js is already installed."
-fi
+brew install node
 
-# Ensure npm is installed
-if ! command -v npm &> /dev/null
-then
-    echo "npm could not be found, installing..."
-    brew install npm
-else
-    echo "npm is already installed."
-fi
+# Install npm
+brew install npm
 
-# Install Python
-echo "Installing Python..."
-brew install python3
+# Install django and additional dependencies
+sudo apt install python3 python3-django python3-djangorestframework python3-djangorestframework-simplejwt python3-django-cors-headers
 
-# Install Django and additional packages using Homebrew
-echo "Installing Django and additional packages..."
-brew install django
-pip3 install djangorestframework djangorestframework-simplejwt django-cors-headers pythonnet django-crontab
-echo "Installation complete!"
+pip install django-crontab pythonnet drf-yasg
+
+# Install frontend dependencies
+cd zenro/frontend/ && npm install && cd ../..
